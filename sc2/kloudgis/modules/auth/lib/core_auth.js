@@ -3,17 +3,12 @@ SC.mixin(KG, {
     /**
  * Name of localStorage where we store the auth token
  */
-    AUTHENTICATION_TOKEN_LOCAL_STORE_KEY: 'App.AuthenticationToken',
+    AUTHENTICATION_TOKEN_LOCAL_STORE_KEY: 'KG.AuthenticationToken',
 
     /**
  * Name of Authentication header returned in API responses
  */
     AUTHENTICATION_HEADER_NAME: 'X-Kloudgis-Authentication',
-
-    /**
- * Name of app build timestamp header returned in API responses
- */
-    BUILD_TIMESTAMP_HEADER_NAME: 'X-Kloudgis-Build-Timestamp',
 
     /**
  * All tokens to expire in 14 days
@@ -34,9 +29,6 @@ KG.core_auth = SC.Object.create({
             return NO;
         }
 
-        // Assumed logged out
-        this.logout();
-
         // Decode token
         var delimiterIndex = token.indexOf('~~~');
         if (delimiterIndex < 0) {
@@ -52,11 +44,12 @@ KG.core_auth = SC.Object.create({
         if (expiryString === null) {
             return NO;
         }
-        var now = SC.DateTime.create();
-        var expiry = SC.DateTime.parse(expiryString, SC.DATETIME_ISO8601);
-        if (SC.DateTime.compare(now, expiry) > 0) {
+        var now = new Date();
+		//TODO parse the string and compare
+        var expiry = null;//SC.DateTime.parse(expiryString, SC.DATETIME_ISO8601);
+       // if (SC.DateTime.compare(now, expiry) > 0) {
             return NO;
-        }
+       // }
 
         // Synchronously get user from server
         var newToken = null;
@@ -65,7 +58,7 @@ KG.core_auth = SC.Object.create({
         };
         //synch
         $.ajax({
-            url: '/kg_auth/login',
+            url: '/kg_auth/public/login',
             type: 'POST',
             async: false,
             dataType: 'json',
@@ -93,16 +86,13 @@ KG.core_auth = SC.Object.create({
             rememberMe = NO;
         }
 
-        // Assumes the user has logged out - if not force logout
-        this.logout();
-
         var postData = {
             user: user,
             pwd: pwd_hashed
         };
 
         // Call server
-        var url = '/kg_auth/login';
+        var url = '/kg_auth/public/login';
         var context = {
             rememberMe: rememberMe,
             callbackTarget: cb_target,
@@ -153,11 +143,10 @@ KG.core_auth = SC.Object.create({
         try {
             // Figure out the expiry
             // Take off 1 hour so that we expire before the token does which means we have time to act
-            var expiry = SC.DateTime.create();
+            var expiry = new Date();
             if (this.rememberMe) {
-                expiry.advance({
-                    second: KG.AUTHENTICATION_TOKEN_EXPIRY_SECONDS
-                });
+				//TODO add a delay to the current time!
+                //expiry = 
             }
             // Get the token
             var token;
@@ -192,6 +181,13 @@ KG.core_auth = SC.Object.create({
    * Remove authentication tokens
    */
     logout: function() {
+		//tell the server about the logout (invalidate token and destroy the session)
+	 	var url = '/kg_auth/public/login/logout';
+		 $.ajax({
+	            type: 'POST',
+	            url: url,
+	            async: YES
+	        });
         // Remove token from local store
         localStorage.removeItem(KG.AUTHENTICATION_TOKEN_LOCAL_STORE_KEY);
 
