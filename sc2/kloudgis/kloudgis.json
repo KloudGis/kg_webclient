@@ -1,0 +1,55 @@
+{ 
+  "name": "Kloudgis", 
+  "bpm": "1.0.0", 
+  "bpm:build": { 
+    "bpm_libs.js": { 
+      "spade:format": "function", 
+      "directories": [ 
+      ] 
+    }, 
+    "bpm_styles.css": { 
+      "directories": [ 
+      ] 
+    }, 
+    "app_lib.js": { 
+        "spade:format": "function", 
+         "directories": [ 
+         "modules/app/lib" 
+         ] 
+       }, 
+       "app_styles.css": { 
+         "directories": [ 	
+         ] 
+    },
+    "auth_lib.js": { 
+        "spade:format": "function", 
+         "directories": [ 
+         "modules/auth/lib" 
+         ] 
+       }, 
+       "auth_styles.css": { 
+         "directories": [ 	
+         ] 
+       },
+	"login_lib.js": { 
+        "spade:format": "function", 
+         "directories": [ 
+         "modules/login/lib" 
+         ] 
+       }, 
+       "login_styles.css": { 
+         "directories": [ 	
+         ] 
+    }
+  }, 	
+  "dependencies:development": { 
+  }, 
+  "dependencies": { 
+	"jquery": ">= 0", 
+	"spade": ">= 0", 
+	"uglify-js": ">= 0",
+    "sproutcore": ">= 0-pre", 
+    "sproutcore-datastore": ">= 0-pre",
+    "sproutcore-statechart": ">= 0-pre" 
+  } 
+} 

@@ -1,0 +1,12 @@
+
+.sc-view .kg-file-field-view {
+  z-index: 6000;
+  direction: ltr;
+}
+
+.sc-view .kg-file-field-input-view {
+  opacity: 0;
+  -moz-opacity: 0;
+  filter: alpha(opacity=0);
+  font-size: 480px;
+}

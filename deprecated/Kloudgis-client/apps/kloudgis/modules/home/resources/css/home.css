@@ -1,0 +1,126 @@
+.sc-view.sc-collection-item.project-item .project-content{
+	border-radius: 10px; 	
+	border: solid 1px rgb(184,184,184);
+	-moz-box-shadow: 3px 3px 4px #000;
+	-webkit-box-shadow: 3px 3px 4px #000;
+	box-shadow: 3px 3px 4px #000;
+	-webkit-transition: all .1s linear;
+}
+
+.sc-view.sc-collection-item.project-item.sel {
+	background: none;
+}
+
+.sc-view.sc-collection-item.project-item.sel .project-content{
+	border-radius: 10px; 
+	border: solid 1px #608AB9;
+	-moz-box-shadow: 3px 3px 4px #608AB9;
+	-webkit-box-shadow: 3px 3px 4px #608AB9;
+	box-shadow: 3px 3px 4px #608AB9;
+}
+
+.sc-view.sc-collection-item.project-item .project-label{
+	text-align: center;
+	font: Arial;
+	font-size: 16px;
+	color: #333;
+	text-shadow: rgba(255, 255, 255, .9) 0px 1px 0px;
+	-webkit-transition: all .1s linear;
+}
+
+.sc-view.sc-collection-item.project-item.sel .project-label{
+	text-shadow: rgba(255, 255, 255, .9) 0px 1px 0px;
+	font-size: 19px;
+}
+
+.sc-view.sc-label-view.username-label{
+	color: #333;
+	text-shadow: rgba(255, 255, 255, .9) 0px 1px 0px;
+	font-size: 18px;
+	white-space: nowrap;
+	overflow: hidden; 
+	text-overflow: ellipsis;
+  	-o-text-overflow: ellipsis;
+  	-ms-text-overflow: ellipsis;
+}
+
+.sc-view.sc-label-view.location-label{
+	color: #608AB9;
+	font-size: 14px;
+	white-space: nowrap;
+	overflow: hidden; 
+	text-overflow: ellipsis;
+  	-o-text-overflow: ellipsis;
+  	-ms-text-overflow: ellipsis;
+}
+
+.sc-view.sc-label-view.feed-label{
+	color: #333;
+	font-size: 20px;
+	text-align: center;
+	text-shadow: rgba(255, 255, 255, .9) 0px 1px 0px;
+}
+
+#side_panel{
+	border-left: solid white 1px;
+}
+
+
+.feed-list-container{
+	background-color: white;
+	border-radius: 8px;
+	-webkit-box-shadow: inset rgba(0, 0, 0, 0.3) 0 3px 5px;
+	-moz-box-shadow: inset rgba(0, 0, 0, 0.3) 0 3px 5px;
+}
+
+.feed-list-container .sc-collection-view{
+	background: none;
+}
+
+.sc-view.sc-label-view.feed-title-label,
+.sc-view.sc-label-view.feed-descr-label,
+.sc-view.sc-label-view.feed-title-project{
+	color: #333;
+	white-space: nowrap;
+	overflow: hidden; 
+	text-overflow: ellipsis;
+  	-o-text-overflow: ellipsis;
+  	-ms-text-overflow: ellipsis;
+}
+
+.sc-view.sc-label-view.feed-title-label{
+	font-size: 16px;
+}
+
+.sc-view.sc-label-view.feed-descr-label{
+	font-size: 14px;
+}
+
+.sc-view.sc-label-view.feed-title-project{
+	font-size: 18px;
+	color: #608AB9;
+	text-align: center;
+}
+
+.sc-view.sc-collection-item.feed-list-item{
+	border-bottom: 1px solid #DDD;
+}
+
+.feed-list-item.even{
+	background-color: none;
+}
+
+.feed-list-item.odd{
+	background: -moz-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(241,245,250,0.6) 50%, rgba(241,245,250,0.6) 50%, rgba(255,255,255,0) 100%);
+	background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(241,245,250,0.6) 50%, rgba(241,245,250,0.6) 50%, rgba(255,255,255,0) 100%);
+}
+
+.sc-view.sc-collection-item.feed-list-item.feed-selected{
+	background: -moz-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(96,138,196,0.4) 50%, rgba(96,138,196,0.4) 51%, rgba(255,255,255,0) 100%);
+	background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(96,138,196,0.4) 50%, rgba(96,138,196,0.4) 51%, rgba(255,255,255,0) 100%);
+}
+
+.sc-view.sc-collection-item.feed-list-item.feed-selected .feed-title-project{
+	color: white;
+	text-shadow: rgba(30, 30, 30, .9) 0px 1px 0px;
+}

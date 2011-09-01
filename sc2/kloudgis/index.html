@@ -1,0 +1,69 @@
+<html>
+  <head>
+	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
+    <title>Login to kloudgis</title>
+  </head>
+  <body>
+     <script type="text/x-handlebars">		
+			<img id="kloud-logo" src="resources/images/kloudgis_black_256.png" alt="Kloudgis"/>
+			<label id="kloud-brand">Kloudgis</label>
+		<div class="login-pane">
+			<table>
+			<tr>
+			<td>
+				<label for="user-field">_Username</label>
+			</td>
+			<td>
+				{{#view KG.TextField id="user-field" valueBinding="KG.loginController.user" type="email" placeholder_not_loc="_UsernameHint" spellcheck="false" autocorrect="off" autocapitalize="off" nl_action="loginAction" autofocus="true"}}
+				{{/view}}	
+				</td>
+			<tr>
+			<td>
+				<label for="pwd-field">_Password</label>
+				</td>
+				<td>
+				{{#view KG.TextField id="pwd-field" valueBinding="KG.loginController.pwd" type="password" placeholder_not_loc="_PasswordHint" spellcheck="false" autocorrect="off" autocapitalize="off" nl_action="loginAction"}}
+				{{/view}}
+				</td>
+			</div>
+			<tr id="login-button-row">
+			<td>
+			</td>
+			<td>
+				{{#view KG.LoadingImageView isVisibleBinding="KG.core_login.isBusy"}}
+					<img {{bindAttr src="loadingImage"}} alt="Loading"/>
+			  	{{/view}}
+				{{#view SC.Button classBinding="isActive" target="KG.core_login" action="loginAction"}}
+			    	_Login
+			  	{{/view}}
+			</td>
+			</table>
+			{{view SC.Checkbox id="remember-me" title="_rememberMe"
+			        valueBinding="KG.core_login.rememberMe"}}
+			{{#view id="error-message" messageBinding="KG.core_login.errorMessage"}}
+				{{message}} 
+			{{/view}}
+		</div>			
+    </script>
+	
+	 <script type="text/x-handlebars">
+		{{#view SC.Button classBinding="isActive" target="KG.core_login" action="signupAction" id="signup-link"}}
+			_Signup
+		{{/view}}
+	</script>
+  </body>
+
+<!-- load all of the dependencies --> 
+   <script type="text/javascript" src="assets/bpm_libs.js"></script> 
+<!-- load my app assets --> 
+   <script type="text/javascript" src="assets/app_lib.js"></script>
+   <script type="text/javascript" src="assets/auth_lib.js"></script> 
+   <script type="text/javascript" src="assets/login_lib.js"></script> 
+<!-- load my app external lib -->   
+   <script type="text/javascript" src="ext/sha256.js"></script> 
+   <script type="text/javascript"> 
+	      spade.ready(function() { 
+	        spade.require('Kloudgis/~modules/login/lib/main');			
+	      }); 
+	</script>
+</html>

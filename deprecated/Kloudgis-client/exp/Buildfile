@@ -1,0 +1,33 @@
+# ===========================================================================
+# Project:   Kloudgis
+# Copyright: ©2010 My Company, Inc.
+# ===========================================================================
+
+# Add initial buildfile information here
+#config :all, :required => :sproutcore
+
+config :all,
+ 	:required => [:sproutcore, :core_kg, 'sproutcore/statechart', 'sproutcore/animation']
+
+# Modules config
+config :kloudgis,
+	:inlined_modules => ['main', 'login','share_security'],
+	:deferred_modules => ['home','app','m_app','login_ui', 'dbclient','openlayers', 'm_openlayers', 'leaflet', 'raphael'],
+	:prefetched_modules =>['share_sandbox','share_views']
+#	:layout => 'kloudgis:lib/index.rhtml'
+
+config 'kloudgis/home', 
+		:required => ['kloudgis/share_sandbox']
+		
+config 'kloudgis/app', 
+				:required => ['kloudgis/share_sandbox', 'kloudgis/share_views', 'kloudgis/openlayers', 'kloudgis/leaflet', 'kloudgis/raphael']
+				
+config 'kloudgis/m_app', 
+				:required => ['kloudgis/share_sandbox', 'kloudgis/share_views', 'kloudgis/m_openlayers']
+
+config 'kloudgis/dbclient', 
+				:required => ['kloudgis/share_sandbox', 'kloudgis/share_views']
+		
+proxy "/kg_server", :to => "localhost:8080"
+
+proxy "/geoserver", :to => "192.168.12.36:8080"

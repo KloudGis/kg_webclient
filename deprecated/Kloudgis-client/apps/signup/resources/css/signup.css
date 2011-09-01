@@ -1,0 +1,232 @@
+
+#signupView{
+	border-radius: 10px;
+	background: rgb(245,245,245);
+	-webkit-box-shadow: 0px 0px 10px #333;
+	-moz-box-shadow: 0px 0px 10px #333;
+	box-shadow: 0px 0px 10px #333;
+}
+
+#signupView .logo-label{
+	font-family: Helvetica, Arial, Sans-Serif;
+	font-size: 24px;
+	line-height: 28px;
+	font-weight: bold;
+	color: #333;
+	text-shadow: rgba(255, 255, 255, .9) 0px 1px 0px;
+}
+
+#signupView .signup-label{
+	font-family: Helvetica, Arial, Sans-Serif;
+	font-size: 19px;
+	font-weight: normal;
+	color: #333;
+	text-shadow: rgba(255, 255, 255, .9) 0px 1px 0px;
+}
+
+#create-button{
+	    cursor: hand;
+	   	margin-left: 10px;
+		font-size: 14px;
+		padding: 7px 0px 7px;
+		display: inline-block;
+		font-family: "HelveticaNeue-Bold", "HelveticaNeue", Helvetica, Arial, Sans-serif;
+		font-weight: bold;
+		color: white;
+		text-shadow: 0 1px 1px #333;
+		-webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+		-moz-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+		box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+		text-decoration: none;
+		white-space: nowrap;
+		background: -moz-linear-gradient(center bottom, #FF9009 22%, #FA4 81%);
+		background: -webkit-gradient(linear,left bottom, left top, color-stop(0.22, #FF9009), color-stop(0.81, #FA4));
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorStr=#FA4, endColorStr=#FF9009);
+		-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#FA4, endColorstr=#FF9009)";
+}
+
+#create-button:hover{
+    background:#FF9009;
+}
+
+#create-button span{
+	padding-right: 12px;
+	padding-left: 12px;
+}
+
+#error-message{
+	color: red;
+}
+.sc-view.sc-label-view.input-label{
+	font-family: Helvetica, Arial, Sans-Serif;
+	font-size: 14px;
+	font-weight: normal;
+	color: #333;
+	text-shadow: rgba(255, 255, 255, .9) 0px 1px 0px;
+	text-align:right;
+	white-space: nowrap;
+	overflow: hidden;
+  	text-overflow: ellipsis;
+  	-o-text-overflow: ellipsis;
+  	-ms-text-overflow: ellipsis;
+	vertical-align: middle;
+}
+
+
+/* Text section */
+
+.input-text{
+	border: 1px solid #DDD;
+	background: white;	
+	-webkit-transition: background 0.5s ease-in-out;
+	-o-transition: background 0.5s ease-in-out;
+	-moz-transition: background 0.5s ease-in-out;
+	transition: background 0.5s ease-in-out;
+}
+.input-view .input-text .input-field{
+	background: white;
+	-webkit-transition: background 0.5s ease-in-out;
+	-o-transition: background 0.5s ease-in-out;
+	-moz-transition: background 0.5s ease-in-out;
+	transition: background 0.5s ease-in-out;	
+}
+
+.input-view .input-text{	
+	border-radius: 3px;
+}
+
+.input-view.focus .input-text, 
+.input-view.focus.error .input-text
+{
+	border: 1px solid #333;	
+	border-bottom-right-radius: 0px;
+	border-top-right-radius: 0px;
+	border-bottom-left-radius: 3px;
+	border-top-left-radius: 3px;
+	-webkit-box-shadow: 0px 0px 2px #333;
+	-moz-box-shadow: 0px 0px 2px #333;
+	box-shadow: 0px 0px 2px #333;
+}
+
+.input-view.error .input-text{
+	border-bottom-right-radius: 0px;
+	border-top-right-radius: 0px;
+	border-bottom-left-radius: 3px;
+	border-top-left-radius: 3px;
+}
+
+/* Green background if valid */
+.input-view.valid .input-text{
+	background: rgb(240,254,233);
+}
+
+.input-view.valid .input-text .input-field{
+	background: rgb(240,254,233);
+}
+
+
+
+/* HELP SECTION */
+
+/* round rect*/
+.input-help{
+	background: rgb(240,254,233);
+	border: 1px solid rgb(225,239,219);
+	border-bottom-right-radius: 3px;
+	border-top-right-radius: 3px;	
+	-webkit-transition: background 1s ease-in-out;
+	-o-transition: background 1s ease-in-out;
+	-moz-transition: background 1s ease-in-out;
+	transition: background 1s ease-in-out;
+}
+
+.input-view .input-help{
+	opacity: 0;
+	-webkit-transition: opacity 1s ease-in-out;
+	-o-transition: opacity 1s ease-in-out;
+	-moz-transition: opacity 1s ease-in-out;
+	transition: opacity 1s ease-in-out;
+}
+
+.input-view.error .input-help{
+	opacity: 1.0;
+	background: rgb(255,207,207);
+	border: 1px solid rgb(229,163,163);
+}
+
+/* More red if error and focused*/
+.input-view.error.focus .input-help{
+	opacity: 1.0;
+	background: rgb(255,195,195);
+	border: 1px solid rgb(255,163,163);
+}
+
+/* Gray when OK focused*/
+.input-view.focus .input-help{
+	opacity: 1.0;
+	background: rgb(242,242,242);
+	border: 1px solid #DDD;
+}
+
+/* Green when valid*/
+.input-view.focus.valid .input-help{
+	opacity: 1.0;
+	background: rgb(242,242,242);
+	border: 1px solid #DDD;
+	background: rgb(240,254,233);
+}
+
+.label-help{
+	font-family: Helvetica, Arial, Sans-Serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #333;
+	text-shadow: rgba(255, 255, 255, .9) 0px 1px 0px;
+	
+}
+
+
+/*
+	no borders nor outline nor shadow
+*/
+.sc-view .sc-text-field-view.input-field {
+  border: none;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+.sc-view.sc-text-field-view.input-field.focus {
+  border-color: none;
+  outline: 0;
+}
+
+.msie .sc-view.sc-text-field-view.input-field input {
+  margin-top: 5px;
+}
+
+
+.safari .sc-view  .sc-text-field-view.input-field .border {
+  -webkit-appearance: none;
+}
+
+.mozilla .sc-view  .sc-text-field-view.input-field .border {
+  -moz-appearance: none;
+}
+
+.msie .sc-view .sc-text-field-view.input-field .border {
+  border: 0;
+}
+
+/*** sucess page ***/
+
+.sc-view.sc-label-view.success-label{
+	font-size: 18px;
+	color: #333;
+}
+
+.sucess-login-label{
+	font-size: 14px;
+	text-align: center;
+}
+

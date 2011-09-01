@@ -1,0 +1,46 @@
+<div id="logo-section">
+<label id="kloud-brand">Kloudgis</label>
+{{#view KG.LogoImageView id="kloud-logo"}}
+	<img {{bindAttr src="logoImage"}} alt="Kloudgis"/>
+{{/view}}
+</div>
+<div class="login-pane">
+	<table>
+	<tr>
+	<td>
+		<label for="user-field">{{loc _Username}}</label>
+	</td>
+	<td>
+		{{#view KG.UserView}}
+  			<input id="user-field" type="email" spellcheck="false" autocorrect="off" autocapitalize="off" placeholder="{{loc _UsernameHint}}"/>
+		{{/view}}	
+		</td>
+	<tr>
+	<td>
+		<label for="pwd-field">{{loc _Password}}</label>
+		</td>
+		<td>
+		{{#view KG.PwdView}}
+  			<input id="pwd-field" type="password" spellcheck="false" autocorrect="off" autocapitalize="off" placeholder="{{loc _PasswordHint}}"/>
+		{{/view}}
+		</td>
+	</div>
+	<tr id="login-button-row">
+	<td>
+	</td>
+	<td>
+		{{#view KG.LoadingImageView isVisibleBinding="KG.core_login.isBusy"}}
+			<img {{bindAttr src="loadingImage"}} alt="Loading"/>
+	  	{{/view}}
+		{{#view SC.Button classBinding="isActive" action="loginAction"}}
+	    	{{loc _Login}}
+	  	{{/view}}
+	</td>
+	</table>
+	{{#view SC.TemplateView id="error-message" messageBinding="KG.core_login.errorMessage"}}
+		{{message}} 
+	{{/view}}
+</div>
+{{#view SC.Button classBinding="isActive" action="signupAction" id="signup-link"}}
+	<label class="ellipsis">{{loc _signup}}</label>
+{{/view}}

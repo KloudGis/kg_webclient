@@ -1,0 +1,10 @@
+#config :all, :required => :sproutcore
+
+config :all,
+ 	:required => [:sproutcore]
+
+# Modules config
+config :core_kg,
+	:inlined_modules => ['shared', 'sandbox','feature']
+
+		

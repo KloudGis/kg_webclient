@@ -1,0 +1,21 @@
+@media only screen and (device-width: 320px) {
+	
+	#kloud-logo{
+		display: none;
+	}
+	
+	.login-pane {
+		width:auto;
+		left: 8px;
+		right: 8px;
+		top:8px;
+		margin-left:0px;
+		margin-top:0px;
+	}
+	
+	#signup-link{
+			top:auto;
+			bottom:8px;
+			margin-top:0px;
+	}
+}
