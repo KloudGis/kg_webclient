@@ -27,6 +27,7 @@ SC.mixin(KG, {
 	
 		        enterState: function() {
 					console.log('Logged out state');
+					KG.core_login.set('showLogin', YES);
 					KG.loginController.set('content', KG.Credential.create({}));
 		        },
 
@@ -51,11 +52,17 @@ SC.mixin(KG, {
 				
 					enterState:function(){
 						console.log('login successful');
-						KG.loginController.get('content').destroy();
-						KG.loginController.set('content', null);
-						KG.core_login.loginCompleted();
+						if(!SC.none(KG.loginController.get('content'))){
+							KG.loginController.get('content').destroy();
+							KG.loginController.set('content', null);
+						}
+						window.location.href = "home.html";						
 					}
-			})
+			}),
+			
+			signupAction: function(sender) {
+	            KG.core_login.login();
+	        },
         })
     })
 });

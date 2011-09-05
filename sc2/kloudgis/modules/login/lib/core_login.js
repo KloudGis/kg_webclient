@@ -1,17 +1,8 @@
 KG.core_login = SC.Object.create({
+	showLogin: NO,
     isBusy: NO,
     errorMessage: '',
 	rememberMe: NO,
-
-    loginAction: function() {
-        console.log('login action triggered');
-        KG.statechart.sendAction('loginAction');
-    },
-
-    signupAction: function() {
-        console.log('signup action triggered');
-        KG.statechart.sendAction('signupAction');
-    },
 
     signup: function() {
         window.location.href = "signup.html";

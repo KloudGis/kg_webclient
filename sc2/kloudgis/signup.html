@@ -1,22 +1,98 @@
 <html>
   <head>
 	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
-    <title>Kloudgis</title>
+	<link rel="stylesheet" href="css/signup.css" type="text/css" media="screen" charset="utf-8" />
+    <title>Signup to Kloudgis</title>
   </head>
   <body>
-	 <h1>This is signup</h1>
+	 <script type="text/x-handlebars">	
+		<img id="kloud-logo" src="resources/images/kloudgis_black_256.png" alt="Kloudgis"/>
+		<label id="kloud-welcome">Signup to Kloudgis</label>
+		<div class="signup-pane">
+			<table>
+			<tr class="section">
+					<td>
+						{{#view KG.SignupField id="user-field" classBinding="focus KG.userFieldController.hasError"}}
+							<label for="user-textfield">_Email</label>
+							{{#view KG.TextField id="user-textfield" valueBinding="KG.userFieldController.value" type="email" placeholder_not_loc="_UserHint" spellcheck="false" autocorrect="off" autocapitalize="off" nl_sc_action="validateAction" autofocus="true"}}
+							{{/view}}
+							{{KG.userFieldController.errorMessage}}						
+							{{#view KG.LoadingImageView isVisibleBinding="KG.userFieldController.isBusy"}}
+								<img {{bindAttr src="loadingImage"}} alt="Loading"/>
+							{{/view}}
+						{{/view}}	
+					</td>
+			</tr>
+			<tr class="section">
+					<td>
+						{{#view KG.SignupField id="pwd-field" classBinding="focus KG.pwdFieldController.hasError"}}
+							<label for="pwd-textfield">_Pwd</label>
+							{{#view KG.TextField id="pwd-textfield" valueBinding="KG.pwdFieldController.value" type="password" placeholder_not_loc="_PwdHint" spellcheck="false" autocorrect="off" autocapitalize="off" nl_sc_action="validateAction"}}
+							{{/view}}
+							{{errorMessage}}						
+						{{/view}}	
+					</td>
+			</tr>
+			<tr class="section">
+					<td>
+						{{#view KG.SignupField id="name-field" classBinding="focus KG.nameFieldController.hasError"}}
+							<label for="name-textfield">_Name</label>
+							{{#view KG.TextField id="name-textfield" valueBinding="KG.nameFieldController.value" type="text" placeholder_not_loc="_NameHint" spellcheck="false" autocorrect="off" autocapitalize="off" nl_sc_action="validateAction"}}
+							{{/view}}
+							{{errorMessage}}						
+						{{/view}}	
+					</td>
+			</tr>
+			<tr class="section">
+					<td>
+						{{#view KG.SignupField id="company-field" classBinding="focus KG.companyFieldController.hasError"}}
+							<label for="company-textfield">_Company</label>
+							{{#view KG.TextField id="company-textfield" valueBinding="KG.companyFieldController.value" type="text" placeholder_not_loc="_CompanyHint" spellcheck="false" autocorrect="off" autocapitalize="off" nl_sc_action="validateAction"}}
+							{{/view}}
+							{{errorMessage}}						
+						{{/view}}	
+					</td>
+			</tr>
+			<tr class="section">
+					<td>
+						{{#view KG.SignupField id="location-field" classBinding="focus KG.locationFieldController.hasError"}}
+							<label for="location-textfield">_Location</label>
+							{{#view KG.TextField id="location-textfield" valueBinding="KG.locationFieldController.value" type="text" placeholder_not_loc="_LocationHint" spellcheck="false" autocorrect="off" autocapitalize="off" nl_sc_action="validateAction"}}
+							{{/view}}
+							{{errorMessage}}						
+						{{/view}}	
+					</td>
+			</tr>	
+			<tr class="section">
+					<td>
+						{{#view KG.Button classBinding="isActive" sc_action="createAccountAction" id="create-button"}}
+						_Create
+						{{/view}}
+					</td>
+			</tr>
+			<tr class="section">
+					<td>
+						{{#view messageBinding="KG.core_signup.globalError" id="global-error"}}
+							{{message}}
+						{{/view}}
+					</td>
+			</tr>
+			</table>
+		</div>		
+    </script>
   </body>
 
 <!-- load all of the dependencies --> 
    <script type="text/javascript" src="assets/bpm_libs.js"></script> 
 <!-- load my app assets --> 
-   <script type="text/javascript" src="assets/signup_libs.js"></script> 
+   <script type="text/javascript" src="assets/app_lib.js"></script>
+   <script type="text/javascript" src="assets/signup_lib.js"></script> 
 <!-- load my app external lib -->   
+   <script type="text/javascript" src="ext/sha256.js"></script>
    <script type="text/javascript"> 
 	      spade.ready(function() { 
 			//bootstrap
-	        //spade.require('Kloudgis/~modules/home/lib/main');
-	 		//spade.require('Kloudgis/~modules/home/lib/core_home');			
+	        spade.require('Kloudgis/~modules/signup/lib/main');			
 	      }); 
 	</script>
 	

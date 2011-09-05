@@ -13,7 +13,7 @@ SC.mixin(KG, {
     /**
  * All tokens to expire in 14 days
  */
-    AUTHENTICATION_TOKEN_EXPIRY_SECONDS: 60 * 60 * 24 * 14,
+    AUTHENTICATION_TOKEN_EXPIRY: 14,
 
 });
 
@@ -31,44 +31,41 @@ KG.core_auth = SC.Object.create({
 
         // Decode token
         var delimiterIndex = token.indexOf('~~~');
-        if (delimiterIndex < 0) {
+        if (delimiterIndex < 1) {
             return NO;
         }
-        var jsonString = token.substr(0, delimiterIndex);
-        var json = JSON.parse(jsonString);
-        if (SC.none(json)) {
+        var expiryString = token.substr(0, delimiterIndex);
+        if (SC.none(expiryString)) {
             return NO;
         }
 
-        var expiryString = json.ExpiresOn;
-        if (expiryString === null) {
-            return NO;
-        }
         var now = new Date();
 		//TODO parse the string and compare
-        var expiry = null;//SC.DateTime.parse(expiryString, SC.DATETIME_ISO8601);
-       // if (SC.DateTime.compare(now, expiry) > 0) {
+        var expiry = new Date(expiryString);
+        if (SC.none(expiry) || expiry.getTime() == Number.NaN ||  now > expiry) {
             return NO;
-       // }
+        }
 
         // Synchronously get user from server
         var newToken = null;
         var postData = {
-            pwd: token
+			user: null,
+            pwd: token.substr(delimiterIndex + 3)
         };
         //synch
         $.ajax({
-            url: '/kg_auth/public/login',
-            type: 'POST',
-            async: false,
-            dataType: 'json',
+			type: 'POST',
+            url: '/kg_auth/public/login',             
             data: JSON.stringify(postData),
+			dataType: 'json',
+			contentType: 'application/json; charset=utf-8',
             error: function(jqXHR, textStatus, errorThrown) {
                 SC.Logger.error('Auto login error: HTTP error status code: ' + jqXHR.status);
             },
             success: function(data, textStatus, jqXHR) {
                 newToken = data.auth_token;
-            }
+            },
+			async: false
         });
 
         // Save
@@ -142,12 +139,12 @@ KG.core_auth = SC.Object.create({
         var error = null;
         try {
             // Figure out the expiry
-            // Take off 1 hour so that we expire before the token does which means we have time to act
             var expiry = new Date();
             if (this.rememberMe) {
-				//TODO add a delay to the current time!
-                //expiry = 
-            }
+                expiry.setDate(expiry.getDate()+KG.AUTHENTICATION_TOKEN_EXPIRY);
+            }else{
+				expiry = '';
+			}
             // Get the token
             var token;
             if (!SC.none(data)) {
@@ -174,7 +171,11 @@ KG.core_auth = SC.Object.create({
     saveToken: function(token, expiry) {
         this.set('authenticationTokenExpiry', expiry);
         this.set('authenticationToken', token);
-        localStorage.setItem(KG.AUTHENTICATION_TOKEN_LOCAL_STORE_KEY, token);
+		if(SC.none(token)){
+			localStorage.setItem(KG.AUTHENTICATION_TOKEN_LOCAL_STORE_KEY, '');
+		}else{
+        	localStorage.setItem(KG.AUTHENTICATION_TOKEN_LOCAL_STORE_KEY, expiry + '~~~' + token);
+		}
     },
 
     /*

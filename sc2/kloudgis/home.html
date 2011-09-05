@@ -1,23 +1,32 @@
 <html>
   <head>
 	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
+	<link rel="stylesheet" href="css/home.css" type="text/css" media="screen" charset="utf-8" />
     <title>Kloudgis</title>
   </head>
   <body>
-	 <h1>This is home</h1>
+	 <h1>This is home v2</h1>
+	 <a href="index.html">back to login</a>
+	<script type="text/x-handlebars">	
+		{{#view SC.Button  target="KG.core_auth" action="logout"}}
+			Logout (test)
+		{{/view}}
+	 </script>	
   </body>
 
 <!-- load all of the dependencies --> 
    <script type="text/javascript" src="assets/bpm_libs.js"></script> 
 <!-- load my app assets --> 
-   <script type="text/javascript" src="assets/home_libs.js"></script> 
+   <script type="text/javascript" src="assets/app_lib.js"></script>
+   <script type="text/javascript" src="assets/auth_lib.js"></script>
+   <script type="text/javascript" src="assets/home_lib.js"></script> 
+   
 <!-- load my app external lib -->   
    <script type="text/javascript"> 
 	      spade.ready(function() { 
 			//bootstrap
-	        //spade.require('Kloudgis/~modules/home/lib/main');
-	 		//spade.require('Kloudgis/~modules/home/lib/core_home');			
+	        spade.require('Kloudgis/~modules/home/lib/main');			
 	      }); 
-	</script>
+   </script>
 	
 </html>

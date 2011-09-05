@@ -1,10 +1,12 @@
 <html>
   <head>
 	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
+	<link rel="stylesheet" href="css/login.css" type="text/css" media="screen" charset="utf-8" />
     <title>Login to kloudgis</title>
   </head>
   <body>
-     <script type="text/x-handlebars">		
+     <script type="text/x-handlebars">	
+		{{#view id="main-view" isVisibleBinding="KG.core_login.showLogin"}}	
 			<img id="kloud-logo" src="resources/images/kloudgis_black_256.png" alt="Kloudgis"/>
 			<label id="kloud-brand">Kloudgis</label>
 		<div class="login-pane">
@@ -14,7 +16,7 @@
 				<label for="user-field">_Username</label>
 			</td>
 			<td>
-				{{#view KG.TextField id="user-field" valueBinding="KG.loginController.user" type="email" placeholder_not_loc="_UsernameHint" spellcheck="false" autocorrect="off" autocapitalize="off" nl_action="loginAction" autofocus="true"}}
+				{{#view KG.TextField id="user-field" valueBinding="KG.loginController.user" type="email" placeholder_not_loc="_UsernameHint" spellcheck="false" autocorrect="off" autocapitalize="off" nl_sc_action="loginAction" autofocus="true"}}
 				{{/view}}	
 				</td>
 			<tr>
@@ -22,7 +24,7 @@
 				<label for="pwd-field">_Password</label>
 				</td>
 				<td>
-				{{#view KG.TextField id="pwd-field" valueBinding="KG.loginController.pwd" type="password" placeholder_not_loc="_PasswordHint" spellcheck="false" autocorrect="off" autocapitalize="off" nl_action="loginAction"}}
+				{{#view KG.TextField id="pwd-field" valueBinding="KG.loginController.pwd" type="password" placeholder_not_loc="_PasswordHint" spellcheck="false" autocorrect="off" autocapitalize="off" nl_sc_action="loginAction"}}
 				{{/view}}
 				</td>
 			</div>
@@ -33,7 +35,7 @@
 				{{#view KG.LoadingImageView isVisibleBinding="KG.core_login.isBusy"}}
 					<img {{bindAttr src="loadingImage"}} alt="Loading"/>
 			  	{{/view}}
-				{{#view SC.Button classBinding="isActive" target="KG.core_login" action="loginAction"}}
+				{{#view KG.Button classBinding="isActive" sc_action="loginAction"}}
 			    	_Login
 			  	{{/view}}
 			</td>
@@ -43,14 +45,15 @@
 			{{#view id="error-message" messageBinding="KG.core_login.errorMessage"}}
 				{{message}} 
 			{{/view}}
-		</div>			
+		</div>	
+		<div id="signup-box">
+			<Label>Not yet member ?</Label>
+			{{#view KG.Button classBinding="isActive" sc_action="signupAction" id="signup-link"}}
+				_Signup
+			{{/view}}
+		</div>
+		{{/view}}		
     </script>
-	
-	 <script type="text/x-handlebars">
-		{{#view SC.Button classBinding="isActive" target="KG.core_login" action="signupAction" id="signup-link"}}
-			_Signup
-		{{/view}}
-	</script>
   </body>
 
 <!-- load all of the dependencies --> 
