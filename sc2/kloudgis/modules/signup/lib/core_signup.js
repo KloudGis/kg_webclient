@@ -4,13 +4,41 @@ KG.core_signup = SC.Object.create({
 
     createAccount: function() {
         this.validateAllExceptUser();
-        this.validateUser(this, this.validateUserCallback());
+        this.validateUser(this, this.createUserCallback());
     },
 
-    validateUserCallback: function() {
-        var found = KG.fields.filterProperty('isValid', true);
+    createUserCallback: function() {
+        var found = KG.fields.findProperty('isValid', NO);
         if (!found) {
             this.set('globalError', '');
+			var postData = {
+				user: KG.userFieldController.get('value'),
+				pwd: SHA256(KG.pwdFieldController.get('value')),
+				name: KG.nameFieldController.get('value'),
+				company: KG.companyFieldController.get('value'),
+				location: KG.locationFieldController.get('value'),
+			};
+			// Call server
+            $.ajax({
+                type: 'POST',
+                url: '/kg_auth/public/register',
+                data: JSON.stringify(postData),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                context: this,
+                error: function(){
+					this.set('globalError', '_serverError'.loc());
+				},
+                success: function(data){
+					console.log(data);
+					if(data.content == "_success"){
+						window.location.href = "index.html?user=" + KG.userFieldController.get('value');
+					}else{
+						this.set('globalError', data.content.loc());
+					}
+				},
+                async: YES
+            });
         } else {
             this.set('globalError', '_correctErrorFirst');
         }
@@ -34,7 +62,9 @@ KG.FieldController = SC.Object.extend({
     isBusy: NO,
     errorMessage: '',
 
-    validate: function() {},
+    validate: function() {
+		this.setError();
+	},
 
     setError: function(error) {
         if (SC.none(error)) {
@@ -48,7 +78,7 @@ KG.FieldController = SC.Object.extend({
 
     isValid: function() {
         return ! this.get('hasError') && !this.get('isBusy');
-    }
+    }.property('hasError', 'isBusy')
 
 });
 
@@ -104,12 +134,23 @@ KG.userFieldController = KG.FieldController.create({
         this.doCallback();
     }
 });
-KG.pwdFieldController = KG.FieldController.create();
-KG.nameController = KG.FieldController.create();
-KG.companyController = KG.FieldController.create();
-KG.locationController = KG.FieldController.create();
+KG.pwdFieldController = KG.FieldController.create({
+	validate: function() {
+		var val = this.get('value');
+		if(SC.none(val)){
+			this.setError('_Empty'.loc());
+		}else if(val.length < 6){
+			this.setError('_pwdMinLength'.loc());
+		}else{
+			this.setError();
+		}		
+	},
+});
+KG.nameFieldController = KG.FieldController.create();
+KG.companyFieldController = KG.FieldController.create();
+KG.locationFieldController = KG.FieldController.create();
 
-KG.fields = [KG.userFieldController, KG.pwdFieldController, KG.nameController, KG.companyController, KG.locationController];
+KG.fields = [KG.userFieldController, KG.pwdFieldController, KG.nameFieldController, KG.companyFieldController, KG.locationFieldController];
 
 $(document).ready(function() {
     KG.statechart.initStatechart();

@@ -12,6 +12,10 @@ KG.SignupField = SC.View.extend({
 	focusOut: function(e){
 		this.set('focus', NO);
 		KG.statechart.sendAction('focusOutEvent', this, e);
+		return NO;
+	},
+	
+	keyDown: function(e){	
 		return YES;
 	},
 	
@@ -19,7 +23,7 @@ KG.SignupField = SC.View.extend({
 		if(e.keyCode == 13){
 			KG.statechart.sendAction('newLineEvent', this, e);
 		}
-		return YES;
+		return NO;
 	},
 	
 });

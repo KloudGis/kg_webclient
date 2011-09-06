@@ -4,14 +4,6 @@ KG.core_login = SC.Object.create({
     errorMessage: '',
 	rememberMe: NO,
 
-    signup: function() {
-        window.location.href = "signup.html";
-    },
-
-    _hashPassword: function(pwd) {
-        return SHA256(pwd);
-    },
-
     focusUserField: function() {
         $('#user-field').focus();
     },
@@ -28,13 +20,13 @@ KG.core_login = SC.Object.create({
             console.log('Login attempt');
             // Get our data from the properties using the SC 'get' methods
             // Need to do this because these properties have been bound/observed.
-            var username = KG.loginController.get('user');
+            var username = KG.credential.get('user');
             if (username == null || username == '') {
                 this.focusUserField();
                 throw new Error('_UsernameRequired'.loc());
             }
 
-            var password = KG.loginController.get('pwd');
+            var password = KG.credential.get('pwd');
             if (password == null || password == '') {
                 this.focusPwdField();
                 throw new Error('_PasswordRequired'.loc());
@@ -43,7 +35,7 @@ KG.core_login = SC.Object.create({
             this.set('isBusy', YES);
 
             // We know the username and password are not null at this point, so attempt to login
-            var hashedPassword = this._hashPassword(password);
+            var hashedPassword = SHA256(password);
             KG.core_auth.login(username, hashedPassword, this.get('rememberMe'), this, this.endLogin, {});
             this.set('errorMessage', '')
             return YES;
@@ -90,7 +82,7 @@ KG.core_login = SC.Object.create({
     },
 
     tryLoginAuto: function() {
-        if (KG.core_auth.load()) {
+        if (KG.core_auth.load(YES)) {
             KG.statechart.sendAction('authenticationSucceeded', this);
             return YES;
         } else {
@@ -100,14 +92,11 @@ KG.core_login = SC.Object.create({
     }
 });
 
-KG.Credential = SC.Object.extend({
+KG.credential = SC.Object.create({
 	user: undefined,
 	pwd: undefined
 });
 
-//login controller
-KG.loginController = SC.Object.create({
-});
 
 $(document).ready(function() {
     KG.statechart.initStatechart();

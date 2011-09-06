@@ -11,7 +11,12 @@ SC.mixin(KG, {
             tryLoginAutoState: SC.State.extend({
                 enterState: function() {
 					console.log('try auto login state');
-		            KG.core_login.tryLoginAuto();
+					var user = $.getQueryString('user');				
+					if(SC.none(user)){
+		            	KG.core_login.tryLoginAuto();
+					}else{
+						this.gotoState('loggedOutState');
+					}
 		        },
 
 				authenticationSucceeded: function(sender){
@@ -27,16 +32,15 @@ SC.mixin(KG, {
 	
 		        enterState: function() {
 					console.log('Logged out state');
-					KG.core_login.set('showLogin', YES);
-					KG.loginController.set('content', KG.Credential.create({}));
+					KG.core_login.set('showLogin', YES);				
+					var user = $.getQueryString('user');
+					if(!SC.none(user)){
+						KG.credential.set('user', user);
+					}
 		        },
 
 		        loginAction: function(sender) {
 		            KG.core_login.login();
-		        },
-
-		        signupAction: function() {
-		            KG.core_login.signup();
 		        },
 
 		        authenticationSucceeded: function() {
@@ -52,16 +56,14 @@ SC.mixin(KG, {
 				
 					enterState:function(){
 						console.log('login successful');
-						if(!SC.none(KG.loginController.get('content'))){
-							KG.loginController.get('content').destroy();
-							KG.loginController.set('content', null);
-						}
+						KG.credential.set('user', undefined);
+						KG.credential.set('pwd', undefined);
 						window.location.href = "home.html";						
 					}
 			}),
 			
 			signupAction: function(sender) {
-	            KG.core_login.login();
+	            window.location.href = "signup.html";
 	        },
         })
     })

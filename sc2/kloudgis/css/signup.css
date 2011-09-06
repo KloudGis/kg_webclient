@@ -5,7 +5,7 @@ body{
 
 #kloud-logo{
 	display: block;
-	margin:0px auto;
+	margin:5px auto;
 }
 
 #kloud-welcome{
@@ -28,6 +28,7 @@ body{
 
 .signup-field.has-error input{
 	border: 1px solid rgb(255,155,155);
+	background: none;
 }
 
 .signup-field span{
@@ -54,6 +55,8 @@ body{
 
 .signup-pane .loading-image {
   float: right;
+  margin-top:-21px;
+  margin-right:3px;
 }
 
 .signup-field.focus label{

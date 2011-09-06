@@ -4,16 +4,12 @@ SC.mixin(KG, {
  * Name of localStorage where we store the auth token
  */
     AUTHENTICATION_TOKEN_LOCAL_STORE_KEY: 'KG.AuthenticationToken',
+	REMEMBER_ME_LOCAL_STORE_KEY:  'KG.RememberMe',
 
     /**
  * Name of Authentication header returned in API responses
  */
-    AUTHENTICATION_HEADER_NAME: 'X-Kloudgis-Authentication',
-
-    /**
- * All tokens to expire in 14 days
- */
-    AUTHENTICATION_TOKEN_EXPIRY: 14,
+    AUTHENTICATION_HEADER_NAME: 'X-Kloudgis-Authentication',	
 
 });
 
@@ -21,28 +17,12 @@ SC.mixin(KG, {
 //basic login using the auth token
 KG.core_auth = SC.Object.create({
 
-    load: function() {
+    load: function(useRememberMe) {
         // Get token from local store
         var token = localStorage.getItem(KG.AUTHENTICATION_TOKEN_LOCAL_STORE_KEY);
-        if (SC.none(token)) {
+		var rememberMe = localStorage.getItem(KG.REMEMBER_ME_LOCAL_STORE_KEY);
+        if (SC.none(token) || (userRememberMe && rememberMe != 'true')) {
             this.logout();
-            return NO;
-        }
-
-        // Decode token
-        var delimiterIndex = token.indexOf('~~~');
-        if (delimiterIndex < 1) {
-            return NO;
-        }
-        var expiryString = token.substr(0, delimiterIndex);
-        if (SC.none(expiryString)) {
-            return NO;
-        }
-
-        var now = new Date();
-		//TODO parse the string and compare
-        var expiry = new Date(expiryString);
-        if (SC.none(expiry) || expiry.getTime() == Number.NaN ||  now > expiry) {
             return NO;
         }
 
@@ -50,7 +30,7 @@ KG.core_auth = SC.Object.create({
         var newToken = null;
         var postData = {
 			user: null,
-            pwd: token.substr(delimiterIndex + 3)
+            pwd: token
         };
         //synch
         $.ajax({
@@ -63,13 +43,13 @@ KG.core_auth = SC.Object.create({
                 SC.Logger.error('Auto login error: HTTP error status code: ' + jqXHR.status);
             },
             success: function(data, textStatus, jqXHR) {
-                newToken = data.auth_token;
+                newToken = data.content;			
             },
 			async: false
         });
 
         // Save
-        this.saveToken(newToken, expiry);
+        this.saveToken(newToken);
 
         if (SC.none(newToken)) {
             return NO;
@@ -168,13 +148,17 @@ KG.core_auth = SC.Object.create({
         return YES;
     },
 
-    saveToken: function(token, expiry) {
+    saveToken: function(token, rememberMe) {
         this.set('authenticationTokenExpiry', expiry);
         this.set('authenticationToken', token);
 		if(SC.none(token)){
 			localStorage.setItem(KG.AUTHENTICATION_TOKEN_LOCAL_STORE_KEY, '');
+			localStorage.setItem(KG.REMEMBER_ME_LOCAL_STORE_KEY, NO);
 		}else{
-        	localStorage.setItem(KG.AUTHENTICATION_TOKEN_LOCAL_STORE_KEY, expiry + '~~~' + token);
+        	localStorage.setItem(KG.AUTHENTICATION_TOKEN_LOCAL_STORE_KEY, token);
+			if(rememberMe !== undefined){
+				localStorage.setItem(KG.REMEMBER_ME_LOCAL_STORE_KEY, rememberMe);
+			}
 		}
     },
 

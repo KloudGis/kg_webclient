@@ -3,7 +3,7 @@ KG.TextField = SC.TextField.extend({
     //add more attributes (from autofocus)
     attributeBindings: ['type', 'placeholder', 'value', 'autofocus', 'spellcheck', 'autocorrect', 'autocapitalize'],
 	
-	nl_action: null,
+	nl_sc_action: null,
 	placeholder_not_loc: null,
 	
 	placeholder: function(){
@@ -16,7 +16,7 @@ KG.TextField = SC.TextField.extend({
 	insertNewline: function() {
 	//	console.log('textfield nl action:' + this.get('nl_action'));
 		if(!SC.none(this.get('nl_sc_action'))){
-        	KG.statechart.sendAction(this.get('nl_action'), this);
+        	KG.statechart.sendAction(this.get('nl_sc_action'), this);
 		}
     },
 
@@ -26,17 +26,5 @@ KG.TextField = SC.TextField.extend({
 			console.log('fallback focus');
 			this.$().focus();
 		}
-	},
-	
-	//patch: don't know why, but if not return YES, the event is not propagated ???  
-	focusOut: function(event) {
-		this._super();
-		return YES;
-	},	
-	keyUp: function(event){
-		return YES;
 	}
-	
-	
-	//end patch
 });

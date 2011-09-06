@@ -7,8 +7,10 @@
   <body>
      <script type="text/x-handlebars">	
 		{{#view id="main-view" isVisibleBinding="KG.core_login.showLogin"}}	
-			<img id="kloud-logo" src="resources/images/kloudgis_black_256.png" alt="Kloudgis"/>
-			<label id="kloud-brand">Kloudgis</label>
+			<a href="index.html">
+				<img id="kloud-logo" src="resources/images/kloudgis_black_256.png" alt="Kloudgis"/>
+			</a>
+			<span id="kloud-brand">Kloudgis</span>
 		<div class="login-pane">
 			<table>
 			<tr>
@@ -16,7 +18,7 @@
 				<label for="user-field">_Username</label>
 			</td>
 			<td>
-				{{#view KG.TextField id="user-field" valueBinding="KG.loginController.user" type="email" placeholder_not_loc="_UsernameHint" spellcheck="false" autocorrect="off" autocapitalize="off" nl_sc_action="loginAction" autofocus="true"}}
+				{{#view KG.TextField id="user-field" valueBinding="KG.credential.user" type="email" placeholder_not_loc="_UsernameHint" spellcheck="false" autocorrect="off" autocapitalize="off" nl_sc_action="loginAction" autofocus="true"}}
 				{{/view}}	
 				</td>
 			<tr>
@@ -24,7 +26,7 @@
 				<label for="pwd-field">_Password</label>
 				</td>
 				<td>
-				{{#view KG.TextField id="pwd-field" valueBinding="KG.loginController.pwd" type="password" placeholder_not_loc="_PasswordHint" spellcheck="false" autocorrect="off" autocapitalize="off" nl_sc_action="loginAction"}}
+				{{#view KG.TextField id="pwd-field" valueBinding="KG.credential.pwd" type="password" placeholder_not_loc="_PasswordHint" spellcheck="false" autocorrect="off" autocapitalize="off" nl_sc_action="loginAction"}}
 				{{/view}}
 				</td>
 			</div>
