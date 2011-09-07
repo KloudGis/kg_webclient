@@ -21,7 +21,7 @@ KG.core_auth = SC.Object.create({
         // Get token from local store
         var token = localStorage.getItem(KG.AUTHENTICATION_TOKEN_LOCAL_STORE_KEY);
 		var rememberMe = localStorage.getItem(KG.REMEMBER_ME_LOCAL_STORE_KEY);
-        if (SC.none(token) || (userRememberMe && rememberMe != 'true')) {
+        if (SC.none(token) || (useRememberMe && rememberMe != 'true')) {
             this.logout();
             return NO;
         }
@@ -96,16 +96,12 @@ KG.core_auth = SC.Object.create({
 
         var error = null;
         SC.Logger.error('HTTP error status code: ' + jqXHR.status);
-        if (jqXHR.status === 500 || jqXHR.status === 400 || jqXHR.status === 401) {
-            SC.Logger.error('HTTP response ' + jqXHR.responseText);
-            if (!SC.empty(jqXHR.responseText) && jqXHR.responseText.charAt(0) === '{') {
-                var responseJson = $.parseJSON(jqXHR.responseText);
-                error = new SC.Error(responseJson.Message);
-            } else {
-                error = new SC.Error('Error connecting to server. ' + jqXHR.status + ' ' + jqXHR.statusText);
-            }
+		if(jqXHR.status === 401){
+			error = new SC.Error('_unauthorized');
+		}else if (jqXHR.status === 403 || jqXHR.status === 404 || jqXHR.status > 500) {
+            error = new SC.Error('_serverError');
         } else {
-            error = new SC.Error('Unexpected HTTP error: ' + jqXHR.status + ' ' + jqXHR.statusText);
+            error = new SC.Error('_unexpectedError');
         }
 
         // Callback
@@ -118,22 +114,15 @@ KG.core_auth = SC.Object.create({
     endLogin: function(data, textStatus, jqXHR) {
         var error = null;
         try {
-            // Figure out the expiry
-            var expiry = new Date();
-            if (this.rememberMe) {
-                expiry.setDate(expiry.getDate()+KG.AUTHENTICATION_TOKEN_EXPIRY);
-            }else{
-				expiry = '';
-			}
             // Get the token
             var token;
             if (!SC.none(data)) {
-                token = data.auth_token;
+                token = data.content;
             }
             if (SC.none(token)) {
-                throw new SC.Error('_nullTokenError'.loc());
+                throw new SC.Error('_nullTokenError');
             }
-            KG.core_auth.saveToken(token, expiry);
+            KG.core_auth.saveToken(token, this.rememberMe);
         }
         catch(err) {
             error = err;
@@ -149,7 +138,6 @@ KG.core_auth = SC.Object.create({
     },
 
     saveToken: function(token, rememberMe) {
-        this.set('authenticationTokenExpiry', expiry);
         this.set('authenticationToken', token);
 		if(SC.none(token)){
 			localStorage.setItem(KG.AUTHENTICATION_TOKEN_LOCAL_STORE_KEY, '');
@@ -177,7 +165,6 @@ KG.core_auth = SC.Object.create({
         localStorage.removeItem(KG.AUTHENTICATION_TOKEN_LOCAL_STORE_KEY);
 
         // Clear cached token
-        this.set('authenticationTokenExpiry', null);
         this.set('authenticationToken', null);
 
         return;

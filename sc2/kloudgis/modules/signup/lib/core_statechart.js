@@ -12,6 +12,7 @@ SC.mixin(KG, {
 
                 enterState: function() {
                     console.log('enter signup');
+					document.title = "_signupTitle".loc();
                 },
             }),
 
