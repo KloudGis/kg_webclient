@@ -22,15 +22,15 @@ SC.mixin(KG, {
                 },
 
 				focusOutEvent: function(){
-					this.validate();
+					this._validate();
 				},
 				
 				newLineEvent: function(){
 					console.log('newline');
-					this.validate();
+					this._validate();
 				},
 				
-				validate:function(){
+				_validate:function(){
 					KG.core_signup.validateUser();
 				}
 				

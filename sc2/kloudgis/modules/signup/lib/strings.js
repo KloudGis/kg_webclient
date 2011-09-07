@@ -11,7 +11,8 @@ var fr = {
 	"_name": "Nom complet",
 	"_company": "Compagnie",
 	"_location": "Emplacement",
-	"_createAccount": "Créer"
+	"_createAccount": "Créer",
+	"_InUse": "Ce courriel est déjà utilisé."
 };
 
 var en = {
@@ -26,7 +27,8 @@ var en = {
 	"_name": "Full Name",
 	"_company": "Company",
 	"_location": "Location",
-	"_createAccount": "Create"
+	"_createAccount": "Create",
+	"_InUse": "This email is already taken."
 };
 
 if(KG.lang === 'fr'){
