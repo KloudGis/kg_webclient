@@ -1,5 +1,12 @@
 
 var fr = { 
+	"_loginTitle": "Se connecter à Kloudgis",
+	"_email" : "Courriel:",
+	"_pwd": "Mot de passe:",
+	"_login": "Connecter",
+	"_signupTitle": "Pas encore membre ?",
+	"_signup": "Créer un compte",
+	"_rememberMe": "Rester connecter",
     "_serverError": "Erreur du serveur.",
 	"_unexpectedError": "Erreur interne.",
 	"_unauthorized": "Le courriel ou le mot de passe est incorrect.",
@@ -10,6 +17,13 @@ var fr = {
 };
 
 var en = {
+	"_loginTitle": "Login to Kloudgis",
+	"_email" : "Email:",
+	"_pwd": "Password:",
+	"_login": "Sign in",
+	"_signupTitle": "Not yet member ?",
+	"_signup": "Create an account",
+	"_rememberMe": "Stay signed in",
 	"_serverError": "Server error.",
 	"_unexpectedError": "Internal error.",
 	"_unauthorized": "The email or password you entered is incorrect.",
@@ -24,3 +38,16 @@ if(KG.lang === 'fr'){
 }else{
 	SC.STRINGS = en;
 }
+
+
+//do the localize after the rendering
+SC.run.schedule('render',null, function(){
+	console.log('localize page');
+	document.title = "_loginTitle".loc();
+	$("#email-label").text("_email".loc());
+	$("#pwd-label").text("_pwd".loc());
+	$("#remember-me span").text("_rememberMe".loc());
+	$("#login-button").text("_login".loc());
+	$("#signup-title").text("_signupTitle".loc());
+	$("#signup-button").text("_signup".loc());	
+});

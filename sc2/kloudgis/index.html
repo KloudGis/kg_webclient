@@ -9,13 +9,13 @@
 		{{#view id="main-view" isVisibleBinding="KG.core_login.showLogin"}}	
 			<a href="index.html">
 				<img id="kloud-logo" src="resources/images/kloudgis_black_256.png" alt="Kloudgis"/>
-			</a>
+			</a>		
 			<span id="kloud-brand">Kloudgis</span>
 		<div class="login-pane">
 			<table>
 			<tr>
 			<td>
-				<label for="user-field">_Username</label>
+				<label id="email-label" for="user-field"></label>
 			</td>
 			<td>
 				{{#view KG.TextField id="user-field" valueBinding="KG.credential.user" type="email" placeholder_not_loc="_UsernameHint" spellcheck="false" autocorrect="off" autocapitalize="off" nl_sc_action="loginAction" autofocus="true"}}
@@ -23,7 +23,7 @@
 				</td>
 			<tr>
 			<td>
-				<label for="pwd-field">_Password</label>
+				<label id="pwd-label" for="pwd-field"></label>
 				</td>
 				<td>
 				{{#view KG.TextField id="pwd-field" valueBinding="KG.credential.pwd" type="password" placeholder_not_loc="_PasswordHint" spellcheck="false" autocorrect="off" autocapitalize="off" nl_sc_action="loginAction"}}
@@ -33,12 +33,8 @@
 			<tr id="login-button-row">
 			<td>
 			</td>
-			<td>
-				{{#view KG.LoadingImageView isVisibleBinding="KG.core_login.isBusy"}}
-					<img {{bindAttr src="loadingImage"}} alt="Loading"/>
-			  	{{/view}}
-				{{#view KG.Button classBinding="isActive" sc_action="loginAction"}}
-			    	_Login
+			<td>			
+				{{#view KG.Button id="login-button" classBinding="isActive" sc_action="loginAction"}}		    	
 			  	{{/view}}
 			</td>
 			</table>
@@ -49,23 +45,25 @@
 			{{/view}}
 		</div>	
 		<div id="signup-box">
-			<Label>Not yet member ?</Label>
-			{{#view KG.Button classBinding="isActive" sc_action="signupAction" id="signup-link"}}
-				_Signup
+			<span id="signup-title">Not yet member ?</span>
+			{{#view KG.Button classBinding="isActive" sc_action="signupAction" id="signup-button"}}			
 			{{/view}}
 		</div>
-		{{/view}}		
+		{{/view}}	
+		{{#view KG.LoadingImageView id="kloud-loading" isVisibleBinding="KG.core_login.isBusy"}}
+			<img {{bindAttr src="loadingImage"}} alt="Loading"/>
+	  	{{/view}}	
     </script>
   </body>
 
 <!-- load all of the dependencies --> 
-   <script type="text/javascript" src="assets/bpm_libs.js"></script> 
+   <script type="text/javascript" src="assets/bpm_libs.js" charset="utf-8"></script> 
 <!-- load my app assets --> 
-   <script type="text/javascript" src="assets/app_lib.js"></script>
-   <script type="text/javascript" src="assets/auth_lib.js"></script> 
-   <script type="text/javascript" src="assets/login_lib.js"></script> 
+   <script type="text/javascript" src="assets/app_lib.js" charset="utf-8"></script>
+   <script type="text/javascript" src="assets/auth_lib.js" charset="utf-8"></script> 
+   <script type="text/javascript" src="assets/login_lib.js" charset="utf-8"></script> 
 <!-- load my app external lib -->   
-   <script type="text/javascript" src="ext/sha256.js"></script> 
+   <script type="text/javascript" src="ext/sha256.js" charset="utf-8"></script> 
    <script type="text/javascript"> 
 	      spade.ready(function() { 
 	        spade.require('Kloudgis/~modules/login/lib/main');			

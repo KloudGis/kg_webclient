@@ -36,9 +36,8 @@ KG.core_login = SC.Object.create({
 
             // We know the username and password are not null at this point, so attempt to login
             var hashedPassword = SHA256(password);
-            KG.core_auth.login(username, hashedPassword, this.get('rememberMe'), this, this.endLogin, {});
-            this.set('errorMessage', '')
-            return YES;
+            KG.core_auth.login(username, hashedPassword, this.get('rememberMe'), this, this.endLogin, {});   
+			return YES;       
         }
         catch(e) { // If there was an error, catch and handle it
             // Set Error
@@ -50,6 +49,7 @@ KG.core_login = SC.Object.create({
             KG.statechart.sendAction('authenticationFailed', this);
             return NO;
         }
+		
     },
 
     /**
@@ -64,9 +64,7 @@ KG.core_login = SC.Object.create({
             // Check status
             if (!SC.none(error)) {
                 throw error;
-            }
-            // Clear any previous error message
-            this.set('errorMessage', '');
+            }          
             // Authentication was sucessful!
             this.set('isBusy', NO);
             // Send the event authenticationSucceeded to our statechart
@@ -78,7 +76,10 @@ KG.core_login = SC.Object.create({
             this.focusUserField();
             KG.statechart.sendAction('authenticationFailed', this);
             this.set('isBusy', NO);
+			return YES;
         }
+        this.set('errorMessage', '');
+		return YES;
     },
 
     tryLoginAuto: function() {

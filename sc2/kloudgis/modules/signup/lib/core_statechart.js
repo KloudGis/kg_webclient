@@ -11,8 +11,7 @@ SC.mixin(KG, {
             startupState: SC.State.extend({
 
                 enterState: function() {
-                    console.log('enter signup');
-					document.title = "_signupTitle".loc();
+                    console.log('enter signup');				
                 },
             }),
 

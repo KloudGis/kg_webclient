@@ -53,6 +53,7 @@ KG.core_signup = SC.Object.create({
             KG.fields[i].validate();
         }
     }
+
 });
 
 //Each fields

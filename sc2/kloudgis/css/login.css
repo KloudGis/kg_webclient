@@ -8,6 +8,15 @@ body{
 	margin:0px auto;
 }
 
+#kloud-loading{
+	height: 30px;
+}
+
+#kloud-loading img{
+	display: block;
+	margin:0px auto;
+}
+
 #kloud-brand{
 	margin-left: 10px;
 	display: block;
@@ -68,12 +77,6 @@ body{
 	border: none;
 	vertical-align: middle;
 }
-	
-.login-pane .loading-image{
-		float:right;
-		margin-top:5px;
-		margin-right:5px;
-}
 
 .login-pane label {
   margin-left:25px;
@@ -112,7 +115,7 @@ body{
 	margin:20px auto;
 }
 
-#signup-box label{
+#signup-title{
 	display: block;
 	width: 100%;
 	text-align: center;
@@ -123,10 +126,10 @@ body{
 	text-shadow: rgba(255, 255, 255, .9) 0px 1px 0px;
 }
 
-#signup-link{	
+#signup-button{	
 	display: block;
 	margin:10px auto 20px auto;
-	width:125px;
+	width:135px;
 	border: none;
 	padding: 5px 10px;
 	text-align:center;
@@ -140,10 +143,10 @@ body{
 	background: -moz-linear-gradient(center bottom, rgb(255,144,9) 22%, rgb(255,170,68) 81%);		
 }
 
-#signup-link:hover{
+#signup-button:hover{
 	background:#FF9009;
 }
 
-#signup-link.is-active{
+#signup-button.is-active{
 	background:#EF8001;
 }

@@ -9,13 +9,13 @@
 	    <a href="index.html">
 			<img id="kloud-logo" src="resources/images/kloudgis_black_256.png" alt="Kloudgis"/>
 		</a>
-		<span id="kloud-welcome">_signupKloudgis</span>
+		<span id="kloud-welcome"></span>
 		<div class="signup-pane">
 			<table>
 			<tr class="section">
 					<td>
 						{{#view KG.SignupField id="user-field" classBinding="focus KG.userFieldController.hasError"}}
-							<label for="user-textfield">_Email</label>
+							<label id="email-label" for="user-textfield"></label>
 							{{#view KG.ForwardTextField id="user-textfield" valueBinding="KG.userFieldController.value" type="email" placeholder_not_loc="_UserHint" spellcheck="false" autocorrect="off" autocapitalize="off" autofocus="true"}}
 							{{/view}}
 							{{KG.userFieldController.errorMessage}}						
@@ -28,7 +28,7 @@
 			<tr class="section">
 					<td>
 						{{#view KG.SignupField id="pwd-field" classBinding="focus KG.pwdFieldController.hasError"}}
-							<label for="pwd-textfield">_Pwd</label>
+							<label id="pwd-label" for="pwd-textfield"></label>
 							{{#view KG.ForwardTextField id="pwd-textfield" valueBinding="KG.pwdFieldController.value" type="password" placeholder_not_loc="_PwdHint" spellcheck="false" autocorrect="off" autocapitalize="off" }}
 							{{/view}}
 							{{KG.pwdFieldController.errorMessage}}						
@@ -38,7 +38,7 @@
 			<tr class="section">
 					<td>
 						{{#view KG.SignupField id="name-field" classBinding="focus KG.nameFieldController.hasError"}}
-							<label for="name-textfield">_Name</label>
+							<label id="name-label" for="name-textfield"></label>
 							{{#view KG.ForwardTextField id="name-textfield" valueBinding="KG.nameFieldController.value" type="text" placeholder_not_loc="_NameHint" spellcheck="false" autocorrect="off" autocapitalize="off" }}
 							{{/view}}
 							{{KG.nameFieldController.errorMessage}}						
@@ -48,7 +48,7 @@
 			<tr class="section">
 					<td>
 						{{#view KG.SignupField id="company-field" classBinding="focus KG.companyFieldController.hasError"}}
-							<label for="company-textfield">_Company</label>
+							<label id="company-label" for="company-textfield"></label>
 							{{#view KG.ForwardTextField id="company-textfield" valueBinding="KG.companyFieldController.value" type="text" placeholder_not_loc="_CompanyHint" spellcheck="false" autocorrect="off" autocapitalize="off" }}
 							{{/view}}
 							{{KG.companyFieldController.errorMessage}}						
@@ -58,7 +58,7 @@
 			<tr class="section">
 					<td>
 						{{#view KG.SignupField id="location-field" classBinding="focus KG.locationFieldController.hasError"}}
-							<label for="location-textfield">_Location</label>
+							<label id="location-label" for="location-textfield"></label>
 							{{#view KG.ForwardTextField id="location-textfield" valueBinding="KG.locationFieldController.value" type="text" placeholder_not_loc="_LocationHint" spellcheck="false" autocorrect="off" autocapitalize="off"}}
 							{{/view}}
 							{{KG.locationFieldController.errorMessage}}						
@@ -68,7 +68,6 @@
 			<tr class="section">
 					<td>
 						{{#view KG.Button classBinding="isActive" sc_action="createAccountAction" id="create-button"}}
-						_Create
 						{{/view}}
 					</td>
 			</tr>
