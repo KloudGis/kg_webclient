@@ -12,7 +12,9 @@ var fr = {
 	"_company": "Compagnie",
 	"_location": "Emplacement",
 	"_createAccount": "Créer",
-	"_InUse": "Ce courriel est déjà utilisé."
+	"_InUse": "Ce courriel est déjà utilisé.",
+	"_invalid": "Le courriel est invalide.",
+	"_correctErrorFirst": "Veuillez corriger les erreurs pour continuer."
 };
 
 var en = {
@@ -28,7 +30,9 @@ var en = {
 	"_company": "Company",
 	"_location": "Location",
 	"_createAccount": "Create",
-	"_InUse": "This email is already taken."
+	"_InUse": "This email is already taken.",
+	"_invalid": "This email is not valid.",
+	"_correctErrorFirst": "Please fix the error to continue."
 };
 
 if(KG.lang === 'fr'){

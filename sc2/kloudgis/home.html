@@ -2,25 +2,36 @@
   <head>
 	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
 	<link rel="stylesheet" href="css/home.css" type="text/css" media="screen" charset="utf-8" />
-    <title>Kloudgis</title>
+    <title></title>
   </head>
   <body>
-	<span id="page-loading">Kloudgis...</span>
-	 <h1>This is home v2</h1>
-	 <a href="index.html">back to login</a>
 	<script type="text/x-handlebars">	
-		{{#view SC.Button  target="KG.core_auth" action="logout"}}
-			Logout (test)
+		{{#view SC.Button  id="logout-button" target="KG.core_home" action="logout"}}
+			Logout
 		{{/view}}
+	 </script>
+	<a href="index.html">
+			<img id="kloud-logo" src="resources/images/kloudgis_black_256.png" alt="Kloudgis"/>
+	</a>		
+	<span id="sandboxes-title"></span>
+	
+	<script type="text/x-handlebars">	
+		{{#collection contentBinding="KG.sandboxesController" tagName="ul" class="sandbox-list"}}
+			{{#view KG.SandboxView class="sandbox-list-item"}}
+				{{#view KG.OpenSandboxLinkView tagName="a" class="open-sandbox-link" classBinding="isActive"}}
+					{{title}}
+				{{/view}}
+			{{/view}}
+		{{/collection}}
 	 </script>	
   </body>
 
 <!-- load all of the dependencies --> 
-   <script type="text/javascript" src="assets/bpm_libs.js"></script> 
+   <script type="text/javascript" src="assets/bpm_libs.js" charset="utf-8"></script> 
 <!-- load my app assets --> 
-   <script type="text/javascript" src="assets/app_lib.js"></script>
-   <script type="text/javascript" src="assets/auth_lib.js"></script>
-   <script type="text/javascript" src="assets/home_lib.js"></script> 
+   <script type="text/javascript" src="assets/app_lib.js" charset="utf-8"></script>
+   <script type="text/javascript" src="assets/auth_lib.js" charset="utf-8"></script>
+   <script type="text/javascript" src="assets/home_lib.js" charset="utf-8"></script> 
    
 <!-- load my app external lib -->   
    <script type="text/javascript"> 

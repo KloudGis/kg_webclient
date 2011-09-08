@@ -83,14 +83,16 @@ KG.core_login = SC.Object.create({
     },
 
     tryLoginAuto: function() {
-        if (KG.core_auth.load(YES)) {
-            KG.statechart.sendAction('authenticationSucceeded', this);
-            return YES;
-        } else {
-            KG.statechart.sendAction('authenticationFailed', this);
-            return NO;
-        }
-    }
+        KG.core_auth.load(this, this.tryLoginAutoCallback, YES);
+    },
+
+	tryLoginAutoCallback: function(message){
+		if(message === "_success"){
+			KG.statechart.sendAction('authenticationSucceeded', this);
+		}else{
+			KG.statechart.sendAction('authenticationFailed', this);
+		}
+	}
 });
 
 KG.credential = SC.Object.create({

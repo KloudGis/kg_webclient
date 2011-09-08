@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
 	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
@@ -5,20 +6,21 @@
     <title>Login to kloudgis</title>
   </head>
   <body>
+	<iframe src="ablankpage.htm" id="ablank" name="ablank" style="display:none"></iframe>
      <script type="text/x-handlebars">	
 		{{#view id="main-view" isVisibleBinding="KG.core_login.showLogin"}}	
-			<a href="index.html">
+			<a>
 				<img id="kloud-logo" src="resources/images/kloudgis_black_256.png" alt="Kloudgis"/>
 			</a>		
-			<span id="kloud-brand">Kloudgis</span>
-		<div class="login-pane">
+			<a id="kloud-brand">Kloudgis</a>
+		<form class="login-pane" method='POST' target="ablank" onsubmit="KG.core_login.login();">
 			<table>
 			<tr>
 			<td>
 				<label id="email-label" for="user-field"></label>
 			</td>
 			<td>
-				{{#view KG.TextField id="user-field" valueBinding="KG.credential.user" type="email" placeholder_not_loc="_UsernameHint" spellcheck="false" autocorrect="off" autocapitalize="off" nl_sc_action="loginAction" autofocus="true"}}
+				{{#view KG.TextField id="user-field" valueBinding="KG.credential.user" type="email" placeholder_not_loc="_UsernameHint" spellcheck="false" autocorrect="off" autocapitalize="off" autocomplete="on" nl_sc_action="loginAction" autofocus="true"}}
 				{{/view}}	
 				</td>
 			<tr>
@@ -26,16 +28,15 @@
 				<label id="pwd-label" for="pwd-field"></label>
 				</td>
 				<td>
-				{{#view KG.TextField id="pwd-field" valueBinding="KG.credential.pwd" type="password" placeholder_not_loc="_PasswordHint" spellcheck="false" autocorrect="off" autocapitalize="off" nl_sc_action="loginAction"}}
+				{{#view KG.TextField id="pwd-field" valueBinding="KG.credential.pwd" type="password" placeholder_not_loc="_PasswordHint" spellcheck="false" autocorrect="off" autocapitalize="off" autocomplete="on" nl_sc_action="loginAction"}}
 				{{/view}}
 				</td>
 			</div>
 			<tr id="login-button-row">
 			<td>
 			</td>
-			<td>			
-				{{#view KG.Button id="login-button" classBinding="isActive" sc_action="loginAction"}}		    	
-			  	{{/view}}
+			<td>	
+				<input type="submit" id="login-button"></input>
 			</td>
 			</table>
 			{{view SC.Checkbox id="remember-me" title="_rememberMe"
@@ -48,7 +49,7 @@
 			<span id="signup-title">Not yet member ?</span>
 			{{#view KG.Button classBinding="isActive" sc_action="signupAction" id="signup-button"}}			
 			{{/view}}
-		</div>
+		</form>
 		{{/view}}	
 		{{#view KG.LoadingImageView id="kloud-loading" isVisibleBinding="KG.core_login.isBusy"}}
 			<img {{bindAttr src="loadingImage"}} alt="Loading"/>

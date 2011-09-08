@@ -51,6 +51,16 @@
          "directories": [ 	
          ] 
     },
+	"sandbox_lib.js": { 
+        "spade:format": "function", 
+         "directories": [ 
+         "modules/sandbox/lib" 
+         ] 
+       }, 
+       "auth_styles.css": { 
+         "directories": [ 	
+         ] 
+       },
 	"signup_lib.js": { 
         "spade:format": "function", 
          "directories": [ 

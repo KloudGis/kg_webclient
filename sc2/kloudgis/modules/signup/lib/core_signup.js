@@ -40,7 +40,7 @@ KG.core_signup = SC.Object.create({
                 async: YES
             });
         } else {
-            this.set('globalError', '_correctErrorFirst');
+            this.set('globalError', '_correctErrorFirst'.loc());
         }
     },
 

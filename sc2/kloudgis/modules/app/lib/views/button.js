@@ -1,5 +1,9 @@
 var get = SC.get;
 KG.Button = SC.Button.extend({
+	
+	label_loc: function(){
+		return this.get('label').loc();
+	}.property('label'),
 
     mouseUp: function(event) {
         if (get(this, 'isActive')) {

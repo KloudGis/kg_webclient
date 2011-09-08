@@ -56,8 +56,6 @@ SC.mixin(KG, {
 				
 					enterState:function(){
 						console.log('login successful');
-						KG.credential.set('user', undefined);
-						KG.credential.set('pwd', undefined);
 						window.location.href = "home.html";						
 					}
 			}),

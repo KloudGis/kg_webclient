@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>kloudgis/modules/app/lib/main.js</string>
+	<string>kloudgis/index.html</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -302,30 +302,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>13</integer>
+				<integer>8</integer>
 				<key>line</key>
-				<integer>20</integer>
+				<integer>35</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>23</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>12</integer>
-				<key>line</key>
-				<integer>20</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>14</integer>
-				<key>line</key>
-				<integer>20</integer>
-			</dict>
+			<integer>7</integer>
 		</dict>
 		<key>kloudgis/kloudgis.json</key>
 		<dict>
@@ -418,30 +402,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>129</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>3</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>36</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
 		</dict>
 		<key>kloudgis/modules/auth/lib/core_auth.js</key>
 		<dict>
@@ -520,14 +488,30 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>12</integer>
+				<integer>14</integer>
 				<key>line</key>
-				<integer>43</integer>
+				<integer>42</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>19</integer>
+			<integer>15</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>36</integer>
+				<key>line</key>
+				<integer>42</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>14</integer>
+				<key>line</key>
+				<integer>42</integer>
+			</dict>
 		</dict>
 		<key>kloudgis/modules/login/lib/main.js</key>
 		<dict>
@@ -537,6 +521,20 @@
 				<integer>49</integer>
 				<key>line</key>
 				<integer>10</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>kloudgis/modules/login/lib/strings.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -555,21 +553,37 @@
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>102</integer>
+			<integer>0</integer>
 		</dict>
 		<key>kloudgis/modules/signup/lib/core_statechart.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>16</integer>
+				<integer>35</integer>
 				<key>line</key>
-				<integer>48</integer>
+				<integer>54</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>20</integer>
+			<integer>19</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>4</integer>
+				<key>line</key>
+				<integer>54</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>35</integer>
+				<key>line</key>
+				<integer>54</integer>
+			</dict>
 		</dict>
 		<key>kloudgis/modules/signup/lib/main.js</key>
 		<dict>
@@ -634,14 +648,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>212</integer>
+				<integer>69</integer>
 				<key>line</key>
-				<integer>61</integer>
+				<integer>12</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>39</integer>
+			<integer>46</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
@@ -655,6 +669,7 @@
 		<string>kloudgis/modules/app/lib/views/text_field.js</string>
 		<string>kloudgis/modules/signup/lib/core_statechart.js</string>
 		<string>kloudgis/index.html</string>
+		<string>kloudgis/modules/login/lib/strings.js</string>
 		<string>kloudgis/kloudgis.json</string>
 		<string>kloudgis/home.html</string>
 		<string>kloudgis/modules/login/lib/main.js</string>
@@ -679,6 +694,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{10, 52}, {1296, 976}}</string>
+	<string>{{515, 209}, {1296, 976}}</string>
 </dict>
 </plist>

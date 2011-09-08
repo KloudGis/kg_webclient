@@ -5,12 +5,13 @@
     <title>Signup to Kloudgis</title>
   </head>
   <body>
+	<iframe src="ablankpage.htm" id="ablank" name="ablank" style="display:none"></iframe>
 	 <script type="text/x-handlebars">	
 	    <a href="index.html">
 			<img id="kloud-logo" src="resources/images/kloudgis_black_256.png" alt="Kloudgis"/>
 		</a>
 		<span id="kloud-welcome"></span>
-		<div class="signup-pane">
+		<form class="signup-pane" method='POST' target="ablank" onsubmit="KG.core_signup.createAccount();">
 			<table>
 			<tr class="section">
 					<td>
@@ -67,7 +68,7 @@
 			</tr>	
 			<tr class="section">
 					<td>
-						{{#view KG.Button classBinding="isActive" sc_action="createAccountAction" id="create-button"}}
+						{{#view KG.Button classBinding="isActive" sc_action="createAccountAction" id="create-button"}}						
 						{{/view}}
 					</td>
 			</tr>
@@ -79,7 +80,7 @@
 					</td>
 			</tr>
 			</table>
-		</div>		
+		</form>		
     </script>
   </body>
 

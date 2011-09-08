@@ -1,7 +1,7 @@
 KG.TextField = SC.TextField.extend({
 	
     //add more attributes (from autofocus)
-    attributeBindings: ['type', 'placeholder', 'value', 'autofocus', 'spellcheck', 'autocorrect', 'autocapitalize'],
+    attributeBindings: ['type', 'placeholder', 'value', 'autofocus', 'spellcheck', 'autocorrect', 'autocapitalize', "autocomplete"],
 	
 	nl_sc_action: null,
 	placeholder_not_loc: null,

@@ -16,18 +16,22 @@ SC.mixin(KG, {
 //store and retreive auth token
 //basic login using the auth token
 KG.core_auth = SC.Object.create({
+	
+	authenticationToken: null,
+	activeUser: null,
 
-    load: function(useRememberMe) {
+    load: function(cb_target, cb, useRememberMe) {
         // Get token from local store
         var token = localStorage.getItem(KG.AUTHENTICATION_TOKEN_LOCAL_STORE_KEY);
 		var rememberMe = localStorage.getItem(KG.REMEMBER_ME_LOCAL_STORE_KEY);
         if (SC.none(token) || (useRememberMe && rememberMe != 'true')) {
             this.logout();
+			cb.call(cb_target, "_failed");
             return NO;
         }
 
         // Synchronously get user from server
-        var newToken = null;
+        
         var postData = {
 			user: null,
             pwd: token
@@ -39,21 +43,20 @@ KG.core_auth = SC.Object.create({
             data: JSON.stringify(postData),
 			dataType: 'json',
 			contentType: 'application/json; charset=utf-8',
+			context: this,
             error: function(jqXHR, textStatus, errorThrown) {
-                SC.Logger.error('Auto login error: HTTP error status code: ' + jqXHR.status);
+                SC.Logger.error('Load error: HTTP error status code: ' + jqXHR.status);
+				cb.call(cb_target, "_error");
             },
             success: function(data, textStatus, jqXHR) {
-                newToken = data.content;			
+				var newToken = data.token;
+				var user = data.user;
+				// Save
+		        this.saveLogin(newToken, undefined, user);
+				cb.call(cb_target, "_success");
             },
-			async: false
+			async: YES
         });
-
-        // Save
-        this.saveToken(newToken);
-
-        if (SC.none(newToken)) {
-            return NO;
-        }
         return YES;
     },
 
@@ -115,14 +118,15 @@ KG.core_auth = SC.Object.create({
         var error = null;
         try {
             // Get the token
-            var token;
+            var token,user;
             if (!SC.none(data)) {
-                token = data.content;
+                token = data.token;
+				user = data.user;
             }
             if (SC.none(token)) {
                 throw new SC.Error('_nullTokenError');
             }
-            KG.core_auth.saveToken(token, this.rememberMe);
+            KG.core_auth.saveLogin(token, this.rememberMe, user);
         }
         catch(err) {
             error = err;
@@ -137,8 +141,9 @@ KG.core_auth = SC.Object.create({
         return YES;
     },
 
-    saveToken: function(token, rememberMe) {
+    saveLogin: function(token, rememberMe, user) {
         this.set('authenticationToken', token);
+		this.set('activeUser', user);
 		if(SC.none(token)){
 			localStorage.setItem(KG.AUTHENTICATION_TOKEN_LOCAL_STORE_KEY, '');
 			localStorage.setItem(KG.REMEMBER_ME_LOCAL_STORE_KEY, NO);
@@ -154,6 +159,7 @@ KG.core_auth = SC.Object.create({
    * Remove authentication tokens
    */
     logout: function() {
+		console.log('Logging out');
 		//tell the server about the logout (invalidate token and destroy the session)
 	 	var url = '/kg_auth/public/login/logout';
 		 $.ajax({
@@ -166,7 +172,7 @@ KG.core_auth = SC.Object.create({
 
         // Clear cached token
         this.set('authenticationToken', null);
-
+		this.set('activeUser', null);
         return;
     }
 });
