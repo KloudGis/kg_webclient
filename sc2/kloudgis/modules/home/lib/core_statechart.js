@@ -37,7 +37,8 @@ SC.mixin(KG, {
 					enterState:function(){
 						console.log('hi!');
 						var records = KG.store.find(KG.SANDBOX_QUERY);
-						KG.sandboxesController.set('content', records);					
+						KG.sandboxesController.set('content', records);
+						jQuery('#if-spinner').fadeOut();					
 					}
 			})
 			
