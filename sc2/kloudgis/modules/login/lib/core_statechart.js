@@ -33,7 +33,7 @@ SC.mixin(KG, {
 		        enterState: function() {
 					console.log('Logged out state');
 					KG.core_login.set('showLogin', YES);
-					jQuery('#if-spinner').fadeOut();				
+					$('#if-spinner').fadeOut();				
 					var user = $.getQueryString('user');
 					if(!SC.none(user)){
 						KG.credential.set('user', user);
