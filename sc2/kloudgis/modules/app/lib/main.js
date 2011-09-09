@@ -1,6 +1,5 @@
 //framework dependencies
 require("sproutcore"); 
-//require("sproutcore-datastore"); 
 require("sproutcore-statechart");
 
 //create the namespace

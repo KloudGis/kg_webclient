@@ -36,7 +36,6 @@ KG.core_auth = SC.Object.create({
 			user: null,
             pwd: token
         };
-        //synch
         $.ajax({
 			type: 'POST',
             url: '/kg_auth/public/login',             
@@ -174,5 +173,11 @@ KG.core_auth = SC.Object.create({
         this.set('authenticationToken', null);
 		this.set('activeUser', null);
         return;
-    }
+    },
+
+	createAjaxRequestHeaders: function(){
+		var headers = {};
+		headers[KG.AUTHENTICATION_HEADER_NAME] = this.get('authenticationToken');
+		return headers;
+	}
 });

@@ -28,7 +28,7 @@ SC.mixin(KG, {
 		        enterState: function() {				
 					console.log('I dont know you!!');
 					console.log(KG.core_auth.get('authenticationToken'));
-					//window.location.href = "index.html";
+					window.location.href = "index.html";
 		        }
 		    }),
 		
@@ -36,8 +36,8 @@ SC.mixin(KG, {
 				
 					enterState:function(){
 						console.log('hi!');
-						KG.sandboxesController.pushObject(SC.Object.create({ id: 1, name: 's1'}));
-						KG.sandboxesController.pushObject(SC.Object.create({ id: 2, name: 's2'}));					
+						var records = KG.store.find(KG.SANDBOX_QUERY);
+						KG.sandboxesController.set('content', records);					
 					}
 			})
 			

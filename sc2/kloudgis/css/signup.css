@@ -36,6 +36,10 @@ body{
 	color: rgb(255,155,155);
 }
 
+#global-error{
+	margin:10px;
+}
+
 #global-error span{
 	color: rgb(255,155,155);
 	font-size: 16px;

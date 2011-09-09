@@ -9,11 +9,20 @@
 	background-color: rgba(0,0,0,0.25);
 	position:absolute;
 	left:10px;
-	bottom:10px;
+	bottom:20px;
 	padding: 5px;
 }
 
 #back-home a{
 	color: black;
+	font-weight: 600;
+}
+
+#back-home a:hover{
+	color: white;
 	font-weight: 800;
+}
+
+.kg_controls{
+	z-index:8;
 }
