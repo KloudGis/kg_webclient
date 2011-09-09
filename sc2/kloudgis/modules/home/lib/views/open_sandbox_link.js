@@ -7,7 +7,7 @@ KG.OpenSandboxLinkView = SC.View.extend({
 	}.property(),
 	
 	href: function(){
-		return "sandbox.html?id=" + this.getPath('itemView.content.id');
+		return "sandbox.html?sandbox=" + this.getPath('itemView.content.key');
 	}.property()
 	
 });

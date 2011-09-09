@@ -3,6 +3,13 @@
 	border: 1px solid #CCC;
 }
 
+#if-spinner{
+	position: absolute;	
+	width:100%;
+	height:60px;
+	top:45%;	
+}
+
 #back-home{
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
