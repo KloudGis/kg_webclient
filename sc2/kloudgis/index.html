@@ -6,14 +6,13 @@
     <title>Login to kloudgis</title>
   </head>
   <body>
-	<iframe src="ablankpage.htm" id="ablank" name="ablank" style="display:none"></iframe>
      <script type="text/x-handlebars">	
 		{{#view id="main-view" isVisibleBinding="KG.core_login.showLogin"}}	
 			<a>
 				<img id="kloud-logo" src="resources/images/kloudgis_black_256.png" alt="Kloudgis"/>
 			</a>		
 			<a id="kloud-brand">Kloudgis</a>
-		<form class="login-pane" method='POST' target="ablank" onsubmit="KG.core_login.login();">
+		<form class="login-pane">
 			<table>
 			<tr>
 			<td>
@@ -36,7 +35,8 @@
 			<td>
 			</td>
 			<td>	
-				<input type="submit" id="login-button"></input>
+				{{#view KG.Button classBinding="isActive" sc_action="loginAction" id="login-button"}}						
+				{{/view}}
 			</td>
 			</table>
 			{{view SC.Checkbox id="remember-me" title="_rememberMe"
