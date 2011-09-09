@@ -14,7 +14,23 @@ KG.core_sandbox = SC.Object.create({
 	   
 	addMap: function(){
 		KG.core_leaflet.addToDocument();
+	},
+	
+	//add a view to the body
+	/* 
+	test: function(){
+		var view = SC.View.create({
+		  templateName: 'say-hello',
+		  name: "Bob"
+		});
+		view.append();
 	}
+	//in the header part of the html
+	<script type="text/x-handlebars" data-template-name="say-hello">
+	    Hello, <b>{{name}}</b>
+	</script>	
+	
+	*/
 	
 });
 

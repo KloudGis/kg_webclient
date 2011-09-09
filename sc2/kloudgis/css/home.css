@@ -54,6 +54,8 @@ body{
 
 
 #logout-button{
-	float: right;
+	position: absolute;
+	right:10px;
+	top:4px;
 }
 

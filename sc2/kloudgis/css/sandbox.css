@@ -1,6 +1,6 @@
 #map {
 	height: 100%;
-	border: 1px solid #CCC;
+	border: none;
 }
 
 #if-spinner{
@@ -14,7 +14,6 @@
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 	background-color: rgba(0,0,0,0.25);
-	position:absolute;
 	left:10px;
 	bottom:20px;
 	padding: 5px;
@@ -30,6 +29,8 @@
 	font-weight: 800;
 }
 
-.kg_controls{
+.kg-controls{
 	z-index:8;
+	display: block;
+	position:absolute;
 }

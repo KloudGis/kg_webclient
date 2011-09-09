@@ -36,6 +36,7 @@ SC.mixin(KG, {
 				
 					enterState:function(){
 						console.log('hi!');
+						document.title = $.getQueryString('sandbox') || '?';
 						KG.core_sandbox.addMap();
 						$('#if-spinner').fadeOut();					
 					}
