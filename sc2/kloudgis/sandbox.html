@@ -3,7 +3,14 @@
 	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
 	<link rel="stylesheet" href="css/sandbox.css" type="text/css" media="screen" charset="utf-8" />
 	<link rel="stylesheet" href="ext/leaflet/leaflet.css" type="text/css" media="screen" charset="utf-8"/>
-    <title></title>
+    <title>Kloudgis</title>
+	<script type="text/x-handlebars" data-template-name="notes-marker-popup">
+	    {{#collection contentBinding="KG.notePopupController" tagName="ul" class="popup-note-list"}}
+			{{#view KG.NotePopupItemView}}
+				{{itemView.content.title}}
+			{{/view}}
+		{{/collection}}
+	</script>
   </head>
   <body>	
 	<iframe id="if-spinner" src="spinner.html"></iframe>
@@ -19,6 +26,7 @@
 <!-- load my app assets --> 
    <script type="text/javascript" src="assets/app_lib.js" charset="utf-8"></script>
    <script type="text/javascript" src="assets/auth_lib.js" charset="utf-8"></script>
+   <script type="text/javascript" src="assets/core_lib.js" charset="utf-8"></script> 
    <script type="text/javascript" src="assets/sandbox_lib.js" charset="utf-8"></script> 
 <!-- load my app external lib --> 
    <script type="text/javascript" src="ext/leaflet/leaflet.js" charset="utf-8"></script> 

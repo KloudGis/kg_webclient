@@ -1,7 +1,9 @@
 var fr = { 
+	"_Map": "Carte"
 };
 
 var en = {
+	"_Map": "Map"
 };
 
 if(KG.lang === 'fr'){

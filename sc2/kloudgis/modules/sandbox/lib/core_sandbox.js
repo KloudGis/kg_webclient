@@ -1,5 +1,7 @@
 KG.core_sandbox = SC.Object.create({
 	
+	
+	
 	authenticate: function(){		
 		KG.core_auth.load(this, this.authenticateCallback);
 	},
@@ -14,7 +16,7 @@ KG.core_sandbox = SC.Object.create({
 	   
 	addMap: function(){
 		KG.core_leaflet.addToDocument();
-	},
+	}
 	
 	//add a view to the body
 	/* 

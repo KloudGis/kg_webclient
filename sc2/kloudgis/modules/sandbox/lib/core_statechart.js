@@ -36,9 +36,11 @@ SC.mixin(KG, {
 				
 					enterState:function(){
 						console.log('hi!');
-						document.title = $.getQueryString('sandbox') || '?';
+						var sb = $.getQueryString('sandbox');
+						KG.set('active_sandbox', sb);					
 						KG.core_sandbox.addMap();
-						$('#if-spinner').fadeOut();					
+						$('#if-spinner').fadeOut();	
+						KG.core_note.refreshMarkers();				
 					}
 			})
 			

@@ -18,10 +18,6 @@ KG.core_home = SC.Object.create({
 	}	
 });
 
-KG.store = SC.Store.create({ 
-  commitRecordsAutomatically: NO
-}).from('KG.Store'),
-
 $(document).ready(function() {
     KG.statechart.initStatechart();
 });

@@ -38,7 +38,7 @@ KG.core_auth = SC.Object.create({
         };
         $.ajax({
 			type: 'POST',
-            url: '/kg_auth/public/login',             
+            url: '/api_auth/public/login',             
             data: JSON.stringify(postData),
 			dataType: 'json',
 			contentType: 'application/json; charset=utf-8',
@@ -71,7 +71,7 @@ KG.core_auth = SC.Object.create({
         };
 
         // Call server
-        var url = '/kg_auth/public/login';
+        var url = '/api_auth/public/login';
         var context = {
             rememberMe: rememberMe,
             callbackTarget: cb_target,
@@ -160,7 +160,7 @@ KG.core_auth = SC.Object.create({
     logout: function() {
 		console.log('Logging out');
 		//tell the server about the logout (invalidate token and destroy the session)
-	 	var url = '/kg_auth/public/login/logout';
+	 	var url = '/api_auth/public/login/logout';
 		 $.ajax({
 	            type: 'POST',
 	            url: url,

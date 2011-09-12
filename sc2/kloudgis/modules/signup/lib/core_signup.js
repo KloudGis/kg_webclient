@@ -21,7 +21,7 @@ KG.core_signup = SC.Object.create({
 			// Call server
             $.ajax({
                 type: 'POST',
-                url: '/kg_auth/public/register',
+                url: '/api_auth/public/register',
                 data: JSON.stringify(postData),
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
@@ -93,7 +93,7 @@ KG.userFieldController = KG.FieldController.create({
         } else {
             var fieldValue = this.get('value');
             this.set('isBusy', YES);
-            var url = '/kg_auth/public/register/test_email';
+            var url = '/api_auth/public/register/test_email';
             var context = {
                 callbackTarget: cb_target,
                 callbackFunction: cb,

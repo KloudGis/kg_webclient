@@ -11,6 +11,16 @@
       "directories": [ 
       ] 
     }, 
+	"core_lib.js": { 
+        "spade:format": "function", 
+         "directories": [ 
+         "modules/core/lib" 
+         ] 
+       }, 
+       "core_styles.css": { 
+         "directories": [ 	
+         ] 
+    },
     "app_lib.js": { 
         "spade:format": "function", 
          "directories": [ 

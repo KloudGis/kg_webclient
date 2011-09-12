@@ -5,7 +5,8 @@ require("sproutcore-statechart");
 //create the namespace
 KG = SC.Application.create({ 
     //store: SC.Store.create().from(SC.Record.fixtures),
-	lang: 'fr'
+	lang: 'fr',
+	active_sandbox: null
 });
 
 //jQuery extension

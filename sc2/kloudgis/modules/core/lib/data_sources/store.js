@@ -1,14 +1,10 @@
-//predefined queries
-KG.SANDBOX_QUERY = SC.Query.local(KG.Sandbox, {query_url: '/kg_sandbox/protected/sandboxes'});
-
 //datasource
 KG.Store = SC.DataSource.extend({
 
-	
     // ..........................................................
     // QUERY SUPPORT
     // 
-  /**
+    /**
 
     Invoked by the store whenever it needs to retrieve data matching a
     specific query, triggered by find().  This method is called anytime
@@ -75,29 +71,76 @@ KG.Store = SC.DataSource.extend({
     @returns {Boolean} YES if you can handle fetching the query, NO otherwise
   */
     fetch: function(store, query) {
-		console.log('fetch!');
-		$.ajax({
-			type: 'GET',
-            url: query.get('query_url'),             
-			dataType: 'json',
-			contentType: 'application/json; charset=utf-8',
-			context: this,
-			headers: KG.core_auth.createAjaxRequestHeaders(),
-			async: YES,
-            error: function(jqXHR, textStatus, errorThrown) {
-                SC.Logger.error('Load error: HTTP error status code: ' + jqXHR.status);
-				store.dataSourceDidErrorQuery(query, errorThrown);
-            },
-            success: function(data, textStatus, jqXHR) {
-				console.log('fetch success');
-				var raw= data.records;
-				if(!SC.none(raw)){
-					store.loadRecords(query.get('recordType'), raw);
-				}
-				store.dataSourceDidFetchQuery(query);
-            }		
-        });
-	}
-	
-	
+        console.log('fetch!');
+        if (!SC.none(query.get('query_url'))) {
+            $.ajax({
+                type: 'GET',
+                url: query.get('query_url'),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                context: this,
+                headers: KG.core_auth.createAjaxRequestHeaders(),
+                async: YES,
+                error: function(jqXHR, textStatus, errorThrown) {
+                    SC.Logger.error('Load error: HTTP error status code: ' + jqXHR.status);
+                    store.dataSourceDidErrorQuery(query, errorThrown);
+                },
+                success: function(data, textStatus, jqXHR) {
+                    console.log('fetch success');
+                    var raw = data.records;
+                    var storeKeys;
+                    if (!SC.none(raw)) {
+                        storeKeys = store.loadRecords(query.get('recordType'), raw);
+                    }
+                    if (query.get('isLocal')) {
+                        store.dataSourceDidFetchQuery(query);
+                    } else {
+                        store.loadQueryResults(query, storeKeys);
+                    }
+                }
+            });
+            return YES;
+        }
+        return NO;
+    },
+
+    // ..........................................................
+    // RECORD SUPPORT
+    // 
+    retrieveRecord: function(store, storeKey) {
+        var rtype = store.recordTypeFor(storeKey);
+        var id = store.idFor(storeKey);
+        var url;
+        if (!SC.none(id) && rtype == 'KG.Note') {
+            url = '/api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('active_sandbox'));
+        }
+        if (url) {
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                context: this,
+                headers: KG.core_auth.createAjaxRequestHeaders(),
+                async: YES,
+                error: function(jqXHR, textStatus, errorThrown) {
+                    SC.Logger.error('Load error: HTTP error status code: ' + jqXHR.status);
+                    store.dataSourceDidError(storeKey, errorThrown);
+                },
+                success: function(data, textStatus, jqXHR) {
+                    console.log('retreive success');
+                    var raw = data;
+                    var storeKeys;
+                    if (!SC.none(raw)) {
+                        store.dataSourceDidComplete(storeKey, raw, raw.guid);
+                    } else {
+                        store.dataSourceDidComplete(storeKey);
+                    }
+                }
+            });
+            return YES;
+        }
+        return NO; // return YES if you handled the storeKey
+    }
+
 });
