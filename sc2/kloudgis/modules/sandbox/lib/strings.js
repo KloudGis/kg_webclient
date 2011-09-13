@@ -1,9 +1,13 @@
 var fr = { 
-	"_Map": "Carte"
+	"_Map": "Carte",
+	"_Note": "Note",
+	"_Notes": "%@ Notes"
 };
 
 var en = {
-	"_Map": "Map"
+	"_Map": "Map",
+	"_Note": "Note",
+	"_Notes": "%@ Notes"
 };
 
 if(KG.lang === 'fr'){

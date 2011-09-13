@@ -5,9 +5,12 @@
 	<link rel="stylesheet" href="ext/leaflet/leaflet.css" type="text/css" media="screen" charset="utf-8"/>
     <title>Kloudgis</title>
 	<script type="text/x-handlebars" data-template-name="notes-marker-popup">
+		{{#view class="popup-note-title"}}
+			{{parentView.title}}
+		{{/view}}
 	    {{#collection contentBinding="KG.notePopupController" tagName="ul" class="popup-note-list"}}
 			{{#view KG.NotePopupItemView}}
-				{{itemView.content.title}}
+				{{title}}
 			{{/view}}
 		{{/collection}}
 	</script>

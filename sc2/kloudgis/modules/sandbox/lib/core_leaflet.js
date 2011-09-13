@@ -126,9 +126,7 @@ KG.core_leaflet = SC.Object.create({
         });
         this.map.addLayer(lmarker);
         var len = marker.getPath('notes.length');
-        lmarker.bindPopup("...", {
-            title: '_Notes'.loc()
-        });
+        lmarker.bindPopup("...");
         lmarker.on('click',
         function() {
             click_cb.call(click_target, marker);
@@ -148,7 +146,7 @@ KG.core_leaflet = SC.Object.create({
             marker._native_marker._popup.setContent(div);
         }
     },
-
+	
     closeMarkerPopup: function(marker) {
         marker._native_marker.closePopup();
     }

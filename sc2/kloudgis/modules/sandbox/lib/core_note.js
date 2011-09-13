@@ -26,7 +26,9 @@ KG.core_note = SC.Object.create({
         }
     },
 
+/* Super element to put in a note marker popup */
     _div: null,
+/* SC view to generate html bind on the  KG.notePopupController*/
     _view: null,
 
     markersReady: function(markers, key, nothing, context) {
@@ -56,14 +58,14 @@ KG.core_note = SC.Object.create({
     },
 
     markerClicked: function(marker) {
-        $(".leaflet-popup-pane").removeClass('show');
         if (SC.none(this._div)) {
             this._div = document.createElement('div');
             this._view = SC.View.create({
-                templateName: 'notes-marker-popup',
+                templateName: 'notes-marker-popup',			
             });
             this._view.appendTo(this._div);
         }
+		this._view.set('title', "...");
         var notes = marker.get('features');
         KG.notePopupController.set('content', notes);
         KG.core_leaflet.refreshMarkerPopup(marker, this._div);
@@ -83,9 +85,15 @@ KG.core_note = SC.Object.create({
         params.count++;
         if (params.count === params.length) {
             console.log('refresh!');
+			var title;
+			if(params.length > 1){
+				title = '_Notes'.loc(params.length);
+			}else{
+				title = '_Note'.loc();
+			}
+			this._view.set('title', title);
             setTimeout(function() {
                 KG.core_leaflet.refreshMarkerPopup(params.marker, this._div);
-                $(".leaflet-popup-pane").addClass('show');
             },
             1);
         }

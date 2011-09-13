@@ -35,15 +35,24 @@
 	position:absolute;
 }
 
-
-.leaflet-popup-pane{
-	opacity: 0;
-	transition: opacity 1s;
-	-moz-transition: opacity 1s; 
-	-webkit-transition: opacity 1s;
-	-o-transition: opacity 1s;
+.popup-note-list{
+	list-style: none;
+	margin-left:0px;
 }
 
-.leaflet-popup-pane.show{
-	opacity: 1;
+.note-popup-item{
+	font-size:14px;
+	padding: 3px;
+}
+
+.note-popup-item:hover{
+	border-radius: 6px;
+	background: rgba(0,0,255,0.5);
+	color:white;
+}
+
+.popup-note-title{
+	text-align: center;
+	font-size:14px;
+	font-weight: bold;
 }
