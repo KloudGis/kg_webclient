@@ -20,24 +20,28 @@ KG.core_leaflet = SC.Object.create({
         this.map.on('zoomend', this.onZoom, this);
         this.map.on('moveend', this.onMove, this);
         this.map.on('click', this.onClick, this);
-		this.map.on('layeradd', this.onLayerAdd);
+        this.map.on('layeradd', this.onLayerAdd);
     },
 
     onZoom: function(e) {
         console.log('zoom changed');
+        SC.run.begin();
+        KG.statechart.sendAction('mapZoomed', this);
+        SC.run.end();
     },
 
     onMove: function(e) {
         console.log('map moved');
+        SC.run.begin();
+        KG.statechart.sendAction('mapMoved', this);
+        SC.run.end();
     },
 
     onClick: function(e) {
         console.log('map clicked');
     },
 
-	onLayerAdd: function(e) {
-        console.log('layer added');
-    },
+    onLayerAdd: function(e) {},
 
     pixelsToWorld: function(pixels) {
         var center = this.getCenter();
@@ -67,20 +71,31 @@ KG.core_leaflet = SC.Object.create({
     },
 
     getFatBounds: function() {
-        console.log("Fat bounds calc");
-        var distX = this.map.getSize().x / 4;
-        var distY = this.map.getSize().y / 4;
-        var lbounds = this.map.getPixelBounds();
-        var min = lbounds.min;
-        var max = lbounds.max;
-        //sw
-        var x = min.x - distX;
-        var y = max.y + distY;
-        var sw = this.map.unproject(new L.Point(x, y));
-        //ne
-        var x1 = max.x + distX;
-        var y1 = min.y - distY;
-        var ne = this.map.unproject(new L.Point(x1, y1));
+        return this._getBounds(this.pixelsToWorld(this.map.getSize().divideBy(6).x));
+    },
+
+    getBounds: function() {
+        return this._getBounds(0);
+    },
+
+    _getBounds: function(fat) {
+        var lbounds = this.map.getBounds();
+        var lcenter = this.map.getCenter();
+
+        var sw = lbounds._southWest;
+        var ne = lbounds._northEast;
+        if (!lbounds.contains(lcenter)) {
+            console.log('quick fix to find the real bounds');
+            ne.lat = Math.min(sw.lat + fat, 90);
+            ne.lng = Math.min(sw.lng + fat, 180);
+            sw.lng = -180;
+        } else {
+            sw.lat = Math.max(sw.lat - fat, -90);
+            sw.lng = Math.max(sw.lng - fat, -180);
+            ne.lat = Math.min(ne.lat + fat, 90);
+            ne.lng = Math.min(ne.lng + fat, 180);
+        }
+
         var bounds = KG.Bounds.create({
             sw: KG.LonLat.create({
                 lon: sw.lng,
@@ -91,7 +106,6 @@ KG.core_leaflet = SC.Object.create({
                 lat: ne.lat
             })
         });
-        console.log(bounds);
         return bounds;
     },
 
@@ -103,7 +117,7 @@ KG.core_leaflet = SC.Object.create({
         this.map.setView(new L.LatLng(center.get('lat'), center.get('lon')), zoom);
     },
 
-    addMarker: function(marker, contentView, click_target, click_cb) {
+    addMarker: function(marker, click_target, click_cb) {
         //	console.log('leaflet add marker');
         //	console.log(marker);
         var lmarkerLocation = new L.LatLng(marker.get('lat'), marker.get('lon')),
@@ -112,14 +126,13 @@ KG.core_leaflet = SC.Object.create({
         });
         this.map.addLayer(lmarker);
         var len = marker.getPath('notes.length');
-        if (contentView) {
-            var div = document.createElement('div');
-            contentView.appendTo(div);
-            lmarker.bindPopup(div, {title:'_Notes'.loc()});
-			lmarker.on('click', function(){
-				click_cb.call(click_target, marker);
-			});
-        }
+        lmarker.bindPopup("...", {
+            title: '_Notes'.loc()
+        });
+        lmarker.on('click',
+        function() {
+            click_cb.call(click_target, marker);
+        });
         marker._native_marker = lmarker;
     },
 
@@ -130,17 +143,32 @@ KG.core_leaflet = SC.Object.create({
         }
     },
 
-	refreshMarkerPopup: function(marker){
-		if(marker._native_marker._popup._container){
-			marker._native_marker._popup._updateLayout();
-			marker._native_marker._popup._updatePosition();
-		}
-	},
+    refreshMarkerPopup: function(marker, div) {
+        if (marker._native_marker._popup) {
+            marker._native_marker._popup.setContent(div);
+        }
+    },
 
     closeMarkerPopup: function(marker) {
         marker._native_marker.closePopup();
-    },
+    }
 
+/*
+_temp: null,
+    printBounds: function() {
+        if (!SC.none(this._temp)) {
+            this.map.removeLayer(this._temp);
+        }
+        var fat = this.getFatBounds();
+        var p1 = new L.LatLng(fat.sw.lat, fat.sw.lon);
+        var p2 = new L.LatLng(fat.ne.lat, fat.sw.lon);
+        var p3 = new L.LatLng(fat.ne.lat, fat.ne.lon);
+        var p4 = new L.LatLng(fat.sw.lat, fat.ne.lon);
+        var pts = [p1, p2, p3, p4];
+        this._temp = new L.Polygon(pts);
+        this.map.addLayer(this._temp);
+    },
+*/
 });
 
 /*var osmURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';

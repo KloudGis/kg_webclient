@@ -13,9 +13,13 @@
 	 </script>
 	<a href="index.html">
 			<img id="kloud-logo" src="resources/images/kloudgis_black_256.png" alt="Kloudgis"/>
-	</a>		
-	<span id="sandboxes-title"></span>
+	</a>
 	
+	<script type="text/x-handlebars">		
+		{{#view KG.TitleView id="sandboxes-title"}}
+			{{titleString}}
+		{{/view}}
+	</script>
 	<script type="text/x-handlebars">	
 		{{#collection contentBinding="KG.sandboxesController" tagName="ul" class="sandbox-list"}}
 			{{#view KG.SandboxView class="sandbox-list-item"}}

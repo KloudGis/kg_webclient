@@ -82,10 +82,13 @@ KG.Store = SC.DataSource.extend({
                 headers: KG.core_auth.createAjaxRequestHeaders(),
                 async: YES,
                 error: function(jqXHR, textStatus, errorThrown) {
+					SC.run.begin();
                     SC.Logger.error('Load error: HTTP error status code: ' + jqXHR.status);
                     store.dataSourceDidErrorQuery(query, errorThrown);
+					SC.run.end();
                 },
                 success: function(data, textStatus, jqXHR) {
+					SC.run.begin();
                     console.log('fetch success');
                     var raw = data.records;
                     var storeKeys;
@@ -97,6 +100,7 @@ KG.Store = SC.DataSource.extend({
                     } else {
                         store.loadQueryResults(query, storeKeys);
                     }
+					SC.run.end();
                 }
             });
             return YES;
