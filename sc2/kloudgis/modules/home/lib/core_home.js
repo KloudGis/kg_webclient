@@ -15,7 +15,26 @@ KG.core_home = SC.Object.create({
 	logout: function(){
 		KG.core_auth.logout();
 		window.location.href="index.html";
-	}	
+	},
+	
+	loadSandboxList: function(){
+		var records = KG.store.find(KG.SANDBOX_QUERY);
+		KG.sandboxesController.set('content', records);
+		records.onReady(this, this._onListReady);
+		records.onError(this, this._onListError);
+	},
+	
+	_onListReady: function(records){
+		$('#if-spinner').fadeOut();					
+		KG.sandboxesController.set('recordsReady', YES);
+		records.offError();
+	},
+	
+	_onListError: function(records){
+		$('#if-spinner').fadeOut();					
+		//todo error
+		console.log('records error!');
+	}
 });
 
 $(document).ready(function() {
