@@ -4,57 +4,56 @@ SC.mixin(KG, {
  * Name of localStorage where we store the auth token
  */
     AUTHENTICATION_TOKEN_LOCAL_STORE_KEY: 'KG.AuthenticationToken',
-	REMEMBER_ME_LOCAL_STORE_KEY:  'KG.RememberMe',
+    REMEMBER_ME_LOCAL_STORE_KEY: 'KG.RememberMe',
 
     /**
  * Name of Authentication header returned in API responses
  */
-    AUTHENTICATION_HEADER_NAME: 'X-Kloudgis-Authentication',	
+    AUTHENTICATION_HEADER_NAME: 'X-Kloudgis-Authentication',
 
 });
 
 //store and retreive auth token
 //basic login using the auth token
 KG.core_auth = SC.Object.create({
-	
-	authenticationToken: null,
-	activeUser: null,
+
+    authenticationToken: null,
+    activeUser: null,
 
     load: function(cb_target, cb, useRememberMe) {
         // Get token from local store
         var token = localStorage.getItem(KG.AUTHENTICATION_TOKEN_LOCAL_STORE_KEY);
-		var rememberMe = localStorage.getItem(KG.REMEMBER_ME_LOCAL_STORE_KEY);
+        var rememberMe = localStorage.getItem(KG.REMEMBER_ME_LOCAL_STORE_KEY);
         if (SC.none(token) || (useRememberMe && rememberMe != 'true')) {
             this.logout();
-			cb.call(cb_target, "_failed");
+            cb.call(cb_target, "_failed");
             return NO;
         }
 
         // Synchronously get user from server
-        
         var postData = {
-			user: null,
+            user: null,
             pwd: token
         };
         $.ajax({
-			type: 'POST',
-            url: '/api_auth/public/login',             
+            type: 'POST',
+            url: '/api_auth/public/login',
             data: JSON.stringify(postData),
-			dataType: 'json',
-			contentType: 'application/json; charset=utf-8',
-			context: this,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            context: this,
             error: function(jqXHR, textStatus, errorThrown) {
                 SC.Logger.error('Load error: HTTP error status code: ' + jqXHR.status);
-				cb.call(cb_target, "_error");
+                cb.call(cb_target, "_error");
             },
             success: function(data, textStatus, jqXHR) {
-				var newToken = data.token;
-				var user = data.user;
-				// Save
-		        this.saveLogin(newToken, undefined, user);
-				cb.call(cb_target, "_success");
+                var newToken = data.token;
+                var user = data.user;
+                // Save
+                this.saveLogin(newToken, undefined, user);
+                cb.call(cb_target, "_success");
             },
-			async: YES
+            async: YES
         });
         return YES;
     },
@@ -98,9 +97,12 @@ KG.core_auth = SC.Object.create({
 
         var error = null;
         SC.Logger.error('HTTP error status code: ' + jqXHR.status);
-		if(jqXHR.status === 401){
-			error = new SC.Error('_unauthorized');
-		}else if (jqXHR.status === 403 || jqXHR.status === 404 || jqXHR.status > 500) {
+        if (jqXHR.status === 401) {
+            error = new SC.Error('_unauthorized');
+        }
+        if (jqXHR.status === 503 || jqXHR.status === 404) {
+            error = new SC.Error('_serverDown');
+        } else if (jqXHR.status === 403 || jqXHR.status > 500) {
             error = new SC.Error('_serverError');
         } else {
             error = new SC.Error('_unexpectedError');
@@ -117,10 +119,10 @@ KG.core_auth = SC.Object.create({
         var error = null;
         try {
             // Get the token
-            var token,user;
+            var token, user;
             if (!SC.none(data)) {
                 token = data.token;
-				user = data.user;
+                user = data.user;
             }
             if (SC.none(token)) {
                 throw new SC.Error('_nullTokenError');
@@ -142,42 +144,42 @@ KG.core_auth = SC.Object.create({
 
     saveLogin: function(token, rememberMe, user) {
         this.set('authenticationToken', token);
-		this.set('activeUser', user);
-		if(SC.none(token)){
-			localStorage.setItem(KG.AUTHENTICATION_TOKEN_LOCAL_STORE_KEY, '');
-			localStorage.setItem(KG.REMEMBER_ME_LOCAL_STORE_KEY, NO);
-		}else{
-        	localStorage.setItem(KG.AUTHENTICATION_TOKEN_LOCAL_STORE_KEY, token);
-			if(rememberMe !== undefined){
-				localStorage.setItem(KG.REMEMBER_ME_LOCAL_STORE_KEY, rememberMe);
-			}
-		}
+        this.set('activeUser', user);
+        if (SC.none(token)) {
+            localStorage.setItem(KG.AUTHENTICATION_TOKEN_LOCAL_STORE_KEY, '');
+            localStorage.setItem(KG.REMEMBER_ME_LOCAL_STORE_KEY, NO);
+        } else {
+            localStorage.setItem(KG.AUTHENTICATION_TOKEN_LOCAL_STORE_KEY, token);
+            if (rememberMe !== undefined) {
+                localStorage.setItem(KG.REMEMBER_ME_LOCAL_STORE_KEY, rememberMe);
+            }
+        }
     },
 
     /*
    * Remove authentication tokens
    */
     logout: function() {
-		console.log('Logging out');
-		//tell the server about the logout (invalidate token and destroy the session)
-	 	var url = '/api_auth/public/login/logout';
-		 $.ajax({
-	            type: 'POST',
-	            url: url,
-	            async: YES
-	        });
+        console.log('Logging out');
+        //tell the server about the logout (invalidate token and destroy the session)
+        var url = '/api_auth/public/login/logout';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            async: YES
+        });
         // Remove token from local store
         localStorage.removeItem(KG.AUTHENTICATION_TOKEN_LOCAL_STORE_KEY);
 
         // Clear cached token
         this.set('authenticationToken', null);
-		this.set('activeUser', null);
+        this.set('activeUser', null);
         return;
     },
 
-	createAjaxRequestHeaders: function(){
-		var headers = {};
-		headers[KG.AUTHENTICATION_HEADER_NAME] = this.get('authenticationToken');
-		return headers;
-	}
+    createAjaxRequestHeaders: function() {
+        var headers = {};
+        headers[KG.AUTHENTICATION_HEADER_NAME] = this.get('authenticationToken');
+        return headers;
+    }
 });

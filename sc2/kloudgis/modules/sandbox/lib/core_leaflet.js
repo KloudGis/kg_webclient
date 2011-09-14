@@ -6,6 +6,8 @@ KG.core_leaflet = SC.Object.create({
     noteIcon: new L.Icon(),
     groupIcon: new L.Icon('resources/images/group.png'),
 
+//	layerControl: new L.Control.Layers(),
+
     addToDocument: function() {
         var key = '8ccaf9c293f247d6b18a30fce375e298';
         var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/' + key + '/997/256/{z}/{x}/{y}.png',
@@ -17,7 +19,9 @@ KG.core_leaflet = SC.Object.create({
 
         // initialize the map on the "map" div
         var map = new L.Map('map');
+	//	map.addControl(this.layerControl);
         map.setView(new L.LatLng(46, -72), 8).addLayer(layer);
+		//this.layerControl.addBaseLayer(layer, "Base");
         this.map = map;
         this.popup = new L.Popup();
         this.map.on('zoomend', this.onZoom, this);
@@ -172,6 +176,7 @@ KG.core_leaflet = SC.Object.create({
         });
         layer._native_layer = wms;
         this.map.addLayer(wms);
+	//	this.layerControl.addOverlay(wms, layer.get('label'));
     }
 
     /*

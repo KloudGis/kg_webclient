@@ -35,8 +35,10 @@ KG.core_home = SC.Object.create({
 	
 	_onListError: function(records){
 		$('#if-spinner').fadeOut();					
-		//todo error
 		console.log('records error!');
+		var label = $('#sandboxes-title');
+		label.text('_errorLoading'.loc());
+		label.css('color', 'red');
 	}
 });
 
