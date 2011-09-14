@@ -215,6 +215,7 @@ a.leaflet-active {
 	opacity: 1;
 	}
 
+/* *** KG change *** Set the transition time to 0.5s */
 .leaflet-fade-anim .leaflet-popup {
 	opacity: 0;
 

@@ -84,14 +84,8 @@ KG.core_note = SC.Object.create({
     noteReady: function(note, params) {
         params.count++;
         if (params.count === params.length) {
-            console.log('refresh!');
-			var title;
-			if(params.length > 1){
-				title = '_Notes'.loc(params.length);
-			}else{
-				title = '_Note'.loc();
-			}
-			this._view.set('title', title);
+            console.log('refresh!');			
+			this._view.set('title', params.marker.get('title'));
             setTimeout(function() {
                 KG.core_leaflet.refreshMarkerPopup(params.marker, this._div);
             },
