@@ -1,13 +1,13 @@
 KG.core_sandbox = SC.Object.create({
 	
-	
-	
 	authenticate: function(){		
-		KG.core_auth.load(this, this.authenticateCallback);
+		KG.core_auth.load(this, this.authenticateCallback);		
 	},
 	
 	authenticateCallback: function(message){
 		if(message === "_success"){
+			//write a cookie for wms service.  Expires in 1 days
+			$.cookie('C-Kloudgis-Authentication', KG.core_auth.get('authenticationToken'), {expires: 1, path: '/'});
 			KG.statechart.sendAction('authenticationSucceeded', this);
 		}else{
 			KG.statechart.sendAction('authenficationFailed', this);

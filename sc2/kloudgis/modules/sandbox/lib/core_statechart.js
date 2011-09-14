@@ -41,6 +41,7 @@ SC.mixin(KG, {
 						KG.core_sandbox.addMap();
 						$('#if-spinner').fadeOut();	
 						KG.core_note.refreshMarkers();				
+						KG.core_layer.loadLayers();
 					},
 					
 					mapZoomed: function(sender){

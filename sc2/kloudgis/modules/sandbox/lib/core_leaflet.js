@@ -3,8 +3,8 @@ KG.core_leaflet = SC.Object.create({
     map: null,
     popup: null,
 
-	noteIcon: new L.Icon(),
-	groupIcon: new L.Icon('resources/images/group.png'),
+    noteIcon: new L.Icon(),
+    groupIcon: new L.Icon('resources/images/group.png'),
 
     addToDocument: function() {
         var key = '8ccaf9c293f247d6b18a30fce375e298';
@@ -124,23 +124,23 @@ KG.core_leaflet = SC.Object.create({
         //	console.log('leaflet add marker');
         //	console.log(marker);
         var lmarkerLocation = new L.LatLng(marker.get('lat'), marker.get('lon'));
-		var icon = this.noteIcon;
-		if(marker.get('featureCount') > 1){
-			icon = this.groupIcon;
-		}
+        var icon = this.noteIcon;
+        if (marker.get('featureCount') > 1) {
+            icon = this.groupIcon;
+        }
         lmarker = new L.Marker(lmarkerLocation, {
             draggable: false,
-			title: marker.get('tooltip'),
-			icon: icon
+            title: marker.get('tooltip'),
+            icon: icon
         });
         this.map.addLayer(lmarker);
         var len = marker.getPath('notes.length');
         lmarker.bindPopup("...");
         lmarker.on('click',
         function() {
-			SC.run.begin();
+            SC.run.begin();
             click_cb.call(click_target, marker);
-			SC.run.end();
+            SC.run.end();
         });
         marker._native_marker = lmarker;
     },
@@ -157,12 +157,24 @@ KG.core_leaflet = SC.Object.create({
             marker._native_marker._popup.setContent(div);
         }
     },
-	
+
     closeMarkerPopup: function(marker) {
         marker._native_marker.closePopup();
+    },
+
+    addWMSLayer: function(layer) {
+        var wms = new L.TileLayer.WMS(layer.get('url'), {
+            layers: layer.get('name'),
+            transparent: YES,
+            format: 'image/png',
+            kg_layer: layer.get('id'),
+            kg_sandbox: KG.get('active_sandbox')
+        });
+        layer._native_layer = wms;
+        this.map.addLayer(wms);
     }
 
-/*
+    /*
 _temp: null,
     printBounds: function() {
         if (!SC.none(this._temp)) {

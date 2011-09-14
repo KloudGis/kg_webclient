@@ -1,3 +1,6 @@
+//predefined queries
+KG.SANDBOX_QUERY = SC.Query.local(KG.Sandbox, {query_url: '/api_sandbox/protected/sandboxes'});
+
 KG.core_home = SC.Object.create({
 	
 	authenticate: function(){		
