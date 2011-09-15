@@ -8,6 +8,10 @@ KG.core_sandbox = SC.Object.create({
 		if(message === "_success"){
 			//write a cookie for wms service.  Expires in 1 days
 			$.cookie('C-Kloudgis-Authentication', KG.core_auth.get('authenticationToken'), {expires: 1, path: '/'});
+			//clear cookie on page leave
+			window.onbeforeunload=function(){
+				$.cookie('C-Kloudgis-Authentication', null, {expires: 1, path: '/'});
+			};
 			KG.statechart.sendAction('authenticationSucceeded', this);
 		}else{
 			KG.statechart.sendAction('authenficationFailed', this);
@@ -17,22 +21,6 @@ KG.core_sandbox = SC.Object.create({
 	addMap: function(){
 		KG.core_leaflet.addToDocument();
 	}
-	
-	//add a view to the body
-	/* 
-	test: function(){
-		var view = SC.View.create({
-		  templateName: 'say-hello',
-		  name: "Bob"
-		});
-		view.append();
-	}
-	//in the header part of the html
-	<script type="text/x-handlebars" data-template-name="say-hello">
-	    Hello, <b>{{name}}</b>
-	</script>	
-	
-	*/
 	
 });
 

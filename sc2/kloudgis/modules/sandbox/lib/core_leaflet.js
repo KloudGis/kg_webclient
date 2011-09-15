@@ -6,8 +6,7 @@ KG.core_leaflet = SC.Object.create({
     noteIcon: new L.Icon(),
     groupIcon: new L.Icon('resources/images/group.png'),
 
-//	layerControl: new L.Control.Layers(),
-
+    //	layerControl: new L.Control.Layers(),
     addToDocument: function() {
         var key = '8ccaf9c293f247d6b18a30fce375e298';
         var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/' + key + '/997/256/{z}/{x}/{y}.png',
@@ -19,9 +18,9 @@ KG.core_leaflet = SC.Object.create({
 
         // initialize the map on the "map" div
         var map = new L.Map('map');
-	//	map.addControl(this.layerControl);
+        //	map.addControl(this.layerControl);
         map.setView(new L.LatLng(46, -72), 8).addLayer(layer);
-		//this.layerControl.addBaseLayer(layer, "Base");
+        //this.layerControl.addBaseLayer(layer, "Base");
         this.map = map;
         this.popup = new L.Popup();
         this.map.on('zoomend', this.onZoom, this);
@@ -93,7 +92,7 @@ KG.core_leaflet = SC.Object.create({
         var ne = lbounds._northEast;
         if (!lbounds.contains(lcenter)) {
             console.log('quick fix to find the real bounds');
-            ne.lat = Math.min(sw.lat + fat, 90);
+            ne.lat = Math.min(ne.lat + fat, 90);
             ne.lng = Math.min(sw.lng + fat, 180);
             sw.lng = -180;
         } else {
@@ -146,6 +145,20 @@ KG.core_leaflet = SC.Object.create({
             click_cb.call(click_target, marker);
             SC.run.end();
         });
+        //patch to make the popup hide on Safari Mac.
+        if ($.browser.safari && navigator.platform.indexOf('Mac') == 0) {
+            lmarker._popup._close = function() {
+                if (this._opened) {
+                    this._map.removeLayer(this);
+                    var element = $(".leaflet-popup-pane")[0];
+					if(element.style.width == '1px'){
+						element.style.width = '0px';
+					}else{
+						element.style.width = '1px';
+					}			
+                }
+            };
+        }
         marker._native_marker = lmarker;
     },
 
@@ -176,25 +189,27 @@ KG.core_leaflet = SC.Object.create({
         });
         layer._native_layer = wms;
         this.map.addLayer(wms);
-	//	this.layerControl.addOverlay(wms, layer.get('label'));
-    }
+        //	this.layerControl.addOverlay(wms, layer.get('label'));
+    },
 
-    /*
-_temp: null,
+    _temp: null,
     printBounds: function() {
         if (!SC.none(this._temp)) {
             this.map.removeLayer(this._temp);
         }
-        var fat = this.getFatBounds();
-        var p1 = new L.LatLng(fat.sw.lat, fat.sw.lon);
-        var p2 = new L.LatLng(fat.ne.lat, fat.sw.lon);
-        var p3 = new L.LatLng(fat.ne.lat, fat.ne.lon);
-        var p4 = new L.LatLng(fat.sw.lat, fat.ne.lon);
+        var bounds = this.getBounds();
+        var sw = bounds.sw;
+        var ne = bounds.ne;
+        var p1 = new L.LatLng(sw.lat, sw.lon);
+        var p2 = new L.LatLng(ne.lat, sw.lon);
+        var p3 = new L.LatLng(ne.lat, ne.lon);
+        var p4 = new L.LatLng(sw.lat, ne.lon);
         var pts = [p1, p2, p3, p4];
         this._temp = new L.Polygon(pts);
         this.map.addLayer(this._temp);
+        return bounds;
     },
-*/
+
 });
 
 /*var osmURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
