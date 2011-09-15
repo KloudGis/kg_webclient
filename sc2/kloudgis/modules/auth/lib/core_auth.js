@@ -162,7 +162,29 @@ KG.core_auth = SC.Object.create({
     logout: function() {
         console.log('Logging out');
         //tell the server about the logout (invalidate token and destroy the session)
-        var url = '/api_auth/public/login/logout';
+		//auth service
+        var url = '/api_auth/public/logout';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            async: YES
+        });
+		//sandbox service
+		url = '/api_sandbox/public/logout';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            async: YES
+        });
+		//data service
+		url = '/api_data/public/logout';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            async: YES
+        });
+		//map service
+		url = '/api_map/public/logout';
         $.ajax({
             type: 'POST',
             url: url,
