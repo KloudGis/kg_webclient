@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>currentDocument</key>
+	<string>kloudgis/modules/auth/lib/core_auth.js</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -19,6 +21,20 @@
 	<integer>512</integer>
 	<key>metaData</key>
 	<dict>
+		<key>jeanfelixg.conf</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>kloudgis copy.back</key>
 		<dict>
 			<key>caret</key>
@@ -175,6 +191,20 @@
 			<key>firstVisibleLine</key>
 			<integer>10</integer>
 		</dict>
+		<key>kloudgis/kloudgis.json</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>12</integer>
+				<key>line</key>
+				<integer>19</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>kloudgis/modules/app/lib/views/forward_text_field.js</key>
 		<dict>
 			<key>caret</key>
@@ -238,14 +268,30 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>12</integer>
 				<key>line</key>
-				<integer>109</integer>
+				<integer>180</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>83</integer>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>10</integer>
+				<key>line</key>
+				<integer>180</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>14</integer>
+				<key>line</key>
+				<integer>180</integer>
+			</dict>
 		</dict>
 		<key>kloudgis/modules/home/lib/core_home.js</key>
 		<dict>
@@ -306,6 +352,12 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
+	<key>openDocuments</key>
+	<array>
+		<string>kloudgis/kloudgis.json</string>
+		<string>kloudgis/modules/auth/lib/core_auth.js</string>
+		<string>jeanfelixg.conf</string>
+	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>

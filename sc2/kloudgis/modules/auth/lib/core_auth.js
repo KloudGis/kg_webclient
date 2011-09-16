@@ -99,8 +99,7 @@ KG.core_auth = SC.Object.create({
         SC.Logger.error('HTTP error status code: ' + jqXHR.status);
         if (jqXHR.status === 401) {
             error = new SC.Error('_unauthorized');
-        }
-        if (jqXHR.status === 503 || jqXHR.status === 404) {
+        } else if (jqXHR.status === 503 || jqXHR.status === 404) {
             error = new SC.Error('_serverDown');
         } else if (jqXHR.status === 403 || jqXHR.status > 500) {
             error = new SC.Error('_serverError');

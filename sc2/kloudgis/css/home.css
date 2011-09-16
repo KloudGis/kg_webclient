@@ -52,10 +52,17 @@ body{
 }
 
 
+#welcome-usr-label{
+	margin-top:5px;
+	width:100%;
+	text-align: center;
+	font-size: 14px;
+}
+
 
 #logout-button{
 	position: absolute;
 	right:10px;
-	top:4px;
+	top:5px;
 }
 

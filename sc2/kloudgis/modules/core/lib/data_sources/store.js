@@ -90,7 +90,7 @@ KG.Store = SC.DataSource.extend({
                 success: function(data, textStatus, jqXHR) {
 					SC.run.begin();
                     console.log('fetch success');
-                    var raw = data.records;
+                    var raw = data ? data.records : null;
                     var storeKeys;
                     if (!SC.none(raw)) {
                         storeKeys = store.loadRecords(query.get('recordType'), raw);
