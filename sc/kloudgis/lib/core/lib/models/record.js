@@ -1,1 +1,0 @@
-KG.Record = SC.Record.extend({});
