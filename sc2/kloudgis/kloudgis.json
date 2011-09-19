@@ -3,10 +3,10 @@
   "bpm": "1.0.0",
   "bpm:build": {
     "bpm_libs.js": {
+	  "spade:format": "function", 
       "directories": [
         "lib"
-      ],
-      "minifier": "uglify-js"
+      ]
     },
     "bpm_styles.css": {
       "directories": [

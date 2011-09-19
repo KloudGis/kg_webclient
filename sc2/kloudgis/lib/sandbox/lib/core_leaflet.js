@@ -1,10 +1,12 @@
 KG.core_leaflet = SC.Object.create({
 
     map: null,
-    popup: null,
 
+    _newNoteMarker: null,
+    //icons
     noteIcon: new L.Icon(),
     groupIcon: new L.Icon('resources/images/group.png'),
+    newNoteIcon: new L.Icon('resources/images/new.png'),
 
     //	layerControl: new L.Control.Layers(),
     addToDocument: function() {
@@ -22,11 +24,11 @@ KG.core_leaflet = SC.Object.create({
         map.setView(new L.LatLng(46, -72), 8).addLayer(layer);
         //this.layerControl.addBaseLayer(layer, "Base");
         this.map = map;
-        this.popup = new L.Popup();
         this.map.on('zoomend', this.onZoom, this);
         this.map.on('moveend', this.onMove, this);
         this.map.on('click', this.onClick, this);
         this.map.on('layeradd', this.onLayerAdd);
+        this.map.on('layerremove', this.onLayerRemove);
     },
 
     onZoom: function(e) {
@@ -48,6 +50,15 @@ KG.core_leaflet = SC.Object.create({
     },
 
     onLayerAdd: function(e) {},
+
+    onLayerRemove: function(e) {
+        var self = KG.core_leaflet;
+        if (self._newNoteMarker && self._newNoteMarker._popup === e.layer) {
+            console.log('popup closed');
+            //popup closed
+            KG.statechart.sendAction('newNotePopupClosed', self);
+        }
+    },
 
     pixelsToWorld: function(pixels) {
         var center = this.getCenter();
@@ -131,7 +142,7 @@ KG.core_leaflet = SC.Object.create({
         if (marker.get('featureCount') > 1) {
             icon = this.groupIcon;
         }
-        lmarker = new L.Marker(lmarkerLocation, {
+        var lmarker = new L.Marker(lmarkerLocation, {
             draggable: false,
             title: marker.get('tooltip'),
             icon: icon
@@ -151,11 +162,11 @@ KG.core_leaflet = SC.Object.create({
                 if (this._opened) {
                     this._map.removeLayer(this);
                     var element = $(".leaflet-popup-pane")[0];
-					if(element.style.width == '1px'){
-						element.style.width = '0px';
-					}else{
-						element.style.width = '1px';
-					}			
+                    if (element.style.width == '1px') {
+                        element.style.width = '0px';
+                    } else {
+                        element.style.width = '1px';
+                    }
                 }
             };
         }
@@ -177,6 +188,40 @@ KG.core_leaflet = SC.Object.create({
 
     closeMarkerPopup: function(marker) {
         marker._native_marker.closePopup();
+    },
+
+	openMarkerPopup: function(marker){
+		marker._native_marker.openPopup();
+	},
+
+    addNewNoteMarker: function(popupContent) {
+        var lcenter = this.map.getCenter();
+        var lmarker = new L.Marker(lcenter, {
+            draggable: true,
+            title: "_newNote",
+            icon: this.newNoteIcon
+        });
+		lmarker.on('dragend', function(){
+			KG.statechart.sendAction('notePositionSet');
+		})
+        lmarker.bindPopup(popupContent);
+        this.map.addLayer(lmarker);
+        lmarker.openPopup();
+        this._newNoteMarker = lmarker;
+        return SC.Object.create({
+            _native_marker: lmarker,
+            coordinate: function() {
+                var latlng = this._native_marker.getLatLng();
+				return {x: latlng.lng, y: latlng.lat};
+            }.property()
+        });
+    },
+
+    cleanUpNewNoteMarker: function() {
+        var marker = this._newNoteMarker;
+        if (!SC.none(marker)) {
+            this.map.removeLayer(marker);
+        }
     },
 
     addWMSLayer: function(layer) {

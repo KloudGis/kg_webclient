@@ -14,13 +14,36 @@
 			{{/view}}
 		{{/collection}}
 	</script>
+	<script type="text/x-handlebars" data-template-name="new-note-popup">
+		{{#view class="new-note-popup"}}
+			{{KG.activeNoteController.titleLabel}}
+	    	{{#view KG.TextField valueBinding="KG.activeNoteController.content.title" type="text" placeholder_not_loc="_noteTitlePlaceholder" }}
+			{{/view}}
+			{{KG.activeNoteController.descriptionLabel}}
+			{{#view SC.TextArea valueBinding="KG.activeNoteController.content.description"}}
+			{{/view}}
+			{{#view class="new-note-popup-bottom"}}
+				{{#view KG.Button classBinding="isActive" sc_action="confirmNoteAction"}}
+					{{KG.activeNoteController.confirmLabel}}
+				{{/view}}
+			{{/view}}
+		{{/view}}
+	</script>
   </head>
   <body>	
 	<iframe id="if-spinner" src="spinner.html"></iframe>
 	<div id="map">		
 	</div>
-	<div id="back-home" class="kg-controls">
-		<a href="home.html">Back home</a>
+	
+	<div id="bottom-bar">
+		<div id="back-home" class="kg-controls">
+			<a href="home.html"></a>
+		</div>	
+		<div id="create-note" class="kg-controls">
+			<a href="javascript:void(0)" onclick="KG.core_sandbox.createNote()"><img src="resources/images/s_marker.png"/><span></span>
+			</a>
+		</div>	
+		</script>
 	</div>
   </body>
 

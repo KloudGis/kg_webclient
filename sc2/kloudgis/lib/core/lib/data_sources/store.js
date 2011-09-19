@@ -82,15 +82,15 @@ KG.Store = SC.DataSource.extend({
                 headers: KG.core_auth.createAjaxRequestHeaders(),
                 async: YES,
                 error: function(jqXHR, textStatus, errorThrown) {
-					SC.run.begin();
+                    SC.run.begin();
                     SC.Logger.error('Load error: HTTP error status code: ' + jqXHR.status);
                     store.dataSourceDidErrorQuery(query, errorThrown);
-					SC.run.end();
+                    SC.run.end();
                 },
                 success: function(data, textStatus, jqXHR) {
-					SC.run.begin();
+                    SC.run.begin();
                     console.log('fetch success');
-                    var raw = data ? data.records : null;
+                    var raw = data ? data.records: null;
                     var storeKeys;
                     if (!SC.none(raw)) {
                         storeKeys = store.loadRecords(query.get('recordType'), raw);
@@ -100,7 +100,7 @@ KG.Store = SC.DataSource.extend({
                     } else {
                         store.loadQueryResults(query, storeKeys);
                     }
-					SC.run.end();
+                    SC.run.end();
                 }
             });
             return YES;
@@ -145,6 +145,40 @@ KG.Store = SC.DataSource.extend({
             return YES;
         }
         return NO; // return YES if you handled the storeKey
-    }
+    },
 
+    createRecord: function(store, storeKey) {
+        var rtype = store.recordTypeFor(storeKey);
+        if (rtype == 'KG.Note') {
+            url = '/api_data/protected/notes?sandbox=%@'.fmt(KG.get('active_sandbox'));
+        }
+        if (url) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+				data: JSON.stringify(store.readDataHash(storeKey)),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                context: this,
+                headers: KG.core_auth.createAjaxRequestHeaders(),
+                async: YES,
+                error: function(jqXHR, textStatus, errorThrown) {
+                    SC.Logger.error('Create error: HTTP error status code: ' + jqXHR.status);
+                    store.dataSourceDidError(storeKey, errorThrown);
+                },
+                success: function(data, textStatus, jqXHR) {
+                    console.log('create success');
+                    var raw = data;
+                    var storeKeys;
+                    if (!SC.none(raw)) {
+                        store.dataSourceDidComplete(storeKey, raw, raw.guid);
+                    } else {
+                        store.dataSourceDidComplete(storeKey);
+                    }
+                }
+            });
+            return YES;
+        }
+        return NO;
+    }
 });

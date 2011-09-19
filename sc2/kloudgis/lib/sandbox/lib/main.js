@@ -1,4 +1,6 @@
 require("kloudgis/app/lib/main");
+require("kloudgis/app/lib/views/button");
+require("kloudgis/app/lib/views/text_field");
 require("kloudgis/auth/lib/main");
 require("kloudgis/core/lib/main_ds");
 require("kloudgis/core/lib/models/record");
@@ -11,6 +13,7 @@ require("./core_leaflet");
 //notes
 require("./controllers/note_markers");
 require("./controllers/note_popup");
+require("./controllers/active_note");
 require("./core_note");
 require("./models/note_marker");
 require("./views/note_popup_item");

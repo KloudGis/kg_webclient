@@ -53,7 +53,6 @@ KG.core_auth = SC.Object.create({
                 var user = data.user;
                 // Save
                 this.saveLogin(newToken, undefined, user);	
-				console.log('callback:' + cb);
                 cb.call(cb_target, "_success");
             },
             async: YES
