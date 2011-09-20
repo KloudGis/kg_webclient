@@ -7,11 +7,6 @@
       "directories": [
         "lib"
       ]
-    },
-    "bpm_styles.css": {
-      "directories": [
-        "css"
-      ]
     }
   },
   "dependencies": {

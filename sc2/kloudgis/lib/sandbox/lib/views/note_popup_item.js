@@ -8,6 +8,7 @@ KG.NotePopupItemView = SC.View.extend({
 	
 	mouseUp: function(e){
 		console.log('click note!' + this.get('title') );
+		KG.statechart.sendAction('noteSelectedAction', this.getPath('itemView.content'), KG.notePopupController.get('marker'));
 		return NO;
 	}
 });

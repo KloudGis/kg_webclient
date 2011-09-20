@@ -6,7 +6,7 @@
     <title>Kloudgis</title>
 	<script type="text/x-handlebars" data-template-name="notes-marker-popup">
 		{{#view class="popup-note-title"}}
-			{{parentView.title}}
+			{{KG.notePopupController.popupTitle}}
 		{{/view}}
 	    {{#collection contentBinding="KG.notePopupController" tagName="ul" class="popup-note-list"}}
 			{{#view KG.NotePopupItemView}}
@@ -14,17 +14,24 @@
 			{{/view}}
 		{{/collection}}
 	</script>
-	<script type="text/x-handlebars" data-template-name="new-note-popup">
-		{{#view class="new-note-popup"}}
+	<script type="text/x-handlebars" data-template-name="active-note-popup">
+		{{#view class="active-note-popup"}}		
+			
+			{{#view class="note-date-label"}}
+				{{KG.activeNoteController.dateValue}}
+			{{/view}}
 			{{KG.activeNoteController.titleLabel}}
-	    	{{#view KG.TextField valueBinding="KG.activeNoteController.content.title" type="text" placeholder_not_loc="_noteTitlePlaceholder" }}
+	    	{{#view KG.TextField valueBinding="KG.activeNoteController.titleValue" disabledBinding="KG.activeNoteController.isDisabled" type="text" placeholder_not_loc="_noteTitlePlaceholder" }}
 			{{/view}}
 			{{KG.activeNoteController.descriptionLabel}}
-			{{#view SC.TextArea valueBinding="KG.activeNoteController.content.description"}}
+			{{#view KG.TextArea disabledBinding="KG.activeNoteController.isDisabled" valueBinding="KG.activeNoteController*content.description"}}
 			{{/view}}
-			{{#view class="new-note-popup-bottom"}}
-				{{#view KG.Button classBinding="isActive" sc_action="confirmNoteAction"}}
+			{{#view class="active-note-popup-bottom"}}
+				{{#view KG.Button disabledBinding="KG.activeNoteController.isDisabled" classBinding="isActive" sc_action="confirmNoteAction"}}
 					{{KG.activeNoteController.confirmLabel}}
+				{{/view}}
+				{{#view class="note-author-label"}}
+					{{KG.activeNoteController.authorValue}}
 				{{/view}}
 			{{/view}}
 		{{/view}}

@@ -119,29 +119,7 @@ KG.Store = SC.DataSource.extend({
             url = '/api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('active_sandbox'));
         }
         if (url) {
-            $.ajax({
-                type: 'GET',
-                url: url,
-                dataType: 'json',
-                contentType: 'application/json; charset=utf-8',
-                context: this,
-                headers: KG.core_auth.createAjaxRequestHeaders(),
-                async: YES,
-                error: function(jqXHR, textStatus, errorThrown) {
-                    SC.Logger.error('Load error: HTTP error status code: ' + jqXHR.status);
-                    store.dataSourceDidError(storeKey, errorThrown);
-                },
-                success: function(data, textStatus, jqXHR) {
-                    console.log('retreive success');
-                    var raw = data;
-                    var storeKeys;
-                    if (!SC.none(raw)) {
-                        store.dataSourceDidComplete(storeKey, raw, raw.guid);
-                    } else {
-                        store.dataSourceDidComplete(storeKey);
-                    }
-                }
-            });
+            this.ajaxSupport(store, storeKey, 'GET', url);
             return YES;
         }
         return NO; // return YES if you handled the storeKey
@@ -153,32 +131,50 @@ KG.Store = SC.DataSource.extend({
             url = '/api_data/protected/notes?sandbox=%@'.fmt(KG.get('active_sandbox'));
         }
         if (url) {
-            $.ajax({
-                type: 'POST',
-                url: url,
-				data: JSON.stringify(store.readDataHash(storeKey)),
-                dataType: 'json',
-                contentType: 'application/json; charset=utf-8',
-                context: this,
-                headers: KG.core_auth.createAjaxRequestHeaders(),
-                async: YES,
-                error: function(jqXHR, textStatus, errorThrown) {
-                    SC.Logger.error('Create error: HTTP error status code: ' + jqXHR.status);
-                    store.dataSourceDidError(storeKey, errorThrown);
-                },
-                success: function(data, textStatus, jqXHR) {
-                    console.log('create success');
-                    var raw = data;
-                    var storeKeys;
-                    if (!SC.none(raw)) {
-                        store.dataSourceDidComplete(storeKey, raw, raw.guid);
-                    } else {
-                        store.dataSourceDidComplete(storeKey);
-                    }
-                }
-            });
+            this.ajaxSupport(store, 'POST', url, JSON.stringify(store.readDataHash(storeKey)));
             return YES;
         }
         return NO;
+    },
+
+    updateRecord: function(store, storeKey, params) {
+        var rtype = store.recordTypeFor(storeKey);
+        var id = store.idFor(storeKey);
+        var url;
+        if (!SC.none(id) && rtype == 'KG.Note') {
+            url = '/api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('active_sandbox'));
+        }
+        if (url) {
+            this.ajaxSupport(store, storeKey, 'PUT', url, JSON.stringify(store.readDataHash(storeKey)));
+            return YES;
+        }
+        return NO;
+    },
+
+    ajaxSupport: function(store, storeKey, type, url, data) {
+        $.ajax({
+            type: type,
+            url: url,
+            data: data,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            context: this,
+            headers: KG.core_auth.createAjaxRequestHeaders(),
+            async: YES,
+            error: function(jqXHR, textStatus, errorThrown) {
+                SC.Logger.error('Ajax error: HTTP error status code: ' + jqXHR.status);
+                store.dataSourceDidError(storeKey, errorThrown);
+            },
+            success: function(data, textStatus, jqXHR) {
+                console.log(type + ' success');
+                var raw = data;
+                var storeKeys;
+                if (!SC.none(raw)) {
+                    store.dataSourceDidComplete(storeKey, raw, raw.guid);
+                } else {
+                    store.dataSourceDidComplete(storeKey);
+                }
+            }
+        });
     }
 });

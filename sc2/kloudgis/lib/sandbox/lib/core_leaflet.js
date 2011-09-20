@@ -2,7 +2,7 @@ KG.core_leaflet = SC.Object.create({
 
     map: null,
 
-    _newNoteMarker: null,
+    activeMarker: null,
     //icons
     noteIcon: new L.Icon(),
     groupIcon: new L.Icon('resources/images/group.png'),
@@ -53,10 +53,10 @@ KG.core_leaflet = SC.Object.create({
 
     onLayerRemove: function(e) {
         var self = KG.core_leaflet;
-        if (self._newNoteMarker && self._newNoteMarker._popup === e.layer) {
+        if (self.get('activeMarker') && self.get('activeMarker')._native_marker && self.get('activeMarker')._native_marker._popup === e.layer) {
             console.log('popup closed');
             //popup closed
-            KG.statechart.sendAction('newNotePopupClosed', self);
+            KG.statechart.sendAction('activePopupClosed', self);
         }
     },
 
@@ -153,6 +153,7 @@ KG.core_leaflet = SC.Object.create({
         lmarker.on('click',
         function() {
             SC.run.begin();
+			KG.core_leaflet.onMarkerClick(marker);
             click_cb.call(click_target, marker);
             SC.run.end();
         });
@@ -173,6 +174,10 @@ KG.core_leaflet = SC.Object.create({
         marker._native_marker = lmarker;
     },
 
+	onMarkerClick: function(marker){
+		this.set('activeMarker', marker);
+	},
+
     removeMarker: function(marker) {
         if (marker._native_marker) {
             this.map.removeLayer(marker._native_marker);
@@ -190,6 +195,12 @@ KG.core_leaflet = SC.Object.create({
         marker._native_marker.closePopup();
     },
 
+	closeActivePopup: function(){
+		if(this.get('activeMarker')){
+			this.get('activeMarker')._native_marker.closePopup();
+		}
+	},
+
 	openMarkerPopup: function(marker){
 		marker._native_marker.openPopup();
 	},
@@ -202,25 +213,28 @@ KG.core_leaflet = SC.Object.create({
             icon: this.newNoteIcon
         });
 		lmarker.on('dragend', function(){
+			SC.run.begin();
 			KG.statechart.sendAction('notePositionSet');
+			SC.run.end();
 		})
         lmarker.bindPopup(popupContent);
         this.map.addLayer(lmarker);
         lmarker.openPopup();
-        this._newNoteMarker = lmarker;
-        return SC.Object.create({
+		var marker = SC.Object.create({
             _native_marker: lmarker,
             coordinate: function() {
                 var latlng = this._native_marker.getLatLng();
 				return {x: latlng.lng, y: latlng.lat};
             }.property()
         });
+		this.onMarkerClick(marker);
+        return marker;
     },
 
     cleanUpNewNoteMarker: function() {
-        var marker = this._newNoteMarker;
+        var marker = this.get('activeMarker');
         if (!SC.none(marker)) {
-            this.map.removeLayer(marker);
+            this.map.removeLayer(marker._native_marker);
         }
     },
 

@@ -65,31 +65,43 @@
 	font-weight: bold;
 }
 
-.new-note-popup span{
+.active-note-popup .note-author-label{
+	font-size:10px;
+	display: block;	
+	text-align: right;
+}
+
+.active-note-popup .note-date-label{
+	font-style: italic;
+	display: inline;
+	float: right;	
+}
+
+.active-note-popup > span{
 	display: block;
 	font-weight: bold;
 }
 
-.new-note-popup input{
+.active-note-popup input{
 	width: 200px;
 }
 
-.new-note-popup textarea{
+.active-note-popup textarea{
 	width: 100%;
 	height: 60px;
 	resize: none;
 }
 
-.new-note-popup button{
+.active-note-popup button{
 	width:100px;
 	margin-top:10px;
 }
 
-.new-note-popup button span{
+.active-note-popup button span{
 	font-weight: normal;
 }
 
-.new-note-popup-bottom{
+.active-note-popup-bottom{
 	width: 100%;
 	text-align: center;
 }

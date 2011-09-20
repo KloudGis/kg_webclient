@@ -63,7 +63,27 @@ SC.mixin(KG, {
                         this.gotoState('createNoteState');
                     },
 
+					noteSelectedAction: function(note, marker){
+						KG.core_note.activateNote(note, marker);
+						var self = this;
+						setTimeout(function(){
+							self.gotoState('editNoteState');
+						},25);					
+					}			
                 }),
+
+				editNoteState: SC.State.extend({
+					
+					activePopupClosed: function() {
+                        KG.core_note.revertUpdateNote();
+						this.gotoState('navigationState');
+                    },
+
+					confirmNoteAction: function() {
+                        KG.core_note.confirmUpdateNote();
+						this.gotoState('navigationState');
+                    }
+				}),
 
                 createNoteState: SC.State.extend({
 					
@@ -71,7 +91,6 @@ SC.mixin(KG, {
 					
                     enterState: function() {
                         console.log('creating a note!');
-                        KG.core_note.locateNote();
                     },
 
                     locateNoteState: SC.State.extend({
@@ -83,7 +102,8 @@ SC.mixin(KG, {
 						
                         notePositionSet: function() {
                             this.gotoState('confirmNoteState');
-                        },
+                        }
+
                     }),
 
                     confirmNoteState: SC.State.extend({
@@ -95,7 +115,7 @@ SC.mixin(KG, {
 							}
 						},
 						
-                        newNotePopupClosed: function() {
+                        activePopupClosed: function() {
                             KG.core_note.revertCreateNote();
                             this.gotoState('navigationState');
                         },
