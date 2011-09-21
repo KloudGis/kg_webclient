@@ -1,6 +1,7 @@
 KG.core_sandbox = SC.Object.create({
 	
 	sandboxMeta: {},
+	isSandboxOwner: NO,
 	
 	authenticate: function(){		
 		return KG.core_auth.load(this, this.authenticateCallback);		
@@ -42,7 +43,8 @@ KG.core_sandbox = SC.Object.create({
 	
 	metaDidChange: function(){
 		console.log('Meta changed.');
-		$('#active-sandbox-label').text(this.get('sandboxMeta').name);
+		$('#active-sandbox-label span').text(this.get('sandboxMeta').name);
+		this.set('isSandboxOwner', KG.core_auth.get('activeUser').id === this.get('sandboxMeta').owner)
 	}.observes('sandboxMeta'),
 	   
 	addMap: function(){

@@ -3,51 +3,51 @@
   "bpm": "1.0.0",
   "bpm:build": {
     "bpm_libs.js": {
-	  	"spade:format": "function",
       "directories": [  
-      ]
+      ],
+		"minifier": "uglify-js"
     },
 	"core_lib.js": {
-		"spade:format": "function",
       "directories": [
         "lib/core/lib"
-      ]
+      ],
+		"minifier": "uglify-js"
     },
 	"app_lib.js": {
-		"spade:format": "function",
       "directories": [
         "lib/app/lib"
-      ]
+      ],
+		"minifier": "uglify-js"
     },
 	"auth_lib.js": {
-		"spade:format": "function",
       "directories": [
         "lib/auth/lib"
-      ]
+      ],
+		"minifier": "uglify-js"
     },
 	"login_lib.js": {
-		"spade:format": "function",
       "directories": [
         "lib/login/lib"
-      ]
+      ],
+		"minifier": "uglify-js"
     },
 	"home_lib.js": {
-		"spade:format": "function",
       "directories": [
         "lib/home/lib"
-      ]
+      ],
+		"minifier": "uglify-js"
     },
 	"sandbox_lib.js": {
-		"spade:format": "function",
       "directories": [
         "lib/sandbox/lib"
-      ]
+      ],
+		"minifier": "uglify-js"
     },
 	"signup_lib.js": {
-		"spade:format": "function",
       "directories": [
         "lib/signup/lib"
-      ]
+      ],
+		"minifier": "uglify-js"
     }
   },
   "dependencies": {

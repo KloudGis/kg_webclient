@@ -69,10 +69,10 @@ KG.activeNoteController = SC.Object.create({
 	
 	isDeleteVisible: function(){
 		var auth = this.getPath('content.author');
-		if(this.getPath('content.status') !== SC.Record.READY_NEW && !auth || auth === KG.core_auth.get('activeUser').id){
+		if(this.getPath('content.status') !== SC.Record.READY_NEW && (!auth || auth === KG.core_auth.get('activeUser').id || KG.core_sandbox.get('isSandboxOwner'))){
 			return YES;
 		}
 		return NO;
-	}.property('content.status', 'content.author'),
+	}.property('content.status', 'content.author', 'KG.core_sandbox.isSandboxOwner'),
 	
 });

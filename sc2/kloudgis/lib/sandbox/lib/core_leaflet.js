@@ -226,6 +226,7 @@ KG.core_leaflet = SC.Object.create({
         lmarker.openPopup();
 		var marker = SC.Object.create({
             _native_marker: lmarker,
+			isNewNote: YES,
             coordinate: function() {
                 var latlng = this._native_marker.getLatLng();
 				return {x: latlng.lng, y: latlng.lat};
@@ -237,7 +238,7 @@ KG.core_leaflet = SC.Object.create({
 
     cleanUpNewNoteMarker: function() {
         var marker = this.get('activeMarker');
-        if (!SC.none(marker)) {
+        if (!SC.none(marker) && marker.isNewNote) {
             this.map.removeLayer(marker._native_marker);
         }
     },

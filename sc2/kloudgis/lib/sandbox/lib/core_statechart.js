@@ -114,7 +114,10 @@ SC.mixin(KG, {
 
                         notePositionSet: function() {
                             this.gotoState('confirmNoteState');
-                        }
+                        },
+
+						activePopupClosed: function() {
+						}
 
                     }),
 

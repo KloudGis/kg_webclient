@@ -57,12 +57,17 @@
 	z-index:9;
 	text-align: center;
 	font-size: 16px;
-	padding: 5px 5px;
+	padding: 5px;
 	color: #333;
     background-color: rgba(255, 255, 255, 0.8);
-	-moz-box-shadow: 0 0 7px #ccc;
-	-webkit-box-shadow: 0 0 7px #ccc;
-	box-shadow: 0 0 7px #ccc;
+	-moz-box-shadow: 0 0 10px #333;
+	-webkit-box-shadow: 0 0 10px #333;
+	box-shadow: 0 0 10px #333;
+}
+
+#active-sandbox-label span{
+	display: block;
+	width:100%;
 }
 
 .popup-note-list{
@@ -94,8 +99,8 @@
 }
 
 .active-note-popup .note-date-label{
+	font-size:11px;
 	font-style: italic;
-	display: inline;
 	float: right;	
 }
 
@@ -105,7 +110,7 @@
 }
 
 .active-note-popup input{
-	width: 200px;
+	width: 100%;
 }
 
 .active-note-popup textarea{
@@ -115,6 +120,7 @@
 }
 
 .active-note-popup button{
+	display: inline;
 	width:100px;
 	margin-top:10px;
 }
@@ -124,10 +130,10 @@
 }
 
 .active-note-popup-bottom{
-	width: 100%;
+	width: 220px;
 	text-align: center;
 }
 
-.active-note-popup .delete-button{
+.active-note-popup .red-button{
 	margin-left:10px;
 }

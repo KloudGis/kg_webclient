@@ -28,10 +28,10 @@
 			{{#view KG.TextArea disabledBinding="KG.activeNoteController.isDisabled" valueBinding="KG.activeNoteController*content.description"}}
 			{{/view}}
 			{{#view class="active-note-popup-bottom"}}
-				{{#view KG.Button isVisibleBinding="KG.activeNoteController.isUpdateVisible" class="update-button" classBinding="isActive" sc_action="confirmNoteAction"}}
+				{{#view KG.Button isVisibleBinding="KG.activeNoteController.isUpdateVisible" class="white-button" classBinding="isActive" sc_action="confirmNoteAction"}}
 					{{KG.activeNoteController.confirmLabel}}
 				{{/view}}		
-				{{#view KG.Button isVisibleBinding="KG.activeNoteController.isDeleteVisible" class="delete-button" classBinding="isActive" sc_action="deleteNoteAction"}}
+				{{#view KG.Button isVisibleBinding="KG.activeNoteController.isDeleteVisible" class="red-button" classBinding="isActive" sc_action="deleteNoteAction"}}
 					{{KG.activeNoteController.deleteLabel}}
 				{{/view}}
 				{{#view class="note-author-label"}}
@@ -51,8 +51,10 @@
 		<div id="create-note" class="kg-controls">
 			<a href="javascript:void(0)" onclick="KG.core_sandbox.createNote()">
 			</a>
-		</div>	
-		<span id="active-sandbox-label" class="label-ellipsis"></span>
+		</div>
+		<div id="active-sandbox-label">	
+			<span class="label-ellipsis"></span>
+		<div>
   </body>
 
 <!-- load all of the dependencies --> 
