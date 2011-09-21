@@ -59,6 +59,13 @@ body{
 	font-size: 14px;
 }
 
+#query-message{
+	color:red;
+	font-size: 16px;
+	margin:10px;
+	visibility:hidden;
+}
+
 
 #logout-button{
 	position: absolute;

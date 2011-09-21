@@ -15,35 +15,32 @@
 	position: absolute;
 	text-align:center;
 	margin: 12px;
-	padding-top: 10px;
-	padding-bottom: 10px;
+	padding: 9px;
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 	background-color: rgba(0,0,0,0.25);
 }
 
 .kg-controls a{
-	padding: 10px;
+	padding: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
 	color: black;
 	font-weight: 600;
-	text-shadow: rgba(255, 255, 255, .9) 0px 1px 0px;
+	background-color: rgba(255,255,255,0.75);
 }
 
 .kg-controls a:hover{
-	color: white;
-	text-shadow: rgba(0, 0, 0, .9) 0px 1px 0px;
-	font-weight: 800;
+	background-color: #fff;
 }
 
 #back-home{
 	left:10px;
 	bottom:0px;
-	width:75px;
 }
 
 #create-note{
 	left:120px;
-	width:120px;
 	bottom:0px;
 }
 
@@ -123,10 +120,6 @@
 	display: inline;
 	width:100px;
 	margin-top:10px;
-}
-
-.active-note-popup button span{
-	font-weight: normal;
 }
 
 .active-note-popup-bottom{

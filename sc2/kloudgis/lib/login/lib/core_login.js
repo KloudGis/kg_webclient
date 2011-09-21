@@ -72,7 +72,8 @@ KG.core_login = SC.Object.create({
         }
         catch(e) {
             // Authentication was not sucessful!
-            this.set('errorMessage', e.message.loc());
+			var mess = e.message || '?';
+            this.set('errorMessage', mess.loc());
             this.focusUserField();
             KG.statechart.sendAction('authenticationFailed', this);
             this.set('isBusy', NO);

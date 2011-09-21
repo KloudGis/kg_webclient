@@ -12,7 +12,7 @@ SC.mixin(KG, {
                 enterState: function() {
 					if(!KG.core_home.authenticate()){
 						this.gotoState('loggedOutState');
-					}
+					}					
 		        },
 		
 				authenticationSucceeded: function(){
@@ -39,6 +39,12 @@ SC.mixin(KG, {
 					enterState:function(){
 						console.log('hi!');
 						KG.core_home.loadSandboxList();				
+						var mess = $.getQueryString('message');
+						if(mess){
+							var tag = $('#query-message');
+							tag.text(mess.loc());
+							tag.css('visibility', 'visible');
+						}
 					}
 			})
 			

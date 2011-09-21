@@ -100,13 +100,13 @@ KG.core_auth = SC.Object.create({
         var error = null;
         SC.Logger.error('HTTP error status code: ' + jqXHR.status);
         if (jqXHR.status === 401) {
-            error = new SC.Error('_unauthorized');
+            error = {message: '_unauthorized'};
         } else if (jqXHR.status === 503 || jqXHR.status === 404) {
-            error = new SC.Error('_serverDown');
+            error = {message: '_serverDown'};
         } else if (jqXHR.status === 403 || jqXHR.status > 500) {
-            error = new SC.Error('_serverError');
+            error = {message: '_serverError'};
         } else {
-            error = new SC.Error('_unexpectedError');
+            error = {message: '_unexpectedError'};
         }
 
         // Callback
@@ -126,7 +126,7 @@ KG.core_auth = SC.Object.create({
                 user = data.user;
             }
             if (SC.none(token)) {
-                throw new SC.Error('_nullTokenError');
+                throw {message: '_nullTokenError'};
             }
             KG.core_auth.saveLogin(token, this.rememberMe, user);
         }

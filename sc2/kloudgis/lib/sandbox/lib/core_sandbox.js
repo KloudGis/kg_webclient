@@ -1,6 +1,7 @@
 KG.core_sandbox = SC.Object.create({
 	
 	sandboxMeta: {},
+	membership: null,
 	isSandboxOwner: NO,
 	
 	authenticate: function(){		
@@ -14,13 +15,34 @@ KG.core_sandbox = SC.Object.create({
 			//clear cookie on page leave
 			window.onbeforeunload=function(){
 				$.cookie('C-Kloudgis-Authentication', null, {expires: 1, path: '/'});
-			};
+			};			
 			KG.statechart.sendAction('authenticationSucceeded', this);
-			this.fetchSandboxMeta();
 		}else{
 			KG.statechart.sendAction('authenficationFailed', this);
 		}
 	},
+	
+	membershipCheck:function(){
+		$.ajax({
+            type: 'GET',
+            url: '/api_data/protected/members/logged_member?sandbox=%@'.fmt(KG.get('activeSandboxKey')),
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+			headers: KG.core_auth.createAjaxRequestHeaders(),
+            context: this,
+            error: function(jqXHR, textStatus, errorThrown) {
+                SC.Logger.error('Membership error: HTTP error status code: ' + jqXHR.status);
+				KG.statechart.sendAction('membershipFailed', this);
+            },
+            success: function(data, textStatus, jqXHR) {
+				console.log('SB Meta success.');
+				this.set('membership', data);
+               	KG.statechart.sendAction('membershipSucceeded', this);
+            },
+            async: YES
+        });
+	},
+	
 	
 	fetchSandboxMeta: function(){
 		$.ajax({

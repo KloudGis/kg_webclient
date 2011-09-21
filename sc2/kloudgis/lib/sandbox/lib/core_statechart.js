@@ -6,9 +6,9 @@ SC.mixin(KG, {
 
         rootState: SC.State.extend({
 
-            initialSubstate: 'tryAuthenticate',
+            initialSubstate: 'tryAuthenticateState',
 
-            tryAuthenticate: SC.State.extend({
+            tryAuthenticateState: SC.State.extend({
                 enterState: function() {
 					var sb = $.getQueryString('sandbox');
                     KG.set('activeSandboxKey', sb);
@@ -18,13 +18,32 @@ SC.mixin(KG, {
                 },
 
                 authenticationSucceeded: function() {
-                    this.gotoState('loggedInState');
+                    this.gotoState('tryMembershipState');
                 },
 
                 authenficationFailed: function() {
                     this.gotoState('loggedOutState');
                 }
             }),
+
+			tryMembershipState:  SC.State.extend({
+				 enterState: function() {
+					console.log("test membership");
+					//show the map to not slow down the app
+					KG.core_sandbox.addMap();
+					KG.core_sandbox.membershipCheck();
+					KG.core_sandbox.fetchSandboxMeta();
+				 },
+				
+				 membershipSucceeded: function() {
+                    this.gotoState('loggedInState');
+                 },
+
+                 membershipFailed: function() {
+					console.log("membership test failed");
+                    window.location.href = "home.html?message=_wrong-membership";
+                 }				
+			}),
 
             loggedOutState: SC.State.extend({
 
@@ -38,8 +57,7 @@ SC.mixin(KG, {
                 initialSubstate: 'navigationState',
 
                 enterState: function() {
-                    console.log('hi!');                 
-                    KG.core_sandbox.addMap();
+                    console.log('hi!');                                  
                     $('#if-spinner').fadeOut();                 
                     KG.core_layer.loadLayers();
                 },
