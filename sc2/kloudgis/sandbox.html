@@ -2,6 +2,7 @@
   <head>
 	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
 	<link rel="stylesheet" href="css/sandbox.css" type="text/css" media="screen" charset="utf-8" />
+	<link rel="stylesheet" href="css/common.css" type="text/css" media="screen" charset="utf-8" />
 	<link rel="stylesheet" href="ext/leaflet/leaflet.css" type="text/css" media="screen" charset="utf-8"/>
     <title>Kloudgis</title>
 	<script type="text/x-handlebars" data-template-name="notes-marker-popup">
@@ -27,8 +28,11 @@
 			{{#view KG.TextArea disabledBinding="KG.activeNoteController.isDisabled" valueBinding="KG.activeNoteController*content.description"}}
 			{{/view}}
 			{{#view class="active-note-popup-bottom"}}
-				{{#view KG.Button disabledBinding="KG.activeNoteController.isDisabled" classBinding="isActive" sc_action="confirmNoteAction"}}
+				{{#view KG.Button isVisibleBinding="KG.activeNoteController.isUpdateVisible" class="update-button" classBinding="isActive" sc_action="confirmNoteAction"}}
 					{{KG.activeNoteController.confirmLabel}}
+				{{/view}}		
+				{{#view KG.Button isVisibleBinding="KG.activeNoteController.isDeleteVisible" class="delete-button" classBinding="isActive" sc_action="deleteNoteAction"}}
+					{{KG.activeNoteController.deleteLabel}}
 				{{/view}}
 				{{#view class="note-author-label"}}
 					{{KG.activeNoteController.authorValue}}
@@ -40,22 +44,23 @@
   <body>	
 	<iframe id="if-spinner" src="spinner.html"></iframe>
 	<div id="map">		
-	</div>
-	
-	<div id="bottom-bar">
+	</div>	
 		<div id="back-home" class="kg-controls">
 			<a href="home.html"></a>
 		</div>	
 		<div id="create-note" class="kg-controls">
-			<a href="javascript:void(0)" onclick="KG.core_sandbox.createNote()"><img src="resources/images/s_marker.png"/><span></span>
+			<a href="javascript:void(0)" onclick="KG.core_sandbox.createNote()">
 			</a>
 		</div>	
-		</script>
-	</div>
+		<span id="active-sandbox-label" class="label-ellipsis"></span>
   </body>
 
 <!-- load all of the dependencies --> 
-   <script type="text/javascript" src="assets/bpm_libs.js" charset="utf-8"></script> 
+   <script type="text/javascript" src="assets/bpm_libs.js" charset="utf-8"></script>
+   <script type="text/javascript" src="assets/app_lib.js" charset="utf-8"></script> 
+   <script type="text/javascript" src="assets/auth_lib.js" charset="utf-8"></script>
+   <script type="text/javascript" src="assets/core_lib.js" charset="utf-8"></script>
+   <script type="text/javascript" src="assets/sandbox_lib.js" charset="utf-8"></script>
 <!-- load my app external lib --> 
    <script type="text/javascript" src="ext/leaflet/leaflet.js" charset="utf-8"></script> 
    <script type="text/javascript"> 

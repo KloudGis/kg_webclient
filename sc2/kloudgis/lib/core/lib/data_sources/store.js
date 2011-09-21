@@ -71,7 +71,7 @@ KG.Store = SC.DataSource.extend({
     @returns {Boolean} YES if you can handle fetching the query, NO otherwise
   */
     fetch: function(store, query) {
-        console.log('fetch!');
+        console.log('fetch url:%@'.fmt(query.get('query_url')));
         if (!SC.none(query.get('query_url'))) {
             $.ajax({
                 type: 'GET',
@@ -116,7 +116,7 @@ KG.Store = SC.DataSource.extend({
         var id = store.idFor(storeKey);
         var url;
         if (!SC.none(id) && rtype == 'KG.Note') {
-            url = '/api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('active_sandbox'));
+            url = '/api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
         }
         if (url) {
             this.ajaxSupport(store, storeKey, 'GET', url);
@@ -128,10 +128,10 @@ KG.Store = SC.DataSource.extend({
     createRecord: function(store, storeKey) {
         var rtype = store.recordTypeFor(storeKey);
         if (rtype == 'KG.Note') {
-            url = '/api_data/protected/notes?sandbox=%@'.fmt(KG.get('active_sandbox'));
+            url = '/api_data/protected/notes?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
         }
         if (url) {
-            this.ajaxSupport(store, 'POST', url, JSON.stringify(store.readDataHash(storeKey)));
+            this.ajaxSupport(store, storeKey, 'POST', url, JSON.stringify(store.readDataHash(storeKey)));
             return YES;
         }
         return NO;
@@ -142,10 +142,24 @@ KG.Store = SC.DataSource.extend({
         var id = store.idFor(storeKey);
         var url;
         if (!SC.none(id) && rtype == 'KG.Note') {
-            url = '/api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('active_sandbox'));
+            url = '/api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
         }
         if (url) {
             this.ajaxSupport(store, storeKey, 'PUT', url, JSON.stringify(store.readDataHash(storeKey)));
+            return YES;
+        }
+        return NO;
+    },
+
+    destroyRecord: function(store, storeKey, params) {
+        var rtype = store.recordTypeFor(storeKey);
+        var id = store.idFor(storeKey);
+        var url;
+        if (!SC.none(id) && rtype == 'KG.Note') {
+            url = '/api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+        }
+        if (url) {
+            this.ajaxSupport(store, storeKey, 'DELETE', url);
             return YES;
         }
         return NO;
@@ -169,10 +183,14 @@ KG.Store = SC.DataSource.extend({
                 console.log(type + ' success');
                 var raw = data;
                 var storeKeys;
-                if (!SC.none(raw)) {
-                    store.dataSourceDidComplete(storeKey, raw, raw.guid);
+                if (type === 'DELETE') {
+                    store.dataSourceDidDestroy(storeKey);
                 } else {
-                    store.dataSourceDidComplete(storeKey);
+                    if (!SC.none(raw) && raw.guid) {
+                        store.dataSourceDidComplete(storeKey, raw, raw.guid);
+                    } else {
+                        store.dataSourceDidComplete(storeKey);
+                    }
                 }
             }
         });

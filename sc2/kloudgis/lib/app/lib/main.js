@@ -6,7 +6,7 @@ require("sproutcore-statechart");
 KG = SC.Application.create({ 
     //store: SC.Store.create().from(SC.Record.fixtures),
 	lang: 'fr',
-	active_sandbox: null
+	activeSandboxKey: null
 });
 
 //jQuery extension

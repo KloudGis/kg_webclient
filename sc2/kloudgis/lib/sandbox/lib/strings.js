@@ -2,7 +2,8 @@ var fr = {
 	"_Map": "Carte",
 	"_Note": "Note",
 	"_Notes": "%@ Notes",
-	"_createNote": "Créer",
+	"_createNote": "Créer une note",
+	"_Delete": "Supprimer",
 	"_backHome": "Retour",
 	"_noteTitle": "Titre:",
 	"_noteDescription": "Description:",
@@ -17,7 +18,8 @@ var en = {
 	"_Map": "Map",
 	"_Note": "Note",
 	"_Notes": "%@ Notes",
-	"_createNote": "Create",
+	"_createNote": "Create Note",
+	"_Delete": "Delete",
 	"_backHome": "Return",
 	"_noteTitle": "Title:",
 	"_noteDescription": "Description:",
@@ -38,5 +40,5 @@ if(KG.lang === 'fr'){
 SC.run.schedule('render',null, function(){
 	console.log('localize page');
 	$('#back-home a').text("_backHome".loc());
-	$('#create-note span').text("_createNote".loc());
+	$('#create-note a').text("_createNote".loc());
 });

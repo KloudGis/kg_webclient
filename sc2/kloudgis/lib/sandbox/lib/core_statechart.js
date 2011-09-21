@@ -10,6 +10,8 @@ SC.mixin(KG, {
 
             tryAuthenticate: SC.State.extend({
                 enterState: function() {
+					var sb = $.getQueryString('sandbox');
+                    KG.set('activeSandboxKey', sb);
                     if (!KG.core_sandbox.authenticate()) {
                         this.gotoState('loggedOutState');
                     }
@@ -36,70 +38,80 @@ SC.mixin(KG, {
                 initialSubstate: 'navigationState',
 
                 enterState: function() {
-                    console.log('hi!');
-                    var sb = $.getQueryString('sandbox');
-                    KG.set('active_sandbox', sb);
+                    console.log('hi!');                 
                     KG.core_sandbox.addMap();
-                    $('#if-spinner').fadeOut();
-                    KG.core_note.refreshMarkers();
+                    $('#if-spinner').fadeOut();                 
                     KG.core_layer.loadLayers();
-                },
-
-                mapZoomed: function(sender) {
-                    KG.core_note.refreshMarkers(YES);
-                },
-
-                mapMoved: function(sender) {
-                    KG.core_note.refreshMarkers();
                 },
 
                 navigationState: SC.State.extend({
 
                     enterState: function() {
                         console.log('navigation!');
+						KG.core_note.refreshMarkers();
                     },
 
                     createNoteAction: function() {
                         this.gotoState('createNoteState');
                     },
 
-					noteSelectedAction: function(note, marker){
-						KG.core_note.activateNote(note, marker);
-						var self = this;
-						setTimeout(function(){
-							self.gotoState('editNoteState');
-						},25);					
-					}			
+                    noteSelectedAction: function(note, marker) {
+                        KG.core_note.activateNote(note, marker);
+                        var self = this;
+                        setTimeout(function() {
+                            self.gotoState('editNoteState');
+                        },
+                        25);
+                    }
                 }),
 
-				editNoteState: SC.State.extend({
-					
-					activePopupClosed: function() {
+				mapZoomed: function(sender) {
+                    KG.core_note.refreshMarkers();
+                },
+
+                mapMoved: function(sender) {
+					KG.core_note.refreshMarkers();
+                },
+
+                editNoteState: SC.State.extend({
+
+                    activePopupClosed: function() {
                         KG.core_note.revertUpdateNote();
-						this.gotoState('navigationState');
+                        this.gotoState('navigationState');
                     },
 
-					confirmNoteAction: function() {
+                    confirmNoteAction: function() {
                         KG.core_note.confirmUpdateNote();
-						this.gotoState('navigationState');
-                    }
-				}),
+                        this.gotoState('navigationState');
+                    },
+
+					deleteNoteAction: function(){
+						KG.core_note.deleteActiveNote();
+                        this.gotoState('navigationState');
+					},
+
+                    mapZoomed: function(sender) {
+                    },
+
+                    mapMoved: function(sender) {
+                    },
+                }),
 
                 createNoteState: SC.State.extend({
-					
-					initialSubstate: 'locateNoteState',
-					
+
+                    initialSubstate: 'locateNoteState',
+
                     enterState: function() {
                         console.log('creating a note!');
-                    },
+                    },				
 
                     locateNoteState: SC.State.extend({
-	
-						enterState: function(){
-							console.log('Lets locate it first');
-							KG.core_note.locateNote();
-						},
-						
+
+                        enterState: function() {
+                            console.log('Lets locate it first');
+                            KG.core_note.locateNote();
+                        },
+
                         notePositionSet: function() {
                             this.gotoState('confirmNoteState');
                         }
@@ -107,14 +119,20 @@ SC.mixin(KG, {
                     }),
 
                     confirmNoteState: SC.State.extend({
-						
-						enterState: function(){
-							console.log('Confirm it now.');
-							if(!KG.core_note.createNote()){
-								this.gotoState('createNoteState');
-							}
-						},
-						
+
+                        enterState: function() {
+                            console.log('Confirm it now.');
+                            if (!KG.core_note.createNote()) {
+                                this.gotoState('createNoteState');
+                            }
+                        },
+
+						mapZoomed: function(sender) {
+	                    },
+
+	                    mapMoved: function(sender) {
+	                    },
+
                         activePopupClosed: function() {
                             KG.core_note.revertCreateNote();
                             this.gotoState('navigationState');

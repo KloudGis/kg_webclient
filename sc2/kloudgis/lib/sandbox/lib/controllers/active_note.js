@@ -17,6 +17,10 @@ KG.activeNoteController = SC.Object.create({
 		}
     }.property('content.status'),
 
+	deleteLabel: function() {
+		return "_Delete".loc();
+    }.property('content.status'),
+
 	titleValue: function(key, value){
 		if(value != undefined){
 			this.get('content').set('title', value);
@@ -57,7 +61,18 @@ KG.activeNoteController = SC.Object.create({
 			return NO;
 		}
 		return YES;
-	}.property('content.status', 'content.author')
+	}.property('content.status', 'content.author'),
 	
+	isUpdateVisible: function(){
+		return !this.get('isDisabled');
+	}.property('isDisabled'),
+	
+	isDeleteVisible: function(){
+		var auth = this.getPath('content.author');
+		if(this.getPath('content.status') !== SC.Record.READY_NEW && !auth || auth === KG.core_auth.get('activeUser').id){
+			return YES;
+		}
+		return NO;
+	}.property('content.status', 'content.author'),
 	
 });

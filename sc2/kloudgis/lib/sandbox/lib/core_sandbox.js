@@ -1,5 +1,7 @@
 KG.core_sandbox = SC.Object.create({
 	
+	sandboxMeta: {},
+	
 	authenticate: function(){		
 		return KG.core_auth.load(this, this.authenticateCallback);		
 	},
@@ -13,10 +15,35 @@ KG.core_sandbox = SC.Object.create({
 				$.cookie('C-Kloudgis-Authentication', null, {expires: 1, path: '/'});
 			};
 			KG.statechart.sendAction('authenticationSucceeded', this);
+			this.fetchSandboxMeta();
 		}else{
 			KG.statechart.sendAction('authenficationFailed', this);
 		}
 	},
+	
+	fetchSandboxMeta: function(){
+		$.ajax({
+            type: 'GET',
+            url: '/api_sandbox/protected/sandboxes/%@/meta'.fmt(KG.get('activeSandboxKey')),
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+			headers: KG.core_auth.createAjaxRequestHeaders(),
+            context: this,
+            error: function(jqXHR, textStatus, errorThrown) {
+                SC.Logger.error('SB Meta error: HTTP error status code: ' + jqXHR.status);
+            },
+            success: function(data, textStatus, jqXHR) {
+				console.log('SB Meta success.');
+               	this.set('sandboxMeta', data);
+            },
+            async: YES
+        });
+	},
+	
+	metaDidChange: function(){
+		console.log('Meta changed.');
+		$('#active-sandbox-label').text(this.get('sandboxMeta').name);
+	}.observes('sandboxMeta'),
 	   
 	addMap: function(){
 		KG.core_leaflet.addToDocument();

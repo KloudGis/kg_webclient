@@ -10,20 +10,10 @@
 	top:45%;	
 }
 
-#bottom-bar{
-	z-index:8;
-	position: absolute;
-	left:0px;
-	right:0px;
-	bottom:0px;
-	height: 50px;
-}
-
-#bottom-bar div{
-	display: inline;
-}
-
 .kg-controls{
+	z-index:9;
+	position: absolute;
+	text-align:center;
 	margin: 12px;
 	padding-top: 10px;
 	padding-bottom: 10px;
@@ -33,14 +23,46 @@
 }
 
 .kg-controls a{
-	padding: 15px;
+	padding: 10px;
 	color: black;
 	font-weight: 600;
+	text-shadow: rgba(255, 255, 255, .9) 0px 1px 0px;
 }
 
 .kg-controls a:hover{
 	color: white;
+	text-shadow: rgba(0, 0, 0, .9) 0px 1px 0px;
 	font-weight: 800;
+}
+
+#back-home{
+	left:10px;
+	bottom:0px;
+	width:75px;
+}
+
+#create-note{
+	left:120px;
+	width:120px;
+	bottom:0px;
+}
+
+#active-sandbox-label{
+	position: absolute;
+	left:50%;
+	bottom:0px;
+	width:200px;
+	height:16px;
+	margin-left:-100px;
+	z-index:9;
+	text-align: center;
+	font-size: 16px;
+	padding: 5px 5px;
+	color: #333;
+    background-color: rgba(255, 255, 255, 0.8);
+	-moz-box-shadow: 0 0 7px #ccc;
+	-webkit-box-shadow: 0 0 7px #ccc;
+	box-shadow: 0 0 7px #ccc;
 }
 
 .popup-note-list{
@@ -106,3 +128,6 @@
 	text-align: center;
 }
 
+.active-note-popup .delete-button{
+	margin-left:10px;
+}

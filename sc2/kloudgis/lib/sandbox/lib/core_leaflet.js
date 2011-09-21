@@ -87,6 +87,10 @@ KG.core_leaflet = SC.Object.create({
         });
     },
 
+	getZoom: function(){
+		return this.map.getZoom();
+	},
+
     getFatBounds: function() {
         return this._getBounds(this.pixelsToWorld(this.map.getSize().divideBy(6).x));
     },
@@ -244,7 +248,7 @@ KG.core_leaflet = SC.Object.create({
             transparent: YES,
             format: 'image/png',
             kg_layer: layer.get('id'),
-            kg_sandbox: KG.get('active_sandbox')
+            kg_sandbox: KG.get('activeSandboxKey')
         });
         layer._native_layer = wms;
         this.map.addLayer(wms);
