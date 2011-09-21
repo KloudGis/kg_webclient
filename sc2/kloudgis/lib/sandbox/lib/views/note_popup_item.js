@@ -1,4 +1,4 @@
-KG.NotePopupItemView = SC.View.extend({
+KG.NotePopupItemView = SC.Button.extend({
 	
 	classNames: 'note-popup-item'.w(),
 	

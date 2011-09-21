@@ -67,14 +67,18 @@
 	width:100%;
 }
 
+/*
 .popup-note-list{
 	list-style: none;
 	margin-left:0px;
-}
+}*/
 
 .note-popup-item{
 	font-size:14px;
-	padding: 3px;
+	padding: 5px;
+	margin-top:3px;
+	background: none;
+	border: none;
 }
 
 .note-popup-item:hover{
