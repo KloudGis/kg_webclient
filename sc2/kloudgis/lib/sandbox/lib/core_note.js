@@ -193,7 +193,6 @@ KG.core_note = SC.Object.create({
         this._view_notes.set('title', "...");
         var notes = marker.get('features');
         KG.notesPopupController.set('content', notes);
-        KG.core_leaflet.refreshMarkerPopup(marker, this._div_notes);
         var len = notes.get('length');
         var params = {
             count: 0,

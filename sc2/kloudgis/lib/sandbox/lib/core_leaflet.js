@@ -29,7 +29,7 @@ KG.core_leaflet = SC.Object.create({
         this.map.on('click', this.onClick, this);
         this.map.on('layeradd', this.onLayerAdd);
         this.map.on('layerremove', this.onLayerRemove);
-		this.map.on('mousemove', this.onMouseMove, this);
+        this.map.on('mousemove', this.onMouseMove, this);
     },
 
     onZoom: function(e) {
@@ -51,9 +51,19 @@ KG.core_leaflet = SC.Object.create({
             lon: e.latlng.lng,
             lat: e.latlng.lat
         }));
+/*
+        var map = this.map;
+        var latlngStr = '(' + e.latlng.lat.toFixed(3) + ', ' + e.latlng.lng.toFixed(3) + ')';
+        var BBOX = map.getBounds()._southWest.lng + "," + map.getBounds()._southWest.lat + "," + map.getBounds()._northEast.lng + "," + map.getBounds()._northEast.lat;
+        var WIDTH = map.getSize().x;
+        var HEIGHT = map.getSize().y;
+        var X = map.layerPointToContainerPoint(e.layerPoint).x;
+        var Y = map.layerPointToContainerPoint(e.layerPoint).y;
+        var URL = 'http://suite.opengeo.org/geoserver/usa/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&LAYERS=usa:states&QUERY_LAYERS=usa:states&STYLES=&BBOX=' + BBOX + '&FEATURE_COUNT=5&HEIGHT=' + HEIGHT + '&WIDTH=' + WIDTH + '&FORMAT=image%2Fpng&INFO_FORMAT=text%2Fhtml&SRS=EPSG%3A4326&X=' + X + '&Y=' + Y;
+        alert(URL);*/
     },
 
- 	onMouseMove: function(e) {
+    onMouseMove: function(e) {
         KG.core_sandbox.set('mousePosition', KG.LonLat.create({
             lon: e.latlng.lng,
             lat: e.latlng.lat
@@ -98,9 +108,9 @@ KG.core_leaflet = SC.Object.create({
         });
     },
 
-	getZoom: function(){
-		return this.map.getZoom();
-	},
+    getZoom: function() {
+        return this.map.getZoom();
+    },
 
     getFatBounds: function() {
         return this._getBounds(this.pixelsToWorld(this.map.getSize().divideBy(6).x));
@@ -110,31 +120,77 @@ KG.core_leaflet = SC.Object.create({
         return this._getBounds(0);
     },
 
-    _getBounds: function(fat) {
+    getBoundsA: function() {
         var lbounds = this.map.getBounds();
         var lcenter = this.map.getCenter();
-
         var sw = lbounds._southWest;
         var ne = lbounds._northEast;
+        var b = [];
         if (!lbounds.contains(lcenter)) {
-            console.log('quick fix to find the real bounds');
-            ne.lat = Math.min(ne.lat + fat, 90);
-            ne.lng = Math.min(sw.lng + fat, 180);
-            sw.lng = -180;
+            b[0] = KG.Bounds.create({
+                sw: KG.LonLat.create({
+                    lon: -179.9999,
+                    lat: sw.lat
+                }),
+                ne: KG.LonLat.create({
+                    lon: sw.lng,
+                    lat: ne.lat
+                })
+            });
+            b[1] = KG.Bounds.create({
+                sw: KG.LonLat.create({
+                    lon: ne.lng,
+                    lat: sw.lat
+                }),
+                ne: KG.LonLat.create({
+                    lon: 179.9999,
+                    lat: ne.lat
+                })
+            });
         } else {
-            sw.lat = Math.max(sw.lat - fat, -90);
-            sw.lng = Math.max(sw.lng - fat, -180);
-            ne.lat = Math.min(ne.lat + fat, 90);
-            ne.lng = Math.min(ne.lng + fat, 180);
+            b[0] = KG.Bounds.create({
+                sw: KG.LonLat.create({
+                    lon: sw.lng,
+                    lat: sw.lat
+                }),
+                ne: KG.LonLat.create({
+                    lon: ne.lng,
+                    lat: ne.lat
+                })
+            });
         }
+        return b;
+    },
+
+    _getBounds: function(fat) {
+        var bounds = this.getBoundsA();
+        var lcenter = this.map.getCenter();
+        var sw, ne;
+		sw = bounds[0].sw;
+        ne = bounds[0].ne;
+        if (bounds[1]) {
+            var center = KG.LonLat.create({
+                lon: lcenter.lng,
+                lat: lcenter.lat
+            });
+            if (bounds[1].contains(center)) {
+                sw = bounds[1].sw;
+                ne = bounds[1].ne;
+            }
+        }
+
+        sw.lat = Math.max(sw.lat - fat, -90);
+        sw.lon = Math.max(sw.lon - fat, -179.9999);
+        ne.lat = Math.min(ne.lat + fat, 90);
+        ne.lon = Math.min(ne.lon + fat, 179.9999);
 
         var bounds = KG.Bounds.create({
             sw: KG.LonLat.create({
-                lon: sw.lng,
+                lon: sw.lon,
                 lat: sw.lat
             }),
             ne: KG.LonLat.create({
-                lon: ne.lng,
+                lon: ne.lon,
                 lat: ne.lat
             })
         });
@@ -168,7 +224,7 @@ KG.core_leaflet = SC.Object.create({
         lmarker.on('click',
         function() {
             SC.run.begin();
-			KG.core_leaflet.onMarkerClick(marker);
+            KG.core_leaflet.onMarkerClick(marker);
             click_cb.call(click_target, marker);
             SC.run.end();
         });
@@ -189,9 +245,9 @@ KG.core_leaflet = SC.Object.create({
         marker._native_marker = lmarker;
     },
 
-	onMarkerClick: function(marker){
-		this.set('activeMarker', marker);
-	},
+    onMarkerClick: function(marker) {
+        this.set('activeMarker', marker);
+    },
 
     removeMarker: function(marker) {
         if (marker._native_marker) {
@@ -210,15 +266,15 @@ KG.core_leaflet = SC.Object.create({
         marker._native_marker.closePopup();
     },
 
-	closeActivePopup: function(){
-		if(this.get('activeMarker')){
-			this.get('activeMarker')._native_marker.closePopup();
-		}
-	},
+    closeActivePopup: function() {
+        if (this.get('activeMarker')) {
+            this.get('activeMarker')._native_marker.closePopup();
+        }
+    },
 
-	openMarkerPopup: function(marker){
-		marker._native_marker.openPopup();
-	},
+    openMarkerPopup: function(marker) {
+        marker._native_marker.openPopup();
+    },
 
     addNewNoteMarker: function(popupContent) {
         var lcenter = this.map.getCenter();
@@ -227,23 +283,27 @@ KG.core_leaflet = SC.Object.create({
             title: "_newNote",
             icon: this.newNoteIcon
         });
-		lmarker.on('dragend', function(){
-			SC.run.begin();
-			KG.statechart.sendAction('notePositionSet');
-			SC.run.end();
-		})
+        lmarker.on('dragend',
+        function() {
+            SC.run.begin();
+            KG.statechart.sendAction('notePositionSet');
+            SC.run.end();
+        })
         lmarker.bindPopup(popupContent);
         this.map.addLayer(lmarker);
         lmarker.openPopup();
-		var marker = SC.Object.create({
+        var marker = SC.Object.create({
             _native_marker: lmarker,
-			isNewNote: YES,
+            isNewNote: YES,
             coordinate: function() {
                 var latlng = this._native_marker.getLatLng();
-				return {x: latlng.lng, y: latlng.lat};
+                return {
+                    x: latlng.lng,
+                    y: latlng.lat
+                };
             }.property()
         });
-		this.onMarkerClick(marker);
+        this.onMarkerClick(marker);
         return marker;
     },
 
@@ -268,6 +328,42 @@ KG.core_leaflet = SC.Object.create({
     },
 
     _temp: null,
+    _temp2: null,
+    printBoundsA: function() {
+        if (!SC.none(this._temp)) {
+            this.map.removeLayer(this._temp);
+        }
+        if (!SC.none(this._temp2)) {
+            this.map.removeLayer(this._temp2);
+        }
+        console.log(this.map.getBounds());
+        var bounds = this.getBoundsA()[0];
+        var sw = bounds.sw;
+        var ne = bounds.ne;
+        var p1 = new L.LatLng(sw.lat, sw.lon);
+        var p2 = new L.LatLng(ne.lat, sw.lon);
+        var p3 = new L.LatLng(ne.lat, ne.lon);
+        var p4 = new L.LatLng(sw.lat, ne.lon);
+        var pts = [p1, p2, p3, p4];
+        this._temp = new L.Polygon(pts);
+        this.map.addLayer(this._temp);
+        bounds = this.getBoundsA()[1];
+        if (bounds) {
+            sw = bounds.sw;
+            ne = bounds.ne;
+            p1 = new L.LatLng(sw.lat, sw.lon);
+            p2 = new L.LatLng(ne.lat, sw.lon);
+            p3 = new L.LatLng(ne.lat, ne.lon);
+            p4 = new L.LatLng(sw.lat, ne.lon);
+            pts = [p1, p2, p3, p4];
+            this._temp2 = new L.Polygon(pts, {
+                color: 'red'
+            });
+            this.map.addLayer(this._temp2);
+        }
+        return this.getBoundsA();
+    },
+
     printBounds: function() {
         if (!SC.none(this._temp)) {
             this.map.removeLayer(this._temp);
