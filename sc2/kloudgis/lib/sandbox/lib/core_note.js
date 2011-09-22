@@ -38,6 +38,9 @@ KG.core_note = SC.Object.create({
 
     //show the note form to let the user fill it up
     activateNote: function(inNote, marker) {
+		if(!inNote){
+			return NO;
+		}
         var note = inNote;
         if (note.get('status') !== SC.Record.READY_NEW) {
             this._store = KG.store.chain();
@@ -60,6 +63,7 @@ KG.core_note = SC.Object.create({
             $(".new-note-popup input").focus();
         },
         1);
+		return YES;
     },
 
     //the user confirm the note create (hit the create button)
@@ -132,11 +136,6 @@ KG.core_note = SC.Object.create({
             var dist = KG.core_leaflet.pixelsToWorld(20); //cluster within 20 pixels
             if (KG.noteMarkersController.get('content')) {
                 var content = KG.noteMarkersController.get('content');
-                if (content.get('query') && content.get('query')._response) {
-                    console.log('*** cancel note marker query');
-                    content.get('query')._response.cancel();
-                    content.get('query')._response = null;
-                }
                 content.destroy();
             }
             var query = SC.Query.remote(KG.NoteMarker, {
@@ -152,11 +151,12 @@ KG.core_note = SC.Object.create({
 
     /* Super element to put in a note marker popup */
     _div_notes: null,
-    /* SC view to generate html bind on the  KG.notePopupController*/
+    /* SC view to generate html bind on the  KG.notesPopupController*/
     _view_notes: null,
 
     markersReady: function(markers, key, nothing, context) {
         if (markers.get('status') & SC.Record.READY) {
+			KG.notesPopupController.set('marker', null); 
             markers.removeObserver('status', this, this.markersReady);
             var rtype = markers.getPath('query.recordType');
             var loadedMarkers = KG.store.find(rtype);
@@ -192,7 +192,7 @@ KG.core_note = SC.Object.create({
         }
         this._view_notes.set('title', "...");
         var notes = marker.get('features');
-        KG.notePopupController.set('content', notes);
+        KG.notesPopupController.set('content', notes);
         KG.core_leaflet.refreshMarkerPopup(marker, this._div_notes);
         var len = notes.get('length');
         var params = {
@@ -209,12 +209,12 @@ KG.core_note = SC.Object.create({
     noteReady: function(note, params) {
         params.count++;
         if (params.count === params.length) {
-            console.log('refresh!');
-            KG.notePopupController.set('marker', params.marker);
+            console.log('refresh the popup content.');
+			KG.notesPopupController.set('marker', params.marker);     
             if (params.count === 1) {
 				//when only one note, show the note directly
 				KG.statechart.sendAction('noteSelectedAction', note, params.marker);
-			} else {
+			} else {				
                 var div = this._div_notes;
                 setTimeout(function() {
                     KG.core_leaflet.refreshMarkerPopup(params.marker, div);

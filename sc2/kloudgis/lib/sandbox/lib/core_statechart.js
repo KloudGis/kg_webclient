@@ -10,11 +10,9 @@ SC.mixin(KG, {
 
             tryAuthenticateState: SC.State.extend({
                 enterState: function() {
-					var sb = $.getQueryString('sandbox');
+                    var sb = $.getQueryString('sandbox');
                     KG.set('activeSandboxKey', sb);
-                    if (!KG.core_sandbox.authenticate()) {
-                        this.gotoState('loggedOutState');
-                    }
+                    KG.core_sandbox.authenticate();
                 },
 
                 authenticationSucceeded: function() {
@@ -26,24 +24,24 @@ SC.mixin(KG, {
                 }
             }),
 
-			tryMembershipState:  SC.State.extend({
-				 enterState: function() {
-					console.log("test membership");
-					//show the map to not slow down the app
-					KG.core_sandbox.addMap();
-					KG.core_sandbox.membershipCheck();
-					KG.core_sandbox.fetchSandboxMeta();
-				 },
-				
-				 membershipSucceeded: function() {
-                    this.gotoState('loggedInState');
-                 },
+            tryMembershipState: SC.State.extend({
+                enterState: function() {
+                    console.log("test membership");
+                    //show the map to not slow down the app
+                    KG.core_sandbox.addMap();
+                    KG.core_sandbox.membershipCheck();
+                    KG.core_sandbox.fetchSandboxMeta();
+                },
 
-                 membershipFailed: function() {
-					console.log("membership test failed");
+                membershipSucceeded: function() {
+                    this.gotoState('loggedInState');
+                },
+
+                membershipFailed: function() {
+                    console.log("membership test failed");
                     window.location.href = "home.html?message=_wrong-membership";
-                 }				
-			}),
+                }
+            }),
 
             loggedOutState: SC.State.extend({
 
@@ -57,8 +55,8 @@ SC.mixin(KG, {
                 initialSubstate: 'navigationState',
 
                 enterState: function() {
-                    console.log('hi!');                                  
-                    $('#if-spinner').fadeOut();                 
+                    console.log('hi!');
+                    $('#if-spinner').fadeOut();
                     KG.core_layer.loadLayers();
                 },
 
@@ -66,7 +64,7 @@ SC.mixin(KG, {
 
                     enterState: function() {
                         console.log('navigation!');
-						KG.core_note.refreshMarkers();
+                        KG.core_note.refreshMarkers();
                     },
 
                     createNoteAction: function() {
@@ -74,21 +72,22 @@ SC.mixin(KG, {
                     },
 
                     noteSelectedAction: function(note, marker) {
-                        KG.core_note.activateNote(note, marker);
-                        var self = this;
-                        setTimeout(function() {
-                            self.gotoState('editNoteState');
-                        },
-                        25);
+                        if (KG.core_note.activateNote(note, marker)) {
+                            var self = this;
+                            setTimeout(function() {
+                                self.gotoState('editNoteState');
+                            },
+                            25);
+                        }
                     }
                 }),
 
-				mapZoomed: function(sender) {
+                mapZoomed: function(sender) {
                     KG.core_note.refreshMarkers();
                 },
 
                 mapMoved: function(sender) {
-					KG.core_note.refreshMarkers();
+                    KG.core_note.refreshMarkers();
                 },
 
                 editNoteState: SC.State.extend({
@@ -103,16 +102,14 @@ SC.mixin(KG, {
                         this.gotoState('navigationState');
                     },
 
-					deleteNoteAction: function(){
-						KG.core_note.deleteActiveNote();
+                    deleteNoteAction: function() {
+                        KG.core_note.deleteActiveNote();
                         this.gotoState('navigationState');
-					},
-
-                    mapZoomed: function(sender) {
                     },
 
-                    mapMoved: function(sender) {
-                    },
+                    mapZoomed: function(sender) {},
+
+                    mapMoved: function(sender) {},
                 }),
 
                 createNoteState: SC.State.extend({
@@ -121,7 +118,7 @@ SC.mixin(KG, {
 
                     enterState: function() {
                         console.log('creating a note!');
-                    },				
+                    },
 
                     locateNoteState: SC.State.extend({
 
@@ -134,8 +131,7 @@ SC.mixin(KG, {
                             this.gotoState('confirmNoteState');
                         },
 
-						activePopupClosed: function() {
-						}
+                        activePopupClosed: function() {}
 
                     }),
 
@@ -148,11 +144,9 @@ SC.mixin(KG, {
                             }
                         },
 
-						mapZoomed: function(sender) {
-	                    },
+                        mapZoomed: function(sender) {},
 
-	                    mapMoved: function(sender) {
-	                    },
+                        mapMoved: function(sender) {},
 
                         activePopupClosed: function() {
                             KG.core_note.revertCreateNote();

@@ -13,7 +13,7 @@ require("./core_sandbox");
 require("./core_leaflet");
 //notes
 require("./controllers/note_markers");
-require("./controllers/note_popup");
+require("./controllers/notes_popup");
 require("./controllers/active_note");
 require("./core_note");
 require("./models/note_marker");

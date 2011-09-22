@@ -7,9 +7,9 @@
     <title>Kloudgis</title>
 	<script type="text/x-handlebars" data-template-name="notes-marker-popup">
 		{{#view class="popup-note-title"}}
-			{{KG.notePopupController.popupTitle}}
+			{{KG.notesPopupController.popupTitle}}
 		{{/view}}
-	    {{#collection contentBinding="KG.notePopupController" tagName="ul" class="popup-note-list"}}
+	    {{#collection contentBinding="KG.notesPopupController" tagName="ul" class="popup-note-list"}}
 			{{#view KG.NotePopupItemView}}
 				{{title}}
 			{{/view}}
@@ -54,7 +54,12 @@
 		</div>
 		<div id="active-sandbox-label">	
 			<span class="label-ellipsis"></span>
-		<div>
+		</div>
+		<script type="text/x-handlebars">
+			{{#view class="kg-controls" id="position-label"}}
+				{{KG.core_sandbox.positionLabel}}
+			{{/view}}
+		</script>
   </body>
 
 <!-- load all of the dependencies --> 

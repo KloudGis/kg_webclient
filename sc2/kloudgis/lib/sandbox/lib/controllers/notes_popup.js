@@ -1,4 +1,5 @@
-KG.notePopupController = SC.ArrayProxy.create({
+//notes for the active note marker
+KG.notesPopupController = SC.ArrayProxy.create({
 	content: [],
 	marker: null,
 	popupTitle: function(){

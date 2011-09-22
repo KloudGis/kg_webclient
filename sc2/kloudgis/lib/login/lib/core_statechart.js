@@ -13,9 +13,7 @@ SC.mixin(KG, {
 					console.log('try auto login state');
 					var user = $.getQueryString('user');				
 					if(SC.none(user)){
-						if(!KG.core_login.tryLoginAuto()){
-							this.gotoState('loggedOutState');
-						}
+						KG.core_login.tryLoginAuto();
 					}else{
 						this.gotoState('loggedOutState');
 					}					

@@ -10,9 +10,7 @@ SC.mixin(KG, {
 
             tryAuthenticate: SC.State.extend({
                 enterState: function() {
-					if(!KG.core_home.authenticate()){
-						this.gotoState('loggedOutState');
-					}					
+					KG.core_home.authenticate();					
 		        },
 		
 				authenticationSucceeded: function(){

@@ -84,7 +84,7 @@ KG.core_login = SC.Object.create({
     },
 
     tryLoginAuto: function() {
-        return KG.core_auth.load(this, this.tryLoginAutoCallback, YES);		
+        KG.core_auth.load(this, this.tryLoginAutoCallback, YES);		
     },
 
 	tryLoginAutoCallback: function(message){

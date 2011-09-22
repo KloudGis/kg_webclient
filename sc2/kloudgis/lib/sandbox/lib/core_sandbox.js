@@ -4,6 +4,8 @@ KG.core_sandbox = SC.Object.create({
 	membership: null,
 	isSandboxOwner: NO,
 	
+	mousePosition: null,
+	
 	authenticate: function(){		
 		return KG.core_auth.load(this, this.authenticateCallback);		
 	},
@@ -75,7 +77,16 @@ KG.core_sandbox = SC.Object.create({
 	
 	createNote: function(){
 		KG.statechart.sendAction('createNoteAction');
-	}
+	},
+	
+	positionLabel: function(){
+		var pos = this.get('mousePosition');
+		if(pos){
+			return 'Lon: %@, Lat:%@'.fmt(pos.get('lon').toFixed(4), pos.get('lat').toFixed(4));
+		}else{
+			return '';
+		}
+	}.property('mousePosition')
 	
 });
 

@@ -11,7 +11,7 @@ KG.core_home = SC.Object.create({
 	}.property('KG.core_auth.activeUser'),
 	
 	authenticate: function(){		
-		return KG.core_auth.load(this, this.authenticateCallback);
+		KG.core_auth.load(this, this.authenticateCallback);
 	},
 	
 	authenticateCallback: function(message){

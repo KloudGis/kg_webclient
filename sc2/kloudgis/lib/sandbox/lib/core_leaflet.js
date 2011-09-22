@@ -29,6 +29,7 @@ KG.core_leaflet = SC.Object.create({
         this.map.on('click', this.onClick, this);
         this.map.on('layeradd', this.onLayerAdd);
         this.map.on('layerremove', this.onLayerRemove);
+		this.map.on('mousemove', this.onMouseMove, this);
     },
 
     onZoom: function(e) {
@@ -46,7 +47,17 @@ KG.core_leaflet = SC.Object.create({
     },
 
     onClick: function(e) {
-        console.log('map clicked');
+        KG.core_sandbox.set('mousePosition', KG.LonLat.create({
+            lon: e.latlng.lng,
+            lat: e.latlng.lat
+        }));
+    },
+
+ 	onMouseMove: function(e) {
+        KG.core_sandbox.set('mousePosition', KG.LonLat.create({
+            lon: e.latlng.lng,
+            lat: e.latlng.lat
+        }));
     },
 
     onLayerAdd: function(e) {},
