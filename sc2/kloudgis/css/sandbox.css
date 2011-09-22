@@ -11,6 +11,7 @@
 }
 
 .kg-controls{
+	font-size: 0.4cm;
 	z-index:9;
 	position: absolute;
 	text-align:center;
@@ -40,7 +41,7 @@
 }
 
 #create-note{
-	left:120px;
+	left:3cm;
 	bottom:0px;
 }
 
@@ -58,11 +59,11 @@
 	left:50%;
 	bottom:0px;
 	width:200px;
-	height:16px;
+	height:0.5cm;
 	margin-left:-100px;
 	z-index:9;
 	text-align: center;
-	font-size: 16px;
+	font-size: 0.5cm;
 	padding: 5px;
 	color: #333;
     background-color: rgba(255, 255, 255, 0.8);
