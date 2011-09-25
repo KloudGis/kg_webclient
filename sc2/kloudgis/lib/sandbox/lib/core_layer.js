@@ -17,6 +17,12 @@ KG.core_layer = SC.Object.create({
 		ordered.filterProperty('visibility', YES).forEach(function(layer){
 			KG.core_leaflet.addWMSLayer(layer);
 		});
+	},
+	
+	getLayersSelection: function(){
+		var layers = KG.layersController.get('content');
+		var sel = layers.filterProperty('visibility', YES).filterProperty('isSelectable', YES);
+		return sel;
 	}
 	
 	

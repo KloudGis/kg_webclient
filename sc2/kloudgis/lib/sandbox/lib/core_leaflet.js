@@ -52,7 +52,7 @@ KG.core_leaflet = SC.Object.create({
     },
 
     onClick: function(e) {
-        KG.core_sandbox.set('mousePosition', KG.LonLat.create({
+        KG.statechart.sendAction('mouseClickedOnMap', KG.LonLat.create({
             lon: e.latlng.lng,
             lat: e.latlng.lat
         }));
@@ -321,6 +321,11 @@ KG.core_leaflet = SC.Object.create({
         this.map.addLayer(wms);
         //	this.layerControl.addOverlay(wms, layer.get('label'));
     },
+
+
+	mapSizeDidChange: function(){
+		this.map.invalidateSize();
+	},
 
     _temp: null,
     _temp2: null,

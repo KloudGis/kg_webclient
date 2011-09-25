@@ -1,5 +1,7 @@
 <html>
   <head>
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
 	<link rel="stylesheet" href="css/sandbox.css" type="text/css" media="screen" charset="utf-8" />
 	<link rel="stylesheet" href="css/common.css" type="text/css" media="screen" charset="utf-8" />
@@ -17,7 +19,6 @@
 	</script>
 	<script type="text/x-handlebars" data-template-name="active-note-popup">
 		{{#view class="active-note-popup"}}		
-			
 			{{#view class="note-date-label"}}
 				{{KG.activeNoteController.dateValue}}
 			{{/view}}
@@ -42,23 +43,29 @@
 	</script>
   </head>
   <body>	
-	<div id="map">		
-	</div>	
-	<div id="back-home" class="kg-controls">
-		<a href="home.html"></a>
-	</div>	
-	<div id="create-note" class="kg-controls">
-		<a href="javascript:void(0)" onclick="KG.core_sandbox.createNote()">
-		</a>
+	<div id="super-map">
+		<div id="map">		
+		</div>	
+		<div id="back-home" class="kg-controls">
+			<a href="home.html"></a>
+		</div>	
+		<div id="create-note" class="kg-controls">
+			<a href="javascript:void(0)" onclick="KG.core_sandbox.createNote()">
+			</a>
+		</div>
+		<div id="active-sandbox-label">	
+			<span class="label-ellipsis"></span>
+		</div>
+		<script type="text/x-handlebars">
+			{{#view class="kg-controls" id="position-label"}}
+				{{KG.core_sandbox.positionLabel}}
+			{{/view}}
+		</script>
 	</div>
-	<div id="active-sandbox-label">	
-		<span class="label-ellipsis"></span>
-	</div>
-	<script type="text/x-handlebars">
-		{{#view class="kg-controls" id="position-label"}}
-			{{KG.core_sandbox.positionLabel}}
-		{{/view}}
-	</script>
+		<script type="text/x-handlebars">
+			{{#view id="side-panel"}}
+			{{/view}}
+		</script>		
   </body>
 
 <!-- load all of the dependencies --> 

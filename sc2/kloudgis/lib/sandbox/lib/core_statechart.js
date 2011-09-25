@@ -82,7 +82,12 @@ SC.mixin(KG, {
                             },
                             25);
                         }
-                    }
+                    },
+
+					mouseClickedOnMap: function(lonlat){
+						KG.core_sandbox.set('mousePosition', lonlat);
+						KG.core_info.findFeaturesAt(lonlat);
+					}
                 }),
 
                 mapZoomed: function(sender) {

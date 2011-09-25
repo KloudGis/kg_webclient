@@ -216,7 +216,7 @@ KG.core_note = SC.Object.create({
 			} else {				
                 var div = this._div_notes;
                 setTimeout(function() {
-                    KG.core_leaflet.refreshMarkerPopup(params.marker, div);
+                    KG.core_leaflet.refreshMarkerPopup(params.marker, "<html><div><span>test</span><input></input></div></html>");
                 },
                 1);
             }
