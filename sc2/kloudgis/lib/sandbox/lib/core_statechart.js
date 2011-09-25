@@ -12,7 +12,11 @@ SC.mixin(KG, {
                 enterState: function() {
                     var sb = $.getQueryString('sandbox');
                     KG.set('activeSandboxKey', sb);
-                    KG.core_sandbox.authenticate();
+
+                    setTimeout(function() {
+                        KG.core_sandbox.authenticate();
+                    },
+                    1);
                 },
 
                 authenticationSucceeded: function() {
@@ -56,7 +60,6 @@ SC.mixin(KG, {
 
                 enterState: function() {
                     console.log('hi!');
-                    $('#if-spinner').fadeOut();
                     KG.core_layer.loadLayers();
                 },
 

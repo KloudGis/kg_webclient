@@ -42,24 +42,23 @@
 	</script>
   </head>
   <body>	
-	<iframe id="if-spinner" src="spinner.html"></iframe>
 	<div id="map">		
 	</div>	
-		<div id="back-home" class="kg-controls">
-			<a href="home.html"></a>
-		</div>	
-		<div id="create-note" class="kg-controls">
-			<a href="javascript:void(0)" onclick="KG.core_sandbox.createNote()">
-			</a>
-		</div>
-		<div id="active-sandbox-label">	
-			<span class="label-ellipsis"></span>
-		</div>
-		<script type="text/x-handlebars">
-			{{#view class="kg-controls" id="position-label"}}
-				{{KG.core_sandbox.positionLabel}}
-			{{/view}}
-		</script>
+	<div id="back-home" class="kg-controls">
+		<a href="home.html"></a>
+	</div>	
+	<div id="create-note" class="kg-controls">
+		<a href="javascript:void(0)" onclick="KG.core_sandbox.createNote()">
+		</a>
+	</div>
+	<div id="active-sandbox-label">	
+		<span class="label-ellipsis"></span>
+	</div>
+	<script type="text/x-handlebars">
+		{{#view class="kg-controls" id="position-label"}}
+			{{KG.core_sandbox.positionLabel}}
+		{{/view}}
+	</script>
   </body>
 
 <!-- load all of the dependencies --> 

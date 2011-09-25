@@ -10,18 +10,23 @@ KG.core_leaflet = SC.Object.create({
 
     //	layerControl: new L.Control.Layers(),
     addToDocument: function() {
-        var key = '8ccaf9c293f247d6b18a30fce375e298';
+       /* var key = '8ccaf9c293f247d6b18a30fce375e298';
         var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/' + key + '/997/256/{z}/{x}/{y}.png',
         cloudmadeAttribution = 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
-        layer = new L.TileLayer(cloudmadeUrl, {
+        cloudmade = new L.TileLayer(cloudmadeUrl, {
             maxZoom: 18,
             attribution: cloudmadeAttribution
-        });
+        });*/
 
+		var mapquestUrl = 'http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
+	            mapquestAttribution = "Data CC-By-SA by <a href='http://openstreetmap.org/' target='_blank'>OpenStreetMap</a>, Tiles Courtesy of <a href='http://open.mapquest.com' target='_blank'>MapQuest</a>",
+	            mapquest = new L.TileLayer(mapquestUrl, {maxZoom: 18, attribution: mapquestAttribution, subdomains: ['1','2','3','4']});
+      
         // initialize the map on the "map" div
         var map = new L.Map('map');
         //	map.addControl(this.layerControl);
-        map.setView(new L.LatLng(46, -72), 8).addLayer(layer);
+        map.setView(new L.LatLng(46,-72), 8).addLayer(mapquest);
+		
         //this.layerControl.addBaseLayer(layer, "Base");
         this.map = map;
         this.map.on('zoomend', this.onZoom, this);
@@ -51,16 +56,6 @@ KG.core_leaflet = SC.Object.create({
             lon: e.latlng.lng,
             lat: e.latlng.lat
         }));
-/*
-        var map = this.map;
-        var latlngStr = '(' + e.latlng.lat.toFixed(3) + ', ' + e.latlng.lng.toFixed(3) + ')';
-        var BBOX = map.getBounds()._southWest.lng + "," + map.getBounds()._southWest.lat + "," + map.getBounds()._northEast.lng + "," + map.getBounds()._northEast.lat;
-        var WIDTH = map.getSize().x;
-        var HEIGHT = map.getSize().y;
-        var X = map.layerPointToContainerPoint(e.layerPoint).x;
-        var Y = map.layerPointToContainerPoint(e.layerPoint).y;
-        var URL = 'http://suite.opengeo.org/geoserver/usa/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&LAYERS=usa:states&QUERY_LAYERS=usa:states&STYLES=&BBOX=' + BBOX + '&FEATURE_COUNT=5&HEIGHT=' + HEIGHT + '&WIDTH=' + WIDTH + '&FORMAT=image%2Fpng&INFO_FORMAT=text%2Fhtml&SRS=EPSG%3A4326&X=' + X + '&Y=' + Y;
-        alert(URL);*/
     },
 
     onMouseMove: function(e) {
@@ -389,5 +384,16 @@ var layer = new L.TileLayer(osmURL, {
     maxZoom: 20,
     attribution: at
 });
+*/
+
+//USA States test WMS
+/*var nexrad = new L.TileLayer.WMS("http://suite.opengeo.org/geoserver/usa/wms", {
+        layers: 'usa:states',
+        format: 'image/png',
+        transparent: true
+    });
+
+
+map.addLayer(nexrad);
 */
 
