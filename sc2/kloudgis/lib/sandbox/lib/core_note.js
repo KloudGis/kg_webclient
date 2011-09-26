@@ -1,7 +1,7 @@
 KG.core_note = SC.Object.create({
 
     _bounds: null,
-	_zoom: null,
+    _zoom: null,
 
     _div_active_note: null,
     _view_active_note: null,
@@ -38,9 +38,9 @@ KG.core_note = SC.Object.create({
 
     //show the note form to let the user fill it up
     activateNote: function(inNote, marker) {
-		if(!inNote){
-			return NO;
-		}
+        if (!inNote) {
+            return NO;
+        }
         var note = inNote;
         if (note.get('status') !== SC.Record.READY_NEW) {
             this._store = KG.store.chain();
@@ -63,7 +63,7 @@ KG.core_note = SC.Object.create({
             $(".new-note-popup input").focus();
         },
         1);
-		return YES;
+        return YES;
     },
 
     //the user confirm the note create (hit the create button)
@@ -98,18 +98,19 @@ KG.core_note = SC.Object.create({
         KG.core_leaflet.cleanUpNewNoteMarker();
     },
 
-	deleteActiveNote: function(){
-		var note = KG.activeNoteController.get('content');
-		if(note){
-			var origin_note = KG.store.find(note);
-			origin_note.onDestroyedClean(null, function(){
-				console.log('destroyed completed');
-				KG.core_note.refreshMarkers(YES);
-			})
-			note.destroy();
-			this.confirmUpdateNote();
-		}
-	},
+    deleteActiveNote: function() {
+        var note = KG.activeNoteController.get('content');
+        if (note) {
+            var origin_note = KG.store.find(note);
+            origin_note.onDestroyedClean(null,
+            function() {
+                console.log('destroyed completed');
+                KG.core_note.refreshMarkers(YES);
+            })
+            note.destroy();
+            this.confirmUpdateNote();
+        }
+    },
 
     //the user closed the popup to cancel the note creation
     revertUpdateNote: function() {
@@ -130,7 +131,7 @@ KG.core_note = SC.Object.create({
     //flush and recalculate the note clusters
     refreshMarkers: function(force) {
         var bounds = KG.core_leaflet.getBounds();
-		var zoom = KG.core_leaflet.getZoom();
+        var zoom = KG.core_leaflet.getZoom();
         if (force || SC.none(this._zoom) || this._zoom != zoom || SC.none(this._bounds) || !this._bounds.contains(bounds)) {
             var fatBounds = KG.core_leaflet.getFatBounds();
             var dist = KG.core_leaflet.pixelsToWorld(20); //cluster within 20 pixels
@@ -142,10 +143,10 @@ KG.core_note = SC.Object.create({
                 query_url: '/api_data/protected/notes/clusters?sw_lon=%@&ne_lat=%@&ne_lon=%@&sw_lat=%@&distance=%@&sandbox=%@'.fmt(fatBounds.getPath('sw.lon'), fatBounds.getPath('sw.lat'), fatBounds.getPath('ne.lon'), fatBounds.getPath('ne.lat'), dist, KG.get('activeSandboxKey'))
             });
             var newMarkers = KG.store.find(query);
-            newMarkers.addObserver('status', this, this.markersReady);
+            newMarkers.onReady(this, this.markersReady);
             KG.noteMarkersController.set('content', newMarkers);
             this._bounds = fatBounds;
-			this._zoom = zoom;
+            this._zoom = zoom;
         }
     },
 
@@ -154,28 +155,26 @@ KG.core_note = SC.Object.create({
     /* SC view to generate html bind on the  KG.notesPopupController*/
     _view_notes: null,
 
-    markersReady: function(markers, key, nothing, context) {
-        if (markers.get('status') & SC.Record.READY) {
-			KG.notesPopupController.set('marker', null); 
-            markers.removeObserver('status', this, this.markersReady);
-            var rtype = markers.getPath('query.recordType');
-            var loadedMarkers = KG.store.find(rtype);
-            loadedMarkers.forEach(function(old) {
-                //console.log('remove old marker %@'.fmt(old));
-                KG.core_leaflet.removeMarker(old);
-                old.set('isOnMap', NO);
-                if (markers.indexOf(old) === -1) {
-                    KG.store.unloadRecord(rtype, old.get('id'));
-                }
-            });
-            var i;
-            for (i = 0; i < markers.get('length'); i++) {
-                var marker = KG.noteMarkersController.objectAt(i);
-                if (marker) {
-                    if (!marker.get('isOnMap')) {
-                        KG.core_leaflet.addMarker(marker, this, this.markerClicked);
-                        marker.set('isOnMap', YES);
-                    }
+    markersReady: function(markers) {
+        markers.offReady();
+        KG.notesPopupController.set('marker', null);
+        var rtype = markers.getPath('query.recordType');
+        var loadedMarkers = KG.store.find(rtype);
+        loadedMarkers.forEach(function(old) {
+            //console.log('remove old marker %@'.fmt(old));
+            KG.core_leaflet.removeMarker(old);
+            old.set('isOnMap', NO);
+            if (markers.indexOf(old) === -1) {
+                KG.store.unloadRecord(rtype, old.get('id'));
+            }
+        });
+        var i;
+        for (i = 0; i < markers.get('length'); i++) {
+            var marker = KG.noteMarkersController.objectAt(i);
+            if (marker) {
+                if (!marker.get('isOnMap')) {
+                    KG.core_leaflet.addMarker(marker, this, this.markerClicked);
+                    marker.set('isOnMap', YES);
                 }
             }
         }
@@ -209,14 +208,14 @@ KG.core_note = SC.Object.create({
         params.count++;
         if (params.count === params.length) {
             console.log('refresh the popup content.');
-			KG.notesPopupController.set('marker', params.marker);     
+            KG.notesPopupController.set('marker', params.marker);
             if (params.count === 1) {
-				//when only one note, show the note directly
-				KG.statechart.sendAction('noteSelectedAction', note, params.marker);
-			} else {				
+                //when only one note, show the note directly
+                KG.statechart.sendAction('noteSelectedAction', note, params.marker);
+            } else {
                 var div = this._div_notes;
                 setTimeout(function() {
-                    KG.core_leaflet.refreshMarkerPopup(params.marker, "<html><div><span>test</span><input></input></div></html>");
+                    KG.core_leaflet.refreshMarkerPopup(params.marker, div);
                 },
                 1);
             }

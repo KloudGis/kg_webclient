@@ -5,7 +5,7 @@
 	bottom: 0px;
 	top: 0px;
 	border: none;
-	-webkit-transition:left 1s ease-in;
+	-webkit-transition:left 0.5s ease-out;
 }
 
 #super-map.map-info-selection{
@@ -17,7 +17,7 @@
 	position:absolute;
 	width: 0px;
 	height:100%;
-	-webkit-transition:width 1s ease-in;
+	-webkit-transition:width 0.5s ease-out;
 }
 
 #side-panel.map-info-selection{

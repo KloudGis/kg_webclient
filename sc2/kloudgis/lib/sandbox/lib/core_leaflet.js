@@ -32,9 +32,14 @@ KG.core_leaflet = SC.Object.create({
         this.map.on('zoomend', this.onZoom, this);
         this.map.on('moveend', this.onMove, this);
         this.map.on('click', this.onClick, this);
-        this.map.on('layeradd', this.onLayerAdd);
-        this.map.on('layerremove', this.onLayerRemove);
-        this.map.on('mousemove', this.onMouseMove, this);
+        this.map.on('layeradd', this.onLayerAdd, this);
+        this.map.on('layerremove', this.onLayerRemove, this);
+		//2 reasons:
+		//- If touch, no need to track the "mouse" position, there is no mouse.
+		//- On mobile safari (4.3.2), the input textfield in a popup cannot take the focus is the mouseMove event is set in the map.
+		if(!L.Browser.touch){
+        	this.map.on('mousemove', this.onMouseMove, this);
+		}
     },
 
     onZoom: function(e) {
@@ -323,8 +328,11 @@ KG.core_leaflet = SC.Object.create({
     },
 
 
-	mapSizeDidChange: function(){
+	mapSizeDidChange: function(center){
 		this.map.invalidateSize();
+		if(center){
+			this.map.setView(new L.LatLng(center.get('lat'), center.get('lon')), this.map.getZoom());
+		}
 	},
 
     _temp: null,

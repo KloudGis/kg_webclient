@@ -2,7 +2,7 @@
 KG.infoController = SC.ArrayProxy.create({
 	content: [],
 	
-	hasSelection: function(){
-		return this.getPath('content.length') > 0;
+	featureCount: function(){
+		return this.getPath('content.length');
 	}.property('content.length')
 });
