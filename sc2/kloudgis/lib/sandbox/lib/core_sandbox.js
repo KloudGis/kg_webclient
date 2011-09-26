@@ -79,12 +79,21 @@ KG.core_sandbox = SC.Object.create({
 		KG.statechart.sendAction('createNoteAction');
 	},
 	
-	positionLabel: function(){
+	latitudeLabel: function(){
 		var pos = this.get('mousePosition');
 		if(pos){
-			return 'Lon: %@, Lat:%@'.fmt(pos.get('lon').toFixed(4), pos.get('lat').toFixed(4));
+			return 'Lat: %@'.fmt(pos.get('lat').toFixed(4));
 		}else{
-			return '';
+			return 'Lat: ?';
+		}
+	}.property('mousePosition'),
+	
+	longitudeLabel: function(){
+		var pos = this.get('mousePosition');
+		if(pos){
+			return 'Lon: %@'.fmt(pos.get('lon').toFixed(4));
+		}else{
+			return 'Lon: ?';
 		}
 	}.property('mousePosition')
 	

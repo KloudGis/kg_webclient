@@ -41,6 +41,22 @@
 			{{/view}}
 		{{/view}}
 	</script>
+	<script type="text/x-handlebars" data-template-name="info-popup">
+		<table id="popup-info-table">
+		<tr>
+		<td>
+		 	{{#view class="popup-info-message"}}
+						{{KG.infoController.popupMessage}}			
+			{{/view}}
+		</td>
+		<td>
+			{{#view KG.Button tagName="div" class="popup-info-select" classBinding="isActive" sc_action="selectFeatureAction"}}	
+				<img src="resources/images/right_arrow_32.png"/>		
+			{{/view}}
+		</td>
+		</tr>
+		</table>
+	</script>
   </head>
   <body>	
 	<div id="super-map">
@@ -58,7 +74,8 @@
 		</div>
 		<script type="text/x-handlebars">
 			{{#view class="kg-controls" id="position-label"}}
-				{{KG.core_sandbox.positionLabel}}
+				{{KG.core_sandbox.latitudeLabel}}
+				{{KG.core_sandbox.longitudeLabel}}
 			{{/view}}
 		</script>
 	</div>

@@ -87,6 +87,10 @@ SC.mixin(KG, {
 					mouseClickedOnMap: function(lonlat){
 						KG.core_sandbox.set('mousePosition', lonlat);
 						KG.core_info.findFeaturesAt(lonlat);
+					},
+					
+					featureInfoReady: function(){
+						this.gotoState("infoPopupState");
 					}
                 }),
 
@@ -98,9 +102,35 @@ SC.mixin(KG, {
                     KG.core_note.refreshMarkers();
                 },
 
+				//feature info popup
+				infoPopupState: SC.State.extend({
+					
+					enterState: function(){
+						console.log('enter info popup!');
+						KG.core_info.showInfoPopup();
+					},
+					
+					exitState: function(){
+						console.log('exit info popup!');
+						KG.core_info.hideInfoPopup();
+					},
+					
+					infoPopupClosed: function() {
+						console.log('info popup closed.');
+						var self = this;
+						setTimeout(function(){self.gotoState('navigationState');}, 1);						
+					},
+					
+					selectFeatureAction: function(){
+						KG.core_info.selectFeature();
+						this.gotoState('navigationState');
+					}				
+				}),
+
+				//edit note popup
                 editNoteState: SC.State.extend({
 
-                    activePopupClosed: function() {
+                    notePopupClosed: function() {
                         KG.core_note.revertUpdateNote();
                         this.gotoState('navigationState');
                     },
@@ -120,6 +150,7 @@ SC.mixin(KG, {
                     mapMoved: function(sender) {},
                 }),
 
+				//create note popup
                 createNoteState: SC.State.extend({
 
                     initialSubstate: 'locateNoteState',
@@ -139,7 +170,7 @@ SC.mixin(KG, {
                             this.gotoState('confirmNoteState');
                         },
 
-                        activePopupClosed: function() {}
+                        notePopupClosed: function() {}
 
                     }),
 
@@ -156,7 +187,7 @@ SC.mixin(KG, {
 
                         mapMoved: function(sender) {},
 
-                        activePopupClosed: function() {
+                        notePopupClosed: function() {
                             KG.core_note.revertCreateNote();
                             this.gotoState('navigationState');
                         },

@@ -1,7 +1,7 @@
 KG.core_leaflet = SC.Object.create({
 
     map: null,
-
+	popupInfo: null,
     activeMarker: null,
     //icons
     noteIcon: new L.Icon(),
@@ -40,6 +40,8 @@ KG.core_leaflet = SC.Object.create({
 		if(!L.Browser.touch){
         	this.map.on('mousemove', this.onMouseMove, this);
 		}
+		
+		this.popupInfo = new L.Popup({closeButton: false});
     },
 
     onZoom: function(e) {
@@ -70,15 +72,23 @@ KG.core_leaflet = SC.Object.create({
         }));
     },
 
-    onLayerAdd: function(e) {},
+    onLayerAdd: function(e) {
+		if(e.layer === this.popupInfo){
+			$(this.popupInfo._wrapper).addClass('info-popup');
+			$(this.popupInfo._tip).addClass('info-popup');
+		}
+	},
 
     onLayerRemove: function(e) {
         var self = KG.core_leaflet;
         if (self.get('activeMarker') && self.get('activeMarker')._native_marker && self.get('activeMarker')._native_marker._popup === e.layer) {
             console.log('popup closed');
             //popup closed
-            KG.statechart.sendAction('activePopupClosed', self);
-        }
+            KG.statechart.sendAction('notePopupClosed', self);
+        }else if(self.popupInfo && self.popupInfo === e.layer){
+			//popup closed
+            KG.statechart.sendAction('infoPopupClosed', self);
+		}
     },
 
     pixelsToWorld: function(pixels) {
@@ -334,7 +344,22 @@ KG.core_leaflet = SC.Object.create({
 			this.map.setView(new L.LatLng(center.get('lat'), center.get('lon')), this.map.getZoom());
 		}
 	},
+	
+	
+	showPopupInfo: function(latLon, content){
+		var popup = this.popupInfo;
+		popup.setLatLng(new L.LatLng(latLon.get('lat'), latLon.get('lon')));
+		popup.setContent(content);
+		this.map.openPopup(popup);
+		setTimeout(function(){popup._update()},1);
+	},
 
+	hidePopupInfo: function(){
+		if(this.popupInfo){
+			this.map.closePopup();
+		}
+	},
+	
     _temp: null,
     _temp2: null,
     printBoundsA: function() {
@@ -387,7 +412,7 @@ KG.core_leaflet = SC.Object.create({
         this._temp = new L.Polygon(pts);
         this.map.addLayer(this._temp);
         return bounds;
-    },
+    }
 
 });
 
