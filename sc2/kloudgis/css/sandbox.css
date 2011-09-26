@@ -25,7 +25,7 @@
 }
 
 .kg-controls{
-	font-size: 0.4cm;
+	font-size: 0.3cm;
 	z-index:9;
 	position: absolute;
 	text-align:center;
@@ -76,12 +76,12 @@
 	position: absolute;
 	left:50%;
 	top:0px;
-	width:200px;
-	height:0.5cm;
-	margin-left:-100px;
-	z-index:9;
+	width:3.5cm;
+	height:0.35cm;
+	margin-left:-1.75cm;
+	z-index:2;
 	text-align: center;
-	font-size: 0.5cm;
+	font-size: 0.35cm;
 	padding: 5px;
 	color: #333;
     background-color: rgba(255, 255, 255, 0.8);
