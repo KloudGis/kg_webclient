@@ -12,7 +12,9 @@ SC.mixin(KG, {
                 enterState: function() {
 					console.log('try');
 					setTimeout(function() {
+						SC.run.begin();
 						KG.core_home.authenticate();}, 1);										
+						SC.run.end();
 		        },
 		
 				authenticationSucceeded: function(){

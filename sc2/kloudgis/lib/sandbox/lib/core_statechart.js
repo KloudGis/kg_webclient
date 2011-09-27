@@ -14,7 +14,9 @@ SC.mixin(KG, {
                     KG.set('activeSandboxKey', sb);
 
                     setTimeout(function() {
+						SC.run.begin();
                         KG.core_sandbox.authenticate();
+						SC.run.end();
                     },
                     1);
                 },
@@ -78,7 +80,9 @@ SC.mixin(KG, {
                         if (KG.core_note.activateNote(note, marker)) {
                             var self = this;
                             setTimeout(function() {
+								SC.run.begin();
                                 self.gotoState('editNoteState');
+								SC.run.end();
                             },
                             25);
                         }
@@ -118,7 +122,7 @@ SC.mixin(KG, {
 					infoPopupClosed: function() {
 						console.log('info popup closed.');
 						var self = this;
-						setTimeout(function(){self.gotoState('navigationState');}, 1);						
+						setTimeout(function(){SC.run.begin();self.gotoState('navigationState');SC.run.end();}, 1);						
 					},
 					
 					selectFeatureAction: function(){

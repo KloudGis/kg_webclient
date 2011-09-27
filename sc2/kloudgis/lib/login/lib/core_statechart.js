@@ -14,7 +14,9 @@ SC.mixin(KG, {
                     var user = $.getQueryString('user');
                     if (SC.none(user)) {
                         setTimeout(function() {
+							SC.run.begin();
                             KG.core_login.tryLoginAuto();
+							SC.run.end();	
                         },
                         1);
                     } else {
