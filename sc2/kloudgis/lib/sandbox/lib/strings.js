@@ -11,8 +11,7 @@ var fr = {
 	"_noteUpdate": "Mise à jour",
 	"_noteTitlePlaceholder": "Votre note",
 	"_moveNote": "Glisser la note où vous le voulez.",
-	"_author": "Par %@",
-	"_featureSummary": "Élément avec id %@"
+	"_author": "Par %@"
 };
 
 var en = {
@@ -28,8 +27,7 @@ var en = {
 	"_noteUpdate": "Update",
 	"_noteTitlePlaceholder": "Your note",
 	"_moveNote": "Drag where you want it.",
-	"_author": "By %@",
-	"_featureSummary": "Feature with Id %@"
+	"_author": "By %@"
 };
 
 if(KG.lang === 'fr'){

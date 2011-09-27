@@ -8,7 +8,6 @@ KG.core_info = SC.Object.create({
     limit_query: 10,
 
     findFeaturesAt: function(lonLat) {
-		console.log('Try to find features at loc');
         var onePixel = KG.core_leaflet.pixelsToWorld(1);
         var sLayers = KG.core_layer.getLayersSelection();
         var layers = sLayers.map(function(item, index, self) {
@@ -26,6 +25,7 @@ KG.core_info = SC.Object.create({
             KG.infoController.set('content', records);
             records.onReady(this, this.infoReady);
         } else {
+			console.log('No valid layer to do a F_INFO');
             KG.infoController.set('content', []);
         }
         if (SC.none(this._div_info)) {
@@ -90,18 +90,4 @@ KG.core_info = SC.Object.create({
         },
         700);
     }
-
-    /*
-	selectionInfoDidChange: function(){
-		console.log('selection changed!');
-		if(KG.infoController.get('hasSelection')){
-			$('#super-map').addClass('map-info-selection');
-			$('#side-panel').addClass('map-info-selection');
-		}else{
-			$('#super-map').removeClass('map-info-selection');
-			$('#side-panel').removeClass('map-info-selection');
-		}
-		setTimeout(function(){KG.core_leaflet.mapSizeDidChange()}, 1100);
-	}.observes('KG.infoController.hasSelection')
-*/
 });

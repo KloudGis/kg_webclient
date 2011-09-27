@@ -1,5 +1,5 @@
 SC.mixin(KG, {
-    //global state chart
+    //sandbox page state chart
     statechart: SC.Statechart.create({
         //log trace
         trace: NO,
@@ -136,18 +136,23 @@ SC.mixin(KG, {
 
                     notePopupClosed: function() {
                         KG.core_note.revertUpdateNote();
-                        this.gotoState('navigationState');
+                        this.backToNavigation();
                     },
 
                     confirmNoteAction: function() {
                         KG.core_note.confirmUpdateNote();
-                        this.gotoState('navigationState');
+                        this.backToNavigation();
                     },
 
                     deleteNoteAction: function() {
                         KG.core_note.deleteActiveNote();
-                        this.gotoState('navigationState');
+                        this.backToNavigation();
                     },
+
+					backToNavigation: function(){
+						var self = this;
+						setTimeout(function(){SC.run.begin();self.gotoState('navigationState');SC.run.end();}, 1);
+					},
 
                     mapZoomed: function(sender) {},
 
@@ -193,13 +198,18 @@ SC.mixin(KG, {
 
                         notePopupClosed: function() {
                             KG.core_note.revertCreateNote();
-                            this.gotoState('navigationState');
+                            this.backToNavigation();
                         },
 
                         confirmNoteAction: function() {
                             KG.core_note.confirmCreateNote();
-                            this.gotoState('navigationState');
-                        }
+                            this.backToNavigation();
+                        },
+
+						backToNavigation: function(){
+							var self = this;
+							setTimeout(function(){SC.run.begin();self.gotoState('navigationState');SC.run.end();}, 1);
+						},
                     })
                 })
             })

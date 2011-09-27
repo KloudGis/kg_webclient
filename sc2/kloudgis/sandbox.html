@@ -42,20 +42,47 @@
 		{{/view}}
 	</script>
 	<script type="text/x-handlebars" data-template-name="info-popup">
-		<table id="popup-info-table">
+		{{#collection contentBinding="KG.infoController"  isVisibleBinding="KG.infoController.listVisible" tagName="ul" class="popup-info-list"}}
+			{{#view KG.FeatureInfoPopupItemView class="popup-info-item" ignoreIfFirst="true"}}
+					<table class="popup-info-table">
+					<tr>
+					<td>
+						{{itemView.content.title}}			
+						</td>
+					<td>
+						{{#view KG.SelectFeatureButtonView class="popup-info-select" tagName="div" classBinding="isActive"}}	
+							<img src="resources/images/right_arrow_32.png"/>		
+							{{/view}}
+					</td>
+					</tr>
+					</table>
+			{{/view}}		
+		{{/collection}}
+		<table class="popup-info-master-row-table">
 		<tr>
 		<td>
-		 	{{#view class="popup-info-message"}}
-						{{KG.infoController.popupMessage}}			
-			{{/view}}
+		{{#view KG.ExpandButtonView tagName="div" class="popup-info-expand" isVisibleBinding="KG.infoController.multipleFeatures" sclassBinding="isActive" expandedBinding="KG.infoController.listVisible"}}	
+			<img {{bindAttr src="logo"}}/>		
+		{{/view}}		
 		</td>
 		<td>
-			{{#view KG.Button tagName="div" class="popup-info-select" classBinding="isActive" sc_action="selectFeatureAction"}}	
-				<img src="resources/images/right_arrow_32.png"/>		
-			{{/view}}
+		{{#view KG.FeatureInfoPopupItemView class="popup-info-item" contentBinding="KG.infoController.content.firstObject"}}
+			<table class="popup-info-table">
+			<tr>
+			<td>
+				{{content.title}}			
+			</td>
+			<td>
+				{{#view KG.SelectFeatureButtonView class="popup-info-select" tagName="div" classBinding="isActive"}}	
+					<img src="resources/images/right_arrow_32.png"/>		
+				{{/view}}
+			</td>
+			</tr>
+			</table>
+		{{/view}}	
 		</td>
 		</tr>
-		</table>
+		</table>	
 	</script>
   </head>
   <body>	

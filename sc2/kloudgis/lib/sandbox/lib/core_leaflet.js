@@ -237,7 +237,6 @@ KG.core_leaflet = SC.Object.create({
         if (marker.get('featureCount') > 1) {
             icon = this.groupIcon;
         }
-		console.log('tooltip is:' + marker.get('tooltip'));
         var lmarker = new L.Marker(lmarkerLocation, {
             draggable: false,
             title: marker.get('tooltip'),

@@ -5,7 +5,8 @@ KG.Feature = KG.Record.extend({
     date: SC.Record.attr(Number),
     geo_type: SC.Record.attr(String),
     coords: SC.Record.attr(Array),
-    attrs: SC.Record.attr(Array),
+    attrs: SC.Record.attr(Object),
+	title_attr: SC.Record.attr(String),
 
     center: function() {
         if (this.get('geo_type') === "Point") {
@@ -18,7 +19,16 @@ KG.Feature = KG.Record.extend({
 		return NO;
     }.property('coords'),
 
-	summary: function() {
-        return "_featureSummary".loc(this.get('fid'));
-    }.property('fid'),
+	title: function() {
+		var attrs = this.get('attrs');
+        return attrs[this.get('title_attr')];
+    }.property('title_column'),
+
+
+	/*
+	//get all properties from an object
+	for(var key in attrs){
+	      console.log(key);
+	}
+	*/
 });
