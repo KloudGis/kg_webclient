@@ -105,7 +105,7 @@ KG.core_note = SC.Object.create({
             origin_note.onDestroyedClean(null,
             function() {
                 console.log('destroyed completed');
-                KG.core_note.refreshMarkers(YES);
+				KG.core_note.refreshMarkers(YES);        
             })
             note.destroy();
             this.confirmUpdateNote();
@@ -147,7 +147,9 @@ KG.core_note = SC.Object.create({
             KG.noteMarkersController.set('content', newMarkers);
             this._bounds = fatBounds;
             this._zoom = zoom;
+			return YES;
         }
+		return NO;
     },
 
     /* Super element to put in a note marker popup */
@@ -182,6 +184,7 @@ KG.core_note = SC.Object.create({
 
     //the user clicked a marker, adjust the popup content
     markerClicked: function(marker) {
+		console.log('marker is clicked');
         if (SC.none(this._div_notes)) {
             this._div_notes = document.createElement('div');
             this._view_notes = SC.View.create({
@@ -191,7 +194,6 @@ KG.core_note = SC.Object.create({
         }
         this._view_notes.set('title', "...");
         var notes = marker.get('features');
-        KG.notesPopupController.set('content', notes);
         var len = notes.get('length');
         var params = {
             count: 0,
@@ -212,7 +214,8 @@ KG.core_note = SC.Object.create({
             if (params.count === 1) {
                 //when only one note, show the note directly
                 KG.statechart.sendAction('noteSelectedAction', note, params.marker);
-            } else {
+            } else {			
+				KG.notesPopupController.set('content', params.marker.get('features'));
                 var div = this._div_notes;
                 setTimeout(function() {
                     KG.core_leaflet.refreshMarkerPopup(params.marker, div);

@@ -2,6 +2,8 @@ KG.NoteMarker = KG.Record.extend({
 
 	lon: SC.Record.attr(Number),
     lat: SC.Record.attr(Number),
+
+	tip: SC.Record.attr(String),
 	
 	isOnMap: NO,
 	
@@ -25,6 +27,14 @@ KG.NoteMarker = KG.Record.extend({
 	}.property('featureCount'),
 	
 	tooltip: function(){
-		return this.get('title');
-	}.property('title')
+		var tip = this.get('tip');
+		if(tip){
+			if(tip.charAt(0) === '_'){
+				var count = this.get('featureCount');
+				return tip.loc(count);
+			}else{
+				return tip;
+			}
+		}
+	}.property('tip', 'featureCount')
 });

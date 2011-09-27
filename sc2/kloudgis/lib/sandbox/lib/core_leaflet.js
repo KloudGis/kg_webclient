@@ -1,7 +1,7 @@
 KG.core_leaflet = SC.Object.create({
 
     map: null,
-	popupInfo: null,
+    popupInfo: null,
     activeMarker: null,
     //icons
     noteIcon: new L.Icon(),
@@ -10,7 +10,7 @@ KG.core_leaflet = SC.Object.create({
 
     //	layerControl: new L.Control.Layers(),
     addToDocument: function() {
-       /* var key = '8ccaf9c293f247d6b18a30fce375e298';
+        /* var key = '8ccaf9c293f247d6b18a30fce375e298';
         var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/' + key + '/997/256/{z}/{x}/{y}.png',
         cloudmadeAttribution = 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
         cloudmade = new L.TileLayer(cloudmadeUrl, {
@@ -18,15 +18,19 @@ KG.core_leaflet = SC.Object.create({
             attribution: cloudmadeAttribution
         });*/
 
-		var mapquestUrl = 'http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
-	            mapquestAttribution = "Data CC-By-SA by <a href='http://openstreetmap.org/' target='_blank'>OpenStreetMap</a>, Tiles Courtesy of <a href='http://open.mapquest.com' target='_blank'>MapQuest</a>",
-	            mapquest = new L.TileLayer(mapquestUrl, {maxZoom: 18, attribution: mapquestAttribution, subdomains: ['1','2','3','4']});
-      
+        var mapquestUrl = 'http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
+        mapquestAttribution = "Data CC-By-SA by <a href='http://openstreetmap.org/' target='_blank'>OpenStreetMap</a>, Tiles Courtesy of <a href='http://open.mapquest.com' target='_blank'>MapQuest</a>",
+        mapquest = new L.TileLayer(mapquestUrl, {
+            maxZoom: 18,
+            attribution: mapquestAttribution,
+            subdomains: ['1', '2', '3', '4']
+        });
+
         // initialize the map on the "map" div
         var map = new L.Map('map');
         //	map.addControl(this.layerControl);
-        map.setView(new L.LatLng(46,-72), 8).addLayer(mapquest);
-		
+        map.setView(new L.LatLng(46, -72), 8).addLayer(mapquest);
+
         //this.layerControl.addBaseLayer(layer, "Base");
         this.map = map;
         this.map.on('zoomend', this.onZoom, this);
@@ -34,14 +38,16 @@ KG.core_leaflet = SC.Object.create({
         this.map.on('click', this.onClick, this);
         this.map.on('layeradd', this.onLayerAdd, this);
         this.map.on('layerremove', this.onLayerRemove, this);
-		//2 reasons:
-		//- If touch, no need to track the "mouse" position, there is no mouse.
-		//- On mobile safari (4.3.2), the input textfield in a popup cannot take the focus is the mouseMove event is set in the map.
-		if(!L.Browser.touch){
-        	this.map.on('mousemove', this.onMouseMove, this);
-		}
-		
-		this.popupInfo = new L.Popup({closeButton: false});
+        //2 reasons:
+        //- If touch, no need to track the "mouse" position, there is no mouse.
+        //- On mobile safari (4.3.2), the input textfield in a popup cannot take the focus is the mouseMove event is set in the map.
+        if (!L.Browser.touch) {
+            this.map.on('mousemove', this.onMouseMove, this);
+        }
+
+        this.popupInfo = new L.Popup({
+            closeButton: false
+        });
     },
 
     onZoom: function(e) {
@@ -59,36 +65,44 @@ KG.core_leaflet = SC.Object.create({
     },
 
     onClick: function(e) {
+        SC.run.begin();
         KG.statechart.sendAction('mouseClickedOnMap', KG.LonLat.create({
             lon: e.latlng.lng,
             lat: e.latlng.lat
         }));
+        SC.run.end();
     },
 
     onMouseMove: function(e) {
+        SC.run.begin();
         KG.core_sandbox.set('mousePosition', KG.LonLat.create({
             lon: e.latlng.lng,
             lat: e.latlng.lat
         }));
+        SC.run.end();
     },
 
     onLayerAdd: function(e) {
-		if(e.layer === this.popupInfo){
-			$(this.popupInfo._wrapper).addClass('info-popup');
-			$(this.popupInfo._tip).addClass('info-popup');
-		}
-	},
+        SC.run.begin();
+        if (e.layer === this.popupInfo) {
+            $(this.popupInfo._wrapper).addClass('info-popup');
+            $(this.popupInfo._tip).addClass('info-popup');
+        }
+        SC.run.end();
+    },
 
     onLayerRemove: function(e) {
+        SC.run.begin();
         var self = KG.core_leaflet;
         if (self.get('activeMarker') && self.get('activeMarker')._native_marker && self.get('activeMarker')._native_marker._popup === e.layer) {
             console.log('popup closed');
             //popup closed
             KG.statechart.sendAction('notePopupClosed', self);
-        }else if(self.popupInfo && self.popupInfo === e.layer){
-			//popup closed
+        } else if (self.popupInfo && self.popupInfo === e.layer) {
+            //popup closed
             KG.statechart.sendAction('infoPopupClosed', self);
-		}
+        }
+        SC.run.end();
     },
 
     pixelsToWorld: function(pixels) {
@@ -176,7 +190,7 @@ KG.core_leaflet = SC.Object.create({
         var bounds = this.getBoundsA();
         var lcenter = this.map.getCenter();
         var sw, ne;
-		sw = bounds[0].sw;
+        sw = bounds[0].sw;
         ne = bounds[0].ne;
         if (bounds[1]) {
             var center = KG.LonLat.create({
@@ -223,6 +237,7 @@ KG.core_leaflet = SC.Object.create({
         if (marker.get('featureCount') > 1) {
             icon = this.groupIcon;
         }
+		console.log('tooltip is:' + marker.get('tooltip'));
         var lmarker = new L.Marker(lmarkerLocation, {
             draggable: false,
             title: marker.get('tooltip'),
@@ -337,29 +352,30 @@ KG.core_leaflet = SC.Object.create({
         //	this.layerControl.addOverlay(wms, layer.get('label'));
     },
 
+    mapSizeDidChange: function(center) {
+        this.map.invalidateSize();
+        if (center) {
+            this.map.setView(new L.LatLng(center.get('lat'), center.get('lon')), this.map.getZoom());
+        }
+    },
 
-	mapSizeDidChange: function(center){
-		this.map.invalidateSize();
-		if(center){
-			this.map.setView(new L.LatLng(center.get('lat'), center.get('lon')), this.map.getZoom());
-		}
-	},
-	
-	
-	showPopupInfo: function(latLon, content){
-		var popup = this.popupInfo;
-		popup.setLatLng(new L.LatLng(latLon.get('lat'), latLon.get('lon')));
-		popup.setContent(content);
-		this.map.openPopup(popup);
-		setTimeout(function(){popup._update()},1);
-	},
+    showPopupInfo: function(latLon, content) {
+        var popup = this.popupInfo;
+        popup.setLatLng(new L.LatLng(latLon.get('lat'), latLon.get('lon')));
+        popup.setContent(content);
+        this.map.openPopup(popup);
+        setTimeout(function() {
+            popup._update()
+        },
+        1);
+    },
 
-	hidePopupInfo: function(){
-		if(this.popupInfo){
-			this.map.closePopup();
-		}
-	},
-	
+    hidePopupInfo: function() {
+        if (this.popupInfo) {
+            this.map.closePopup();
+        }
+    },
+
     _temp: null,
     _temp2: null,
     printBoundsA: function() {
