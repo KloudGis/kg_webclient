@@ -3,7 +3,6 @@ KG.infoController = SC.ArrayProxy.create({
 	content: [],
 	
 	listVisible: NO,
-	popupMessage: '',
 	
 	featureCount: function(){
 		return this.getPath('content.length');

@@ -67,10 +67,18 @@ SC.mixin(KG, {
 
                 navigationState: SC.State.extend({
 
+					_ignoreMouseClicked: YES,
+					
                     enterState: function() {
                         console.log('navigation!');
                         KG.core_note.refreshMarkers();
+						var self = this;
+						setTimeout(function(){self._ignoreMouseClicked = NO},100);
                     },
+
+					exitState: function(){
+						this._ignoreMouseClicked = YES;
+					},
 
                     createNoteAction: function() {
                         this.gotoState('createNoteState');
@@ -79,18 +87,21 @@ SC.mixin(KG, {
                     noteSelectedAction: function(note, marker) {
                         if (KG.core_note.activateNote(note, marker)) {
                             var self = this;
+							//delay for pending statechart action to happen in THIS state, not in "editNoteState"
                             setTimeout(function() {
 								SC.run.begin();
                                 self.gotoState('editNoteState');
 								SC.run.end();
                             },
-                            25);
+                            100);
                         }
                     },
 
 					mouseClickedOnMap: function(lonlat){
-						KG.core_sandbox.set('mousePosition', lonlat);
-						KG.core_info.findFeaturesAt(lonlat);
+						if(!this._ignoreMouseClicked){
+							KG.core_sandbox.set('mousePosition', lonlat);
+							KG.core_info.findFeaturesAt(lonlat);
+						}
 					},
 					
 					featureInfoReady: function(){
@@ -121,13 +132,26 @@ SC.mixin(KG, {
 					
 					infoPopupClosed: function() {
 						console.log('info popup closed.');
-						var self = this;
-						setTimeout(function(){SC.run.begin();self.gotoState('navigationState');SC.run.end();}, 1);						
+						this.gotoState('navigationState');						
 					},
 					
-					selectFeatureAction: function(){
-						KG.core_info.selectFeature();
+					selectFeatureAction: function(feature){
+						KG.core_info.selectFeature(feature);
 						this.gotoState('navigationState');
+					},
+					
+					featureInfoMouseUpAction:function(feature){
+						KG.core_info.clearHighlightFeature();
+						KG.core_info.highlightFeature(feature);
+					},
+					
+					featureInfoMouseEnterAction:function(feature){
+						KG.core_info.clearHighlightFeature();
+						KG.core_info.highlightFeature(feature);
+					},
+					
+					featureInfoMouseLeaveAction:function(feature){
+						KG.core_info.clearHighlightFeature();
 					}				
 				}),
 
@@ -136,23 +160,18 @@ SC.mixin(KG, {
 
                     notePopupClosed: function() {
                         KG.core_note.revertUpdateNote();
-                        this.backToNavigation();
+                        this.gotoState('navigationState');
                     },
 
                     confirmNoteAction: function() {
                         KG.core_note.confirmUpdateNote();
-                        this.backToNavigation();
+                        this.gotoState('navigationState');
                     },
 
                     deleteNoteAction: function() {
                         KG.core_note.deleteActiveNote();
-                        this.backToNavigation();
+                        this.gotoState('navigationState');
                     },
-
-					backToNavigation: function(){
-						var self = this;
-						setTimeout(function(){SC.run.begin();self.gotoState('navigationState');SC.run.end();}, 1);
-					},
 
                     mapZoomed: function(sender) {},
 
@@ -198,18 +217,13 @@ SC.mixin(KG, {
 
                         notePopupClosed: function() {
                             KG.core_note.revertCreateNote();
-                            this.backToNavigation();
+                            this.gotoState('navigationState');
                         },
 
                         confirmNoteAction: function() {
                             KG.core_note.confirmCreateNote();
-                            this.backToNavigation();
-                        },
-
-						backToNavigation: function(){
-							var self = this;
-							setTimeout(function(){SC.run.begin();self.gotoState('navigationState');SC.run.end();}, 1);
-						},
+                            this.gotoState('navigationState');
+                        }
                     })
                 })
             })

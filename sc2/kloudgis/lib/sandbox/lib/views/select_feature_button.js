@@ -3,8 +3,8 @@ KG.SelectFeatureButtonView = SC.Button.extend({
 	tagName: 'div',
 	
 	mouseUp: function(e){
-		console.log('click SELECT!!!' );
-	//	KG.statechart.sendAction('noteSelectedAction', this.getPath('itemView.content'), KG.notesPopupController.get('marker'));
+		var content = this.get('content') || this.getPath('itemView.content');
+		KG.statechart.sendAction('selectFeatureAction', content);
 		return NO;
 	}
 });

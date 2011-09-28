@@ -73,7 +73,7 @@
 				{{content.title}}			
 			</td>
 			<td>
-				{{#view KG.SelectFeatureButtonView class="popup-info-select" tagName="div" classBinding="isActive"}}	
+				{{#view KG.SelectFeatureButtonView class="popup-info-select" contentBinding="KG.infoController.content.firstObject" tagName="div" classBinding="isActive"}}	
 					<img src="resources/images/right_arrow_32.png"/>		
 				{{/view}}
 			</td>

@@ -1,8 +1,11 @@
 KG.core_leaflet = SC.Object.create({
 
     map: null,
-    popupInfo: null,
     activeMarker: null,
+
+    //private variables
+    _popupInfo: null,
+
     //icons
     noteIcon: new L.Icon(),
     groupIcon: new L.Icon('resources/images/group.png'),
@@ -45,7 +48,7 @@ KG.core_leaflet = SC.Object.create({
             this.map.on('mousemove', this.onMouseMove, this);
         }
 
-        this.popupInfo = new L.Popup({
+        this._popupInfo = new L.Popup({
             closeButton: false
         });
     },
@@ -84,9 +87,9 @@ KG.core_leaflet = SC.Object.create({
 
     onLayerAdd: function(e) {
         SC.run.begin();
-        if (e.layer === this.popupInfo) {
-            $(this.popupInfo._wrapper).addClass('info-popup');
-            $(this.popupInfo._tip).addClass('info-popup');
+        if (e.layer === this._popupInfo) {
+            $(this._popupInfo._wrapper).addClass('info-popup');
+            $(this._popupInfo._tip).addClass('info-popup');
         }
         SC.run.end();
     },
@@ -98,7 +101,7 @@ KG.core_leaflet = SC.Object.create({
             console.log('popup closed');
             //popup closed
             KG.statechart.sendAction('notePopupClosed', self);
-        } else if (self.popupInfo && self.popupInfo === e.layer) {
+        } else if (self._popupInfo && self._popupInfo === e.layer) {
             //popup closed
             KG.statechart.sendAction('infoPopupClosed', self);
         }
@@ -359,7 +362,7 @@ KG.core_leaflet = SC.Object.create({
     },
 
     showPopupInfo: function(latLon, content) {
-        var popup = this.popupInfo;
+        var popup = this._popupInfo;
         popup.setLatLng(new L.LatLng(latLon.get('lat'), latLon.get('lon')));
         popup.setContent(content);
         this.map.openPopup(popup);
@@ -370,9 +373,72 @@ KG.core_leaflet = SC.Object.create({
     },
 
     hidePopupInfo: function() {
-        if (this.popupInfo) {
+        if (this._popupInfo) {
             this.map.closePopup();
         }
+    },
+
+    updatePopupInfo: function() {
+        if (this._popupInfo) {
+            this._popupInfo._updateLayout();
+            this._popupInfo._updatePosition();
+            this._popupInfo._adjustPan();
+        }
+    },
+
+    addHighlight: function(coords, geo_type) {
+        var options = {
+            color: '#0033ff',
+            weight: 5,
+            opacity: 0.5,
+            fillColor: null,
+            //same as color by default
+            fillOpacity: 0.2,
+            clickable: false
+        };
+        var layer = this.createLayerFromCoordinates(coords, geo_type, options);
+        this.map.addLayer(layer);
+        return SC.Object.create({
+            coords: coords,
+            geo_type: geo_type,
+            _native_hl: layer
+        });
+    },
+
+    removeHighlight: function(hl) {
+        if (hl && hl._native_hl) {
+            this.map.removeLayer(hl._native_hl);
+            return YES;
+        }
+        return NO;
+    },
+
+    createLayerFromCoordinates: function(coordinates, geo_type, options) {
+        var layer;
+        geo_type = geo_type.toLowerCase();
+        if (geo_type === 'point') {
+            var circleLocation = new L.LatLng(coordinates[0].y, coordinates[0].x);
+            //8 pixels radius circle
+            options.radius = 7;
+            options.weight = 2;
+            options.fill = YES;
+            layer = new L.CircleMarker(circleLocation, options);
+        } else if (geo_type === 'linestring') {
+            var latlngs = [];
+            coordinates.forEach(function(c) {
+                var coord = new L.LatLng(c.y, c.x);
+                latlngs.push(coord);
+            });
+            layer = new L.Polyline(latlngs, options);
+        } else if (geo_type === 'polygon') {
+            var latlngs = [];
+            coordinates.forEach(function(c) {
+                var coord = new L.LatLng(c.y, c.x);
+                latlngs.push(coord);
+            });
+            layer = new L.Polygon(latlngs, options);
+        }
+        return layer;
     },
 
     _temp: null,

@@ -131,7 +131,6 @@ KG.core_note = SC.Object.create({
     },
 
     _refreshing: NO,
-    _refreshPending: NO,
     _timeout: null,
     //flush and recalculate the note clusters
     refreshMarkers: function(force) {
@@ -139,15 +138,18 @@ KG.core_note = SC.Object.create({
         var zoom = KG.core_leaflet.getZoom();
         if (force || SC.none(this._zoom) || this._zoom != zoom || SC.none(this._bounds) || !this._bounds.contains(bounds)) {
             if (this._refreshing) {
-                this._refreshPending = YES;
+                if (this._timeout) {
+			         clearTimeout(this._timeout);
+			    }
                 var self = this;
                 this._timeout = setTimeout(function() {
                     SC.run.begin();
-                    self._refreshing = NO;
-                    self._refreshPending = NO;
+					if(KG.noteMarkersController.get('status') & SC.Record.ERROR){
+						this._refresing = NO;
+					}
                     self.refreshMarkers(YES);
                     SC.run.end();
-                })
+                },1000);
                 return NO;
             }
             this._refreshing = YES;
@@ -203,10 +205,6 @@ KG.core_note = SC.Object.create({
             this._timeout = null;
         }
         this._refreshing = NO;
-        if (this._refreshPending) {
-            this._refreshPending = NO;
-            this.refreshMarkers(YES);
-        }
     },
 
     //the user clicked a marker, adjust the popup content

@@ -1,3 +1,8 @@
+
+.leaflet-popup-content-wrapper{
+	min-width: 70px;
+}
+
 #map, #super-map {
 	position:absolute;
 	left: 0px;
@@ -113,7 +118,7 @@
 	height:100%;
 	text-align: left;
 	margin-top:3px;	
-	border-radius: 6px;
+	border-radius: 10px;
 	border: none;
 }
 
@@ -204,6 +209,7 @@
 	white-space: nowrap;
 	padding: 0px;
 	margin: 0px;
+	text-align: right;
 }
 
 .popup-info-master-row-table{
@@ -218,13 +224,15 @@
 }
 
 .popup-info-item{
-	border-radius: 6px;
+	min-width: 100px;
+	border-radius: 10px;
 	border: none;
 	margin:5px 5px 0px 10px;	
 }
 
 .popup-info-item span{	
 	margin:0px 5px;
+	text-align: right;
 }
 
 .popup-info-item:hover{
