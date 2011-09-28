@@ -13,6 +13,10 @@ require("./core_statechart");
 require("./core_sandbox");
 require("./core_leaflet");
 
+require("./core_highlight");
+//inspector
+require("./core_inspector");
+
 //info
 require("./controllers/info");
 require("./core_info");

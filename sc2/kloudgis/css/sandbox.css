@@ -1,6 +1,5 @@
 
 .leaflet-popup-content-wrapper{
-	min-width: 70px;
 }
 
 #map, #super-map {
@@ -10,7 +9,9 @@
 	bottom: 0px;
 	top: 0px;
 	border: none;
+	transition:left 0.5s ease-out;
 	-webkit-transition:left 0.5s ease-out;
+	-moz-transition:left 0.5s ease-out;
 }
 
 #super-map.map-info-selection{
@@ -22,7 +23,9 @@
 	position:absolute;
 	width: 0px;
 	height:100%;
+	transition:width 0.5s ease-out;
 	-webkit-transition:width 0.5s ease-out;
+	-moz-transition:width 0.5s ease-out;
 }
 
 #side-panel.map-info-selection{
@@ -104,7 +107,7 @@
 /*NOTES*/
 
 .popup-note-list{
-	min-width: 100px;
+	min-width: 80px;
 	list-style: none;
 	margin-left:0px;
 }
@@ -118,12 +121,16 @@
 	height:100%;
 	text-align: left;
 	margin-top:3px;	
-	border-radius: 10px;
+	border-radius: 16px;
 	border: none;
 }
 
+.popup-note-item span{
+	margin-left: 5px;
+}
+
 .popup-note-item:hover{
-	border-radius: 6px;
+	border-radius: 16px;
 	background: rgba(0,0,255,0.5);
 	color:white;
 }
@@ -175,18 +182,18 @@
 /*FEATURE INFO*/
 
 .leaflet-popup-content-wrapper.info-popup{
-	background: rgba(0,0,0,0.5);
+	background: rgba(0,0,0,0.6);
 	box-shadow: none;
 	-moz-box-shadow: none;
 	-webkit-box-shadow: none;
 }
 .leaflet-popup-tip.info-popup{
-	background: rgba(0,0,0,0.5);
+	background: rgba(0,0,0,0.6);
 	padding: 0px;
 }
 
 .leaflet-popup-content-wrapper.info-popup .leaflet-popup-content{
-	margin: 0px 1px 0px 10px;
+	margin: 0px;
 }
 
 .popup-info-list{
@@ -212,6 +219,10 @@
 	text-align: right;
 }
 
+.more-features-zone{
+	margin-top:5px;
+}
+
 .popup-info-master-row-table{
 	width: 100%;
 	border: none;
@@ -221,22 +232,23 @@
 
 .popup-info-master-row-table td{
 	width: 100%;
+	vertical-align: middle;
 }
 
 .popup-info-item{
-	min-width: 100px;
-	border-radius: 10px;
+	min-width: 80px;
+	border-radius: 16px;
 	border: none;
-	margin:5px 5px 0px 10px;	
+	margin: 0px 5px;	
 }
 
 .popup-info-item span{	
-	margin:0px 5px;
+	margin:0px 5px 0px 10px;
 	text-align: right;
 }
 
 .popup-info-item:hover{
-	background: rgba(0,0,255,0.3);
+	background: rgba(0,0,0,0.5);
 }
 
 .popup-info-select{

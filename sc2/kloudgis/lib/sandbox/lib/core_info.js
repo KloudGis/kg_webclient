@@ -75,10 +75,7 @@ KG.core_info = SC.Object.create({
     showInfoPopup: function() {
         var records = KG.infoController.get('content');
         if (records.get('length') > 0) {
-            var center = records.getPath('firstObject.center');
-            if (!center) {
-                center = records.get('query')._lonLat;
-            }
+			var center = records.getPath('firstObject.center');
             if (center) {
                 var div = this._div_info;
                 KG.core_leaflet.showPopupInfo(center, div);
@@ -98,44 +95,5 @@ KG.core_info = SC.Object.create({
             SC.run.end();
         },
         1);
-    }.observes('KG.infoController.listVisible'),
-
-    selectFeature: function(feature) {
-        if (!SC.none(feature)) {
-            var center = feature.get('center');
-            $('#super-map').addClass('map-info-selection');
-            $('#side-panel').addClass('map-info-selection');
-			this.clearHighlightFeature();
-			this.highlightFeature(feature);
-            setTimeout(function() {
-                KG.core_leaflet.mapSizeDidChange(center);				
-            },
-            700);
-        }
-    },
-
-    cleanSelectFeature: function() {
-		this.clearHighlightFeature();
-		var center = KG.core_leaflet.getCenter();
-        $('#super-map').removeClass('map-info-selection');
-        $('#side-panel').removeClass('map-info-selection');
-        setTimeout(function() {
-            KG.core_leaflet.mapSizeDidChange(center)
-        },
-        700);
-    },
-
-    clearHighlightFeature: function() {
-        if (this.highlight) {
-            KG.core_leaflet.removeHighlight(this.highlight);
-        }
-    },
-
-    highlightFeature: function(feature) {
-        if (!feature) {
-            return NO;
-        }
-        this.highlight = KG.core_leaflet.addHighlight(feature.get('coords'), feature.get('geo_type'));
-        return YES;
-    }
+    }.observes('KG.infoController.listVisible')
 });

@@ -32,7 +32,6 @@ SC.mixin(KG, {
 
             tryMembershipState: SC.State.extend({
                 enterState: function() {
-                    console.log("test membership");
                     //show the map to not slow down the app
                     KG.core_sandbox.addMap();
                     KG.core_sandbox.membershipCheck();
@@ -44,7 +43,6 @@ SC.mixin(KG, {
                 },
 
                 membershipFailed: function() {
-                    console.log("membership test failed");
                     window.location.href = "home.html?message=_wrong-membership";
                 }
             }),
@@ -90,7 +88,9 @@ SC.mixin(KG, {
 							//delay for pending statechart action to happen in THIS state, not in "editNoteState"
                             setTimeout(function() {
 								SC.run.begin();
-                                self.gotoState('editNoteState');
+								if(self.get('statechart').get('currentStates')[0] === self){
+                                	self.gotoState('editNoteState');
+								}
 								SC.run.end();
                             },
                             100);
@@ -136,22 +136,22 @@ SC.mixin(KG, {
 					},
 					
 					selectFeatureAction: function(feature){
-						KG.core_info.selectFeature(feature);
+						KG.core_inspector.selectFeature(feature);
 						this.gotoState('navigationState');
 					},
 					
 					featureInfoMouseUpAction:function(feature){
-						KG.core_info.clearHighlightFeature();
-						KG.core_info.highlightFeature(feature);
+						KG.core_highlight.clearHighlightFeature();
+						KG.core_highlight.highlightFeature(feature);
 					},
 					
 					featureInfoMouseEnterAction:function(feature){
-						KG.core_info.clearHighlightFeature();
-						KG.core_info.highlightFeature(feature);
+						KG.core_highlight.clearHighlightFeature();
+						KG.core_highlight.highlightFeature(feature);
 					},
 					
 					featureInfoMouseLeaveAction:function(feature){
-						KG.core_info.clearHighlightFeature();
+						KG.core_highlight.clearHighlightFeature();
 					}				
 				}),
 
