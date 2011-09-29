@@ -21,7 +21,7 @@
 				<img id="kloud-logo" src="resources/images/kloudgis_black_256.png" alt="Kloudgis"/>
 			</a>		
 			<a id="kloud-brand">Kloudgis</a>
-		<form class="login-pane">
+		<div class="login-pane">
 			<table>
 			<tr>
 			<td>
@@ -58,7 +58,7 @@
 			<span id="signup-title">Not yet member ?</span>
 			{{#view KG.Button classBinding="isActive" sc_action="signupAction" id="signup-button"}}			
 			{{/view}}
-		</form>
+		</div>
 		{{/view}}	
 		{{#view KG.LoadingImageView id="kloud-loading" isVisibleBinding="KG.core_login.isBusy"}}
 			<img {{bindAttr src="loadingImage"}} alt="Loading"/>

@@ -82,6 +82,7 @@ body{
 	white-space: nowrap;
 	background: -webkit-gradient(linear,left bottom, left top, color-stop(0.22, rgb(255,144,9)), color-stop(0.81, rgb(255,170,68)));
 	background: -moz-linear-gradient(center bottom, rgb(255,144,9) 22%, rgb(255,170,68) 81%);
+	background: -o-linear-gradient(bottom, rgb(255,144,9) 22%, rgb(255,170,68) 81%);
 }
 
 #create-button:hover{

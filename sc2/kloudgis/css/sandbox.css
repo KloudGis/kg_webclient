@@ -39,8 +39,7 @@
 	text-align:center;
 	margin: 0.2cm;
 	padding: 1em 0.5em;
-	-moz-border-radius: 0.2cm;
-	-webkit-border-radius: 0.2cm;
+	border-radius: 0.2cm;
 	background-color: rgba(0,0,0,0.25);	
 	font-weight: bold;
 }
@@ -48,8 +47,7 @@
 .kg-controls a{
 	padding: 0.2cm;
 	color: black;	
-	-moz-border-radius: 0.2cm;
-	-webkit-border-radius: 0.2cm;	
+	border-radius: 0.2cm;	
 	background-color: rgba(255,255,255,0.75);
 }
 
@@ -93,8 +91,6 @@
 	padding: 5px;
 	color: #333;
     background-color: rgba(255, 255, 255, 0.8);
-	-moz-box-shadow: 0 0 10px #333;
-	-webkit-box-shadow: 0 0 10px #333;
 	box-shadow: 0 0 10px #333;
 }
 
@@ -182,8 +178,6 @@
 .leaflet-popup-content-wrapper.info-popup{
 	background: rgba(0,0,0,0.6);
 	box-shadow: none;
-	-moz-box-shadow: none;
-	-webkit-box-shadow: none;
 }
 .leaflet-popup-tip.info-popup{
 	background: rgba(0,0,0,0.6);
