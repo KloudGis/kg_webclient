@@ -6,6 +6,7 @@ body{
 #kloud-logo{
 	display: block;
 	margin:5px auto;
+	border:none;
 }
 
 #kloud-welcome{
