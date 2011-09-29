@@ -107,14 +107,13 @@
 /*NOTES*/
 
 .popup-note-list{
-	min-width: 80px;
 	list-style: none;
 	margin-left:0px;
 }
 
 .popup-note-item{
 	font-size:14px;
-	padding: 5px;
+	padding: 3px 0px;
 	margin-top:3px;
 	background: none;
 	width:100%;
@@ -122,11 +121,10 @@
 	text-align: left;
 	margin-top:3px;	
 	border-radius: 16px;
-	border: none;
 }
 
 .popup-note-item span{
-	margin-left: 5px;
+	margin: 3px 10px;
 }
 
 .popup-note-item:hover{
