@@ -21,6 +21,21 @@ KG.core_leaflet = SC.Object.create({
             attribution: cloudmadeAttribution
         });*/
 
+        //patch to make the popup hide on Safari Mac.
+        if ($.browser.safari && navigator.platform.indexOf('Mac') == 0) {
+            L.Popup.prototype._close = function() {
+                if (this._opened) {
+                    this._map.removeLayer(this);
+                    var element = $(".leaflet-popup-pane")[0];
+                    if (element.style.width == '1px') {
+                        element.style.width = '0px';
+                    } else {
+                        element.style.width = '1px';
+                    }
+                }
+            };
+        }
+
         var mapquestUrl = 'http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
         mapquestAttribution = "Data CC-By-SA by <a href='http://openstreetmap.org/' target='_blank'>OpenStreetMap</a>, Tiles Courtesy of <a href='http://open.mapquest.com' target='_blank'>MapQuest</a>",
         mapquest = new L.TileLayer(mapquestUrl, {
@@ -255,20 +270,6 @@ KG.core_leaflet = SC.Object.create({
             click_cb.call(click_target, marker);
             SC.run.end();
         });
-        //patch to make the popup hide on Safari Mac.
-        if ($.browser.safari && navigator.platform.indexOf('Mac') == 0) {
-            lmarker._popup._close = function() {
-                if (this._opened) {
-                    this._map.removeLayer(this);
-                    var element = $(".leaflet-popup-pane")[0];
-                    if (element.style.width == '1px') {
-                        element.style.width = '0px';
-                    } else {
-                        element.style.width = '1px';
-                    }
-                }
-            };
-        }
         marker._native_marker = lmarker;
     },
 
