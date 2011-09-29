@@ -1,3 +1,6 @@
+require('./attribute');
+require('./lon_lat');
+require('./record');
 KG.Feature = KG.Record.extend({
 
     fid: SC.Record.attr(Number),
@@ -53,6 +56,16 @@ KG.Feature = KG.Record.extend({
 			return closest;
 		}
 		return NO;
+	},
+	
+	getAttributes: function(){
+		var ret = [];
+		var attrs = this.get('attrs');
+		for(var key in attrs){
+		     var at = KG.Attribute.create({name: key, value: attrs[key]});
+			ret.pushObject(at);
+		}
+		return ret;
 	}
 
     /*

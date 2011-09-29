@@ -9,16 +9,19 @@
 	<link rel="shortcut icon" href="favicon.ico">
 	<link rel="apple-touch-icon" href="apple-touch-icon.png">
 	
-	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen"  />
-	<link rel="stylesheet" href="css/sandbox.css" type="text/css" media="screen"  />
-	<link rel="stylesheet" href="css/common.css" type="text/css" media="screen"  />
+	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="css/sandbox.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="css/note.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="css/feature_info.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="css/inspector.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="css/common.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="ext/leaflet/leaflet.css" type="text/css" media="screen" />
     <title>Kloudgis</title>
 	<script type="text/x-handlebars" data-template-name="notes-marker-popup">
 		{{#view class="popup-note-title"}}
 			{{KG.notesPopupController.popupTitle}}
 		{{/view}}
-	    {{#collection contentBinding="KG.notesPopupController" tagName="ul" class="popup-note-list"}}
+	    {{#collection contentBinding="KG.notesPopupController" tagName="ul" class="popup-note-list no-style-list"}}
 			{{#view KG.NotePopupItemView}}
 				{{title}}
 			{{/view}}
@@ -49,7 +52,7 @@
 		{{/view}}
 	</script>
 	<script type="text/x-handlebars" data-template-name="info-popup">
-		{{#collection contentBinding="KG.infoController"  isVisibleBinding="KG.infoController.listVisible" tagName="ul" class="popup-info-list"}}
+		{{#collection contentBinding="KG.infoController"  isVisibleBinding="KG.infoController.listVisible" tagName="ul" class="popup-info-list no-style-list"}}
 			{{#view KG.FeatureInfoPopupItemView class="popup-info-item" ignoreIfFirst="true"}}
 					<table class="popup-info-table more-features-zone">
 					<tr>
@@ -90,7 +93,7 @@
 		</td>
 		</tr>
 		</table>	
-	</script>
+	</script>	
   </head>
   <body>	
 	<div id="super-map">
@@ -115,6 +118,35 @@
 	</div>
 		<script type="text/x-handlebars">
 			{{#view id="side-panel"}}
+				<div class="inspector-panel">
+					{{#view class="inspector-title"}}
+						{{KG.inspectorController.title}}
+					{{/view}}
+					<table class="inspector-table">
+					<tr>
+					<td>
+				    {{#collection contentBinding="KG.inspectorController" tagName="ul" class="inspector-attrs-list no-style-list"}}
+						{{#view KG.InspectorAttributeView tagName="span"}}
+							<table class="inspector-attr-table">
+							<tr>
+							<td>
+								<span class="inspector-attr-name">
+									{{itemView.content.name}}
+								</span>	
+							</td>
+							<td>
+								<span class="inspector-attr-value">
+									{{itemView.content.value}}
+								</span>
+							</td>
+							</tr>
+							</table>
+						{{/view}}
+					{{/collection}}
+					</td>
+					</tr>
+					</table>
+				</div>
 			{{/view}}
 		</script>		
   </body>

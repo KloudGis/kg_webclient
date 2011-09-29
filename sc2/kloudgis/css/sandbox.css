@@ -2,12 +2,17 @@
 .leaflet-popup-content-wrapper{
 }
 
-#map, #super-map {
+#super-map {
 	position:absolute;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
-	top: 0px;
+	left:0px;
+	top:0px;
+	bottom:0px;
+	right:0px;
+}
+
+#map {
+	width:100%;
+	height:100%;
 	border: none;
 	transition:left 0.5s ease-out;
 	-webkit-transition:left 0.5s ease-out;
@@ -15,21 +20,29 @@
 }
 
 #super-map.map-info-selection{
-	left: 50%;
+	left: 30%;
 }
 
 #side-panel{
-	background: red;
 	position:absolute;
 	width: 0px;
 	height:100%;
+	overflow: auto;
+	background: url(../resources/images/fabric.png) repeat;
 	transition:width 0.5s ease-out;
 	-webkit-transition:width 0.5s ease-out;
 	-moz-transition:width 0.5s ease-out;
 }
 
 #side-panel.map-info-selection{
-	width: 50%;
+	width: 30%;
+	text-align: center;
+}
+
+#test{
+	background-color:red;
+	width:500px;
+	height:500px;
 }
 
 .kg-controls{
@@ -100,155 +113,4 @@
 	width:100%;
 }
 
-
-/*NOTES*/
-
-.popup-note-list{
-	list-style: none;
-	margin-left:0px;
-}
-
-.popup-note-item{
-	font-size:14px;
-	padding: 3px 0px;
-	margin-top:3px;
-	background: none;
-	width:100%;
-	height:100%;
-	text-align: left;
-	margin-top:3px;	
-	border-radius: 16px;
-}
-
-.popup-note-item span{
-	margin: 3px 10px;
-}
-
-.popup-note-item:hover{
-	border-radius: 16px;
-	background: rgba(0,0,255,0.5);
-	color:white;
-}
-
-.popup-note-title{
-	text-align: center;
-	font-size:14px;
-	font-weight: bold;
-	white-space: nowrap;
-}
-
-.active-note-popup .note-author-label{
-	font-size:10px;
-	display: block;	
-	text-align: right;
-}
-
-.active-note-popup .note-date-label{
-	font-size:11px;
-	font-style: italic;
-	float: right;	
-}
-
-.active-note-popup > span{
-	display: block;
-	font-weight: bold;
-}
-
-.active-note-popup input{
-	width: 100%;
-}
-
-.active-note-popup textarea{
-	width: 100%;
-	height: 60px;
-	resize: none;
-}
-
-.active-note-popup-bottom{
-	width: 220px;
-	text-align: center;
-	margin-top:10px;
-}
-
-.active-note-popup .red-button{
-	margin-left:10px;
-}
-
-/*FEATURE INFO*/
-
-.leaflet-popup-content-wrapper.info-popup{
-	background: rgba(0,0,0,0.6);
-	box-shadow: none;
-}
-.leaflet-popup-tip.info-popup{
-	background: rgba(0,0,0,0.6);
-	padding: 0px;
-}
-
-.leaflet-popup-content-wrapper.info-popup .leaflet-popup-content{
-	margin: 0px;
-}
-
-.popup-info-list{
-	list-style: none;
-	margin-left:0px;
-	-webkit-margin-before: 0px;
-	-webkit-margin-after: 0px;
-}
-
-.popup-info-table{
-	width:100%;
-	border: none;
-	border-spacing: 0px;
-}
-
-.popup-info-table td{
-	vertical-align: middle;
-	width: 100%;
-	color: white;
-	white-space: nowrap;
-	padding: 0px;
-	margin: 0px;
-	text-align: right;
-}
-
-.more-features-zone{
-	margin-top:5px;
-}
-
-.popup-info-master-row-table{
-	width: 100%;
-	border: none;
-	border-spacing: 0px;
-	margin: 5px 0px;
-}
-
-.popup-info-master-row-table td{
-	width: 100%;
-	vertical-align: middle;
-}
-
-.popup-info-item{
-	min-width: 80px;
-	border-radius: 16px;
-	border: none;
-	margin: 0px 5px;	
-}
-
-.popup-info-item span{	
-	margin:0px 5px 0px 10px;
-	text-align: right;
-}
-
-.popup-info-item:hover{
-	background: rgba(0,0,0,0.5);
-}
-
-.popup-info-select{
-	padding:0px;
-	border: none;
-	background: none;
-	width:32px;
-	text-align: right;
-}
 

@@ -4,10 +4,8 @@ require("kloudgis/app/lib/views/text_field");
 require("kloudgis/app/lib/views/text_area");
 require("kloudgis/auth/lib/main");
 require("kloudgis/core/lib/main_ds");
-require("kloudgis/core/lib/models/record");
 require("kloudgis/core/lib/models/feature");
-require("kloudgis/core/lib/lon_lat");
-require("kloudgis/core/lib/bounds");
+require("kloudgis/core/lib/models/bounds");
 require("./strings");
 require("./core_statechart");
 require("./core_sandbox");
@@ -16,6 +14,8 @@ require("./core_leaflet");
 require("./core_highlight");
 //inspector
 require("./core_inspector");
+require("./controllers/inspector");
+require("./views/inspector_attribute");
 
 //info
 require("./controllers/info");

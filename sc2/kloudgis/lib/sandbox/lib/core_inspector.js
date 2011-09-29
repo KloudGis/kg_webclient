@@ -10,6 +10,8 @@ KG.core_inspector = SC.Object.create({
                 KG.core_leaflet.mapSizeDidChange(center);				
             },
             700);
+			KG.inspectorController.set('feature', feature);
+			KG.inspectorController.set('content', feature.getAttributes());
         }
     },
 

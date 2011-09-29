@@ -1,0 +1,39 @@
+.inspector-panel{
+	left:0px;
+	right: 0px;
+	top:0px;
+}
+
+.inspector-table{
+	margin: auto;
+	border-radius: 10px;
+	border: solid 1px gray;
+}
+
+.inspector-attr-table{
+	margin: 10px;
+}
+
+.inspector-title{
+	margin-top: 10px;
+	font-size: 18px;
+	text-align: center;
+}
+
+.inspector-attrs-list{
+}
+
+.inspector-attrs-list li{
+	margin: 5px 0px 0px 0px;
+	text-align: left;
+}
+
+.inspector-attr-name{
+	font-size: 16px;
+	text-align: right;
+}
+
+.inspector-attr-value{
+	font-size: 16px;
+	text-align: left;
+}

@@ -34,3 +34,9 @@
 	background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(234,234,234,0.90)), color-stop(0.5, rgba(195,195,195,0.70)), color-stop(0.5, rgba(166,166,166,0.70)), to(rgba(167,167,167,0.80))); 
 	background-image: -o-linear-gradient(top, rgba(234,234,234,0.90)  0%, rgba(195,195,195,0.70) 50%,  rgba(166,166,166,0.70) 51%, rgba(167,167,167,0.80) 100%);
 }
+
+.no-style-list{
+	list-style: none;
+	-webkit-margin-before: 0px;
+	-webkit-margin-after: 0px;
+}
