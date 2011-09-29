@@ -92,6 +92,7 @@
 	color: #333;
     background-color: rgba(255, 255, 255, 0.8);
 	box-shadow: 0 0 10px #333;
+	-webkit-box-shadow: 0 0 10px #333;
 }
 
 #active-sandbox-label span{
