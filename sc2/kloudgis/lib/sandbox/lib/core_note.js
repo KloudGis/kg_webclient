@@ -8,6 +8,16 @@ KG.core_note = SC.Object.create({
     _new_note_marker: null,
 
 	createNoteLabel: "_createNote".loc(),
+	
+	zoom: function(){
+		var note = KG.activeNoteController.get('content');
+		if(note){
+			var coord = note.get('coordinate');
+			if(coord){
+				KG.core_leaflet.setCenter(KG.LonLat.create({lon:coord.x, lat: coord.y}), 10);
+			}
+		}
+	},
 
     //create a marker to let the user set the position
     locateNote: function() {

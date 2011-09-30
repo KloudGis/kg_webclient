@@ -28,10 +28,13 @@
 		{{/collection}}
 	</script>
 	<script type="text/x-handlebars" data-template-name="active-note-popup">
-		{{#view class="active-note-popup"}}		
+		{{#view class="active-note-popup"}}	
+		{{#view KG.Button class="note-zoom-button" tagName="div" sc_action="zoomNoteAction"}}
+			<a href="javascript:void(0)">zoom</a>
+		{{/view}}	
 			{{#view class="note-date-label"}}
 				{{KG.activeNoteController.dateValue}}
-			{{/view}}
+			{{/view}}			
 			{{KG.activeNoteController.titleLabel}}
 	    	{{#view KG.TextField valueBinding="KG.activeNoteController.titleValue" disabledBinding="KG.activeNoteController.isDisabled" type="text" placeholder_not_loc="_noteTitlePlaceholder" }}
 			{{/view}}
@@ -62,7 +65,7 @@
 					<td>
 						{{#view KG.SelectFeatureButtonView class="popup-info-select" tagName="div" classBinding="isActive"}}	
 							<img src="resources/images/right_arrow_32.png"/>		
-							{{/view}}
+						{{/view}}
 					</td>
 					</tr>
 					</table>

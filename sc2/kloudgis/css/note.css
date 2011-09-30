@@ -41,6 +41,10 @@
 	float: right;	
 }
 
+.note-zoom-button{
+	text-align: center;
+}
+
 .active-note-popup > span{
 	display: block;
 	font-weight: bold;

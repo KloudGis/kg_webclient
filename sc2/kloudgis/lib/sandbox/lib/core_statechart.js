@@ -180,6 +180,10 @@ SC.mixin(KG, {
                     mapZoomed: function(sender) {},
 
                     mapMoved: function(sender) {},
+
+					zoomNoteAction: function(){
+						KG.core_note.zoom();
+					}
                 }),
 
 				//create note popup
@@ -227,7 +231,11 @@ SC.mixin(KG, {
                         confirmNoteAction: function() {
                             KG.core_note.confirmCreateNote();
                             this.gotoState('navigationState');
-                        }
+                        },
+
+						zoomNoteAction: function(){
+							KG.core_note.zoom();
+						}
                     })
                 })
             })
