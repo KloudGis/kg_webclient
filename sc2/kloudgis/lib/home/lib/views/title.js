@@ -1,21 +1,19 @@
 KG.TitleView = SC.View.extend({
 
-    countBinding: 'KG.sandboxesController.length',
-
     recordsReadyBinding: 'KG.sandboxesController.recordsReady',
 
     titleString: function() {
 
         if (this.get('recordsReady')) {
-            var count = this.get('count');
+            var count = KG.sandboxesController.get('length');
             if (count > 0) {
-                return "_sandboxesList".loc();
+                return "_sandboxesList".loc(count);
             } else {
                 return "_sandboxesNothing".loc();
             }
         }else{
 			return '';
 		}
-    }.property('count', 'recordsReady')
+    }.property('recordsReady')
 
 });
