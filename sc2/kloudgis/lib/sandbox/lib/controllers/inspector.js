@@ -11,4 +11,8 @@ KG.inspectorController = SC.ArrayProxy.create({
 			return f.get('title');
 		}
     }.property('feature'),
+
+	closeLabel: function() {
+        return "_closeInspector".loc();
+    }.property(),
 });

@@ -63,6 +63,10 @@ SC.mixin(KG, {
                     KG.core_layer.loadLayers();
                 },
 
+				closeInspectorAction: function(){
+					KG.core_inspector.cleanSelectFeature();
+				},
+
                 navigationState: SC.State.extend({
 
 					_ignoreMouseClicked: YES,

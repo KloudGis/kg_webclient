@@ -40,3 +40,10 @@
 	-webkit-margin-before: 0px;
 	-webkit-margin-after: 0px;
 }
+
+.x-button{
+	width: 30px;
+	height:30px;
+	border:none;
+	background: url(../resources/images/closebox.png);
+}

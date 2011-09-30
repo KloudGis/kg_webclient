@@ -108,6 +108,13 @@ a.leaflet-active {
 	-webkit-border-radius: 7px;
 	border-radius: 7px;
 	}
+	
+	/* *** KG change *** Set the margin top to 1 cm */
+
+.leaflet-control.leaflet-control-zoom {
+	margin-top: 1cm;
+}
+	
 .leaflet-control-zoom {
 	padding: 5px;
 	background: rgba(0, 0, 0, 0.25);
@@ -215,7 +222,7 @@ a.leaflet-active {
 	opacity: 1;
 	}
 
-/* *** KG change *** Set the transition time to 0.5s */
+/* *** KG change *** Set the transition time to 0.3s */
 .leaflet-fade-anim .leaflet-popup {
 	opacity: 0;
 

@@ -96,59 +96,59 @@
 	</script>	
   </head>
   <body>	
-	<div id="super-map">
-		<div id="map">		
-		</div>	
-		<div id="back-home" class="kg-controls">
-			<a href="home.html"></a>
-		</div>	
-		<div id="create-note" class="kg-controls">
-			<a href="javascript:void(0)" onclick="KG.core_sandbox.createNote()">
-			</a>
-		</div>
-		<div id="active-sandbox-label">	
-			<span class="label-ellipsis"></span>
-		</div>
-		<script type="text/x-handlebars">
-			{{#view class="kg-controls" id="position-label"}}
-				{{KG.core_sandbox.latitudeLabel}}
-				{{KG.core_sandbox.longitudeLabel}}
-			{{/view}}
-		</script>
-	</div>
-		<script type="text/x-handlebars">
-			{{#view id="side-panel"}}
-				<div class="inspector-panel">
-					{{#view class="inspector-title"}}
-						{{KG.inspectorController.title}}
+	<div id="box">
+		<div id="side-panel">
+			<div class="inspector-panel">
+				<script type="text/x-handlebars">
+				{{#view KG.Button class="x-button inspector-close-button" classBinding="isActive" sc_action="closeInspectorAction"}}
+				{{/view}}
+				{{#view class="inspector-title"}}
+					{{KG.inspectorController.title}}
 					{{/view}}
-					<table class="inspector-table">
-					<tr>
-					<td>
-				    {{#collection contentBinding="KG.inspectorController" tagName="ul" class="inspector-attrs-list no-style-list"}}
-						{{#view KG.InspectorAttributeView tagName="span"}}
-							<table class="inspector-attr-table">
-							<tr>
+		    		{{#collection contentBinding="KG.inspectorController" tagName="ul" class="inspector-attrs-list no-style-list"}}
+					{{#view KG.InspectorAttributeView }}
+						<table class="inspector-attr-table">
+						<tr>
 							<td>
 								<span class="inspector-attr-name">
 									{{itemView.content.name}}
 								</span>	
 							</td>
 							<td>
-								<span class="inspector-attr-value">
-									{{itemView.content.value}}
-								</span>
+								<div class="inspector-attr-value">
+									<span>
+										{{itemView.content.value}}
+									</span>
+								</div>
 							</td>
-							</tr>
-							</table>
-						{{/view}}
-					{{/collection}}
-					</td>
-					</tr>
-					</table>
-				</div>
+						</tr>
+						</table>
+					{{/view}}
+					{{/collection}}																		
+			</script>	
+			</div>
+		</div>
+		<div id="super-map">
+		<div id="map">		
+		</div>	
+		<span id="back-home" class="kg-controls">
+			<a href="home.html"></a>
+		</span>	
+		<span id="create-note" class="kg-controls">
+			<a href="javascript:void(0)" onclick="KG.core_sandbox.createNote()">
+			</a>
+		</span>
+		<span id="active-sandbox-label">	
+			<span class="label-ellipsis"></span>
+		</span>
+		<script type="text/x-handlebars">
+			{{#view class="kg-controls" id="position-label" tagName="span"}}
+				{{KG.core_sandbox.latitudeLabel}}
+				{{KG.core_sandbox.longitudeLabel}}
 			{{/view}}
-		</script>		
+		</script>
+		</div>
+	</div>	
   </body>
 
 <!-- load all of the dependencies --> 
