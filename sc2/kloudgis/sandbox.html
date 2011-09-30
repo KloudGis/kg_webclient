@@ -131,12 +131,14 @@
 		<div id="super-map">
 		<div id="map">		
 		</div>	
-		<span id="back-home" class="kg-controls">
+		<span id="back-home" class="kg-controls clickable">
 			<a href="home.html"></a>
-		</span>	
-		<span id="create-note" class="kg-controls">
-			<a href="javascript:void(0)" onclick="KG.core_sandbox.createNote()">
-			</a>
+		</span>			
+		<span id="create-note" class="kg-controls clickable">
+			<script type="text/x-handlebars">
+				{{#view  KG.Button classBinding="isActive" sc_action="createNoteAction"}}
+				{{/view}}
+			</script>
 		</span>
 		<span id="active-sandbox-label">	
 			<span class="label-ellipsis"></span>

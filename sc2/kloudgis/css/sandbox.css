@@ -44,6 +44,10 @@
 	font-weight: bold;
 }
 
+.kg-controls.clickable:hover{
+	background-color: rgba(0,0,0,0.40);	
+}
+
 .kg-controls a{
 	padding: 0.2cm;
 	color: black;	
@@ -63,6 +67,13 @@
 #create-note{
 	right:3px;
 	bottom:2cm;
+}
+
+#create-note button{
+	width: 48px;
+	height:48px;
+	border:none;
+	background: url(../resources/images/note.png);
 }
 
 #position-label{
