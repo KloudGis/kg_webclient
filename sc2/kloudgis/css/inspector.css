@@ -7,17 +7,8 @@
 
 .inspector-close-button{
 	float:right;
-	margin-top:-8px;
+	margin-top:-5px;
 	margin-right:-6px;
-}
-
-.inspector-attr-table{
-	padding:0.5em;
-	color: white;
-}
-
-.inspector-attr-table td{
-	vertical-align: middle;
 }
 
 .inspector-title{
@@ -60,14 +51,22 @@
 	border:none;
 }
 
+
+.inspector-list-item{
+	padding:1em;
+	color: white;
+}
+
+
 .inspector-attr-name{
-	font-size: 18px;
-	font-style: italic;
-	text-align: right;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: left;
+	padding-left: 1em;
 }
 
 .inspector-attr-value{
 	font-size: 16px;
 	text-align: left;
-	padding-left: 10px;
+	padding-left: 2em;
 }

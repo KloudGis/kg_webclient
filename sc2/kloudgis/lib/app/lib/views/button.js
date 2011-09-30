@@ -1,7 +1,7 @@
 var get = SC.get;
 KG.Button = SC.Button.extend({
 
-	attributeBindings: ['type', 'disabled'],
+	attributeBindings: ['type', 'disabled', 'title'],
 
     label_loc: function() {
         return this.get('label').loc();

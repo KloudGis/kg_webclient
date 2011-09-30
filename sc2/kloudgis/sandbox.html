@@ -100,29 +100,22 @@
 		<div id="side-panel">
 			<div class="inspector-panel">
 				<script type="text/x-handlebars">
-				{{#view KG.Button class="x-button inspector-close-button" classBinding="isActive" sc_action="closeInspectorAction"}}
+				{{#view KG.Button class="x-button inspector-close-button" classBinding="isActive" sc_action="closeInspectorAction" titleBinding="KG.inspectorController.closeLabel"}}
 				{{/view}}
 				{{#view class="inspector-title"}}
 					{{KG.inspectorController.title}}
 					{{/view}}
 		    		{{#collection contentBinding="KG.inspectorController" tagName="ul" class="inspector-attrs-list no-style-list"}}
-					{{#view KG.InspectorAttributeView }}
-						<table class="inspector-attr-table">
-						<tr>
-							<td>
+					{{#view KG.InspectorAttributeView class="inspector-list-item" }}
 								<span class="inspector-attr-name">
 									{{itemView.content.name}}
 								</span>	
-							</td>
-							<td>
+
 								<div class="inspector-attr-value">
 									<span>
 										{{itemView.content.value}}
 									</span>
 								</div>
-							</td>
-						</tr>
-						</table>
 					{{/view}}
 					{{/collection}}																		
 			</script>	
@@ -136,7 +129,7 @@
 		</span>			
 		<span id="create-note" class="kg-controls clickable">
 			<script type="text/x-handlebars">
-				{{#view  KG.Button classBinding="isActive" sc_action="createNoteAction"}}
+				{{#view  KG.Button titleBinding="KG.core_note.createNoteLabel" classBinding="isActive" sc_action="createNoteAction"}}
 				{{/view}}
 			</script>
 		</span>

@@ -8,11 +8,9 @@ KG.inspectorController = SC.ArrayProxy.create({
 	title: function() {
         var f = this.get('feature');
 		if(f){
-			return f.get('title');
+			return f.get('featuretype') || f.get('title');
 		}
     }.property('feature'),
 
-	closeLabel: function() {
-        return "_closeInspector".loc();
-    }.property(),
+	closeLabel: "_closeInspector".loc()
 });

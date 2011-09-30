@@ -7,6 +7,8 @@ KG.core_note = SC.Object.create({
     _view_active_note: null,
     _new_note_marker: null,
 
+	createNoteLabel: "_createNote".loc(),
+
     //create a marker to let the user set the position
     locateNote: function() {
         KG.core_leaflet.cleanUpNewNoteMarker();
