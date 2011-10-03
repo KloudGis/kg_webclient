@@ -235,6 +235,7 @@ SC.mixin(KG, {
 
 						zoomNoteAction: function(){
 							KG.core_note.zoom();
+							this.gotoState('navigationState');
 						}
                     })
                 })

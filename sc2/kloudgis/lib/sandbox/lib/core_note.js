@@ -7,17 +7,22 @@ KG.core_note = SC.Object.create({
     _view_active_note: null,
     _new_note_marker: null,
 
-	createNoteLabel: "_createNote".loc(),
-	
-	zoom: function(){
-		var note = KG.activeNoteController.get('content');
-		if(note){
-			var coord = note.get('coordinate');
-			if(coord){
-				KG.core_leaflet.setCenter(KG.LonLat.create({lon:coord.x, lat: coord.y}), 10);
-			}
-		}
-	},
+    createNoteLabel: "_createNote".loc(),
+
+    zoom: function() {
+		console.log('zoom note.');
+        var note = KG.activeNoteController.get('content');
+        if (note) {
+            var coord = note.get('coordinate');
+            if (coord) {
+                KG.core_leaflet.closeActivePopup();
+                KG.core_leaflet.setCenter(KG.LonLat.create({
+                    lon: coord.x,
+                    lat: coord.y
+                }), 15);
+            }
+        }
+    },
 
     //create a marker to let the user set the position
     locateNote: function() {
@@ -70,11 +75,11 @@ KG.core_note = SC.Object.create({
         }
         KG.core_leaflet.closeActivePopup();
         setTimeout(function() {
-			SC.run.begin();
+            SC.run.begin();
             KG.core_leaflet.refreshMarkerPopup(marker, noteDiv);
             KG.core_leaflet.openMarkerPopup(marker);
             $(".new-note-popup input").focus();
-			SC.run.end();
+            SC.run.end();
         },
         1);
         return YES;
@@ -142,29 +147,11 @@ KG.core_note = SC.Object.create({
         KG.activeNoteController.set('content', null);
     },
 
-    _refreshing: NO,
-    _timeout: null,
     //flush and recalculate the note clusters
     refreshMarkers: function(force) {
         var bounds = KG.core_leaflet.getBounds();
         var zoom = KG.core_leaflet.getZoom();
         if (force || SC.none(this._zoom) || this._zoom != zoom || SC.none(this._bounds) || !this._bounds.contains(bounds)) {
-            if (this._refreshing) {
-                if (this._timeout) {
-			         clearTimeout(this._timeout);
-			    }
-                var self = this;
-                this._timeout = setTimeout(function() {
-                    SC.run.begin();
-					if(KG.noteMarkersController.get('status') & SC.Record.ERROR){
-						this._refresing = NO;
-					}
-                    self.refreshMarkers(YES);
-                    SC.run.end();
-                },1000);
-                return NO;
-            }
-            this._refreshing = YES;
             var fatBounds = KG.core_leaflet.getFatBounds();
             var dist = KG.core_leaflet.pixelsToWorld(20); //cluster within 20 pixels
             if (KG.noteMarkersController.get('content')) {
@@ -188,6 +175,7 @@ KG.core_note = SC.Object.create({
     _div_notes: null,
     /* SC view to generate html bind on the  KG.notesPopupController*/
     _view_notes: null,
+	_onMarkerReadyQueue: [],
 
     markersReady: function(markers) {
         markers.offReady();
@@ -212,11 +200,10 @@ KG.core_note = SC.Object.create({
                 }
             }
         }
-        if (this._timeout) {
-            clearTimeout(this._timeout);
-            this._timeout = null;
-        }
-        this._refreshing = NO;
+		if(this._onMarkerReadyQueue.length > 0){
+			this._onMarkerReadyQueue.forEach(function(item){item.call()});
+			this._onMarkerReadyQueue = [];
+		}
     },
 
     //the user clicked a marker, adjust the popup content
@@ -255,9 +242,9 @@ KG.core_note = SC.Object.create({
                 KG.notesPopupController.set('content', params.marker.get('features'));
                 var div = this._div_notes;
                 setTimeout(function() {
-					SC.run.begin();
+                    SC.run.begin();
                     KG.core_leaflet.refreshMarkerPopup(params.marker, div);
-					SC.run.end();
+                    SC.run.end();
                 },
                 1);
             }
