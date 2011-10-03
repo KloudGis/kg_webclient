@@ -12,7 +12,9 @@ var fr = {
 	"_noteTitlePlaceholder": "Votre note",
 	"_moveNote": "Glisser la note où vous le voulez.",
 	"_author": "Par %@",
-	"_closeInspector": "Fermer l'inspecteur"
+	"_closeInspector": "Fermer l'inspecteur",
+	"_closeSearch": "Fermer la fenêtre de résultat",	
+	"_search": "Recherche..."
 };
 
 var en = {
@@ -29,7 +31,9 @@ var en = {
 	"_noteTitlePlaceholder": "Your note",
 	"_moveNote": "Drag where you want it.",
 	"_author": "By %@",
-	"_closeInspector": "Close the inspector"
+	"_closeInspector": "Close the inspector",
+	"_closeSearch": "Close the result window",
+	"_search": "Search..."
 };
 
 if(KG.lang === 'fr'){

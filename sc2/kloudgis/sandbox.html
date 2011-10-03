@@ -14,6 +14,7 @@
 	<link rel="stylesheet" href="css/note.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="css/feature_info.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="css/inspector.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="css/search.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="css/common.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="ext/leaflet/leaflet.css" type="text/css" media="screen" />
     <title>Kloudgis</title>
@@ -96,57 +97,103 @@
 		</td>
 		</tr>
 		</table>	
+	</script>
+	<script type="text/x-handlebars" data-template-name="read-only-renderer">
+		<span class="inspector-attr-name">
+			{{itemView.content.name}}
+		</span>	
+
+		<div class="inspector-attr-value">
+			<span>
+				{{itemView.content.value}}
+			</span>
+		</div>
+	</script>
+	<script type="text/x-handlebars" data-template-name="text-renderer">
+		<span class="inspector-attr-name">
+			{{itemView.content.name}}
+		</span>	
+		<div class="inspector-attr-value">
+			{{#view KG.TextField valueBinding="itemView.content.value" spellcheck="false" autocorrect="off" autocapitalize="off"}}
+			{{/view}}
+		</div>
 	</script>	
   </head>
   <body>	
 	<div id="box">
-		<div id="side-panel">
+		<div id="left-side-panel">
 			<div class="inspector-panel">
 				<script type="text/x-handlebars">
 				{{#view KG.Button class="x-button inspector-close-button" classBinding="isActive" sc_action="closeInspectorAction" titleBinding="KG.inspectorController.closeLabel"}}
 				{{/view}}
 				{{#view class="inspector-title"}}
 					{{KG.inspectorController.title}}
+				{{/view}}
+		    	{{#collection contentBinding="KG.inspectorController" tagName="ul" class="inspector-attrs-list no-style-list"}}
+					{{#view KG.InspectorAttributeView class="inspector-list-item"}}
 					{{/view}}
-		    		{{#collection contentBinding="KG.inspectorController" tagName="ul" class="inspector-attrs-list no-style-list"}}
-					{{#view KG.InspectorAttributeView class="inspector-list-item" }}
-								<span class="inspector-attr-name">
-									{{itemView.content.name}}
-								</span>	
-
-								<div class="inspector-attr-value">
-									<span>
-										{{itemView.content.value}}
-									</span>
-								</div>
-					{{/view}}
-					{{/collection}}																		
+				{{/collection}}																		
 			</script>	
 			</div>
 		</div>
 		<div id="super-map">
-		<div id="map">		
-		</div>	
-		<span id="back-home" class="kg-controls clickable">
-			<a href="home.html"></a>
-		</span>			
-		<span id="create-note" class="kg-controls clickable">
+			<div id="map">		
+			</div>	
+			<span id="back-home" class="kg-controls clickable">
+				<a href="home.html"></a>
+			</span>			
+			<span id="create-note" class="kg-controls clickable">
+				<script type="text/x-handlebars">
+					{{#view  KG.Button titleBinding="KG.core_note.createNoteLabel" classBinding="isActive" sc_action="createNoteAction"}}
+					{{/view}}
+				</script>
+			</span>
+			<span id="active-sandbox-label">	
+				<span class="label-ellipsis"></span>
+			</span>
 			<script type="text/x-handlebars">
-				{{#view  KG.Button titleBinding="KG.core_note.createNoteLabel" classBinding="isActive" sc_action="createNoteAction"}}
+				{{#view class="kg-controls" id="position-label" tagName="span"}}
+					{{KG.core_sandbox.latitudeLabel}}
+					{{KG.core_sandbox.longitudeLabel}}
+					{{/view}}
+			</script>
+			<script type="text/x-handlebars">			
+				{{#view class="kg-controls" id="search-control" tagName="span"}}
+					{{#view KG.SearchField resultsBinding="KG.searchController.searchHistorySize" placeholder_not_loc="_search" valueBinding="KG.searchController.searchValue"}}
+					{{/view}}
 				{{/view}}
 			</script>
-		</span>
-		<span id="active-sandbox-label">	
-			<span class="label-ellipsis"></span>
-		</span>
-		<script type="text/x-handlebars">
-			{{#view class="kg-controls" id="position-label" tagName="span"}}
-				{{KG.core_sandbox.latitudeLabel}}
-				{{KG.core_sandbox.longitudeLabel}}
-			{{/view}}
-		</script>
 		</div>
 	</div>	
+	<script type="text/x-handlebars">
+		{{#view class="search-title-area"}}
+			{{#view KG.Button class="x-button search-close-button" classBinding="isActive" sc_action="closeSearchAction" titleBinding="KG.searchController.closeLabel"}}
+			{{/view}}
+			<div id="title-label">
+				{{KG.searchController.listTitle}}
+			</div>
+		{{/view}}
+		{{#view class="search-list-area"}}
+			{{#collection contentBinding="KG.searchController" tagName="ul" class="search-result-list no-style-list"}}
+				{{#view KG.SearchItemView class="search-list-item"}}
+					<table class="search-result-table">
+					<tr>
+					<td>
+						{{#view class="feature-title-label label-ellipsis" tagName="div"}}
+							{{itemView.content.title}}
+						{{/view}}
+					</td>
+					<td>
+					{{#view KG.SelectFeatureButtonView class="search-select" tagName="span" classBinding="isActive"}}	
+						<img src="resources/images/right_arrow_32.png"/>		
+					{{/view}}
+					</td>
+					</tr>
+					</table>
+				{{/view}}
+			{{/collection}}
+		{{/view}}
+	</script>
   </body>
 
 <!-- load all of the dependencies --> 

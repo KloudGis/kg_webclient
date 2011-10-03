@@ -10,7 +10,7 @@
 	height:100%;
 }
 
-#side-panel{
+#left-side-panel{
 	overflow: hidden;
 	height:100%;
 	width:auto;
@@ -22,9 +22,15 @@
 	-moz-transition:max-width 0.6s ease-in;
 }
 
-#side-panel.active{
+#left-side-panel.active{
 	max-width:40%;
 	overflow: auto;
+}
+
+#right-side-panel{
+	height:100%;
+	width:4cm;
+	float: right;
 }
 
 #map {
@@ -38,7 +44,7 @@
 	position: absolute;
 	text-align:center;
 	margin: 0.2cm;
-	padding: 1em 0.5em;
+	padding: 0.75em 0.5em;
 	border-radius: 0.2cm;
 	background-color: rgba(0,0,0,0.25);	
 	font-weight: bold;
@@ -49,7 +55,7 @@
 }
 
 .kg-controls a{
-	padding: 0.2cm;
+	padding: 0.1cm;
 	color: black;	
 	border-radius: 0.2cm;	
 	background-color: rgba(255,255,255,0.75);
@@ -107,6 +113,17 @@
 
 #active-sandbox-label span{
 	display: block;
+	width:100%;
+}
+
+#search-control{
+	left:50%;
+	margin-left:-1.5cm;
+	bottom:3px;
+	width:3cm;
+}
+
+#search-control input{
 	width:100%;
 }
 

@@ -12,6 +12,13 @@ require("./core_sandbox");
 require("./core_leaflet");
 
 require("./core_highlight");
+
+//search
+require("./core_search");
+require("./controllers/search");
+require("./views/search_field");
+require("./views/search_item");
+
 //inspector
 require("./core_inspector");
 require("./controllers/inspector");
@@ -35,3 +42,10 @@ require("./views/note_popup_item");
 require("./controllers/layers");
 require("./models/layer");
 require("./core_layer");
+
+
+
+var i;
+for(i=0; i < 25; i++){
+	KG.searchController.get('content').pushObject(SC.Object.create({title: 'title is' + i}));
+}

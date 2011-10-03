@@ -66,7 +66,11 @@ SC.mixin(KG, {
 				closeInspectorAction: function(){
 					KG.core_inspector.cleanSelectFeature();
 				},
-
+				
+				searchAction: function(){
+					KG.core_search.searchFeatures();
+				},
+				
                 navigationState: SC.State.extend({
 
 					_ignoreMouseClicked: YES,

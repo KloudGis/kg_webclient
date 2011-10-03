@@ -6,7 +6,7 @@ KG.FeatureInfoPopupItemView = SC.Button.extend({
 	
 	isVisible: function(){
 		if(this.get('ignoreIfFirst')){
-			if(this.getPath('itemView.content') === KG.infoController.getPath('content.firstObject')){
+			if(this.getPath('itemView.contentIndex') === 0){
 				return NO;
 			}
 		}
