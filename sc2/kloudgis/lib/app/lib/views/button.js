@@ -11,7 +11,7 @@ KG.Button = SC.Button.extend({
 		this._super();
         var action = get(this, 'sc_action')
         if (action && KG.statechart) {
-            KG.statechart.sendAction(action, this);
+            KG.statechart.sendAction(action, this.getPath('itemView.content'));
         }
     },
 
@@ -19,7 +19,7 @@ KG.Button = SC.Button.extend({
         if (e.keyCode == 13) {
             var action = get(this, 'sc_action')
             if (action && KG.statechart) {
-                KG.statechart.sendAction(action, this);
+                KG.statechart.sendAction(action, this.getPath('itemView.content'));
             }
         }
     }

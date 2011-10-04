@@ -71,6 +71,28 @@ SC.mixin(KG, {
 					KG.core_search.searchFeatures();
 				},
 				
+				clearSearchAction: function(){
+					KG.core_search.clearSearchFeatures();
+				},
+				
+				selectSearchCategory: function(cat){
+					KG.core_search.showResults(cat);
+				},
+				
+				hideSearchResultAction: function(){
+					KG.core_search.hideResults();
+				},
+				
+				selectFeatureAction: function(feature){
+					KG.core_inspector.selectFeature(feature);
+				},
+				
+				featureZoomAction: function(feature){
+					KG.core_highlight.clearHighlightFeature();
+					KG.core_highlight.highlightFeature(feature);
+					KG.core_leaflet.setCenter(feature.get('center'));
+				},
+				
                 navigationState: SC.State.extend({
 
 					_ignoreMouseClicked: YES,

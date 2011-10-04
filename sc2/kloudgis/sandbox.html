@@ -157,39 +157,49 @@
 					{{KG.core_sandbox.longitudeLabel}}
 					{{/view}}
 			</script>
+			<!-- search control in the bottom area -->
 			<script type="text/x-handlebars">			
-				{{#view class="kg-controls" id="search-control" tagName="span"}}
+				{{#view class="kg-controls" id="search-control" tagName="span" classBinding="KG.searchController.hasResults"}}
 					{{#view KG.SearchField resultsBinding="KG.searchController.searchHistorySize" placeholder_not_loc="_search" valueBinding="KG.searchController.searchValue"}}
 					{{/view}}
+					{{#collection contentBinding="KG.searchController" isVisibleBinding="KG.searchController.hasResults" tagName="ul" class="search-cat-list no-style-list"}}
+						{{#view KG.Button class="search-cat-item" tagName="div" sc_action="selectSearchCategory"}}
+							{{#view class="cat-title-label" tagName="div"}}
+								{{itemView.content.title}}
+							{{/view}}
+						{{/view}}
+					{{/collection}}
 				{{/view}}
 			</script>
 		</div>
 	</div>	
+
+	<!-- search results in the middle of the screen -->
 	<script type="text/x-handlebars">
-		{{#view class="search-title-area"}}
-			{{#view KG.Button class="x-button search-close-button" classBinding="isActive" sc_action="closeSearchAction" titleBinding="KG.searchController.closeLabel"}}
+		{{#view class="search-title-area" isVisibleBinding="KG.searchResultsController.listVisible"}}
+			{{#view KG.Button class="x-button search-close-button" classBinding="isActive" sc_action="hideSearchResultAction" titleBinding="KG.searchResultsController.closeLabel"}}
 			{{/view}}
 			<div id="title-label">
-				{{KG.searchController.listTitle}}
+				{{KG.searchResultsController.listTitle}}
 			</div>
 		{{/view}}
-		{{#view class="search-list-area"}}
-			{{#collection contentBinding="KG.searchController" tagName="ul" class="search-result-list no-style-list"}}
-				{{#view KG.SearchItemView class="search-list-item"}}
+		{{#view class="search-list-area" isVisibleBinding="KG.searchResultsController.listVisible" classBinding="KG.searchResultsController.hasResults"}}
+			{{#collection contentBinding="KG.searchResultsController" tagName="ul" class="search-result-list no-style-list"}}
+				{{#view KG.Button class="search-list-item" tagName="div"}}
 					<table class="search-result-table">
 					<tr>
-					<td>
-						{{#view class="feature-title-label label-ellipsis" tagName="div"}}
-							{{itemView.content.title}}
-						{{/view}}
-					</td>
-					<td>
-					{{#view KG.SelectFeatureButtonView class="search-select" tagName="span" classBinding="isActive"}}	
-						<img src="resources/images/right_arrow_32.png"/>		
-					{{/view}}
-					</td>
+						<td class="search-title-cell">
+							{{#view KG.SearchResultLabelView class="feature-title-label"}}
+								{{itemView.content.title}}
+							{{/view}}
+						</td>
+						<td class="search-select-cell">
+							{{#view KG.SelectFeatureButtonView isVisibleBinding="itemView.content.isSelectable" class="search-select" tagName="div" classBinding="isActive"}}	
+								<img src="resources/images/right_arrow_32.png"/>		
+							{{/view}}
+						</td>
 					</tr>
-					</table>
+					</table
 				{{/view}}
 			{{/collection}}
 		{{/view}}

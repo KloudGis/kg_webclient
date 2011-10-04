@@ -1,10 +1,10 @@
 KG.searchController = SC.ArrayProxy.create({
 	content: [],
-	searchValue: null,
 	searchHistorySize: 5,
-	closeLabel: "_closeSearch".loc(),
+	searchValue: null,
 	
-	listTitle: function(){
-		return "_searchResult".loc(this.getPath('content.length'));
-	}.property('content.length')
+	hasResults: function(){
+		return this.getPath('content.length') > 0;
+	}.property('content.length'),
+	
 });

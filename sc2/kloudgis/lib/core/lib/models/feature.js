@@ -12,6 +12,8 @@ KG.Feature = KG.Record.extend({
     title_attr: SC.Record.attr(String),
     centroid: SC.Record.attr(Object),
 
+	isSelectable: YES,
+
     center: function() {
         var center;
         var centroid = this.get('centroid');

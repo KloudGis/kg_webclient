@@ -106,7 +106,7 @@
 	font-size: 0.35cm;
 	padding: 5px;
 	color: #333;
-    background-color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.8);
 	box-shadow: 0 0 10px #333;
 	-webkit-box-shadow: 0 0 10px #333;
 }
@@ -121,10 +121,37 @@
 	margin-left:-1.5cm;
 	bottom:3px;
 	width:3cm;
+	overflow-y:auto;
+	color:white;
+	max-height:1.5cm;	
+	transition:all 0.6s ease-in;
+	-webkit-transition:all 0.6s ease-in;
+	-moz-transition:all 0.6s ease-in;
+}
+
+#search-control.has-results{
+	background: rgba(0,0,0,0.6);
+	max-height:35%;	
 }
 
 #search-control input{
 	width:100%;
+}
+
+.search-cat-list{
+	font-size:14px;
+	padding: 5px;
+	margin:0;
+}
+
+.search-cat-item{
+	padding:0.3em;
+	text-align: left;
+}
+
+.search-cat-item:hover{
+	background-color: rgba(0,0,0,0.5);
+	border-radius: 10px;
 }
 
 

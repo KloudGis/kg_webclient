@@ -14,10 +14,12 @@ require("./core_leaflet");
 require("./core_highlight");
 
 //search
+require("kloudgis/core/lib/models/search_category");
 require("./core_search");
 require("./controllers/search");
+require("./controllers/search_results");
 require("./views/search_field");
-require("./views/search_item");
+require("./views/search_result_label");
 
 //inspector
 require("./core_inspector");
@@ -42,10 +44,3 @@ require("./views/note_popup_item");
 require("./controllers/layers");
 require("./models/layer");
 require("./core_layer");
-
-
-
-var i;
-for(i=0; i < 25; i++){
-	KG.searchController.get('content').pushObject(SC.Object.create({title: 'title is' + i}));
-}

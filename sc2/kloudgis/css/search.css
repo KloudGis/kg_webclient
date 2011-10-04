@@ -2,19 +2,20 @@
 	position: absolute;
 	left: 50%;
 	top:20%;
-	width:5.5cm;
-	margin-left:-2.75cm;
-	height:1cm;
-	margin-top:-1cm;
+	width:5cm;
+	margin-left:-2.5cm;
+	height:0.75cm;
+	margin-top:-0.75cm;
 	color:white;
 	text-align: center;
-	background:rgba(0,0,0,0.5);
-	border-top-left-radius:1em;
-	border-top-right-radius:1em;
+	background:rgba(0,0,0,0.6);
+	border-top-left-radius:12px;
+	border-top-right-radius:12px;
 }
 
 #title-label{
 	margin-top:5px;
+	font-size:16px;
 }
 
 .search-close-button{
@@ -25,62 +26,66 @@
 
 /* 2 fingers scroll on iOS.  iScroll4 can solve it.*/
 .search-list-area{
+	font-size:14px;
 	position:absolute;
 	left: 50%;
 	top:20%;
-	width:5.55cm;
-	margin-left:-2.75cm;
-	overflow: auto;
-	max-height:40%;
-	background:rgba(0,0,0,0.5);
-	border-bottom-left-radius:1em;
-	border-bottom-right-radius:1em;
+	width:5cm;
+	margin-left:-2.5cm;
+	overflow-x:hidden;
+	overflow-y: auto;
+	max-height: 0;
+	background:rgba(0,0,0,0.6);
+	border-bottom-left-radius:12px;
+	border-bottom-right-radius:12px;
 	padding-bottom:10px;
 }
 
+.search-list-area.has-results{
+	max-height:40%;
+}
+
 .search-list-item{
-	padding:0.5em;
+	text-align:right;
+}
+
+.search-list-item > span{
+	position:relative;
+	bottom:5px;
 }
 
 .search-result-list{
 	margin:10px;
 }
 
-.search-result-list li{
-	color: white;
-}
 
 .search-result-list li:hover{
-	color: white;
 	background: rgba(0,0,0,0.5);
 	border-radius:1em;
 }
 
 .search-result-table{
-	width:100%;
+	color: white;
 	border: none;
 	border-spacing: 0px;
 }
 
 .search-result-table td{
-	vertical-align: middle;
-	color: white;
-	white-space: nowrap;
-	padding: 0px;
-	margin: 0px;
-	text-align: right;
+	vertical-align:middle;
+}
+
+.search-title-cell{
+	width:100%;
+}
+
+.search-select-cell{
+	width:32px;
+	height:32px;
 }
 
 .feature-title-label{
-	width:3.5cm;
+	margin-left:5px;
 }
 
-.search-select{
-	padding:0px;
-	border: none;
-	background: none;
-	width:32px;
-	text-align: right;
-	margin-left:1em;
-}
+
 
