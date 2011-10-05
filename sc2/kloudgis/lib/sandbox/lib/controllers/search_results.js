@@ -2,12 +2,18 @@ KG.searchResultsController = SC.ArrayProxy.create({
 	content: [],
 	closeLabel: "_closeSearch".loc(),
 	listVisible: NO,
+	category: null,
 	
 	listTitle: function(){
 		if(SC.none(this.get('content'))){
 			return '';
 		}else{
-			return "_searchResult".loc(this.getPath('content.length'));
+			var cat = this.get('category');
+			if(SC.none(cat)){
+				return '';
+			}else{
+				return "_searchResult".loc(this.getPath('content.length'), cat.get('search'), cat.get('categoryLabel'));
+			}
 		}
 	}.property('content.length'),
 	

@@ -416,7 +416,11 @@ KG.core_leaflet = SC.Object.create({
 
     createLayerFromCoordinates: function(coordinates, geo_type, options) {
         var layer;
-        geo_type = geo_type.toLowerCase();
+		if(geo_type){
+        	geo_type = geo_type.toLowerCase();
+		}else{
+			geo_type = 'point';
+		}
         if (geo_type === 'point') {
             var circleLocation = new L.LatLng(coordinates[0].y, coordinates[0].x);
             //8 pixels radius circle

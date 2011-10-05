@@ -164,9 +164,20 @@
 					{{/view}}
 					{{#collection contentBinding="KG.searchController" isVisibleBinding="KG.searchController.hasResults" tagName="ul" class="search-cat-list no-style-list"}}
 						{{#view KG.Button class="search-cat-item" tagName="div" sc_action="selectSearchCategory"}}
+							<table class="search-category-table">
+							<tr>
+							<td>
 							{{#view class="cat-title-label" tagName="div"}}
-								{{itemView.content.title}}
+								{{itemView.content.categoryLabel}}
 							{{/view}}
+							</td>
+							<td>
+							{{#view class="cat-size-label capsule-label" tagName="span"}}
+								{{itemView.content.count}}
+							{{/view}}
+							</td>
+							</tr>
+							</table>
 						{{/view}}
 					{{/collection}}
 				{{/view}}
@@ -176,14 +187,15 @@
 
 	<!-- search results in the middle of the screen -->
 	<script type="text/x-handlebars">
-		{{#view class="search-title-area" isVisibleBinding="KG.searchResultsController.listVisible"}}
+		{{#view id="search-result" classBinding="KG.searchResultsController.listVisible"}}
+		{{#view class="search-title-area" }}
 			{{#view KG.Button class="x-button search-close-button" classBinding="isActive" sc_action="hideSearchResultAction" titleBinding="KG.searchResultsController.closeLabel"}}
 			{{/view}}
 			<div id="title-label">
 				{{KG.searchResultsController.listTitle}}
 			</div>
 		{{/view}}
-		{{#view class="search-list-area" isVisibleBinding="KG.searchResultsController.listVisible" classBinding="KG.searchResultsController.hasResults"}}
+		{{#view class="search-list-area" classBinding="KG.searchResultsController.hasResults"}}
 			{{#collection contentBinding="KG.searchResultsController" tagName="ul" class="search-result-list no-style-list"}}
 				{{#view KG.Button class="search-list-item" tagName="div"}}
 					<table class="search-result-table">
@@ -202,6 +214,7 @@
 					</table
 				{{/view}}
 			{{/collection}}
+		{{/view}}
 		{{/view}}
 	</script>
   </body>

@@ -15,7 +15,7 @@ var fr = {
 	"_closeInspector": "Fermer l'inspecteur",
 	"_closeSearch": "Fermer la fenêtre de résultat",	
 	"_search": "Recherche...",
-	"_searchResult": "%@ Résultats"
+	"_searchResult": "%@ Résultats pour %@ dans %@"
 };
 
 var en = {
@@ -35,7 +35,7 @@ var en = {
 	"_closeInspector": "Close the inspector",
 	"_closeSearch": "Close the result window",
 	"_search": "Search...",
-	"_searchResult": "%@ Results"
+	"_searchResult": "%@ Results for %@ in %@"
 };
 
 if(KG.lang === 'fr'){

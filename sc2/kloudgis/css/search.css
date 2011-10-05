@@ -1,16 +1,25 @@
-.search-title-area{
+#search-result{
 	position: absolute;
-	left: 50%;
-	top:20%;
 	width:5cm;
 	margin-left:-2.5cm;
-	height:0.75cm;
-	margin-top:-0.75cm;
+	top:-100%;
+	left:50%;
+	transition:top 1s ease-in;
+	-webkit-transition:top 1s ease-in;
+	-moz-transition:top 1s ease-in;
+	background:rgba(0,0,0,0.6);
+	border-radius:12px;
+}
+
+#search-result.list-visible{
+	top:20%;	
+}
+
+.search-title-area{
+	position: relative;
+	width:100%;
 	color:white;
 	text-align: center;
-	background:rgba(0,0,0,0.6);
-	border-top-left-radius:12px;
-	border-top-right-radius:12px;
 }
 
 #title-label{
@@ -27,22 +36,15 @@
 /* 2 fingers scroll on iOS.  iScroll4 can solve it.*/
 .search-list-area{
 	font-size:14px;
-	position:absolute;
-	left: 50%;
-	top:20%;
-	width:5cm;
-	margin-left:-2.5cm;
+	position:relative;
+	width:100%;
+	padding-bottom:10px;
+	max-height:6cm;
 	overflow-x:hidden;
 	overflow-y: auto;
-	max-height: 0;
-	background:rgba(0,0,0,0.6);
-	border-bottom-left-radius:12px;
-	border-bottom-right-radius:12px;
-	padding-bottom:10px;
 }
 
 .search-list-area.has-results{
-	max-height:40%;
 }
 
 .search-list-item{
@@ -57,7 +59,6 @@
 .search-result-list{
 	margin:10px;
 }
-
 
 .search-result-list li:hover{
 	background: rgba(0,0,0,0.5);

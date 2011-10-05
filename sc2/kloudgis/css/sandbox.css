@@ -118,11 +118,11 @@
 
 #search-control{
 	left:50%;
-	margin-left:-1.5cm;
+	margin-left:-1.75cm;
 	bottom:3px;
-	width:3cm;
+	width:3.5cm;
+	overflow-x:hidden;
 	overflow-y:auto;
-	color:white;
 	max-height:1.5cm;	
 	transition:all 0.6s ease-in;
 	-webkit-transition:all 0.6s ease-in;
@@ -145,7 +145,7 @@
 }
 
 .search-cat-item{
-	padding:0.3em;
+	padding:0.2cm;
 	text-align: left;
 }
 
@@ -153,5 +153,26 @@
 	background-color: rgba(0,0,0,0.5);
 	border-radius: 10px;
 }
+
+.search-category-table{
+	width:100%;
+	margin:0;
+	padding:0
+	border: none;
+	border-spacing: 0px;
+	color:white;
+}
+
+.search-category-table td{
+	vertical-align: middle;
+	text-align:right;
+}
+
+.cat-title-label{
+	width:2cm;
+	overflow: hidden;
+	text-overflow:ellipsis;
+}
+
 
 
