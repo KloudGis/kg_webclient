@@ -12,7 +12,7 @@ KG.searchResultsController = SC.ArrayProxy.create({
 			if(SC.none(cat)){
 				return '';
 			}else{
-				return "_searchResult".loc(this.getPath('content.length'), cat.get('search'), cat.get('categoryLabel'));
+				return "_searchResult".loc(this.getPath('content.length'), cat.get('search'), cat.get('title'));
 			}
 		}
 	}.property('content.length'),

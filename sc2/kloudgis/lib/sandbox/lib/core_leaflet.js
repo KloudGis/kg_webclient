@@ -368,7 +368,12 @@ KG.core_leaflet = SC.Object.create({
         popup.setContent(content);
         this.map.openPopup(popup);
         setTimeout(function() {
-            popup._update()
+            popup._update();
+			//to secure the update, re-do it even later
+            setTimeout(function() {
+                popup._update()
+            },
+            100);
         },
         1);
     },
@@ -416,11 +421,11 @@ KG.core_leaflet = SC.Object.create({
 
     createLayerFromCoordinates: function(coordinates, geo_type, options) {
         var layer;
-		if(geo_type){
-        	geo_type = geo_type.toLowerCase();
-		}else{
-			geo_type = 'point';
-		}
+        if (geo_type) {
+            geo_type = geo_type.toLowerCase();
+        } else {
+            geo_type = 'point';
+        }
         if (geo_type === 'point') {
             var circleLocation = new L.LatLng(coordinates[0].y, coordinates[0].x);
             //8 pixels radius circle

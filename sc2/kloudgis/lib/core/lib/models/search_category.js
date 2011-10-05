@@ -7,15 +7,22 @@ KG.SearchCategory = KG.Record.extend({
 	loaded_records: SC.Record.attr(Array),
 
     title: function() {
-        return '%@ (%@)'.fmt(this.get('categoryLabel'), this.get('count'));
-    }.property('category', 'count'),
+    	var cat = this.get('categoryLabel');
+		if(!SC.none(cat)){
+			if(cat.charAt(0) === '_'){
+				return cat.loc();
+			}else{
+				return cat;
+			}
+		}
+    }.property('categoryLabel'),
 
     records: function() {
 		if(!SC.none(this.get('loaded_records'))){
 			return this.get('loaded_records');
 		}
         var query = SC.Query.remote(KG.Feature, {
-            query_url: '/api_data/protected/%@/search?search_string=%@&sandbox=%@'.fmt(this.get('category'), this.get('search'), KG.get('activeSandboxKey')),
+            query_url: '/api_data/protected/features/search?category=%@&search_string=%@&sandbox=%@'.fmt(this.get('category'), this.get('search'), KG.get('activeSandboxKey')),
             conditions: 'count > 0'
         });
         return KG.store.find(query);
