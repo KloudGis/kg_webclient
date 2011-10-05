@@ -1,7 +1,9 @@
 #search-result{
+	z-index:10;
 	position: absolute;
 	width:5cm;
 	margin-left:-2.5cm;
+	padding-bottom:10px;
 	top:-100%;
 	left:50%;
 	transition:top 1s ease-in;
@@ -85,7 +87,7 @@
 }
 
 .feature-title-label{
-	margin-left:5px;
+	margin-left:1em;
 }
 
 
