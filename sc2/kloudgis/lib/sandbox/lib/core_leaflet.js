@@ -69,22 +69,21 @@ KG.core_leaflet = SC.Object.create({
     },
 
     onZoom: function(e) {
-        console.log('zoom changed');
         SC.run.begin();
-        KG.statechart.sendAction('mapZoomed', this);
+        KG.statechart.sendAction('mapZoomedAction', this);
         SC.run.end();
     },
 
     onMove: function(e) {
         console.log('map moved');
         SC.run.begin();
-        KG.statechart.sendAction('mapMoved', this);
+        KG.statechart.sendAction('mapMovedAction', this);
         SC.run.end();
     },
 
     onClick: function(e) {
         SC.run.begin();
-        KG.statechart.sendAction('mouseClickedOnMap', KG.LonLat.create({
+        KG.statechart.sendAction('clickOnMapAction', KG.LonLat.create({
             lon: e.latlng.lng,
             lat: e.latlng.lat
         }));
@@ -115,10 +114,10 @@ KG.core_leaflet = SC.Object.create({
         if (self.get('activeMarker') && self.get('activeMarker')._native_marker && self.get('activeMarker')._native_marker._popup === e.layer) {
             console.log('popup closed');
             //popup closed
-            KG.statechart.sendAction('notePopupClosed', self);
+            KG.statechart.sendAction('hideMarkerPopupAction', self);
         } else if (self._popupInfo && self._popupInfo === e.layer) {
             //popup closed
-            KG.statechart.sendAction('infoPopupClosed', self);
+            KG.statechart.sendAction('hideInfoPopupAction', self);
         }
         SC.run.end();
     },
@@ -301,20 +300,27 @@ KG.core_leaflet = SC.Object.create({
     },
 
     openMarkerPopup: function(marker) {
-        marker._native_marker.openPopup();
+		if(!marker._native_marker._popup._opened){
+        	marker._native_marker.openPopup();
+		}
     },
 
-    addNewNoteMarker: function(popupContent) {
-        var lcenter = this.map.getCenter();
-        var lmarker = new L.Marker(lcenter, {
+    addNewNoteMarker: function(popupContent, pos) {
+		var lpos;
+		if(pos){
+			lpos = new L.LatLng(pos.get('lat'), pos.get('lon'));
+		}else{
+			lpos = this.map.getCenter();	
+		}
+        var lmarker = new L.Marker(lpos, {
             draggable: true,
-            title: "_newNote",
+            title: "_newNote".loc(),
             icon: this.newNoteIcon
         });
         lmarker.on('dragend',
         function() {
             SC.run.begin();
-            KG.statechart.sendAction('notePositionSet');
+            KG.statechart.sendAction('notePositionSetAction');
             SC.run.end();
         })
         lmarker.bindPopup(popupContent);

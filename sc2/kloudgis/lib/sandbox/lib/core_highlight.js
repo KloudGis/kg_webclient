@@ -1,10 +1,8 @@
 KG.core_highlight = SC.Object.create({
 	
-	_featureHighlight: null,
-	
-	clearHighlightFeature: function() {
-        if (this._featureHighlight) {
-            KG.core_leaflet.removeHighlight(this._featureHighlight);
+	clearHighlight: function(hl) {
+        if (hl) {
+            KG.core_leaflet.removeHighlight(hl);
         }
     },
 
@@ -12,7 +10,6 @@ KG.core_highlight = SC.Object.create({
         if (!feature) {
             return NO;
         }
-        this._featureHighlight = KG.core_leaflet.addHighlight(feature.get('coords'), feature.get('geo_type'));
-        return YES;
+        return KG.core_leaflet.addHighlight(feature.get('coords'), feature.get('geo_type'));
     }
 })

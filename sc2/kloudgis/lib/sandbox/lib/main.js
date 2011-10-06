@@ -30,7 +30,6 @@ require("./views/inspector_attribute");
 require("./controllers/info");
 require("./core_info");
 require("./views/feature_info_popup_item");
-require("./views/select_feature_button");
 require("./views/expand_button");
 
 //notes

@@ -14,9 +14,9 @@ SC.mixin(KG, {
                     KG.set('activeSandboxKey', sb);
 
                     setTimeout(function() {
-						SC.run.begin();
+                        SC.run.begin();
                         KG.core_sandbox.authenticate();
-						SC.run.end();
+                        SC.run.end();
                     },
                     1);
                 },
@@ -26,11 +26,12 @@ SC.mixin(KG, {
                 },
 
                 authenficationFailed: function() {
-                    this.gotoState('loggedOutState');
+                    window.location.href = "index.html";
                 }
             }),
 
             tryMembershipState: SC.State.extend({
+
                 enterState: function() {
                     //show the map to not slow down the app
                     KG.core_sandbox.addMap();
@@ -39,7 +40,7 @@ SC.mixin(KG, {
                 },
 
                 membershipSucceeded: function() {
-                    this.gotoState('loggedInState');
+                    this.gotoState('runningState');
                 },
 
                 membershipFailed: function() {
@@ -47,222 +48,319 @@ SC.mixin(KG, {
                 }
             }),
 
-            loggedOutState: SC.State.extend({
+            runningState: SC.State.extend({
+
+                substatesAreConcurrent: YES,
 
                 enterState: function() {
-                    window.location.href = "index.html";
-                }
-            }),
-
-            loggedInState: SC.State.extend({
-
-                initialSubstate: 'navigationState',
-
-                enterState: function() {
-                    console.log('hi!');
                     KG.core_layer.loadLayers();
                 },
 
-				closeInspectorAction: function(){
-					KG.core_inspector.cleanSelectFeature();
-				},
-				
-				searchAction: function(){
-					KG.core_search.searchFeatures();
-				},
-				
-				clearSearchAction: function(){
-					KG.core_search.clearSearchFeatures();
-				},
-				
-				selectSearchCategory: function(cat){
-					KG.core_search.showResults(cat);
-				},
-				
-				hideSearchResultAction: function(){
-					KG.core_search.hideResults();
-				},
-				
-				selectFeatureAction: function(feature){
-					KG.core_inspector.selectFeature(feature);
-				},
-				
-				featureZoomAction: function(feature){
-					KG.core_highlight.clearHighlightFeature();
-					KG.core_highlight.highlightFeature(feature);
-					KG.core_leaflet.setCenter(feature.get('center'));
-				},
-				
-                navigationState: SC.State.extend({
+                /**Concurrent state for INSPECTOR*/
+                inspectorState: SC.State.extend({
+                    initialSubstate: 'inspectorHiddenState',
 
-					_ignoreMouseClicked: YES,
-					
-                    enterState: function() {
-                        console.log('navigation!');
-                        KG.core_note.refreshMarkers();
-						var self = this;
-						setTimeout(function(){self._ignoreMouseClicked = NO},100);
-                    },
+                    inspectorHiddenState: SC.State.extend({
 
-					exitState: function(){
-						this._ignoreMouseClicked = YES;
-					},
-
-                    createNoteAction: function() {
-                        this.gotoState('createNoteState');
-                    },
-
-                    noteSelectedAction: function(note, marker) {
-                        if (KG.core_note.activateNote(note, marker)) {
-                            var self = this;
-							//delay for pending statechart action to happen in THIS state, not in "editNoteState"
-                            setTimeout(function() {
-								SC.run.begin();
-								if(self.get('statechart').get('currentStates')[0] === self){
-                                	self.gotoState('editNoteState');
-								}
-								SC.run.end();
-                            },
-                            100);
+                        selectFeatureInspectorAction: function(feature) {
+                            if (feature) {
+                                KG.core_inspector.selectFeature(feature);
+                                this.gotoState('inspectorVisibleState');
+                            }
                         }
-                    },
-
-					mouseClickedOnMap: function(lonlat){
-						if(!this._ignoreMouseClicked){
-							KG.core_sandbox.set('mousePosition', lonlat);
-							KG.core_info.findFeaturesAt(lonlat);
-						}
-					},
-					
-					featureInfoReady: function(){
-						this.gotoState("infoPopupState");
-					}
-                }),
-
-                mapZoomed: function(sender) {
-                    KG.core_note.refreshMarkers();
-                },
-
-                mapMoved: function(sender) {
-                    KG.core_note.refreshMarkers();
-                },
-
-				//feature info popup
-				infoPopupState: SC.State.extend({
-					
-					enterState: function(){
-						console.log('enter info popup!');
-						KG.core_info.showInfoPopup();
-					},
-					
-					exitState: function(){
-						console.log('exit info popup!');
-						KG.core_info.hideInfoPopup();
-					},
-					
-					infoPopupClosed: function() {
-						console.log('info popup closed.');
-						this.gotoState('navigationState');						
-					},
-					
-					selectFeatureAction: function(feature){
-						KG.core_inspector.selectFeature(feature);
-						this.gotoState('navigationState');
-					},
-					
-					featureInfoMouseUpAction:function(feature){
-						KG.core_highlight.clearHighlightFeature();
-						KG.core_highlight.highlightFeature(feature);
-					},
-					
-					featureInfoMouseEnterAction:function(feature){
-						KG.core_highlight.clearHighlightFeature();
-						KG.core_highlight.highlightFeature(feature);
-					},
-					
-					featureInfoMouseLeaveAction:function(feature){
-						KG.core_highlight.clearHighlightFeature();
-					}				
-				}),
-
-				//edit note popup
-                editNoteState: SC.State.extend({
-
-                    notePopupClosed: function() {
-                        KG.core_note.revertUpdateNote();
-                        this.gotoState('navigationState');
-                    },
-
-                    confirmNoteAction: function() {
-                        KG.core_note.confirmUpdateNote();
-                        this.gotoState('navigationState');
-                    },
-
-                    deleteNoteAction: function() {
-                        KG.core_note.deleteActiveNote();
-                        this.gotoState('navigationState');
-                    },
-
-                    mapZoomed: function(sender) {},
-
-                    mapMoved: function(sender) {},
-
-					zoomNoteAction: function(){
-						KG.core_note.zoom();
-					}
-                }),
-
-				//create note popup
-                createNoteState: SC.State.extend({
-
-                    initialSubstate: 'locateNoteState',
-
-                    enterState: function() {
-                        console.log('creating a note!');
-                    },
-
-                    locateNoteState: SC.State.extend({
-
-                        enterState: function() {
-                            console.log('Lets locate it first');
-                            KG.core_note.locateNote();
-                        },
-
-                        notePositionSet: function() {
-                            this.gotoState('confirmNoteState');
-                        },
-
-                        notePopupClosed: function() {}
-
                     }),
 
-                    confirmNoteState: SC.State.extend({
+                    inspectorVisibleState: SC.State.extend({
 
                         enterState: function() {
-                            console.log('Confirm it now.');
-                            if (!KG.core_note.createNote()) {
+                            var panel = $('#left-side-panel');
+                            panel.addClass('active');
+                        },
+
+                        exitState: function() {
+                            var panel = $('#left-side-panel');
+                            panel.removeClass('active');
+                            KG.core_inspector.cleanSelectFeature();
+                        },
+
+                        selectFeatureInspectorAction: function(feature) {
+                            if (feature) {
+                                KG.core_inspector.selectFeature(feature);
+                            }
+                        },
+
+                        closeInspectorAction: function() {
+                            this.gotoState('inspectorHiddenState');
+                        }
+                    })
+                }),
+
+                /**Concurrent state for Map Interaction*/
+                mapInteractionState: SC.State.extend({
+
+                    initialSubstate: 'navigationState',
+
+                    mapMovedAction: function() {
+                        KG.core_note.refreshMarkers();
+                    },
+
+                    mapZoomedAction: function() {
+                        KG.core_note.refreshMarkers();
+                    },
+
+                    searchAction: function() {
+                        KG.core_search.searchFeatures();
+                    },
+
+					selectSearchCategoryAction: function(cat) {
+                        KG.searchResultsController.set('category', cat);
+                        this.gotoState('searchResultsState');
+                    },
+
+                    navigationState: SC.State.extend({
+
+                        _ignoreMouseClicked: YES,
+
+                        enterState: function() {
+                            console.log('enter navigation state');
+                            //enable search field
+                            KG.searchController.set('fieldDisabled', NO);
+                            //refresh markers
+                            KG.core_note.refreshMarkers();
+                            var self = this;
+                            setTimeout(function() {
+                                self._ignoreMouseClicked = NO
+                            },
+                            100);
+                        },
+
+                        exitState: function() {
+                            //disable search field
+                            KG.searchController.set('fieldDisabled', YES);
+                            this._ignoreMouseClicked = YES;
+                        },
+
+                        clickOnMapAction: function(lonLat) {
+                            if (!this._ignoreMouseClicked) {
+                                KG.core_sandbox.set('mousePosition', lonLat);
+                                KG.core_info.findFeaturesAt(lonLat);
+                            }
+                        },
+
+                        featureInfoReady: function() {
+                            this.gotoState("popupFeatureInfoState");
+                        },                  
+
+                        noteSelectedAction: function(note, marker) {
+                            KG.core_note.activateNote(note, marker);
+                            this.gotoState('editNoteState');
+                        },
+
+                        multipleNotesSelectedAction: function(notes, marker) {
+                            KG.core_note.activateMultipleNotes(notes, marker);
+                            this.gotoState('multipleNotesState');
+                        },
+
+                        createNoteAction: function() {
+                            this.gotoState('locateNoteState');
+                        }
+                    }),
+
+                    searchResultsState: SC.State.extend({
+
+						_highlight: null, 
+						
+                        enterState: function() {
+                            KG.core_search.showResults();
+                        },
+
+                        exitState: function() {
+                            KG.core_search.hideResults();
+							KG.core_highlight.clearHighlight(this._highlight);
+							this._highlight = null;
+                        },
+
+                        hideSearchResultAction: function() {
+                            this.gotoState('navigationState');
+                        },
+
+                        createNoteFromFeatureAction: function(feature) {
+                            //create the note and put it in edit mode
+                            if (feature) {
+                                KG.core_note.set('featureTemplate', feature);
                                 this.gotoState('createNoteState');
                             }
                         },
 
-                        mapZoomed: function(sender) {},
-
-                        mapMoved: function(sender) {},
-
-                        notePopupClosed: function() {
-                            KG.core_note.revertCreateNote();
-                            this.gotoState('navigationState');
-                        },
-
-                        confirmNoteAction: function() {
-                            KG.core_note.confirmCreateNote();
-                            this.gotoState('navigationState');
-                        },
-
-						zoomNoteAction: function(){
-							KG.core_note.zoom();
-							this.gotoState('navigationState');
+						featureZoomAction: function(feature){
+							KG.core_highlight.clearHighlight(this._highlight);
+							this._highlight = KG.core_highlight.highlightFeature(feature);
+							KG.core_leaflet.setCenter(feature.get('center'));
 						}
+                    }),
+
+                    popupFeatureInfoState: SC.State.extend({
+
+                        _highlight: null,
+
+                        enterState: function() {
+							console.log('enter popupFeatureInfoState');
+							KG.core_info.showInfoPopup();
+						},
+
+                        exitState: function() {
+                            KG.core_highlight.clearHighlight(this._highlight);
+                            this._highlight = null;
+							KG.core_info.hideInfoPopup();
+                        },
+
+                        hideInfoPopupAction: function() {
+                            this.gotoState('navigationState');
+                        },
+
+                        selectFeatureInspectorAction: function() {
+                            //the concurrent inspector state take care of showing the inspector
+                            this.gotoState('navigationState');
+                        },
+
+                        featureInfoMouseUpAction: function(feature) {
+                            KG.core_highlight.clearHighlight(this._highlight);
+                            this._highlight = KG.core_highlight.highlightFeature(feature);
+                        },
+
+                        featureInfoMouseEnterAction: function(feature) {
+                            KG.core_highlight.clearHighlight(this._highlight);
+                            this._highlight = KG.core_highlight.highlightFeature(feature);
+                        },
+
+                        featureInfoMouseLeaveAction: function(feature) {
+                            KG.core_highlight.clearHighlight(this._highlight);
+                        }
+                    }),
+
+                    popupNoteState: SC.State.extend({
+
+                        initialSubstate: 'locateNoteState',
+
+                        exitState: function() {
+                            KG.core_leaflet.closeActivePopup();
+                        },
+
+                        mapMovedAction: function() {
+                            //override map interaction action
+                        },
+
+                        mapZoomedAction: function() {
+                            //override map interaction action
+                        },
+
+                        hideMarkerPopupAction: function() {
+                            this.gotoState('navigationState');
+                        },
+
+                        locateNoteState: SC.State.extend({
+
+                            enterState: function() {
+                                KG.core_note.locateNote();
+                                KG.core_note.set('createNoteLabel', "_cancelCreateNote".loc());
+                                KG.core_note.set('createNoteImg', KG.get('cancelCreateNoteImagePath'));
+                            },
+
+                            exitState: function() {
+                                KG.core_note.set('createNoteLabel', "_createNote".loc());
+                                KG.core_note.set('createNoteImg', KG.get('createNoteImagePath'));
+                            },
+
+                            hideMarkerPopupAction: function() {},
+
+                            notePositionSetAction: function() {                            
+                                this.gotoState('createNoteState');
+                            },
+
+                            createNoteAction: function() {
+                                //cancel
+                                KG.core_note.cancelLocateNote();
+                                this.gotoState('navigationState');
+                            }
+                        }),
+
+						createNoteState: SC.State.extend({
+							
+							enterState: function(){
+								KG.core_note.createNote();
+							},
+							
+							exitState: function() {
+                                console.log('exit createNoteState');
+                                KG.core_note.rollbackModifications();
+                                KG.activeNoteController.set('content', null);
+								KG.core_note.clearCreateNote();							
+                            },
+
+							confirmNoteAction: function() {
+                                var note = KG.activeNoteController.get('content');
+                                KG.core_note.commitModifications();
+                                KG.core_note.confirmCreateNote();
+                                this.gotoState('navigationState');
+                            },
+
+                            deleteNoteAction: function() {
+                                this.gotoState('navigationState');
+                            },
+						}),
+
+                        multipleNotesState: SC.State.extend({
+
+                            exitState: function() {
+                                KG.notesPopupController.set('marker', null);
+                                KG.notesPopupController.set('content', []);
+                            },
+
+                            noteSelectedAction: function(note, marker) {
+                                KG.core_note.activateNote(note, marker);
+                                this.gotoState('editNoteState');
+                            }
+                        }),
+
+                        editNoteState: SC.State.extend({
+
+                            enterState: function() {
+                                console.log('enter editNoteState');
+                                KG.core_note.beginModifications();
+                            },
+
+                            exitState: function() {
+                                console.log('exit editNoteState');
+                                KG.core_note.rollbackModifications();
+                                KG.activeNoteController.set('content', null);
+                            },
+
+                            showCommentsAction: function() {
+                                //show comment section
+                            },
+
+                            hideCommentsAction: function() {
+                                //hide comment section
+                            },
+
+                            confirmNoteAction: function() {
+                                var note = KG.activeNoteController.get('content');
+                                console.log('status is' + note.get('status'));
+                                KG.core_note.commitModifications();
+                                this.gotoState('navigationState');
+                            },
+
+                            deleteNoteAction: function() {
+                                KG.core_note.deleteActiveNote();
+                                KG.core_note.commitModifications();
+                                this.gotoState('navigationState');
+                            },
+
+                            zoomNoteAction: function() {
+                                KG.core_note.zoomActiveNote();
+                                this.gotoState('navigationState');
+                            }
+                        }),
                     })
                 })
             })

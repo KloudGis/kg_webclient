@@ -64,7 +64,7 @@
 						{{itemView.content.title}}			
 						</td>
 					<td>
-						{{#view KG.SelectFeatureButtonView class="popup-info-select" tagName="div" classBinding="isActive"}}	
+						{{#view KG.Button sc_action="selectFeatureInspectorAction" class="popup-info-select" tagName="div" classBinding="isActive"}}	
 							<img src="resources/images/right_arrow_32.png"/>		
 						{{/view}}
 					</td>
@@ -87,7 +87,7 @@
 				{{content.title}}			
 			</td>
 			<td>
-				{{#view KG.SelectFeatureButtonView class="popup-info-select" contentBinding="KG.infoController.content.firstObject" tagName="div" classBinding="isActive"}}	
+				{{#view KG.Button sc_action="selectFeatureInspectorAction" class="popup-info-select" contentBinding="KG.infoController.content.firstObject" tagName="div" classBinding="isActive"}}	
 					<img src="resources/images/right_arrow_32.png"/>		
 				{{/view}}
 			</td>
@@ -145,6 +145,7 @@
 			<span id="create-note" class="kg-controls clickable">
 				<script type="text/x-handlebars">
 					{{#view  KG.Button titleBinding="KG.core_note.createNoteLabel" classBinding="isActive" sc_action="createNoteAction"}}
+						<img {{bindAttr src="KG.core_note.createNoteImg"}}/>
 					{{/view}}
 				</script>
 			</span>
@@ -163,7 +164,7 @@
 					{{#view KG.SearchField resultsBinding="KG.searchController.searchHistorySize" placeholder_not_loc="_search" valueBinding="KG.searchController.searchValue"}}
 					{{/view}}
 					{{#collection contentBinding="KG.searchController" isVisibleBinding="KG.searchController.hasResults" tagName="ul" class="search-cat-list no-style-list"}}
-						{{#view KG.Button class="search-cat-item" tagName="div" sc_action="selectSearchCategory"}}
+						{{#view KG.Button class="search-cat-item" tagName="div" sc_action="selectSearchCategoryAction"}}
 							<table class="search-category-table">
 							<tr>
 							<td>
@@ -206,8 +207,13 @@
 							{{/view}}
 						</td>
 						<td class="search-select-cell">
-							{{#view KG.SelectFeatureButtonView isVisibleBinding="itemView.content.isSelectable" class="search-select" tagName="div" classBinding="isActive"}}	
+							{{#view KG.Button isVisibleBinding="itemView.content.isSelectable" class="search-select" tagName="div" classBinding="isActive" sc_action="selectFeatureInspectorAction"}}	
 								<img src="resources/images/right_arrow_32.png"/>		
+							{{/view}}
+						</td>
+						<td class="search-select-cell">
+							{{#view KG.Button isVisibleBinding="itemView.content.hasCreateNote" class="search-create-note" tagName="div" classBinding="isActive" sc_action="createNoteFromFeatureAction"}}	
+								<img src="resources/images/note_32.png"/>		
 							{{/view}}
 						</td>
 					</tr>

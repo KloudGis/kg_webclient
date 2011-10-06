@@ -47,7 +47,8 @@ KG.core_search = SC.Object.create({
                         records.pushObject(SC.Object.create({
                             title: results[i].formatted_address,
                             coords: [geo],
-                            center: lonLat
+                            center: lonLat,
+							hasCreateNote: YES
                         }));
                     }
                     KG.store.loadRecord(KG.SearchCategory, {
@@ -77,10 +78,10 @@ KG.core_search = SC.Object.create({
         KG.searchController.set('content', []);
     },
 
-    showResults: function(cat) {
+    showResults: function() {
         KG.searchResultsController.set('listVisible', YES);
+		var cat = KG.searchResultsController.get('category');
         var records = cat.get('records');
-        KG.searchResultsController.set('category', cat);
         KG.searchResultsController.set('content', records);
     },
 
@@ -96,6 +97,6 @@ KG.core_search = SC.Object.create({
             //hide bottom list too.
             KG.core_search.clearSearchFeatures();
         },
-        500);
+        600);
     }
 });

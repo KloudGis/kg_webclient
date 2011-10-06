@@ -1,25 +1,25 @@
 KG.core_inspector = SC.Object.create({
-	selectFeature: function(feature) {
-        if (!SC.none(feature)) {
-            var center = feature.get('center');
-			var panel = $('#left-side-panel');
-	        panel.addClass('active');
-			KG.core_highlight.clearHighlightFeature();
-			KG.core_highlight.highlightFeature(feature);
-            setTimeout(function() {
-				KG.core_leaflet.mapSizeDidChange(center);           				
-            },
-            600);
-			KG.inspectorController.set('feature', feature);
-			KG.inspectorController.set('content', feature.getAttributes());
-        }
+	
+	_highlight: null,
+	
+    selectFeature: function(feature) {
+		//refresh the map size after the anim
+        var center = feature.get('center');
+        setTimeout(function() {
+            KG.core_leaflet.mapSizeDidChange(center);
+        },
+        600);
+        KG.core_highlight.clearHighlight(this._highlight);
+        this._highlight = KG.core_highlight.highlightFeature(feature);
+        KG.inspectorController.set('feature', feature);
+        KG.inspectorController.set('content', feature.getAttributes());
     },
 
     cleanSelectFeature: function() {
-		KG.core_highlight.clearHighlightFeature();
-		var center = KG.core_leaflet.getCenter();
-		var panel = $('#left-side-panel');
-		panel.removeClass('active');
+        KG.core_highlight.clearHighlight(this._highlight);
+		this._highlight = null;
+		//refresh the map size after the anim
+        var center = KG.core_leaflet.getCenter();     
         setTimeout(function() {
             KG.core_leaflet.mapSizeDidChange(center)
         },
