@@ -11,5 +11,18 @@ KG.core_highlight = SC.Object.create({
             return NO;
         }
         return KG.core_leaflet.addHighlight(feature.get('coords'), feature.get('geo_type'));
+    },
+
+	clearHighlightMarker: function(hlMarker) {
+        if (hlMarker) {
+            KG.core_leaflet.removeMarker(hlMarker);
+        }
+    },
+
+    addHighlightMarker: function(lonLat) {
+        if (!lonLat) {
+            return NO;
+        }
+        return KG.core_leaflet.addHighlightMarker(lonLat);
     }
 })

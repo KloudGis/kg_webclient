@@ -48,13 +48,13 @@ SC.mixin(KG, {
                 }
             }),
 
+			mapLoginSucceeded: function(){
+		    	KG.core_layer.loadLayers();
+			},
+
             runningState: SC.State.extend({
 
                 substatesAreConcurrent: YES,
-
-                enterState: function() {
-                    KG.core_layer.loadLayers();
-                },
 
                 /**Concurrent state for INSPECTOR*/
                 inspectorState: SC.State.extend({
@@ -62,10 +62,10 @@ SC.mixin(KG, {
 
                     inspectorHiddenState: SC.State.extend({
 
-                        selectFeatureInspectorAction: function(feature) {
-                            if (feature) {
+						selectFeatureInspectorAction: function(feature) {
+                            if (feature && feature.get('isSelectable') && feature.get('isInspectorSelectable')) {
+								this.gotoState('inspectorVisibleState');
                                 KG.core_inspector.selectFeature(feature);
-                                this.gotoState('inspectorVisibleState');
                             }
                         }
                     }),
@@ -84,7 +84,7 @@ SC.mixin(KG, {
                         },
 
                         selectFeatureInspectorAction: function(feature) {
-                            if (feature) {
+                            if (feature && feature.get('isSelectable') && feature.get('isInspectorSelectable')) {
                                 KG.core_inspector.selectFeature(feature);
                             }
                         },
@@ -169,8 +169,10 @@ SC.mixin(KG, {
                     searchResultsState: SC.State.extend({
 
 						_highlight: null, 
+						_hlMarker: null,
 						
                         enterState: function() {
+							console.log('show results state');
                             KG.core_search.showResults();
                         },
 
@@ -178,7 +180,14 @@ SC.mixin(KG, {
                             KG.core_search.hideResults();
 							KG.core_highlight.clearHighlight(this._highlight);
 							this._highlight = null;
+							KG.core_highlight.clearHighlightMarker(this._hlMarker);
+							this._hlMarker = null;
                         },
+
+						selectSearchCategoryAction: function(cat) {
+	                        KG.searchResultsController.set('category', cat);
+							KG.core_search.showResults();
+	                    },
 
                         hideSearchResultAction: function() {
                             this.gotoState('navigationState');
@@ -194,9 +203,23 @@ SC.mixin(KG, {
                         },
 
 						featureZoomAction: function(feature){
+							KG.core_highlight.clearHighlightMarker(this._hlMarker);
 							KG.core_highlight.clearHighlight(this._highlight);
 							this._highlight = KG.core_highlight.highlightFeature(feature);
+							this._hlMarker = KG.core_highlight.addHighlightMarker(feature.get('center'));
+							KG.core_note.setHighlightMarker(this._hlMarker);
 							KG.core_leaflet.setCenter(feature.get('center'));
+							
+						},
+						
+						selectFeatureInspectorAction: function(feature) {
+							KG.core_highlight.clearHighlightMarker(this._hlMarker);
+							if(KG.store.recordTypeFor(feature.get('storeKey')) === KG.Note){
+								var marker = KG.core_highlight.addHighlightMarker(feature.get('center'));							
+								KG.core_note.setHighlightMarker(marker);
+								KG.core_note.activateNote(feature, marker);	
+								this.gotoState('editNoteState');					
+							}
 						}
                     }),
 
@@ -332,8 +355,8 @@ SC.mixin(KG, {
 
                             exitState: function() {
                                 console.log('exit editNoteState');
-                                KG.core_note.rollbackModifications();
-                                KG.activeNoteController.set('content', null);
+                                KG.core_note.postEdition();
+                                KG.activeNoteController.set('content', null);						
                             },
 
                             showCommentsAction: function() {

@@ -20,6 +20,8 @@ KG.core_note = SC.Object.create({
 	
 	//feature to use to create a new note
 	featureTemplate: null,
+	
+	_removeOnCloseMarker: null,
 
     beginModifications: function() {
         this.rollbackModifications();
@@ -41,8 +43,15 @@ KG.core_note = SC.Object.create({
             this._store.discardChanges();
             this._store.destroy();
             this._store = null;
-        }
+        }	
     },
+
+	postEdition: function(){
+		this.rollbackModifications();
+		if(this._highlightMarker){
+			KG.core_leaflet.removeMarker(this._highlightMarker);
+		}
+	},
 
     zoomActiveNote: function() {
         console.log('zoom note.');
@@ -109,6 +118,7 @@ KG.core_note = SC.Object.create({
         if (!inNote) {
             return NO;
         }
+		KG.activeNoteController.set('marker', marker);
         KG.activeNoteController.set('content', inNote);
         var noteDiv = this._div_active_note;
         if (SC.none(noteDiv)) {
@@ -128,6 +138,10 @@ KG.core_note = SC.Object.create({
         1);
         return YES;
     },
+
+	setHighlightMarker: function(marker){
+		this._highlightMarker = marker;
+	},
 
     activateMultipleNotes: function(notes, marker) {
         KG.notesPopupController.set('marker', marker);
@@ -223,6 +237,10 @@ KG.core_note = SC.Object.create({
                 }
             }
         }
+		//readd the hl marker if any (to put it on top)
+		if(this._highlightMarker){
+			KG.core_leaflet.reAddMarker(this._highlightMarker);
+		}
     },
 
     _waitDiv: undefined,

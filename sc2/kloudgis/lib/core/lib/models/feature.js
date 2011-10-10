@@ -13,6 +13,7 @@ KG.Feature = KG.Record.extend({
     centroid: SC.Record.attr(Object),
 
 	isSelectable: YES,
+	isInspectorSelectable: YES,
 
     center: function() {
         var center;
