@@ -7,7 +7,11 @@ KG.TitleView = SC.View.extend({
         if (this.get('recordsReady')) {
             var count = KG.sandboxesController.get('length');
             if (count > 0) {
-                return "_sandboxesList".loc(count);
+				if(count === 1){
+					return "_sandboxesListOne".loc();
+				}else{
+                	return "_sandboxesList".loc(count);
+				}
             } else {
                 return "_sandboxesNothing".loc();
             }

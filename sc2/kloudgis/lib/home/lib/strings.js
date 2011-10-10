@@ -1,6 +1,7 @@
 var fr = { 
 	"_homeTitle": "Kloudgis",
-	"_sandboxesList": "Vos projets: (%@)",
+	"_sandboxesListOne": "Votre projet:",
+	"_sandboxesList": "Vos %@ projets:",
 	"_sandboxesNothing": "Vous n'avez pas de projet.",
 	"_errorLoading": "Erreur lors du chargement des projets.",
 	"_welcomeUser": "Bienvenue %@",
@@ -9,7 +10,8 @@ var fr = {
 
 var en = {
 	"_homeTitle": "Kloudgis",
-	"_sandboxesList": "Your projets: (%@)",
+	"_sandboxesListOne": "Your projet:",
+	"_sandboxesList": "Your %@ projets:",
 	"_sandboxesNothing": "You don't have any project.",
 	"_errorLoading": "Cannot load the projects.",
 	"_welcomeUser": "Welcome %@",

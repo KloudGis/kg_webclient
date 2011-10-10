@@ -187,6 +187,7 @@ SC.mixin(KG, {
                         createNoteFromFeatureAction: function(feature) {
                             //create the note and put it in edit mode
                             if (feature) {
+								KG.core_leaflet.setCenter(feature.get('center'));
                                 KG.core_note.set('featureTemplate', feature);
                                 this.gotoState('createNoteState');
                             }

@@ -1,15 +1,19 @@
 /*FEATURE INFO*/
 
-.leaflet-popup-content-wrapper.info-popup{
+.leaflet-popup.info-popup .leaflet-popup-close-button{
+	display: none;
+}
+
+.leaflet-popup.info-popup .leaflet-popup-content-wrapper{
 	background: rgba(0,0,0,0.6);
 	box-shadow: none;
 }
-.leaflet-popup-tip.info-popup{
+.leaflet-popup.info-popup .leaflet-popup-tip{
 	background: rgba(0,0,0,0.6);
 	padding: 0px;
 }
 
-.leaflet-popup-content-wrapper.info-popup .leaflet-popup-content{
+.leaflet-popup.info-popup .leaflet-popup-content-wrapper .leaflet-popup-content{
 	margin: 0px;
 }
 

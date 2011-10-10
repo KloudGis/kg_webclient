@@ -102,8 +102,7 @@ KG.core_leaflet = SC.Object.create({
     onLayerAdd: function(e) {
         SC.run.begin();
         if (e.layer === this._popupInfo) {
-            $(this._popupInfo._wrapper).addClass('info-popup');
-            $(this._popupInfo._tip).addClass('info-popup');
+            $(this._popupInfo._container).addClass('info-popup');
         }
         SC.run.end();
     },
