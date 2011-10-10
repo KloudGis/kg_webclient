@@ -2,6 +2,7 @@ require("sproutcore-datastore");
 require("./data_sources/store");
 require("./models/record");
 require("./models/note");
+require("./models/comment");
 
 KG.store = SC.Store.create({
     commitRecordsAutomatically: NO

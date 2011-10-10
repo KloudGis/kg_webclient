@@ -36,6 +36,7 @@ require("./views/expand_button");
 require("./controllers/note_markers");
 require("./controllers/notes_popup");
 require("./controllers/active_note");
+require("./controllers/active_comments");
 require("./core_note");
 require("./models/note_marker");
 require("./views/note_popup_item");

@@ -115,21 +115,27 @@ KG.Store = SC.DataSource.extend({
         var rtype = store.recordTypeFor(storeKey);
         var id = store.idFor(storeKey);
         var url;
-        if (!SC.none(id) && rtype == 'KG.Note') {
-            url = '/api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
-        }
-        if (url) {
-            this.ajaxSupport(store, storeKey, 'GET', url);
-            return YES;
+        if (!SC.none(id)) {
+            if (rtype === KG.Note) {
+                url = '/api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+            } else if (rtype === KG.Comment) {
+                url = '/api_data/protected/comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+            }
+            if (url) {
+                this.ajaxSupport(store, storeKey, 'GET', url);
+                return YES;
+            }
         }
         return NO; // return YES if you handled the storeKey
     },
 
     createRecord: function(store, storeKey) {
         var rtype = store.recordTypeFor(storeKey);
-        if (rtype == 'KG.Note') {
+        if (rtype === KG.Note) {
             url = '/api_data/protected/notes?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
-        }
+        } else if (rtype === KG.Comment) {
+			url = '/api_data/protected/comments?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
+		}
         if (url) {
             this.ajaxSupport(store, storeKey, 'POST', url, JSON.stringify(store.readDataHash(storeKey)));
             return YES;
@@ -141,8 +147,12 @@ KG.Store = SC.DataSource.extend({
         var rtype = store.recordTypeFor(storeKey);
         var id = store.idFor(storeKey);
         var url;
-        if (!SC.none(id) && rtype == 'KG.Note') {
-            url = '/api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+        if (!SC.none(id)) {
+			if (rtype === KG.Note) {
+                url = '/api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+            } else if (rtype === KG.Comment) {
+                url = '/api_data/protected/comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+            }
         }
         if (url) {
             this.ajaxSupport(store, storeKey, 'PUT', url, JSON.stringify(store.readDataHash(storeKey)));
@@ -155,8 +165,12 @@ KG.Store = SC.DataSource.extend({
         var rtype = store.recordTypeFor(storeKey);
         var id = store.idFor(storeKey);
         var url;
-        if (!SC.none(id) && rtype == 'KG.Note') {
-            url = '/api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+        if (!SC.none(id)) {
+			if (rtype === KG.Note) {
+                url = '/api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+            } else if (rtype === KG.Comment) {
+                url = '/api_data/protected/comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+            }
         }
         if (url) {
             this.ajaxSupport(store, storeKey, 'DELETE', url);
