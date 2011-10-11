@@ -18,6 +18,7 @@
 	<link rel="stylesheet" href="css/common.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="ext/leaflet/leaflet.css" type="text/css" media="screen" />
     <title>Kloudgis</title>
+	<!-- popup for Multiple NOTES -->
 	<script type="text/x-handlebars" data-template-name="notes-marker-popup">
 		{{#view class="popup-note-title"}}
 			{{KG.notesPopupController.popupTitle}}
@@ -28,11 +29,12 @@
 			{{/view}}
 		{{/collection}}
 	</script>
+		<!-- popup for EDIT a NOTE -->
 	<script type="text/x-handlebars" data-template-name="active-note-popup">
 		{{#view class="active-note-popup"}}	
-		{{#view KG.Button class="note-zoom-button" isVisibleBinding="KG.activeNoteController.isOldRecord" tagName="div" sc_action="zoomNoteAction"}}
-			<a href="javascript:void(0)">zoom</a>
-		{{/view}}	
+			{{#view KG.Button class="note-zoom-button" isVisibleBinding="KG.activeNoteController.isOldRecord" tagName="div" sc_action="zoomNoteAction"}}
+				<a href="javascript:void(0)">zoom</a>
+			{{/view}}	
 			{{#view class="note-date-label"}}
 				{{KG.activeNoteController.dateValue}}
 			{{/view}}			
@@ -40,7 +42,7 @@
 	    	{{#view KG.TextField valueBinding="KG.activeNoteController.titleValue" disabledBinding="KG.activeNoteController.isDisabled" type="text" placeholder_not_loc="_noteTitlePlaceholder" }}
 			{{/view}}
 			{{KG.activeNoteController.descriptionLabel}}
-			{{#view KG.TextArea disabledBinding="KG.activeNoteController.isDisabled" valueBinding="KG.activeNoteController*content.description"}}
+			{{#view KG.TextArea id="note-description-area" disabledBinding="KG.activeNoteController.isDisabled" valueBinding="KG.activeNoteController*content.description"}}
 			{{/view}}
 			{{#view class="active-note-popup-bottom"}}
 				{{#view KG.Button isVisibleBinding="KG.activeNoteController.isUpdateVisible" class="white-button" classBinding="isActive" sc_action="confirmNoteAction"}}
@@ -53,8 +55,34 @@
 					{{KG.activeNoteController.authorValue}}
 				{{/view}}
 			{{/view}}
+			{{#view KG.Button class="comment-button" isVisibleBinding="KG.activeCommentsController.hidden" classBinding="isActive" sc_action="showCommentsAction"}}
+				<a href="javascript:void(0)">
+					{{KG.activeNoteController.commentsLabel}}
+				</a>
+			{{/view}}
+			{{#view KG.Button class="comment-button" isVisibleBinding="KG.activeCommentsController.showing" classBinding="isActive" sc_action="hideCommentsAction"}}
+				<a href="javascript:void(0)">
+					{{KG.activeNoteController.hideCommentsLabel}}
+				</a>
+			{{/view}}
+			{{#view KG.CommentContainerView class="note-comments-container" isVisibleBinding="KG.activeCommentsController.showing"}}
+				{{#collection contentBinding="KG.activeCommentsController.content" tagName="ul" class="popup-comment-list no-style-list"}}
+					{{#view class="note-comment-author"}}
+						{{itemView.content.author_descriptor}}
+					{{/view}}
+					{{#view class="note-comment-content"}}
+						{{itemView.content.value}}
+					{{/view}}
+					{{#view class="note-comment-date"}}
+						{{itemView.content.formatted_date}}
+					{{/view}}
+				{{/collection}}
+				{{#view KG.CommentAreaView id="note-new-comment-area" valueBinding="KG.newCommentController.content" placeholder_not_loc="_commentPlaceholder"}}
+				{{/view}}
+			{{/view}}
 		{{/view}}
 	</script>
+		<!-- popup for Feature Info -->
 	<script type="text/x-handlebars" data-template-name="info-popup">
 		{{#collection contentBinding="KG.infoController"  isVisibleBinding="KG.infoController.listVisible" tagName="ul" class="popup-info-list no-style-list"}}
 			{{#view KG.FeatureInfoPopupItemView class="popup-info-item" ignoreIfFirst="true"}}
@@ -98,6 +126,8 @@
 		</tr>
 		</table>	
 	</script>
+	
+		<!-- Inspector renderers -->
 	<script type="text/x-handlebars" data-template-name="read-only-renderer">
 		<span class="inspector-attr-name">
 			{{itemView.content.name}}
@@ -233,6 +263,7 @@
    <script type="text/javascript" src="assets/sandbox_lib.js" ></script>
 <!-- load my app external lib --> 
    <script type="text/javascript" src="ext/leaflet/leaflet.js" ></script> 
+   <script type="text/javascript" src="ext/plugins/autoresize.jquery.js" ></script> 
    <script type="text/javascript"> 
 	      spade.ready(function() { 
 			//bootstrap

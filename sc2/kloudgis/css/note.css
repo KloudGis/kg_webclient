@@ -54,11 +54,12 @@
 	width: 100%;
 }
 
-.active-note-popup textarea{
-	width: 100%;
-	height: 60px;
-	resize: none;
+#note-description-area{	
+	height: 48px;
+	display: block;
+	width:100%;
 }
+
 
 .active-note-popup-bottom{
 	width: 220px;
@@ -70,3 +71,34 @@
 	margin-left:10px;
 }
 
+.note-comments-container{
+	max-height:3cm;
+	overflow-y: auto;
+}
+
+.note-comments-container textarea{
+	width:220px;
+}
+
+.active-note-popup .comment-button{
+	background: none;
+	border: none;
+}
+
+#note-new-comment-area{
+	display: block;
+	width:100%;
+	height:28px;
+}
+
+.note-comment-author{
+	font-weight: bold;
+}
+
+.note-comment-content{
+	
+}
+
+.note-comment-date{
+	font-weight: 400;
+}

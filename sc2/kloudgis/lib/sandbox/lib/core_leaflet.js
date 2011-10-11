@@ -46,7 +46,7 @@ KG.core_leaflet = SC.Object.create({
         });
 
         // initialize the map on the "map" div
-        var map = new L.Map('map');
+        var map = new L.Map('map', {});
         //	map.addControl(this.layerControl);
         map.setView(new L.LatLng(46, -72), 8).addLayer(mapquest);
 
@@ -99,6 +99,18 @@ KG.core_leaflet = SC.Object.create({
         }));
         SC.run.end();
     },
+
+	enableMouseWheelHandler: function(){
+		if(this.map.options['scrollWheelZoom']){
+			this.map['scrollWheelZoom'].enable();
+		}
+	},
+	
+	disableMouseWheelHandler: function(){
+		if(this.map.options['scrollWheelZoom']){
+			this.map['scrollWheelZoom'].disable();
+		}
+	},
 
     onLayerAdd: function(e) {
         SC.run.begin();

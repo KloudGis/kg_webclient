@@ -281,5 +281,12 @@ KG.core_note = SC.Object.create({
                 100);
             }
         }
-    }
+    },
+
+	fetchComments: function(){
+		var nested_note = KG.activeNoteController.get('content');
+		var note = KG.store.find(nested_note);
+		var comments = note.get('comments');
+		KG.activeCommentsController.set('content', comments);
+	}
 });

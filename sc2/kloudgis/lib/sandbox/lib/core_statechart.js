@@ -351,21 +351,40 @@ SC.mixin(KG, {
                             enterState: function() {
                                 console.log('enter editNoteState');
                                 KG.core_note.beginModifications();
+								KG.newCommentController.set('content', '');	
+								KG.activeCommentsController.set('showing', NO);
+								KG.core_leaflet.disableMouseWheelHandler();
+							/*	//give a chance to render the popup before setting the height		
+								setTimeout(function(){
+									$(".note-comments-container").hide();
+								},1);	*/				
                             },
 
                             exitState: function() {
                                 console.log('exit editNoteState');
                                 KG.core_note.postEdition();
-                                KG.activeNoteController.set('content', null);						
+                                KG.activeNoteController.set('content', null);	
+								KG.activeCommentsController.set('content', null);
+								KG.activeCommentsController.set('showing', NO);	
+								KG.core_leaflet.enableMouseWheelHandler();							
                             },
 
                             showCommentsAction: function() {
                                 //show comment section
+								KG.core_note.fetchComments();
+								KG.activeCommentsController.set('showing', YES);								
+								$("#note-new-comment-area").autoResize({extraSpace: 20});
                             },
 
                             hideCommentsAction: function() {
                                 //hide comment section
+								KG.activeCommentsController.set('showing', NO);
                             },
+
+							addCommentAction: function(){
+								var comment = KG.newCommentController.get('content');
+								KG.newCommentController.set('content', '');														
+							},
 
                             confirmNoteAction: function() {
                                 var note = KG.activeNoteController.get('content');
