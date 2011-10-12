@@ -17,11 +17,11 @@ KG.core_note = SC.Object.create({
 
     /* chained store to perform modifications*/
     _store: null,
-	
-	//feature to use to create a new note
-	featureTemplate: null,
-	
-	_removeOnCloseMarker: null,
+
+    //feature to use to create a new note
+    featureTemplate: null,
+
+    _removeOnCloseMarker: null,
 
     beginModifications: function() {
         this.rollbackModifications();
@@ -35,7 +35,7 @@ KG.core_note = SC.Object.create({
     commitModifications: function() {
         this._store.commitChanges().destroy();
         this._store = null;
-        KG.store.commitRecords();		
+        KG.store.commitRecords();
     },
 
     rollbackModifications: function() {
@@ -43,15 +43,15 @@ KG.core_note = SC.Object.create({
             this._store.discardChanges();
             this._store.destroy();
             this._store = null;
-        }	
+        }
     },
 
-	postEdition: function(){
-		this.rollbackModifications();
-		if(this._highlightMarker){
-			KG.core_leaflet.removeMarker(this._highlightMarker);
-		}
-	},
+    postEdition: function() {
+        this.rollbackModifications();
+        if (this._highlightMarker) {
+            KG.core_leaflet.removeMarker(this._highlightMarker);
+        }
+    },
 
     zoomActiveNote: function() {
         console.log('zoom note.');
@@ -59,7 +59,7 @@ KG.core_note = SC.Object.create({
         if (note) {
             var coord = note.get('coordinate');
             if (coord) {
-                KG.core_leaflet.closeActivePopup();
+                KG.core_leaflet.closePopup();
                 KG.core_leaflet.setCenter(KG.LonLat.create({
                     lon: coord.x,
                     lat: coord.y
@@ -70,16 +70,17 @@ KG.core_note = SC.Object.create({
 
     //create a marker to let the user set the position
     locateNote: function() {
-        KG.core_leaflet.cleanUpNewNoteMarker();
+        this.cancelLocateNote();
         var center = KG.core_leaflet.getCenter();
-        var marker = KG.core_leaflet.addNewNoteMarker("_moveNote".loc());
-        this._new_note_marker = marker;
+        this._new_note_marker = KG.core_leaflet.addNewNoteMarker("_moveNote".loc());
         return YES;
     },
 
     cancelLocateNote: function() {
-        this._new_note_marker = null;
-        KG.core_leaflet.cleanUpNewNoteMarker();
+        if (!SC.none(this._new_note_marker)) {
+            KG.core_leaflet.removeMarker(this._new_note_marker);
+            this._new_note_marker = null;
+        }
     },
 
     //create the actual note record and activate it.
@@ -87,7 +88,7 @@ KG.core_note = SC.Object.create({
         this.beginModifications();
         var note;
         if (!SC.none(this.get('featureTemplate'))) {
-			var feature = this.get('featureTemplate');
+            var feature = this.get('featureTemplate');
             note = this._store.createRecord(KG.Note, {
                 coordinate: {
                     x: feature.get('center').get('lon'),
@@ -99,27 +100,37 @@ KG.core_note = SC.Object.create({
         } else {
             note = this._store.createRecord(KG.Note, {
                 coordinate: {
-                    x: this._new_note_marker.get('coordinate').x,
-                    y: this._new_note_marker.get('coordinate').y
+                    x: this._new_note_marker.get('lon'),
+                    y: this._new_note_marker.get('lat')
                 }
             });
         }
         this.activateNote(note, this._new_note_marker);
     },
 
-	clearCreateNote: function(){
-		this._new_note_marker = null;
-		this.set('featureTemplate', null);
-		KG.core_leaflet.cleanUpNewNoteMarker();
-	},
+    clearCreateNote: function() {
+        KG.core_leaflet.removeMarker(this._new_note_marker);
+        this._new_note_marker = null;
+        this.set('featureTemplate', null);
+    },
 
     //show the note form to let the user fill it up
-    activateNote: function(inNote, marker) {
+    activateNote: function(inNote, params) {
         if (!inNote) {
             return NO;
         }
-		KG.activeNoteController.set('marker', marker);
-        KG.activeNoteController.set('content', inNote);
+        if (inNote.get('status') === SC.Record.READY_NEW || params.isFresh) {
+            this.continueActivateNote(inNote, params.marker);
+        } else {
+            inNote.refresh(YES,
+            function() {
+                KG.core_note.continueActivateNote(inNote, params.marker)
+            });
+        }
+        return YES;
+    },
+
+    continueActivateNote: function(note, marker) {
         var noteDiv = this._div_active_note;
         if (SC.none(noteDiv)) {
             this._div_active_note = document.createElement('div');
@@ -129,19 +140,19 @@ KG.core_note = SC.Object.create({
             });
             this._view_active_note.appendTo(noteDiv);
         }
+        KG.activeNoteController.set('marker', marker);
+        KG.activeNoteController.set('content', note);
         setTimeout(function() {
             SC.run.begin();
-            KG.core_leaflet.refreshMarkerPopup(marker, noteDiv);
-            KG.core_leaflet.openMarkerPopup(marker);
+            KG.core_leaflet.showPopupMarker(marker, noteDiv);
             SC.run.end();
         },
         1);
-        return YES;
     },
 
-	setHighlightMarker: function(marker){
-		this._highlightMarker = marker;
-	},
+    setHighlightMarker: function(marker) {
+        this._highlightMarker = marker;
+    },
 
     activateMultipleNotes: function(notes, marker) {
         KG.notesPopupController.set('marker', marker);
@@ -156,7 +167,7 @@ KG.core_note = SC.Object.create({
         var div = this._div_multiple_notes;
         setTimeout(function() {
             SC.run.begin();
-            KG.core_leaflet.refreshMarkerPopup(marker, div);
+            KG.core_leaflet.showPopupMarker(marker, div);
             SC.run.end();
         },
         1);
@@ -237,22 +248,18 @@ KG.core_note = SC.Object.create({
                 }
             }
         }
-		//readd the hl marker if any (to put it on top)
-		if(this._highlightMarker){
-			KG.core_leaflet.reAddMarker(this._highlightMarker);
-		}
+        //readd the hl marker if any (to put it on top)
+        if (this._highlightMarker) {
+            KG.core_leaflet.reAddMarker(this._highlightMarker);
+        }
     },
-
-    _waitDiv: undefined,
 
     //the user clicked a marker, adjust the popup content
     markerClicked: function(marker) {
-        console.log('marker is clicked');
-        if (!this._waitDiv) {
-            this._waitDiv = document.createElement('div');
-            $(this._waitDiv).text('...');
-        }
-        KG.core_leaflet.refreshMarkerPopup(marker, this._waitDiv);
+        KG.statechart.sendAction('clickMarkerAction', marker);
+    },
+
+    continueMarkerClicked: function(marker) {
         var notes = marker.get('features');
         var len = notes.get('length');
         var params = {
@@ -262,6 +269,7 @@ KG.core_note = SC.Object.create({
         }
         for (i = 0; i < len; i++) {
             var note = notes.objectAt(i);
+            params.isFresh = note.get('status') & SC.Record.BUSY;
             note.onReady(this, this.noteReady, params);
         }
     },
@@ -271,22 +279,68 @@ KG.core_note = SC.Object.create({
         if (params.count === params.length) {
             if (params.count === 1) {
                 setTimeout(function() {
-                    KG.statechart.sendAction('noteSelectedAction', note, params.marker);
+                    SC.run.begin();
+                    KG.statechart.sendAction('noteSelectedAction', note, params);
+                    SC.run.end();
                 },
                 100);
             } else {
                 setTimeout(function() {
+                    SC.run.begin();
                     KG.statechart.sendAction('multipleNotesSelectedAction', params.marker.get('features'), params.marker);
+                    SC.run.end();
                 },
                 100);
             }
         }
     },
 
-	fetchComments: function(){
-		var nested_note = KG.activeNoteController.get('content');
-		var note = KG.store.find(nested_note);
-		var comments = note.get('comments');
-		KG.activeCommentsController.set('content', comments);
-	}
+    fetchComments: function() {
+        console.log('refresh comments');
+        var nested_note = KG.activeNoteController.get('content');
+        var note = KG.store.find(nested_note);
+        note.onReady(null,
+        function() {
+            KG.activeCommentsController.set('content', []);
+            var comments = note.get('comments');
+            var params = {
+                count: 0,
+                length: comments.get('length'),
+                records: [],
+            }
+            if (params.length > 0) {
+                comments.forEach(function(comment) {
+                    comment.onReady(KG.core_note, KG.core_note.commentReady, params);
+                });
+            } else {
+                KG.statechart.sendAction('commentsReadyEvent');
+            }
+        });
+    },
+
+    commentReady: function(comment, params) {
+        params.count++;
+        params.records.push(comment);
+        if (params.count === params.length) {
+            KG.statechart.sendAction('commentsReadyEvent');
+            KG.activeCommentsController.set('content', KG.activeCommentsController.sortByDate(params.records));
+        }
+    },
+
+    addCommentToActiveNote: function(comment) {
+        var nested_note = KG.activeNoteController.get('content');
+        if (nested_note) {
+            var rec_comment = KG.store.createRecord(KG.Comment, {
+                value: comment,
+                author_descriptor: '_me.loc()',
+                note: nested_note.get('id')
+            });
+            KG.store.commitRecords();
+            rec_comment.onReady(null,
+            function() {
+                KG.activeCommentsController.get('content').pushObject(rec_comment);
+                KG.statechart.sendAction('commentsReadyEvent');
+            });
+        }
+    }
 });

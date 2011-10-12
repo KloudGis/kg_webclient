@@ -85,7 +85,7 @@ KG.core_info = SC.Object.create({
     },
 
     hideInfoPopup: function() {
-        KG.core_leaflet.hidePopupInfo();
+        KG.core_leaflet.closePopup();
     },
 
     expandPopupDidChange: function() {

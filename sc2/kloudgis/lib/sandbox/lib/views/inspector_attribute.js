@@ -4,7 +4,7 @@ KG.InspectorAttributeView = SC.View.extend({
 	_renderer: null,
 	
 	destroy: function() {
-		console.log('inspector attribute destroy!!');
+		//console.log('inspector attribute destroy!!');
 		this._super();
 		if(!SC.none(this._renderer)){
 			this._renderer.destroy();

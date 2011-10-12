@@ -83,17 +83,32 @@ KG.activeNoteController = SC.Object.create({
         return NO;
     }.property('content.status', 'content.author', 'KG.core_sandbox.isSandboxOwner'),
 
-	commentsLabel: function(){
-		var len = this.getPath('content.comments.length');
-		if(len === 0){
-			return "_comment".loc();
-		}else{
-			return "_comments".loc(len);
-		}
-	}.property('content.comments.length'),
-	
-	hideCommentsLabel: function(){
-		return "_hideComment".loc();
-	}.property()
+    commentsLabel: '?',
+
+    hideCommentsLabel: function() {
+        return "_hideComment".loc();
+    }.property(),
+
+    contentDidChange: function() {
+        this.refreshCommentsLabel();
+    }.observes('content'),
+
+    activeCommentsDidChange: function() {
+		this.refreshCommentsLabel();
+	}.observes('KG.activeCommentsController*content.length'),
+
+    refreshCommentsLabel: function() {
+        var len;
+        if (KG.activeCommentsController.getPath('content.length') > 0) {
+            len = KG.activeCommentsController.getPath('content.length');
+        } else {
+            len = this.getPath('content.comments.length');
+        }
+        if (len === 0) {
+            this.set('commentsLabel', "_comment".loc());
+        } else {
+            this.set('commentsLabel', "_comments".loc(len));
+        }
+    }
 
 });

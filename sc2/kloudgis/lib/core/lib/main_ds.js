@@ -107,6 +107,7 @@ SC.Record.reopen({
     },
 
     _onReady: function() {
+	//	console.log('onReady status is '  + this.get('status'));
         if (this.get('status') & SC.Record.READY) {
             var queue = this._readyQueue;
             var idx, len;

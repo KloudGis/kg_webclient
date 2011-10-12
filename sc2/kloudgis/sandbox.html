@@ -55,17 +55,17 @@
 					{{KG.activeNoteController.authorValue}}
 				{{/view}}
 			{{/view}}
-			{{#view KG.Button class="comment-button" isVisibleBinding="KG.activeCommentsController.hidden" classBinding="isActive" sc_action="showCommentsAction"}}
+			{{#view KG.Button class="comment-button" isVisibleBinding="KG.activeCommentsController.hideButtonVisible" classBinding="isActive" sc_action="showCommentsAction"}}
 				<a href="javascript:void(0)">
 					{{KG.activeNoteController.commentsLabel}}
 				</a>
 			{{/view}}
-			{{#view KG.Button class="comment-button" isVisibleBinding="KG.activeCommentsController.showing" classBinding="isActive" sc_action="hideCommentsAction"}}
+			{{#view KG.Button class="comment-button" isVisibleBinding="KG.activeCommentsController.showButtonVisible" classBinding="isActive" sc_action="hideCommentsAction"}}
 				<a href="javascript:void(0)">
 					{{KG.activeNoteController.hideCommentsLabel}}
 				</a>
 			{{/view}}
-			{{#view KG.CommentContainerView class="note-comments-container" isVisibleBinding="KG.activeCommentsController.showing"}}
+			{{#view KG.CommentContainerView class="note-comments-container" classBinding="KG.activeCommentsController.showing"}}
 				{{#collection contentBinding="KG.activeCommentsController.content" tagName="ul" class="popup-comment-list no-style-list"}}
 					{{#view class="note-comment-author"}}
 						{{itemView.content.author_descriptor}}
@@ -76,9 +76,9 @@
 					{{#view class="note-comment-date"}}
 						{{itemView.content.formatted_date}}
 					{{/view}}
-				{{/collection}}
-				{{#view KG.CommentAreaView id="note-new-comment-area" valueBinding="KG.newCommentController.content" placeholder_not_loc="_commentPlaceholder"}}
-				{{/view}}
+				{{/collection}}			
+			{{/view}}
+			{{#view KG.CommentAreaView id="note-new-comment-area" isVisibleBinding="KG.activeCommentsController.showing" valueBinding="KG.newCommentController.content" placeholder_not_loc="_commentPlaceholder"}}
 			{{/view}}
 		{{/view}}
 	</script>

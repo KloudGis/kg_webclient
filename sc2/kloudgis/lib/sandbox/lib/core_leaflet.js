@@ -1,10 +1,10 @@
 KG.core_leaflet = SC.Object.create({
 
     map: null,
-    activeMarker: null,
 
     //private variables
     _popupInfo: null,
+    _popupMarker: null,
 
     //icons
     noteIcon: new L.Icon(),
@@ -67,6 +67,10 @@ KG.core_leaflet = SC.Object.create({
         this._popupInfo = new L.Popup({
             closeButton: false
         });
+		this._popupMarker = new L.Popup({
+            closeButton: true,
+			offset: new L.Point(0, -33),
+        });
     },
 
     onZoom: function(e) {
@@ -123,10 +127,11 @@ KG.core_leaflet = SC.Object.create({
     onLayerRemove: function(e) {
         SC.run.begin();
         var self = KG.core_leaflet;
-        if (self.get('activeMarker') && self.get('activeMarker')._native_marker && self.get('activeMarker')._native_marker._popup === e.layer) {
+        if (self._popupMarker && self._popupMarker === e.layer) {
             console.log('popup closed');
             //popup closed
             KG.statechart.sendAction('hideMarkerPopupAction', self);
+			e.layer.off('click', e.layer.openPopup, e.layer);
         } else if (self._popupInfo && self._popupInfo === e.layer) {
             //popup closed
             KG.statechart.sendAction('hideInfoPopupAction', self);
@@ -275,11 +280,9 @@ KG.core_leaflet = SC.Object.create({
         lmarker.on('click',
         function() {
             SC.run.begin();
-            KG.core_leaflet.onMarkerClick(marker);
             click_cb.call(click_target, marker);
             SC.run.end();
         });
-        lmarker.bindPopup("...");
         marker._native_marker = lmarker;
     },
 	
@@ -290,37 +293,11 @@ KG.core_leaflet = SC.Object.create({
 		}
 	},
 
-    onMarkerClick: function(marker) {
-        this.set('activeMarker', marker);
-    },
-
     removeMarker: function(marker) {
         if (marker._native_marker) {
-			marker._native_marker.closePopup();
             this.map.removeLayer(marker._native_marker);
             marker._native_marker = null;
         }
-    },
-
-    refreshMarkerPopup: function(marker, div) {
-		if(!marker._native_marker._popup){
-			marker._native_marker.bindPopup(div);
-		}else if (marker._native_marker._popup) {
-            marker._native_marker._popup.setContent(div);
-        }
-    },
-
-    closeActivePopup: function() {
-		var marker = this.get('activeMarker');
-        if (!SC.none(marker) &&  !SC.none(marker._native_marker)) {
-            marker._native_marker.closePopup();
-        }
-    },
-
-    openMarkerPopup: function(marker) {
-		if(!marker._native_marker._popup._opened){
-        	marker._native_marker.openPopup();
-		}
     },
 
     addNewNoteMarker: function(popupContent, pos) {
@@ -347,23 +324,14 @@ KG.core_leaflet = SC.Object.create({
         var marker = SC.Object.create({
             _native_marker: lmarker,
             isNewNote: YES,
-            coordinate: function() {
-                var latlng = this._native_marker.getLatLng();
-                return {
-                    x: latlng.lng,
-                    y: latlng.lat
-                };
-            }.property()
+			lon: function(){
+				return this._native_marker._latlng.lng;
+			}.property(),
+			lat: function(){
+				return this._native_marker._latlng.lat;
+			}.property()
         });
-        this.onMarkerClick(marker);
         return marker;
-    },
-
-    cleanUpNewNoteMarker: function() {
-        var marker = this.get('activeMarker');
-        if (!SC.none(marker) && marker.isNewNote) {
-            this.map.removeLayer(marker._native_marker);
-        }
     },
 
 
@@ -374,9 +342,14 @@ KG.core_leaflet = SC.Object.create({
             icon: this.hlNoteIcon
         });
 		var marker = SC.Object.create({
-			_native_marker: lmarker
+			_native_marker: lmarker,
+			lon: function(){
+				return this._native_marker._latlng.lng;
+			}.property(),
+			lat: function(){
+				return this._native_marker._latlng.lat;
+			}.property()
         });
-		this.onMarkerClick(marker);
 		this.map.addLayer(lmarker);
         return marker;
 	},
@@ -401,6 +374,28 @@ KG.core_leaflet = SC.Object.create({
         }
     },
 
+	showPopupMarker: function(marker, content) {
+        var popup = this._popupMarker;
+        popup.setLatLng(new L.LatLng(marker.get('lat'), marker.get('lon')));
+        popup.setContent(content);
+		if(!popup._opened){
+        	this.map.openPopup(popup);
+		}
+        setTimeout(function() {
+            popup._update();
+			//to secure the update, re-do it even later
+            setTimeout(function() {
+                popup._update()
+            },
+            100);
+        },
+        1);
+    },
+
+	closePopup: function() {
+        this.map.closePopup();
+    },
+
     showPopupInfo: function(latLon, content) {
         var popup = this._popupInfo;
         popup.setLatLng(new L.LatLng(latLon.get('lat'), latLon.get('lon')));
@@ -415,12 +410,6 @@ KG.core_leaflet = SC.Object.create({
             100);
         },
         1);
-    },
-
-    hidePopupInfo: function() {
-        if (this._popupInfo) {
-            this.map.closePopup();
-        }
     },
 
     updatePopupInfo: function() {

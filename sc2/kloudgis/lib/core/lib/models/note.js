@@ -6,7 +6,7 @@ KG.Note = KG.Record.extend({
 	author_descriptor: SC.Record.attr(String),
 	date: SC.Record.attr(Number),
 	coordinate: SC.Record.attr(Object),
-	comments: SC.Record.toMany('KG.Comment'),
+	comments: SC.Record.toMany('KG.Comment', {inverse: 'note', isMaster: NO}),
 	
 	isSelectable: YES,
 	isInspectorSelectable: NO,

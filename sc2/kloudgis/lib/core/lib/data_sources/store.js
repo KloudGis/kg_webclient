@@ -134,8 +134,8 @@ KG.Store = SC.DataSource.extend({
         if (rtype === KG.Note) {
             url = '/api_data/protected/notes?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
         } else if (rtype === KG.Comment) {
-			url = '/api_data/protected/comments?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
-		}
+            url = '/api_data/protected/comments?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
+        }
         if (url) {
             this.ajaxSupport(store, storeKey, 'POST', url, JSON.stringify(store.readDataHash(storeKey)));
             return YES;
@@ -148,7 +148,7 @@ KG.Store = SC.DataSource.extend({
         var id = store.idFor(storeKey);
         var url;
         if (!SC.none(id)) {
-			if (rtype === KG.Note) {
+            if (rtype === KG.Note) {
                 url = '/api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             } else if (rtype === KG.Comment) {
                 url = '/api_data/protected/comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
@@ -166,7 +166,7 @@ KG.Store = SC.DataSource.extend({
         var id = store.idFor(storeKey);
         var url;
         if (!SC.none(id)) {
-			if (rtype === KG.Note) {
+            if (rtype === KG.Note) {
                 url = '/api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             } else if (rtype === KG.Comment) {
                 url = '/api_data/protected/comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));

@@ -30,6 +30,7 @@
 }
 
 .active-note-popup .note-author-label{
+	margin-top:3px;
 	font-size:10px;
 	display: block;	
 	text-align: right;
@@ -64,25 +65,33 @@
 .active-note-popup-bottom{
 	width: 220px;
 	text-align: center;
-	margin-top:10px;
+	margin-top:5px;
 }
 
 .active-note-popup .red-button{
 	margin-left:10px;
 }
 
-.note-comments-container{
-	max-height:3cm;
-	overflow-y: auto;
-}
-
-.note-comments-container textarea{
-	width:220px;
-}
 
 .active-note-popup .comment-button{
 	background: none;
 	border: none;
+	margin-top:5px;
+}
+
+.note-comments-container{
+	padding-top: 5px;
+	max-height:0;
+	display: none;
+	overflow-y: auto;
+	transition:max-height 0.3s ease-out;
+	-webkit-transition:max-height 0.3s ease-out;
+	-moz-transition:max-height 0.3s ease-out;
+}
+
+.note-comments-container.showing{
+	display: block;
+	max-height:3cm;
 }
 
 #note-new-comment-area{

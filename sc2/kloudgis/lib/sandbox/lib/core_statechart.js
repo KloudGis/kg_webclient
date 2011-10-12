@@ -48,9 +48,9 @@ SC.mixin(KG, {
                 }
             }),
 
-			mapLoginSucceeded: function(){
-		    	KG.core_layer.loadLayers();
-			},
+            mapLoginSucceeded: function() {
+                KG.core_layer.loadLayers();
+            },
 
             runningState: SC.State.extend({
 
@@ -62,9 +62,9 @@ SC.mixin(KG, {
 
                     inspectorHiddenState: SC.State.extend({
 
-						selectFeatureInspectorAction: function(feature) {
+                        selectFeatureInspectorAction: function(feature) {
                             if (feature && feature.get('isSelectable') && feature.get('isInspectorSelectable')) {
-								this.gotoState('inspectorVisibleState');
+                                this.gotoState('inspectorVisibleState');
                                 KG.core_inspector.selectFeature(feature);
                             }
                         }
@@ -112,9 +112,14 @@ SC.mixin(KG, {
                         KG.core_search.searchFeatures();
                     },
 
-					selectSearchCategoryAction: function(cat) {
+                    selectSearchCategoryAction: function(cat) {
                         KG.searchResultsController.set('category', cat);
                         this.gotoState('searchResultsState');
+                    },
+
+                    clickMarkerAction: function(marker) {
+                        this.gotoState('navigationState');
+                        KG.core_note.continueMarkerClicked(marker);
                     },
 
                     navigationState: SC.State.extend({
@@ -149,10 +154,14 @@ SC.mixin(KG, {
 
                         featureInfoReady: function() {
                             this.gotoState("popupFeatureInfoState");
-                        },                  
+                        },
 
-                        noteSelectedAction: function(note, marker) {
-                            KG.core_note.activateNote(note, marker);
+                        clickMarkerAction: function(marker) {
+                            KG.core_note.continueMarkerClicked(marker);
+                        },
+
+                        noteSelectedAction: function(note, params) {
+                            KG.core_note.activateNote(note, params);
                             this.gotoState('editNoteState');
                         },
 
@@ -168,26 +177,26 @@ SC.mixin(KG, {
 
                     searchResultsState: SC.State.extend({
 
-						_highlight: null, 
-						_hlMarker: null,
-						
+                        _highlight: null,
+                        _hlMarker: null,
+
                         enterState: function() {
-							console.log('show results state');
+                            console.log('show results state');
                             KG.core_search.showResults();
                         },
 
                         exitState: function() {
                             KG.core_search.hideResults();
-							KG.core_highlight.clearHighlight(this._highlight);
-							this._highlight = null;
-							KG.core_highlight.clearHighlightMarker(this._hlMarker);
-							this._hlMarker = null;
+                            KG.core_highlight.clearHighlight(this._highlight);
+                            this._highlight = null;
+                            KG.core_highlight.clearHighlightMarker(this._hlMarker);
+                            this._hlMarker = null;
                         },
 
-						selectSearchCategoryAction: function(cat) {
-	                        KG.searchResultsController.set('category', cat);
-							KG.core_search.showResults();
-	                    },
+                        selectSearchCategoryAction: function(cat) {
+                            KG.searchResultsController.set('category', cat);
+                            KG.core_search.showResults();
+                        },
 
                         hideSearchResultAction: function() {
                             this.gotoState('navigationState');
@@ -196,31 +205,33 @@ SC.mixin(KG, {
                         createNoteFromFeatureAction: function(feature) {
                             //create the note and put it in edit mode
                             if (feature) {
-								KG.core_leaflet.setCenter(feature.get('center'));
+                                KG.core_leaflet.setCenter(feature.get('center'));
                                 KG.core_note.set('featureTemplate', feature);
                                 this.gotoState('createNoteState');
                             }
                         },
 
-						featureZoomAction: function(feature){
-							KG.core_highlight.clearHighlightMarker(this._hlMarker);
-							KG.core_highlight.clearHighlight(this._highlight);
-							this._highlight = KG.core_highlight.highlightFeature(feature);
-							this._hlMarker = KG.core_highlight.addHighlightMarker(feature.get('center'));
-							KG.core_note.setHighlightMarker(this._hlMarker);
-							KG.core_leaflet.setCenter(feature.get('center'));
-							
-						},
-						
-						selectFeatureInspectorAction: function(feature) {
-							KG.core_highlight.clearHighlightMarker(this._hlMarker);
-							if(KG.store.recordTypeFor(feature.get('storeKey')) === KG.Note){
-								var marker = KG.core_highlight.addHighlightMarker(feature.get('center'));							
-								KG.core_note.setHighlightMarker(marker);
-								KG.core_note.activateNote(feature, marker);	
-								this.gotoState('editNoteState');					
-							}
-						}
+                        featureZoomAction: function(feature) {
+                            KG.core_highlight.clearHighlightMarker(this._hlMarker);
+                            KG.core_highlight.clearHighlight(this._highlight);
+                            this._highlight = KG.core_highlight.highlightFeature(feature);
+                            if (KG.store.recordTypeFor(feature.get('storeKey')) === KG.Note) {
+                                this._hlMarker = KG.core_highlight.addHighlightMarker(feature.get('center'));
+                                KG.core_note.setHighlightMarker(this._hlMarker);
+                            }
+                            KG.core_leaflet.setCenter(feature.get('center'));
+
+                        },
+
+                        selectFeatureInspectorAction: function(feature) {
+                            KG.core_highlight.clearHighlightMarker(this._hlMarker);
+                            if (KG.store.recordTypeFor(feature.get('storeKey')) === KG.Note) {
+                                var marker = KG.core_highlight.addHighlightMarker(feature.get('center'));
+                                KG.core_note.setHighlightMarker(marker);
+                                KG.core_note.activateNote(feature, marker);
+                                this.gotoState('editNoteState');
+                            }
+                        }
                     }),
 
                     popupFeatureInfoState: SC.State.extend({
@@ -228,14 +239,14 @@ SC.mixin(KG, {
                         _highlight: null,
 
                         enterState: function() {
-							console.log('enter popupFeatureInfoState');
-							KG.core_info.showInfoPopup();
-						},
+                            console.log('enter popupFeatureInfoState');
+                            KG.core_info.showInfoPopup();
+                        },
 
                         exitState: function() {
                             KG.core_highlight.clearHighlight(this._highlight);
                             this._highlight = null;
-							KG.core_info.hideInfoPopup();
+                            KG.core_info.hideInfoPopup();
                         },
 
                         hideInfoPopupAction: function() {
@@ -267,7 +278,7 @@ SC.mixin(KG, {
                         initialSubstate: 'locateNoteState',
 
                         exitState: function() {
-                            KG.core_leaflet.closeActivePopup();
+                            KG.core_leaflet.closePopup();
                         },
 
                         mapMovedAction: function() {
@@ -297,7 +308,7 @@ SC.mixin(KG, {
 
                             hideMarkerPopupAction: function() {},
 
-                            notePositionSetAction: function() {                            
+                            notePositionSetAction: function() {
                                 this.gotoState('createNoteState');
                             },
 
@@ -308,20 +319,20 @@ SC.mixin(KG, {
                             }
                         }),
 
-						createNoteState: SC.State.extend({
-							
-							enterState: function(){
-								KG.core_note.createNote();
-							},
-							
-							exitState: function() {
+                        createNoteState: SC.State.extend({
+
+                            enterState: function() {
+                                KG.core_note.createNote();
+                            },
+
+                            exitState: function() {
                                 console.log('exit createNoteState');
                                 KG.core_note.rollbackModifications();
                                 KG.activeNoteController.set('content', null);
-								KG.core_note.clearCreateNote();							
+                                KG.core_note.clearCreateNote();
                             },
 
-							confirmNoteAction: function() {
+                            confirmNoteAction: function() {
                                 var note = KG.activeNoteController.get('content');
                                 KG.core_note.commitModifications();
                                 KG.core_note.confirmCreateNote();
@@ -331,7 +342,7 @@ SC.mixin(KG, {
                             deleteNoteAction: function() {
                                 this.gotoState('navigationState');
                             },
-						}),
+                        }),
 
                         multipleNotesState: SC.State.extend({
 
@@ -340,8 +351,8 @@ SC.mixin(KG, {
                                 KG.notesPopupController.set('content', []);
                             },
 
-                            noteSelectedAction: function(note, marker) {
-                                KG.core_note.activateNote(note, marker);
+                            noteSelectedAction: function(note, params) {
+                                KG.core_note.activateNote(note, params);
                                 this.gotoState('editNoteState');
                             }
                         }),
@@ -351,40 +362,62 @@ SC.mixin(KG, {
                             enterState: function() {
                                 console.log('enter editNoteState');
                                 KG.core_note.beginModifications();
-								KG.newCommentController.set('content', '');	
-								KG.activeCommentsController.set('showing', NO);
-								KG.core_leaflet.disableMouseWheelHandler();
-							/*	//give a chance to render the popup before setting the height		
-								setTimeout(function(){
-									$(".note-comments-container").hide();
-								},1);	*/				
+                                KG.newCommentController.set('content', '');
+                                KG.activeCommentsController.set('showComments', YES);
+                                KG.activeCommentsController.set('showing', NO);
+                                KG.core_leaflet.disableMouseWheelHandler();
+                                setTimeout(function() {
+                                    $("#note-description-area").autoResize({
+                                        extraSpace: 20
+                                    });
+                                },
+                                100);
                             },
 
                             exitState: function() {
                                 console.log('exit editNoteState');
                                 KG.core_note.postEdition();
-                                KG.activeNoteController.set('content', null);	
-								KG.activeCommentsController.set('content', null);
-								KG.activeCommentsController.set('showing', NO);	
-								KG.core_leaflet.enableMouseWheelHandler();							
+                                KG.activeNoteController.set('content', null);
+                                KG.activeCommentsController.set('content', null);
+                                KG.activeCommentsController.set('showComments', NO);
+                                KG.activeCommentsController.set('showing', NO);
+                                KG.core_leaflet.enableMouseWheelHandler();
                             },
 
                             showCommentsAction: function() {
                                 //show comment section
-								KG.core_note.fetchComments();
-								KG.activeCommentsController.set('showing', YES);								
-								$("#note-new-comment-area").autoResize({extraSpace: 20});
+                                if (KG.activeCommentsController.get('length') === 0) {
+                                    KG.core_note.fetchComments();
+                                }
+                                KG.activeCommentsController.set('showing', YES);
+                                setTimeout(function() {
+                                    $("#note-new-comment-area").autoResize({
+                                        extraSpace: 20
+                                    });
+                                },
+                                1);
                             },
 
                             hideCommentsAction: function() {
                                 //hide comment section
-								KG.activeCommentsController.set('showing', NO);
+                                KG.activeCommentsController.set('showing', NO);
                             },
 
-							addCommentAction: function(){
-								var comment = KG.newCommentController.get('content');
-								KG.newCommentController.set('content', '');														
-							},
+                            addCommentAction: function() {
+                                var comment = KG.newCommentController.get('content');
+                                KG.core_note.addCommentToActiveNote(comment);
+                            },
+
+                            commentsReadyEvent: function() {
+                                setTimeout(function() {
+                                    console.log('scroll to bottom');
+                                    var container = $('.note-comments-container');
+                                    if (container[0]) {
+                                        container.scrollTop(container[0].scrollHeight);
+                                    }
+                                },
+                                1);
+                            },
 
                             confirmNoteAction: function() {
                                 var note = KG.activeNoteController.get('content');

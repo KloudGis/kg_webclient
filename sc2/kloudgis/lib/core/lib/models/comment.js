@@ -4,6 +4,7 @@ KG.Comment = KG.Record.extend({
 	author: SC.Record.attr(Number),
 	author_descriptor: SC.Record.attr(String),
 	date: SC.Record.attr(Number),
+	note: SC.Record.toOne('KG.Note', {inverse: 'comments', isMaster: YES}),
 	
 	formatted_date: function(){
 		var date = this.getPath('date');
