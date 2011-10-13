@@ -47,6 +47,49 @@ KG.core_leaflet = SC.Object.create({
 
         // initialize the map on the "map" div
         var map = new L.Map('map', {});
+        //bug fix in LEAFLET
+        L.Marker.prototype._removeIcon = function() {
+            //add this if
+            if (!this._map) {
+                this._map = map;
+            }
+            this._map._panes.markerPane.removeChild(this._icon);
+            if (this._shadow) {
+                this._map._panes.shadowPane.removeChild(this._shadow);
+            }
+            this._icon = this._shadow = null;
+        };
+
+        L.Path.prototype._updateSvgViewport = function() {
+            //add this if
+            if (!this._map) {
+                this._map = map;
+            }
+            this._updateViewport();
+            var vp = this._map._pathViewport,
+            min = vp.min,
+            max = vp.max,
+            width = max.x - min.x,
+            height = max.y - min.y,
+            root = this._map._pathRoot,
+            pane = this._map._panes.overlayPane;
+
+            // Hack to make flicker on drag end on mobile webkit less irritating
+            // Unfortunately I haven't found a good workaround for this yet
+            if (L.Browser.mobileWebkit) {
+                pane.removeChild(root);
+            }
+
+            L.DomUtil.setPosition(root, min);
+            root.setAttribute('width', width);
+            root.setAttribute('height', height);
+            root.setAttribute('viewBox', [min.x, min.y, width, height].join(' '));
+
+            if (L.Browser.mobileWebkit) {
+                pane.appendChild(root);
+            }
+        };
+
         //	map.addControl(this.layerControl);
         map.setView(new L.LatLng(46, -72), 8).addLayer(mapquest);
 
@@ -67,26 +110,50 @@ KG.core_leaflet = SC.Object.create({
         this._popupInfo = new L.Popup({
             closeButton: false
         });
-		this._popupMarker = new L.Popup({
+        this._popupMarker = new L.Popup({
             closeButton: true,
-			offset: new L.Point(0, -33),
+            offset: new L.Point(0, -33),
         });
+        //disable interaction with the map over the popup
+        this._popupInfo._initLayout();
+        if (L.Browser.touch) {
+            L.DomEvent.addListener(this._popupInfo._wrapper, L.Draggable.START, KG.core_leaflet.stopPropagation);
+            L.DomEvent.addListener(this._popupInfo._wrapper, L.Draggable.END, KG.core_leaflet.stopPropagation);
+            L.DomEvent.addListener(this._popupInfo._wrapper, L.Draggable.MOVE, KG.core_leaflet.stopPropagation);
+        }
+        L.DomEvent.addListener(this._popupInfo._wrapper, 'mousewheel', L.DomEvent.stopPropagation);
+
+        this._popupMarker._initLayout();
+        if (L.Browser.touch) {
+            L.DomEvent.addListener(this._popupMarker._wrapper, L.Draggable.START, KG.core_leaflet.stopPropagation);
+            L.DomEvent.addListener(this._popupMarker._wrapper, L.Draggable.END, KG.core_leaflet.stopPropagation);
+            L.DomEvent.addListener(this._popupMarker._wrapper, L.Draggable.MOVE, KG.core_leaflet.stopPropagation);
+        }
+        L.DomEvent.addListener(this._popupMarker._wrapper, 'mousewheel', KG.core_leaflet.stopPropagation);
+    },
+
+    stopPropagation: function(e) {
+        if (e.stopPropagation) {
+            e.stopPropagation();
+        }
     },
 
     onZoom: function(e) {
+        //	console.log('on Zoom');
         SC.run.begin();
         KG.statechart.sendAction('mapZoomedAction', this);
         SC.run.end();
     },
 
     onMove: function(e) {
-        console.log('map moved');
+        //  console.log('on Move');
         SC.run.begin();
         KG.statechart.sendAction('mapMovedAction', this);
         SC.run.end();
     },
 
     onClick: function(e) {
+        //	console.log('on Click');
         SC.run.begin();
         KG.statechart.sendAction('clickOnMapAction', KG.LonLat.create({
             lon: e.latlng.lng,
@@ -96,6 +163,7 @@ KG.core_leaflet = SC.Object.create({
     },
 
     onMouseMove: function(e) {
+        //	console.log('on MouseMove');
         SC.run.begin();
         KG.core_sandbox.set('mousePosition', KG.LonLat.create({
             lon: e.latlng.lng,
@@ -103,18 +171,6 @@ KG.core_leaflet = SC.Object.create({
         }));
         SC.run.end();
     },
-
-	enableMouseWheelHandler: function(){
-		if(this.map.options['scrollWheelZoom']){
-			this.map['scrollWheelZoom'].enable();
-		}
-	},
-	
-	disableMouseWheelHandler: function(){
-		if(this.map.options['scrollWheelZoom']){
-			this.map['scrollWheelZoom'].disable();
-		}
-	},
 
     onLayerAdd: function(e) {
         SC.run.begin();
@@ -131,7 +187,7 @@ KG.core_leaflet = SC.Object.create({
             console.log('popup closed');
             //popup closed
             KG.statechart.sendAction('hideMarkerPopupAction', self);
-			e.layer.off('click', e.layer.openPopup, e.layer);
+            e.layer.off('click', e.layer.openPopup, e.layer);
         } else if (self._popupInfo && self._popupInfo === e.layer) {
             //popup closed
             KG.statechart.sendAction('hideInfoPopupAction', self);
@@ -264,8 +320,6 @@ KG.core_leaflet = SC.Object.create({
     },
 
     addMarker: function(marker, click_target, click_cb) {
-        //	console.log('leaflet add marker');
-        //	console.log(marker);
         var lmarkerLocation = new L.LatLng(marker.get('lat'), marker.get('lon'));
         var icon = this.noteIcon;
         if (marker.get('featureCount') > 1) {
@@ -275,8 +329,8 @@ KG.core_leaflet = SC.Object.create({
             draggable: false,
             title: marker.get('tooltip'),
             icon: icon
-        });  
-		this.map.addLayer(lmarker);
+        });
+        this.map.addLayer(lmarker);
         lmarker.on('click',
         function() {
             SC.run.begin();
@@ -285,13 +339,13 @@ KG.core_leaflet = SC.Object.create({
         });
         marker._native_marker = lmarker;
     },
-	
-	reAddMarker: function(marker){
-		if (marker._native_marker) {
-			this.map.removeLayer(marker._native_marker);
-			this.map.addLayer(marker._native_marker);
-		}
-	},
+
+    reAddMarker: function(marker) {
+        if (marker._native_marker) {
+            this.map.removeLayer(marker._native_marker);
+            this.map.addLayer(marker._native_marker);
+        }
+    },
 
     removeMarker: function(marker) {
         if (marker._native_marker) {
@@ -301,12 +355,12 @@ KG.core_leaflet = SC.Object.create({
     },
 
     addNewNoteMarker: function(popupContent, pos) {
-		var lpos;
-		if(pos){
-			lpos = new L.LatLng(pos.get('lat'), pos.get('lon'));
-		}else{
-			lpos = this.map.getCenter();	
-		}
+        var lpos;
+        if (pos) {
+            lpos = new L.LatLng(pos.get('lat'), pos.get('lon'));
+        } else {
+            lpos = this.map.getCenter();
+        }
         var lmarker = new L.Marker(lpos, {
             draggable: true,
             title: "_newNote".loc(),
@@ -324,35 +378,34 @@ KG.core_leaflet = SC.Object.create({
         var marker = SC.Object.create({
             _native_marker: lmarker,
             isNewNote: YES,
-			lon: function(){
-				return this._native_marker._latlng.lng;
-			}.property(),
-			lat: function(){
-				return this._native_marker._latlng.lat;
-			}.property()
+            lon: function() {
+                return this._native_marker._latlng.lng;
+            }.property(),
+            lat: function() {
+                return this._native_marker._latlng.lat;
+            }.property()
         });
         return marker;
     },
 
-
-	addHighlightMarker: function(pos){
-		var lpos = new L.LatLng(pos.get('lat'), pos.get('lon'));
-		var lmarker = new L.Marker(lpos, {
+    addHighlightMarker: function(pos) {
+        var lpos = new L.LatLng(pos.get('lat'), pos.get('lon'));
+        var lmarker = new L.Marker(lpos, {
             draggable: false,
             icon: this.hlNoteIcon
         });
-		var marker = SC.Object.create({
-			_native_marker: lmarker,
-			lon: function(){
-				return this._native_marker._latlng.lng;
-			}.property(),
-			lat: function(){
-				return this._native_marker._latlng.lat;
-			}.property()
+        var marker = SC.Object.create({
+            _native_marker: lmarker,
+            lon: function() {
+                return this._native_marker._latlng.lng;
+            }.property(),
+            lat: function() {
+                return this._native_marker._latlng.lat;
+            }.property()
         });
-		this.map.addLayer(lmarker);
+        this.map.addLayer(lmarker);
         return marker;
-	},
+    },
 
     addWMSLayer: function(layer) {
         var wms = new L.TileLayer.WMS(layer.get('url'), {
@@ -374,16 +427,16 @@ KG.core_leaflet = SC.Object.create({
         }
     },
 
-	showPopupMarker: function(marker, content) {
+    showPopupMarker: function(marker, content) {
         var popup = this._popupMarker;
         popup.setLatLng(new L.LatLng(marker.get('lat'), marker.get('lon')));
         popup.setContent(content);
-		if(!popup._opened){
-        	this.map.openPopup(popup);
-		}
+        if (!popup._opened) {
+            this.map.openPopup(popup);
+        }
         setTimeout(function() {
             popup._update();
-			//to secure the update, re-do it even later
+            //to secure the update, re-do it even later
             setTimeout(function() {
                 popup._update()
             },
@@ -392,7 +445,7 @@ KG.core_leaflet = SC.Object.create({
         1);
     },
 
-	closePopup: function() {
+    closePopup: function() {
         this.map.closePopup();
     },
 
@@ -403,7 +456,7 @@ KG.core_leaflet = SC.Object.create({
         this.map.openPopup(popup);
         setTimeout(function() {
             popup._update();
-			//to secure the update, re-do it even later
+            //to secure the update, re-do it even later
             setTimeout(function() {
                 popup._update()
             },
@@ -421,9 +474,9 @@ KG.core_leaflet = SC.Object.create({
     },
 
     addHighlight: function(coords, geo_type) {
-		if(!coords){
-			return NO;
-		}
+        if (!coords) {
+            return NO;
+        }
         var options = {
             color: '#0033ff',
             weight: 5,

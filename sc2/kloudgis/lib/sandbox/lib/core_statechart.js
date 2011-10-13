@@ -122,6 +122,16 @@ SC.mixin(KG, {
                         KG.core_note.continueMarkerClicked(marker);
                     },
 
+					httpError: function(code){
+						if(code === 401){
+							KG.core_sandbox.authenticate();
+						}
+					},
+					
+					authenficationFailed: function() {
+						window.location.href = "index.html";
+					},
+
                     navigationState: SC.State.extend({
 
                         _ignoreMouseClicked: YES,
@@ -279,6 +289,7 @@ SC.mixin(KG, {
 
                         exitState: function() {
                             KG.core_leaflet.closePopup();
+							KG.core_note.clearCreateNote();
                         },
 
                         mapMovedAction: function() {
@@ -290,12 +301,25 @@ SC.mixin(KG, {
                         },
 
                         hideMarkerPopupAction: function() {
+                            console.log('marker popup closed, go back to navigation...');
                             this.gotoState('navigationState');
                         },
+
+						clickOnMapAction: function(lonLat) {
+							console.log('click outside the popup');
+                            this.gotoState('navigationState');
+						},
 
                         locateNoteState: SC.State.extend({
 
                             enterState: function() {
+                                console.log('enter locatenotestate');
+                                this._ignoreCancel = YES;
+                                var self = this;
+                                setTimeout(function() {
+                                    self._ignoreCancel = NO;
+                                },
+                                500);
                                 KG.core_note.locateNote();
                                 KG.core_note.set('createNoteLabel', "_cancelCreateNote".loc());
                                 KG.core_note.set('createNoteImg', KG.get('cancelCreateNoteImagePath'));
@@ -309,20 +333,31 @@ SC.mixin(KG, {
                             hideMarkerPopupAction: function() {},
 
                             notePositionSetAction: function() {
+								console.log('note position is now set');
                                 this.gotoState('createNoteState');
                             },
 
                             createNoteAction: function() {
-                                //cancel
-                                KG.core_note.cancelLocateNote();
-                                this.gotoState('navigationState');
+                                if (!this._ignoreCancel) {
+                                    console.log('cancel create note!');
+                                    //cancel
+                                    KG.core_note.cancelLocateNote();
+                                    this.gotoState('navigationState');
+                                }
                             }
                         }),
 
                         createNoteState: SC.State.extend({
 
                             enterState: function() {
+                                console.log('enter createNoteState');
                                 KG.core_note.createNote();
+								setTimeout(function() {
+                                    $("#note-description-area").autoResize({
+                                        extraSpace: 20
+                                    });
+                                },
+                                100);
                             },
 
                             exitState: function() {
@@ -330,23 +365,25 @@ SC.mixin(KG, {
                                 KG.core_note.rollbackModifications();
                                 KG.activeNoteController.set('content', null);
                                 KG.core_note.clearCreateNote();
-                            },
+                           },
 
                             confirmNoteAction: function() {
                                 var note = KG.activeNoteController.get('content');
                                 KG.core_note.commitModifications();
                                 KG.core_note.confirmCreateNote();
                                 this.gotoState('navigationState');
-                            },
+                            }
 
-                            deleteNoteAction: function() {
-                                this.gotoState('navigationState');
-                            },
                         }),
 
                         multipleNotesState: SC.State.extend({
 
+                            enterState: function() {
+                                console.log('enter multiple notes');
+                            },
+
                             exitState: function() {
+                                console.log('exit multiple notes');
                                 KG.notesPopupController.set('marker', null);
                                 KG.notesPopupController.set('content', []);
                             },
@@ -365,7 +402,6 @@ SC.mixin(KG, {
                                 KG.newCommentController.set('content', '');
                                 KG.activeCommentsController.set('showComments', YES);
                                 KG.activeCommentsController.set('showing', NO);
-                                KG.core_leaflet.disableMouseWheelHandler();
                                 setTimeout(function() {
                                     $("#note-description-area").autoResize({
                                         extraSpace: 20
@@ -381,10 +417,10 @@ SC.mixin(KG, {
                                 KG.activeCommentsController.set('content', null);
                                 KG.activeCommentsController.set('showComments', NO);
                                 KG.activeCommentsController.set('showing', NO);
-                                KG.core_leaflet.enableMouseWheelHandler();
                             },
 
                             showCommentsAction: function() {
+                                console.log('show comments');
                                 //show comment section
                                 if (KG.activeCommentsController.get('length') === 0) {
                                     KG.core_note.fetchComments();

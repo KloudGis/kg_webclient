@@ -176,7 +176,7 @@
 			}
 
 			// TEXTAREA
-			console.log('checking!!!');
+			//console.log('checking!!!');
 			clone.height(0).val(value).scrollTop(10000);
 
 			var scrollTop = clone[0].scrollTop + config.extraSpace;

@@ -80,6 +80,9 @@
 			{{/view}}
 			{{#view KG.CommentAreaView id="note-new-comment-area" isVisibleBinding="KG.activeCommentsController.showing" valueBinding="KG.newCommentController.content" placeholder_not_loc="_commentPlaceholder"}}
 			{{/view}}
+			{{#view KG.LoadingImageView id="note-comment-loading" isVisibleBinding="KG.activeCommentsController.isLoading"}}
+				<img {{bindAttr src="loadingImage"}} alt="Loading"/>
+		  	{{/view}}
 		{{/view}}
 	</script>
 		<!-- popup for Feature Info -->
@@ -174,7 +177,7 @@
 			</span>			
 			<span id="create-note" class="kg-controls clickable">
 				<script type="text/x-handlebars">
-					{{#view  KG.Button titleBinding="KG.core_note.createNoteLabel" classBinding="isActive" sc_action="createNoteAction"}}
+					{{#view  KG.Button tagName="div" titleBinding="KG.core_note.createNoteLabel" classBinding="isActive" sc_action="createNoteAction"}}
 						<img {{bindAttr src="KG.core_note.createNoteImg"}}/>
 					{{/view}}
 				</script>

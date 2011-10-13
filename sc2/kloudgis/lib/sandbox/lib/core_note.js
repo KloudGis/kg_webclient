@@ -105,13 +105,17 @@ KG.core_note = SC.Object.create({
                 }
             });
         }
-        this.activateNote(note, this._new_note_marker);
+        this.activateNote(note, {
+            marker: this._new_note_marker
+        });
     },
 
     clearCreateNote: function() {
-        KG.core_leaflet.removeMarker(this._new_note_marker);
-        this._new_note_marker = null;
-        this.set('featureTemplate', null);
+        if (!SC.none(this._new_note_marker)) {
+            KG.core_leaflet.removeMarker(this._new_note_marker);
+            this._new_note_marker = null;
+            this.set('featureTemplate', null);
+        }
     },
 
     //show the note form to let the user fill it up
@@ -296,7 +300,8 @@ KG.core_note = SC.Object.create({
     },
 
     fetchComments: function() {
-        console.log('refresh comments');
+       // console.log('refresh comments');
+		KG.activeCommentsController.set('isLoading', YES);
         var nested_note = KG.activeNoteController.get('content');
         var note = KG.store.find(nested_note);
         note.onReady(null,
@@ -313,6 +318,7 @@ KG.core_note = SC.Object.create({
                     comment.onReady(KG.core_note, KG.core_note.commentReady, params);
                 });
             } else {
+				KG.activeCommentsController.set('isLoading', NO);
                 KG.statechart.sendAction('commentsReadyEvent');
             }
         });
@@ -324,6 +330,7 @@ KG.core_note = SC.Object.create({
         if (params.count === params.length) {
             KG.statechart.sendAction('commentsReadyEvent');
             KG.activeCommentsController.set('content', KG.activeCommentsController.sortByDate(params.records));
+			KG.activeCommentsController.set('isLoading', NO);
         }
     },
 
@@ -332,7 +339,6 @@ KG.core_note = SC.Object.create({
         if (nested_note) {
             var rec_comment = KG.store.createRecord(KG.Comment, {
                 value: comment,
-                author_descriptor: '_me.loc()',
                 note: nested_note.get('id')
             });
             KG.store.commitRecords();

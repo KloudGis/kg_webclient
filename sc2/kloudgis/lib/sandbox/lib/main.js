@@ -2,6 +2,7 @@ require("kloudgis/app/lib/main");
 require("kloudgis/app/lib/views/button");
 require("kloudgis/app/lib/views/text_field");
 require("kloudgis/app/lib/views/text_area");
+require("kloudgis/app/lib/views/loading_image");
 require("kloudgis/auth/lib/main");
 require("kloudgis/core/lib/main_ds");
 require("kloudgis/core/lib/models/feature");

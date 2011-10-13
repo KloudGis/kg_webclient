@@ -85,6 +85,9 @@ KG.Store = SC.DataSource.extend({
                     SC.run.begin();
                     SC.Logger.error('Load error: HTTP error status code: ' + jqXHR.status);
                     store.dataSourceDidErrorQuery(query, errorThrown);
+					if (KG.statechart) {
+	                    KG.statechart.sendAction('httpError', jqXHR.status);
+	                }
                     SC.run.end();
                 },
                 success: function(data, textStatus, jqXHR) {
@@ -192,6 +195,9 @@ KG.Store = SC.DataSource.extend({
             error: function(jqXHR, textStatus, errorThrown) {
                 SC.Logger.error('Ajax error: HTTP error status code: ' + jqXHR.status);
                 store.dataSourceDidError(storeKey, errorThrown);
+                if (KG.statechart) {
+                    KG.statechart.sendAction('httpError', jqXHR.status);
+                }
             },
             success: function(data, textStatus, jqXHR) {
                 console.log(type + ' success');

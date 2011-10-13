@@ -8,4 +8,5 @@ KG.TextArea = SC.TextArea.extend({
 		}
 		return this.get("placeholder_not_loc").loc();
 	}.property('placeholder_not_loc')
+	
 });

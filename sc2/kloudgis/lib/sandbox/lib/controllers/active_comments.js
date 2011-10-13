@@ -1,10 +1,9 @@
 //notes for the active note marker
 KG.activeCommentsController = SC.ArrayProxy.create({
 	content: null,
-	
 	showComments: NO,
-	
 	showing: NO,
+	isLoading: NO,
 	
 	sortByDate: function(array){
 		//sort by date

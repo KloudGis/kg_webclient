@@ -23,6 +23,9 @@ KG.core_sandbox = SC.Object.create({
 	            context: this,
 	            error: function(jqXHR, textStatus, errorThrown) {
 	                SC.Logger.error('Map login error: HTTP error status code: ' + jqXHR.status);
+					if (KG.statechart) {
+	                    KG.statechart.sendAction('httpError', jqXHR.status);
+	                }
 	            },
 	            success: function(data, textStatus, jqXHR) {
 	                console.log('Map login success.');
@@ -79,6 +82,9 @@ KG.core_sandbox = SC.Object.create({
             context: this,
             error: function(jqXHR, textStatus, errorThrown) {
                 SC.Logger.error('SB Meta error: HTTP error status code: ' + jqXHR.status);
+				if (KG.statechart) {
+                    KG.statechart.sendAction('httpError', jqXHR.status);
+                }
             },
             success: function(data, textStatus, jqXHR) {
                 console.log('SB Meta success.');
