@@ -6,14 +6,22 @@ KG.Comment = KG.Record.extend({
 	date: SC.Record.attr(Number),
 	note: SC.Record.toOne('KG.Note', {inverse: 'comments', isMaster: YES}),
 	
-	formatted_date: function(){
+	formattedDate: function(){
 		var date = this.getPath('date');
         if (date) {
             var d = new Date(date);
             var curr_day = d.getDate();
             var curr_month = d.getMonth() + 1; //months are zero based
             var curr_year = d.getFullYear();
-            return curr_day + "/" + curr_month + "/" + curr_year;
+			var curr_hour = d.getHours();
+			if(curr_hour < 10){
+				curr_hour = '0' + curr_hour;
+			}
+			var curr_min = d.getMinutes();
+			if(curr_min < 10){
+				curr_min = '0' + curr_min;
+			}
+            return "_commentDateFormat".loc(curr_year, curr_month, curr_day, curr_hour, curr_min);
         }
 	}.property('date')
 });

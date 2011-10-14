@@ -122,15 +122,15 @@ SC.mixin(KG, {
                         KG.core_note.continueMarkerClicked(marker);
                     },
 
-					httpError: function(code){
-						if(code === 401){
-							KG.core_sandbox.authenticate();
-						}
-					},
-					
-					authenficationFailed: function() {
-						window.location.href = "index.html";
-					},
+                    httpError: function(code) {
+                        if (code === 401) {
+                            KG.core_sandbox.authenticate();
+                        }
+                    },
+
+                    authenficationFailed: function() {
+                        window.location.href = "index.html";
+                    },
 
                     navigationState: SC.State.extend({
 
@@ -289,7 +289,7 @@ SC.mixin(KG, {
 
                         exitState: function() {
                             KG.core_leaflet.closePopup();
-							KG.core_note.clearCreateNote();
+                            KG.core_note.clearCreateNote();
                         },
 
                         mapMovedAction: function() {
@@ -305,10 +305,10 @@ SC.mixin(KG, {
                             this.gotoState('navigationState');
                         },
 
-						clickOnMapAction: function(lonLat) {
-							console.log('click outside the popup');
+                        clickOnMapAction: function(lonLat) {
+                            console.log('click outside the popup');
                             this.gotoState('navigationState');
-						},
+                        },
 
                         locateNoteState: SC.State.extend({
 
@@ -333,7 +333,7 @@ SC.mixin(KG, {
                             hideMarkerPopupAction: function() {},
 
                             notePositionSetAction: function() {
-								console.log('note position is now set');
+                                console.log('note position is now set');
                                 this.gotoState('createNoteState');
                             },
 
@@ -352,7 +352,7 @@ SC.mixin(KG, {
                             enterState: function() {
                                 console.log('enter createNoteState');
                                 KG.core_note.createNote();
-								setTimeout(function() {
+                                setTimeout(function() {
                                     $("#note-description-area").autoResize({
                                         extraSpace: 20
                                     });
@@ -365,7 +365,7 @@ SC.mixin(KG, {
                                 KG.core_note.rollbackModifications();
                                 KG.activeNoteController.set('content', null);
                                 KG.core_note.clearCreateNote();
-                           },
+                            },
 
                             confirmNoteAction: function() {
                                 var note = KG.activeNoteController.get('content');
@@ -416,7 +416,7 @@ SC.mixin(KG, {
                                 KG.activeNoteController.set('content', null);
                                 KG.activeCommentsController.set('content', null);
                                 KG.activeCommentsController.set('showComments', NO);
-                                KG.activeCommentsController.set('showing', NO);
+                                KG.activeCommentsController.set('showing', NO);                           
                             },
 
                             showCommentsAction: function() {
@@ -427,11 +427,16 @@ SC.mixin(KG, {
                                 }
                                 KG.activeCommentsController.set('showing', YES);
                                 setTimeout(function() {
-                                    $("#note-new-comment-area").autoResize({
+									var area = $("#note-new-comment-area");
+                                    area.autoResize({
                                         extraSpace: 20
                                     });
+									if(KG.activeNoteController.countComments() === 0){
+										area.focus();
+									}
                                 },
                                 1);
+								
                             },
 
                             hideCommentsAction: function() {
@@ -442,6 +447,14 @@ SC.mixin(KG, {
                             addCommentAction: function() {
                                 var comment = KG.newCommentController.get('content');
                                 KG.core_note.addCommentToActiveNote(comment);
+								var area = $("#note-new-comment-area");
+                                area.css('max-height', '28px');
+                                setTimeout(function() {
+                                    area.blur();
+                                    area.css('height', 28);
+                                    area.css('max-height', '');
+                                },
+                                200);
                             },
 
                             commentsReadyEvent: function() {

@@ -39,6 +39,7 @@
 	list-style: none;
 	-webkit-margin-before: 0px;
 	-webkit-margin-after: 0px;
+	margin:none;
 }
 
 .x-button{

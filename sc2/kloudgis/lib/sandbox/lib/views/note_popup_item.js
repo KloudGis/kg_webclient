@@ -5,10 +5,6 @@ KG.NotePopupItemView = SC.Button.extend({
 	
 	tagName: 'div',
 	
-	title: function(){
-		return this.getPath('itemView.content.title');
-	}.property('itemView.content.title'),
-	
 	mouseUp: function(e){
 		this._super(e);
 		KG.statechart.sendAction('noteSelectedAction', this.getPath('itemView.content'), {marker: KG.notesPopupController.get('marker')});

@@ -51,6 +51,7 @@ KG.core_note = SC.Object.create({
         if (this._highlightMarker) {
             KG.core_leaflet.removeMarker(this._highlightMarker);
         }
+		this.cleanUpActiveNoteElements();
     },
 
     zoomActiveNote: function() {
@@ -134,16 +135,16 @@ KG.core_note = SC.Object.create({
         return YES;
     },
 
-    continueActivateNote: function(note, marker) {
-        var noteDiv = this._div_active_note;
-        if (SC.none(noteDiv)) {
-            this._div_active_note = document.createElement('div');
-            noteDiv = this._div_active_note;
-            this._view_active_note = SC.View.create({
-                templateName: 'active-note-popup',
-            });
-            this._view_active_note.appendTo(noteDiv);
-        }
+    continueActivateNote: function(note, marker) {      
+		this.cleanUpActiveNoteElements();
+		var noteDiv = this._div_active_note;
+		if(SC.none(noteDiv)){
+        	var noteDiv = this._div_active_note = document.createElement('div');
+		}
+        this._view_active_note = SC.View.create({
+            templateName: 'active-note-popup',
+        });
+        this._view_active_note.appendTo(noteDiv);
         KG.activeNoteController.set('marker', marker);
         KG.activeNoteController.set('content', note);
         setTimeout(function() {
@@ -153,6 +154,12 @@ KG.core_note = SC.Object.create({
         },
         1);
     },
+
+	cleanUpActiveNoteElements: function(){
+		if (!SC.none(this._view_active_note)) {
+            this._view_active_note.destroy();
+        }
+	},
 
     setHighlightMarker: function(marker) {
         this._highlightMarker = marker;
@@ -274,7 +281,14 @@ KG.core_note = SC.Object.create({
         for (i = 0; i < len; i++) {
             var note = notes.objectAt(i);
             params.isFresh = note.get('status') & SC.Record.BUSY;
-            note.onReady(this, this.noteReady, params);
+            if (note.get('status') === SC.Record.ERROR) {
+                note.refresh(YES,
+                function() {
+                    KG.core_note.noteReady(note, params);
+                });
+            } else {
+                note.onReady(this, this.noteReady, params);
+            }
         }
     },
 
@@ -300,8 +314,8 @@ KG.core_note = SC.Object.create({
     },
 
     fetchComments: function() {
-       // console.log('refresh comments');
-		KG.activeCommentsController.set('isLoading', YES);
+        // console.log('refresh comments');
+        KG.activeCommentsController.set('isLoading', YES);
         var nested_note = KG.activeNoteController.get('content');
         var note = KG.store.find(nested_note);
         note.onReady(null,
@@ -318,7 +332,7 @@ KG.core_note = SC.Object.create({
                     comment.onReady(KG.core_note, KG.core_note.commentReady, params);
                 });
             } else {
-				KG.activeCommentsController.set('isLoading', NO);
+                KG.activeCommentsController.set('isLoading', NO);
                 KG.statechart.sendAction('commentsReadyEvent');
             }
         });
@@ -330,7 +344,7 @@ KG.core_note = SC.Object.create({
         if (params.count === params.length) {
             KG.statechart.sendAction('commentsReadyEvent');
             KG.activeCommentsController.set('content', KG.activeCommentsController.sortByDate(params.records));
-			KG.activeCommentsController.set('isLoading', NO);
+            KG.activeCommentsController.set('isLoading', NO);
         }
     },
 
@@ -341,7 +355,8 @@ KG.core_note = SC.Object.create({
                 value: comment,
                 note: nested_note.get('id')
             });
-            KG.store.commitRecords();
+			//commit only this record
+            KG.store.commitRecords(null, null, [rec_comment.get('storeKey')]);
             rec_comment.onReady(null,
             function() {
                 KG.activeCommentsController.get('content').pushObject(rec_comment);

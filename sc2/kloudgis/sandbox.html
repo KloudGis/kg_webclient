@@ -20,12 +20,23 @@
     <title>Kloudgis</title>
 	<!-- popup for Multiple NOTES -->
 	<script type="text/x-handlebars" data-template-name="notes-marker-popup">
-		{{#view class="popup-note-title"}}
+		{{#view class="multiple-notes-title"}}
 			{{KG.notesPopupController.popupTitle}}
 		{{/view}}
-	    {{#collection contentBinding="KG.notesPopupController" tagName="ul" class="popup-note-list no-style-list"}}
-			{{#view KG.NotePopupItemView}}
-				{{title}}
+	    {{#collection contentBinding="KG.notesPopupController" tagName="ul" class="multiple-notes-list no-style-list"}}			
+			{{#view KG.NotePopupItemView class="multiple-notes-item"}}
+				<table class="multiple-notes-table">
+				<td>
+				{{#view class="multiple-notes-item-title"}}
+					{{itemView.content.title}}
+				{{/view}}
+				</td>
+				<td>
+				{{#view class="note-author-label"}}
+					{{itemView.content.authorFormatted}}
+				{{/view}}
+				</td>
+				</table>
 			{{/view}}
 		{{/collection}}
 	</script>
@@ -36,7 +47,7 @@
 				<a href="javascript:void(0)">zoom</a>
 			{{/view}}	
 			{{#view class="note-date-label"}}
-				{{KG.activeNoteController.dateValue}}
+				{{KG.activeNoteController.content.formattedDate}}
 			{{/view}}			
 			{{KG.activeNoteController.titleLabel}}
 	    	{{#view KG.TextField valueBinding="KG.activeNoteController.titleValue" disabledBinding="KG.activeNoteController.isDisabled" type="text" placeholder_not_loc="_noteTitlePlaceholder" }}
@@ -52,7 +63,7 @@
 					{{KG.activeNoteController.deleteLabel}}
 				{{/view}}
 				{{#view class="note-author-label"}}
-					{{KG.activeNoteController.authorValue}}
+					{{KG.activeNoteController.content.authorFormatted}}
 				{{/view}}
 			{{/view}}
 			{{#view KG.Button class="comment-button" isVisibleBinding="KG.activeCommentsController.hideButtonVisible" classBinding="isActive" sc_action="showCommentsAction"}}
@@ -74,7 +85,7 @@
 						{{itemView.content.value}}
 					{{/view}}
 					{{#view class="note-comment-date"}}
-						{{itemView.content.formatted_date}}
+						{{itemView.content.formattedDate}}
 					{{/view}}
 				{{/collection}}			
 			{{/view}}

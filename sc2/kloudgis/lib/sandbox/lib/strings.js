@@ -22,7 +22,9 @@ var fr = {
 	"_closeSearch": "Fermer la fenêtre de résultat",	
 	"_search": "Recherche...",
 	"_searchResult": "%@ Résultats pour %@ dans %@",
-	"_unknown" : "Élément"
+	"_unknown" : "Élément",
+	"_noteDateFormat": "%@/%@/%@",
+	"_commentDateFormat": "%@/%@/%@ à %@:%@"
 };
 
 var en = {
@@ -49,7 +51,9 @@ var en = {
 	"_closeSearch": "Close the result window",
 	"_search": "Search...",
 	"_searchResult": "%@ Results for %@ in %@",
-	"_unknown" : "Feature"
+	"_unknown" : "Feature",
+	"_noteDateFormat": "%@/%@/%@",
+	"_commentDateFormat": "%@/%@/%@ at %@:%@"
 };
 
 if(KG.lang === 'fr'){

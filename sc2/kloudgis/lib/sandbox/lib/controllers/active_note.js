@@ -40,25 +40,6 @@ KG.activeNoteController = SC.Object.create({
         return val;
     }.property('content.title'),
 
-    dateValue: function() {
-        var date = this.getPath('content.date');
-        if (date) {
-            var d = new Date(date);
-            var curr_day = d.getDate();
-            var curr_month = d.getMonth() + 1; //months are zero based
-            var curr_year = d.getFullYear();
-            return curr_day + "/" + curr_month + "/" + curr_year;
-        }
-        return '';
-    }.property('content.date'),
-
-    authorValue: function() {
-        var a = this.getPath('content.author_descriptor');
-        if (a) {
-            return "_author".loc(a);
-        }
-        return '';
-    }.property('content.author_descriptor'),
 
     isDisabled: function() {
         if (this.getPath('content.status') & SC.Record.BUSY) {
@@ -97,13 +78,18 @@ KG.activeNoteController = SC.Object.create({
 		this.refreshCommentsLabel();
 	}.observes('KG.activeCommentsController*content.length'),
 
-    refreshCommentsLabel: function() {
-        var len;
-        if (KG.activeCommentsController.getPath('content.length') > 0) {
+	countComments: function(){
+		var len;
+		if (KG.activeCommentsController.getPath('content.length') > 0) {
             len = KG.activeCommentsController.getPath('content.length');
         } else {
             len = this.getPath('content.comments.length');
         }
+		return len;
+	},
+
+    refreshCommentsLabel: function() {
+        var len = this.countComments();        
         if (len === 0) {
             this.set('commentsLabel', "_comment".loc());
         } else {

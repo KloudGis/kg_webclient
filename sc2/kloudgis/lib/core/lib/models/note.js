@@ -19,5 +19,25 @@ KG.Note = KG.Record.extend({
                 lat: coordinate.y
             });
 		}
-	}.property('coordinate')
+	}.property('coordinate'),
+	
+	formattedDate: function() {
+        var date = this.get('date');
+        if (date) {
+            var d = new Date(date);
+            var curr_day = d.getDate();
+            var curr_month = d.getMonth() + 1; //months are zero based
+            var curr_year = d.getFullYear();
+            return "_noteDateFormat".loc(curr_year, curr_month, curr_day);
+        }
+        return '';
+    }.property('date'),
+
+	authorFormatted: function() {
+        var a = this.getPath('author_descriptor');
+        if (a) {
+            return "_author".loc(a);
+        }
+        return '';
+    }.property('content.author_descriptor')
 });

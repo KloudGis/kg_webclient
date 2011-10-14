@@ -1,45 +1,61 @@
 /*NOTES*/
+/* multiple notes list */
 
-.popup-note-item{
-	font-size:14px;
-	padding: 3px 0px;
-	margin-top:3px;
-	background: none;
-	width:100%;
-	height:100%;
-	text-align: left;
-	margin-top:3px;	
-	border-radius: 16px;
-}
-
-.popup-note-item span{
-	margin: 3px 10px;
-}
-
-.popup-note-item:hover{
-	border-radius: 16px;
-	background: rgba(0,0,255,0.5);
-	color:white;
-}
-
-.popup-note-title{
+.multiple-notes-title{
 	text-align: center;
 	font-size:14px;
 	font-weight: bold;
 	white-space: nowrap;
 }
 
-.active-note-popup .note-author-label{
+.multiple-notes-table{
+	width: 4cm;
+    padding:0px;
+	border: none;
+	border-spacing: 0px;
+}
+
+.multiple-notes-item{
+	padding: 0.5em;
+}
+
+.multiple-notes-item:hover{
+	background: rgba(0,0,255,0.5);
+	border-radius:1em;
+	color: white;
+}
+
+.multiple-notes-item:hover table{
+	color: white;
+}
+
+.multiple-notes-item:hover table .note-author-label{
+	color: white;
+}
+
+.multiple-notes-table td{
+	vertical-align:bottom;	
+}
+
+.multiple-notes-item-title{
+	font-size:12px;
+}
+
+/* note active */
+.note-author-label{
 	margin-top:3px;
 	font-size:10px;
 	display: block;	
 	text-align: right;
+	white-space: nowrap;
+	color: gray;
 }
 
 .active-note-popup .note-date-label{
-	font-size:11px;
+	font-size:10px;
 	font-style: italic;
-	float: right;	
+	float: right;
+	color:gray;	
 }
 
 .note-zoom-button{
