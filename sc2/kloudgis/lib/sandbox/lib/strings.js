@@ -1,4 +1,5 @@
 var fr = { 
+	"_me": "Moi",
 	"_Map": "Carte",
 	"_Note": "Note",
 	"_Notes": "%@ Notes",
@@ -28,6 +29,7 @@ var fr = {
 };
 
 var en = {
+	"_me": "Me",
 	"_Map": "Map",
 	"_Note": "Note",
 	"_Notes": "%@ Notes",

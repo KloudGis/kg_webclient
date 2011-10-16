@@ -78,14 +78,27 @@
 			{{/view}}
 			{{#view KG.CommentContainerView class="note-comments-container" classBinding="KG.activeCommentsController.showing"}}
 				{{#collection contentBinding="KG.activeCommentsController.content" tagName="ul" class="popup-comment-list no-style-list"}}
-					{{#view class="note-comment-author"}}
-						{{itemView.content.author_descriptor}}
-					{{/view}}
-					{{#view class="note-comment-content"}}
-						{{itemView.content.value}}
-					{{/view}}
-					{{#view class="note-comment-date"}}
-						{{itemView.content.formattedDate}}
+					{{#view KG.Button tagName="div" sc_action="toggleDeleteCommentButtonAction"}}
+						<table style="width:100%">
+						<tr>
+						<td>
+						{{#view KG.AuthorView class="note-comment-author"}}
+							{{authorLabel}}																			
+						{{/view}}
+						{{#view class="note-comment-content"}}
+							{{itemView.content.value}}
+						{{/view}}
+						{{#view class="note-comment-date"}}
+							{{itemView.content.formattedDate}}
+						{{/view}}
+						</td>
+						<td style="text-align:right;vertical-align:middle">
+						{{#view KG.DeleteCommentView class="note-comment-delete red-button" sc_action="deleteCommentButtonAction"}}
+							{{label}}
+						{{/view}}
+						</td>
+						</tr>
+						</table>
 					{{/view}}
 				{{/collection}}			
 			{{/view}}
@@ -212,7 +225,7 @@
 							<table class="search-category-table">
 							<tr>
 							<td>
-							{{#view KG.Button class="cat-title-label" tagName="div" titleBinding="itemView.content.title"}}
+							{{#view class="cat-title-label" titleBinding="itemView.content.title"}}
 								{{itemView.content.title}}
 							{{/view}}
 							</td>

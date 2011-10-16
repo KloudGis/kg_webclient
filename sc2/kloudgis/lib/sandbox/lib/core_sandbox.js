@@ -7,32 +7,32 @@ KG.core_sandbox = SC.Object.create({
     mousePosition: null,
 
     authenticate: function() {
-		var success = KG.core_auth.load(this, this.authenticateCallback);
-		return success;
+        var success = KG.core_auth.load(this, this.authenticateCallback);
+        return success;
     },
 
     authenticateCallback: function(message) {
         if (message === "_success") {
-			//attempt to login to map service first to make the map rendering ready quickly
-	        $.ajax({
-	            type: 'POST',
-	            url: '/api_map/public/login?sandbox=%@'.fmt(KG.get('activeSandboxKey')),
-	            dataType: 'json',
-	            headers: KG.core_auth.createAjaxRequestHeaders(),
-	            contentType: 'application/json; charset=utf-8',
-	            context: this,
-	            error: function(jqXHR, textStatus, errorThrown) {
-	                SC.Logger.error('Map login error: HTTP error status code: ' + jqXHR.status);
-					if (KG.statechart) {
-	                    KG.statechart.sendAction('httpError', jqXHR.status);
-	                }
-	            },
-	            success: function(data, textStatus, jqXHR) {
-	                console.log('Map login success.');
-					KG.statechart.sendAction('mapLoginSucceeded', this);
-	            },
-	            async: YES
-	        });
+            //attempt to login to map service first to make the map rendering ready quickly
+            $.ajax({
+                type: 'POST',
+                url: '/api_map/public/login?sandbox=%@'.fmt(KG.get('activeSandboxKey')),
+                dataType: 'json',
+                headers: KG.core_auth.createAjaxRequestHeaders(),
+                contentType: 'application/json; charset=utf-8',
+                context: this,
+                error: function(jqXHR, textStatus, errorThrown) {
+                    SC.Logger.error('Map login error: HTTP error status code: ' + jqXHR.status);
+                    if (KG.statechart) {
+                        KG.statechart.sendAction('httpError', jqXHR.status);
+                    }
+                },
+                success: function(data, textStatus, jqXHR) {
+                    console.log('Map login success.');
+                    KG.statechart.sendAction('mapLoginSucceeded', this);
+                },
+                async: YES
+            });
             //write a cookie for wms service.  Expires in 1 days
             $.cookie('C-Kloudgis-Authentication', KG.core_auth.get('authenticationToken'), {
                 expires: 1,
@@ -82,7 +82,7 @@ KG.core_sandbox = SC.Object.create({
             context: this,
             error: function(jqXHR, textStatus, errorThrown) {
                 SC.Logger.error('SB Meta error: HTTP error status code: ' + jqXHR.status);
-				if (KG.statechart) {
+                if (KG.statechart) {
                     KG.statechart.sendAction('httpError', jqXHR.status);
                 }
             },
@@ -124,7 +124,22 @@ KG.core_sandbox = SC.Object.create({
         } else {
             return 'Lon: ?';
         }
-    }.property('mousePosition')
+    }.property('mousePosition'),
+
+    autosize: function(element) {
+        var el = $(element);
+        if (el[0]) {
+            el.autoResize({
+                extraSpace: 20
+            });
+        } else {
+            var self = this;
+            setTimeout(function() {
+                self.autosize(element)
+            },
+            300);
+        }
+    }
 
 });
 

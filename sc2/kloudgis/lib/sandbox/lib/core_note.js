@@ -354,14 +354,24 @@ KG.core_note = SC.Object.create({
             var rec_comment = KG.store.createRecord(KG.Comment, {
                 value: comment,
                 note: nested_note.get('id')
-            });
+            });			
 			//commit only this record
             KG.store.commitRecords(null, null, [rec_comment.get('storeKey')]);
             rec_comment.onReady(null,
             function() {
+				nested_note.get('comments').get('editableStoreIds').pushObject(rec_comment.get('id'));
                 KG.activeCommentsController.get('content').pushObject(rec_comment);
                 KG.statechart.sendAction('commentsReadyEvent');
             });
         }
-    }
+    },
+
+
+	deleteComment: function(comment){
+		var nested_note = KG.activeNoteController.get('content');
+		nested_note.get('comments').get('editableStoreIds').removeObject(comment.get('id'));
+		comment.destroy();
+		KG.activeCommentsController.get('content').removeObject(comment);
+		KG.store.commitRecords(null, null, [comment.get('storeKey')]);
+	}
 });

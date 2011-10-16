@@ -1,8 +1,7 @@
 KG.CommentAreaView = KG.TextArea.extend({
 
     insertNewline: function(event) {		
-		KG.statechart.sendAction('addCommentAction');
-		this.set('value', '');		
+		KG.statechart.sendAction('addCommentAction');	
     },
 
     cancel: function() {
