@@ -50,6 +50,7 @@
 
 .search-list-item{
 	text-align:right;
+	width:100%;
 }
 
 .search-list-item > span{

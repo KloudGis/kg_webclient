@@ -125,9 +125,9 @@
 	overflow-x:hidden;
 	overflow-y:auto;
 	max-height:1.5cm;	
-	transition:all 0.6s ease-in;
-	-webkit-transition:all 0.6s ease-in;
-	-moz-transition:all 0.6s ease-in;
+	transition:all 0.3s ease-in;
+	-webkit-transition:all 0.3s ease-in;
+	-moz-transition:all 0.3s ease-in;
 }
 
 #search-control.has-results{
