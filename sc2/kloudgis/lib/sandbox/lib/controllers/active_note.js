@@ -40,7 +40,6 @@ KG.activeNoteController = SC.Object.create({
         return val;
     }.property('content.title'),
 
-
     isDisabled: function() {
         if (this.getPath('content.status') & SC.Record.BUSY) {
             return YES;
@@ -65,16 +64,25 @@ KG.activeNoteController = SC.Object.create({
     }.property('content.status', 'content.author', 'KG.core_sandbox.isSandboxOwner'),
 
     commentsLabel: function() {
-        var len = this.getPath('content.comments.length');        
+        var len = this.getPath('content.comments.length');
         if (len === 0) {
-           return "_comment".loc();
+            return "_0comment".loc();
+        } else if (len === 1) {
+            return "_1comment".loc();
         } else {
-           return "_comments".loc(len);
+            return "_comments".loc(len);
         }
     }.property('content.comments.length'),
 
     hideCommentsLabel: function() {
-        return "_hideComment".loc();
-    }.property(),
+        var len = this.getPath('content.comments.length');
+        if (len === 0) {
+            return "_0hideComment".loc();
+        } else if (len === 1) {
+            return "_1hideComment".loc();
+        } else {
+            return "_hideComments".loc(len);
+        }
+    }.property('content.comments.length'),
 
 });

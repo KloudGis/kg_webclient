@@ -11,6 +11,11 @@ KG.core_note = SC.Object.create({
     _view_active_note: null,
     _new_note_marker: null,
 
+    /* Super element to put in a note marker popup */
+    _div_multiple_notes: null,
+    /* SC view to generate html bind on the  KG.notesPopupController*/
+    _view_multiple_notes: null,
+
     /* label and image for the create note control*/
     createNoteLabel: "_createNote".loc(),
     createNoteImg: KG.createNoteImagePath,
@@ -23,6 +28,9 @@ KG.core_note = SC.Object.create({
 
     _removeOnCloseMarker: null,
 
+    /**
+	* Create a nested store with chain() to start doing modifications
+	**/
     beginModifications: function() {
         this.rollbackModifications();
         this._store = KG.store.chain();
@@ -32,12 +40,18 @@ KG.core_note = SC.Object.create({
         }
     },
 
+    /**
+	* Commit the nested store into the main store and commits all the changes to the server
+	**/
     commitModifications: function() {
         this._store.commitChanges().destroy();
         this._store = null;
         KG.store.commitRecords();
     },
 
+    /**
+	* Discard the changes made in the nested store.
+	**/
     rollbackModifications: function() {
         if (this._store) {
             this._store.discardChanges();
@@ -46,16 +60,21 @@ KG.core_note = SC.Object.create({
         }
     },
 
+    /**
+	* The user quit the not edtion view.  Rollback the unsaved changes and clean up.
+	**/
     postEdition: function() {
         this.rollbackModifications();
         if (this._highlightMarker) {
             KG.core_leaflet.removeMarker(this._highlightMarker);
         }
-		this.cleanUpActiveNoteElements();
+        this.cleanUpActiveNoteElements();
     },
 
+    /**
+	* Zoom and center the map on the active note
+	**/
     zoomActiveNote: function() {
-        console.log('zoom note.');
         var note = KG.activeNoteController.get('content');
         if (note) {
             var coord = note.get('coordinate');
@@ -64,12 +83,14 @@ KG.core_note = SC.Object.create({
                 KG.core_leaflet.setCenter(KG.LonLat.create({
                     lon: coord.x,
                     lat: coord.y
-                }), 15);
+                }), 14);
             }
         }
     },
 
-    //create a marker to let the user set the position
+    /**
+	* Create a temp marker to let the user drag it to the wanted position
+	**/
     locateNote: function() {
         this.cancelLocateNote();
         var center = KG.core_leaflet.getCenter();
@@ -77,6 +98,9 @@ KG.core_note = SC.Object.create({
         return YES;
     },
 
+    /**
+	* Cancel locate note : Remove the temp marker
+	**/
     cancelLocateNote: function() {
         if (!SC.none(this._new_note_marker)) {
             KG.core_leaflet.removeMarker(this._new_note_marker);
@@ -84,7 +108,9 @@ KG.core_note = SC.Object.create({
         }
     },
 
-    //create the actual note record and activate it.
+    /**
+	* Create a new note record and activate it.
+	**/
     createNote: function() {
         this.beginModifications();
         var note;
@@ -111,6 +137,9 @@ KG.core_note = SC.Object.create({
         });
     },
 
+    /**
+	* Cleanup the temp marker used to locate the new note and other resources.
+	**/
     clearCreateNote: function() {
         if (!SC.none(this._new_note_marker)) {
             KG.core_leaflet.removeMarker(this._new_note_marker);
@@ -119,7 +148,9 @@ KG.core_note = SC.Object.create({
         }
     },
 
-    //show the note form to let the user fill it up
+    /**
+	* attempt to activate a note.  If not fresh, the note is refreshed before.
+	**/
     activateNote: function(inNote, params) {
         if (!inNote) {
             return NO;
@@ -135,12 +166,15 @@ KG.core_note = SC.Object.create({
         return YES;
     },
 
-    continueActivateNote: function(note, marker) {      
-		this.cleanUpActiveNoteElements();
-		var noteDiv = this._div_active_note;
-		if(SC.none(noteDiv)){
-        	var noteDiv = this._div_active_note = document.createElement('div');
-		}
+    /**
+	* activate note is accepted, set the active note controller and show the popup marker
+	**/
+    continueActivateNote: function(note, marker) {
+        this.cleanUpActiveNoteElements();
+        var noteDiv = this._div_active_note;
+        if (SC.none(noteDiv)) {
+            var noteDiv = this._div_active_note = document.createElement('div');
+        }
         this._view_active_note = SC.View.create({
             templateName: 'active-note-popup',
         });
@@ -148,23 +182,31 @@ KG.core_note = SC.Object.create({
         KG.activeNoteController.set('marker', marker);
         KG.activeNoteController.set('content', note);
         setTimeout(function() {
-            SC.run.begin();
-            KG.core_leaflet.showPopupMarker(marker, noteDiv);
-            SC.run.end();
+            if (!SC.none(marker)) {
+                SC.run.begin();
+                KG.core_leaflet.showPopupMarker(marker, noteDiv);
+                SC.run.end();
+            }
         },
         1);
     },
 
-	cleanUpActiveNoteElements: function(){
-		if (!SC.none(this._view_active_note)) {
+    /**
+	* cleanup the view used to render the active note.
+	**/
+    cleanUpActiveNoteElements: function() {
+        if (!SC.none(this._view_active_note)) {
             this._view_active_note.destroy();
         }
-	},
+    },
 
     setHighlightMarker: function(marker) {
         this._highlightMarker = marker;
     },
 
+    /**
+	* More then one note to activate. Show a list of notes.
+	**/
     activateMultipleNotes: function(notes, marker) {
         KG.notesPopupController.set('marker', marker);
         KG.notesPopupController.set('content', notes);
@@ -184,7 +226,9 @@ KG.core_note = SC.Object.create({
         1);
     },
 
-    //the user confirm the note create (hit the create button)
+    /**
+	* The user hit the Create or Update button. 
+	**/
     confirmCreateNote: function() {
         var note = KG.activeNoteController.get('content');
         note = KG.store.find(note);
@@ -194,6 +238,9 @@ KG.core_note = SC.Object.create({
         });
     },
 
+    /**
+	* The user hit the Delete button.
+	**/
     deleteActiveNote: function() {
         var note = KG.activeNoteController.get('content');
         if (note) {
@@ -207,7 +254,9 @@ KG.core_note = SC.Object.create({
         }
     },
 
-    //flush and recalculate the note clusters
+    /**
+	* flush and recalculate the note clusters
+	**/
     refreshMarkers: function(force) {
         var bounds = KG.core_leaflet.getBounds();
         var zoom = KG.core_leaflet.getZoom();
@@ -231,18 +280,15 @@ KG.core_note = SC.Object.create({
         return NO;
     },
 
-    /* Super element to put in a note marker popup */
-    _div_multiple_notes: null,
-    /* SC view to generate html bind on the  KG.notesPopupController*/
-    _view_multiple_notes: null,
-
+    /**
+	* Markers from the server are now READY
+	**/
     markersReady: function(markers) {
         markers.offReady();
         KG.notesPopupController.set('marker', null);
         var rtype = markers.getPath('query.recordType');
         var loadedMarkers = KG.store.find(rtype);
         loadedMarkers.forEach(function(old) {
-            //console.log('remove old marker %@'.fmt(old));
             KG.core_leaflet.removeMarker(old);
             old.set('isOnMap', NO);
             if (markers.indexOf(old) === -1) {
@@ -265,12 +311,20 @@ KG.core_note = SC.Object.create({
         }
     },
 
-    //the user clicked a marker, adjust the popup content
+    /**
+	* The user just click a marker. Try to continue.
+	**/
     markerClicked: function(marker) {
         KG.statechart.sendAction('clickMarkerAction', marker);
     },
 
+    /**
+	* Find the notes bind to this marker and wait until its READY.
+	**/
     continueMarkerClicked: function(marker) {
+        if (SC.none(marker)) {
+            return NO;
+        }
         var notes = marker.get('features');
         var len = notes.get('length');
         var params = {
@@ -292,55 +346,57 @@ KG.core_note = SC.Object.create({
         }
     },
 
+    /**
+	* A note from the marker is READY.  If no more note, try to continue.
+	**/
     noteReady: function(note, params) {
         params.count++;
         if (params.count === params.length) {
             if (params.count === 1) {
-                setTimeout(function() {
-                    SC.run.begin();
-                    KG.statechart.sendAction('noteSelectedAction', note, params);
-                    SC.run.end();
-                },
-                100);
+                KG.statechart.sendAction('noteSelectedAction', note, params);
             } else {
-                setTimeout(function() {
-                    SC.run.begin();
-                    KG.statechart.sendAction('multipleNotesSelectedAction', params.marker.get('features'), params.marker);
-                    SC.run.end();
-                },
-                100);
+                KG.statechart.sendAction('multipleNotesSelectedAction', params.marker.get('features'), params.marker);
             }
         }
     },
 
+	/**
+	* Fetch the comments for the active note.
+	**/
     fetchComments: function() {
-        // console.log('refresh comments');
-        KG.activeCommentsController.set('isLoading', YES);
+        console.log('refresh comments');
         var nested_note = KG.activeNoteController.get('content');
         var note = KG.store.find(nested_note);
         note.onReady(null,
         function() {
+	        KG.activeCommentsController.set('isLoading', YES);
             KG.activeCommentsController.set('content', []);
             var comments = note.get('comments');
             var params = {
                 count: 0,
-                length: comments.get('length'),
+                length: nested_note.getPath('comments.length'),
                 records: [],
             }
             if (params.length > 0) {
+				console.log('comments count:' + params.length);
                 comments.forEach(function(comment) {
                     comment.onReady(KG.core_note, KG.core_note.commentReady, params);
+					
                 });
             } else {
+				console.log('NO comments');
                 KG.activeCommentsController.set('isLoading', NO);
                 KG.statechart.sendAction('commentsReadyEvent');
             }
         });
     },
 
+	/**
+	* A comment from the active note is READY.  If no more comment, try to continue.
+	**/
     commentReady: function(comment, params) {
         params.count++;
-        params.records.push(comment);
+        params.records.pushObject(comment);
         if (params.count === params.length) {
             KG.statechart.sendAction('commentsReadyEvent');
             KG.activeCommentsController.set('content', KG.activeCommentsController.sortByDate(params.records));
@@ -348,30 +404,36 @@ KG.core_note = SC.Object.create({
         }
     },
 
+	/**
+	* Create a new Comment record.
+	**/
     addCommentToActiveNote: function(comment) {
         var nested_note = KG.activeNoteController.get('content');
         if (nested_note) {
             var rec_comment = KG.store.createRecord(KG.Comment, {
                 value: comment,
                 note: nested_note.get('id')
-            });			
-			//commit only this record
+            });
+            //commit only this record
             KG.store.commitRecords(null, null, [rec_comment.get('storeKey')]);
             rec_comment.onReady(null,
             function() {
-				nested_note.get('comments').get('editableStoreIds').pushObject(rec_comment.get('id'));
+                nested_note.get('comments').get('editableStoreIds').pushObject(rec_comment.get('id'));
                 KG.activeCommentsController.get('content').pushObject(rec_comment);
                 KG.statechart.sendAction('commentsReadyEvent');
             });
         }
     },
 
-
-	deleteComment: function(comment){
-		var nested_note = KG.activeNoteController.get('content');
-		nested_note.get('comments').get('editableStoreIds').removeObject(comment.get('id'));
-		comment.destroy();
-		KG.activeCommentsController.get('content').removeObject(comment);
-		KG.store.commitRecords(null, null, [comment.get('storeKey')]);
-	}
+	/**
+	* Delete a commment record and commit it to the server.
+	**/
+    deleteComment: function(comment) {
+        var nested_note = KG.activeNoteController.get('content');
+        nested_note.get('comments').get('editableStoreIds').removeObject(comment.get('id'));
+        comment.destroy();
+        KG.activeCommentsController.get('content').removeObject(comment);
+		//commit only on record
+        KG.store.commitRecords(null, null, [comment.get('storeKey')]);
+    }
 });

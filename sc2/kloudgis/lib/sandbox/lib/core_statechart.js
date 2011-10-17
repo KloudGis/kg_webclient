@@ -8,11 +8,10 @@ SC.mixin(KG, {
 
             initialSubstate: 'tryAuthenticateState',
 
-
-			//******************************
-			// transient state to check 
-			// if the user is logged in
-			//******************************
+            //******************************
+            // transient state to check 
+            // if the user is logged in
+            //******************************
             tryAuthenticateState: SC.State.extend({
                 enterState: function() {
                     var sb = $.getQueryString('sandbox');
@@ -35,11 +34,11 @@ SC.mixin(KG, {
                 }
             }),
 
-			//******************************
-			// transient state to check 
-			// if the user is a member of 
-			// the selected sandbox
-			//******************************
+            //******************************
+            // transient state to check 
+            // if the user is a member of 
+            // the selected sandbox
+            //******************************
             tryMembershipState: SC.State.extend({
 
                 enterState: function() {
@@ -58,29 +57,29 @@ SC.mixin(KG, {
                 }
             }),
 
-			//login successful on the map service.  We can add the layers
+            //login successful on the map service.  We can add the layers
             mapLoginSucceeded: function() {
                 KG.core_layer.loadLayers();
             },
 
-			//******************************
-			// Running 
-			// The user can now use the App.
-			//******************************
+            //******************************
+            // Running 
+            // The user can now use the App.
+            //******************************
             runningState: SC.State.extend({
 
                 substatesAreConcurrent: YES,
 
                 //******************************
-				// Concurrent state for Inpector
-				// Inspector 
-				//******************************
+                // Concurrent state for Inpector
+                // Inspector 
+                //******************************
                 inspectorState: SC.State.extend({
                     initialSubstate: 'inspectorHiddenState',
 
-					//******************************
-					// Inspector is Hidden 
-					//******************************
+                    //******************************
+                    // Inspector is Hidden 
+                    //******************************
                     inspectorHiddenState: SC.State.extend({
 
                         selectFeatureInspectorAction: function(feature) {
@@ -91,9 +90,9 @@ SC.mixin(KG, {
                         }
                     }),
 
-					//******************************
-					// Inspector is visible
-					//******************************
+                    //******************************
+                    // Inspector is visible
+                    //******************************
                     inspectorVisibleState: SC.State.extend({
 
                         enterState: function() {
@@ -119,10 +118,10 @@ SC.mixin(KG, {
                     })
                 }),
 
-				//******************************
-				// Concurrent state for Map Interaction
-				// Map Interaction
-				//******************************
+                //******************************
+                // Concurrent state for Map Interaction
+                // Map Interaction
+                //******************************
                 mapInteractionState: SC.State.extend({
 
                     initialSubstate: 'navigationState',
@@ -135,38 +134,38 @@ SC.mixin(KG, {
                         KG.core_note.refreshMarkers();
                     },
 
-					//anytime, the user can perfrom a search
+                    //anytime, the user can perfrom a search
                     searchAction: function() {
                         KG.core_search.searchFeatures();
                     },
 
-					//select a search category from the list -> activate the result dialog
+                    //select a search category from the list -> activate the result dialog
                     selectSearchCategoryAction: function(cat) {
                         KG.searchResultsController.set('category', cat);
                         this.gotoState('searchResultsState');
                     },
-					
-					//a note as been clicked -> activate the note
+
+                    //a note as been clicked -> activate the note
                     clickMarkerAction: function(marker) {
                         this.gotoState('navigationState');
                         KG.core_note.continueMarkerClicked(marker);
                     },
 
-					//an ajax error happen... if 401, validate the login state
+                    //an ajax error happen... if 401, validate the login state
                     httpError: function(code) {
                         if (code === 401) {
                             KG.core_sandbox.authenticate();
                         }
                     },
-					
-					//the user if definitly not logged in -> bring him back to the login page
+
+                    //the user if definitly not logged in -> bring him back to the login page
                     authenficationFailed: function() {
                         window.location.href = "index.html";
                     },
 
-					//******************************
-					// Default state - Navigation
-					//******************************
+                    //******************************
+                    // Default state - Navigation
+                    //******************************
                     navigationState: SC.State.extend({
 
                         _ignoreMouseClicked: YES,
@@ -220,9 +219,9 @@ SC.mixin(KG, {
                         }
                     }),
 
-					//******************************
-					// Show the search result
-					//******************************
+                    //******************************
+                    // Show the search result
+                    //******************************
                     searchResultsState: SC.State.extend({
 
                         _highlight: null,
@@ -276,15 +275,15 @@ SC.mixin(KG, {
                             if (KG.store.recordTypeFor(feature.get('storeKey')) === KG.Note) {
                                 var marker = KG.core_highlight.addHighlightMarker(feature.get('center'));
                                 KG.core_note.setHighlightMarker(marker);
-                                KG.core_note.activateNote(feature, marker);
+                                KG.core_note.activateNote(feature,{marker: marker});
                                 this.gotoState('editNoteState');
                             }
                         }
                     }),
 
-					//******************************
-					// Show the Feature Info result
-					//******************************
+                    //******************************
+                    // Show the Feature Info result
+                    //******************************
                     popupFeatureInfoState: SC.State.extend({
 
                         _highlight: null,
@@ -324,10 +323,9 @@ SC.mixin(KG, {
                         }
                     }),
 
-					
-					//******************************
-					// Show a popup dialog for note
-					//******************************
+                    //******************************
+                    // Show a popup dialog for note
+                    //******************************
                     popupNoteState: SC.State.extend({
 
                         initialSubstate: 'locateNoteState',
@@ -355,10 +353,10 @@ SC.mixin(KG, {
                             this.gotoState('navigationState');
                         },
 
-						//******************************
-						// As the user to locate the note
-						// to create
-						//******************************
+                        //******************************
+                        // As the user to locate the note
+                        // to create
+                        //******************************
                         locateNoteState: SC.State.extend({
 
                             enterState: function() {
@@ -396,16 +394,16 @@ SC.mixin(KG, {
                             }
                         }),
 
-						//******************************
-						// Show the form to enter the 
-						// note properties
-						//******************************
+                        //******************************
+                        // Show the form to enter the 
+                        // note properties
+                        //******************************
                         createNoteState: SC.State.extend({
 
                             enterState: function() {
                                 console.log('enter createNoteState');
                                 KG.core_note.createNote();
-                                KG.core_sandbox.autosize('#note-description-area');	
+                                KG.core_sandbox.autosize('#note-description-area');
                             },
 
                             exitState: function() {
@@ -424,10 +422,10 @@ SC.mixin(KG, {
 
                         }),
 
-						//******************************
-						// Show a dialog with a list
-						// of notes to let the user pick one.
-						//******************************
+                        //******************************
+                        // Show a dialog with a list
+                        // of notes to let the user pick one.
+                        //******************************
                         multipleNotesState: SC.State.extend({
 
                             enterState: function() {
@@ -446,10 +444,10 @@ SC.mixin(KG, {
                             }
                         }),
 
-						//******************************
-						// Edit note popup.
-						// Detail view on the active Note
-						//******************************
+                        //******************************
+                        // Edit note popup.
+                        // Detail view on the active Note
+                        //******************************
                         editNoteState: SC.State.extend({
 
                             enterState: function() {
@@ -458,9 +456,9 @@ SC.mixin(KG, {
                                 KG.newCommentController.set('content', '');
                                 KG.activeCommentsController.set('showComments', YES);
                                 KG.activeCommentsController.set('showing', NO);
-								KG.activeCommentsController.set('isLoading', NO);
-                          		KG.core_sandbox.autosize('#note-description-area');		
-                            },                        
+                                KG.activeCommentsController.set('isLoading', NO);
+                                KG.core_sandbox.autosize('#note-description-area');
+                            },
 
                             exitState: function() {
                                 console.log('exit editNoteState');
@@ -469,7 +467,7 @@ SC.mixin(KG, {
                                 KG.activeCommentsController.set('content', null);
                                 KG.activeCommentsController.set('showComments', NO);
                                 KG.activeCommentsController.set('showing', NO);
-								KG.deleteCommentController.set('content', null);
+                                KG.deleteCommentController.set('content', null);
                             },
 
                             showCommentsAction: function() {
@@ -480,7 +478,7 @@ SC.mixin(KG, {
                                 }
                                 KG.activeCommentsController.set('showing', YES);
                                 setTimeout(function() {
-									KG.core_sandbox.autosize('#note-new-comment-area');	
+                                    KG.core_sandbox.autosize('#note-new-comment-area');
                                     var area = $("#note-new-comment-area");
                                     if (KG.activeCommentsController.getPath('content.length') === 0) {
                                         area.focus();
@@ -497,16 +495,12 @@ SC.mixin(KG, {
 
                             addCommentAction: function() {
                                 var comment = KG.newCommentController.get('content');
-                                KG.core_note.addCommentToActiveNote(comment);
-                                KG.newCommentController.set('content', '');
-                                var area = $("#note-new-comment-area");
-                                area.css('max-height', '28px');
-                                setTimeout(function() {
-                                    area.blur();
-                                    area.css('height', 28);
-                                    area.css('max-height', '');
-                                },
-                                250);
+                                if (!SC.none(comment)) {
+                                    comment = comment.replace("\n", '');
+                                    if (comment.length > 0) {
+                                        KG.core_note.addCommentToActiveNote(comment);
+                                    }
+                                }                         
                             },
 
                             commentsReadyEvent: function() {
@@ -520,20 +514,20 @@ SC.mixin(KG, {
                                 1);
                             },
 
-							toggleDeleteCommentButtonAction: function(comment){
-								if(KG.deleteCommentController.get('content') === comment){
-										KG.deleteCommentController.set('content', null);
-								}else{
-									KG.deleteCommentController.set('content', comment);
-								}
-							},
-							
-							deleteCommentButtonAction: function(comment){
-								if(KG.deleteCommentController.get('content') == comment){
-									KG.core_note.deleteComment(comment);
-									KG.deleteCommentController.set('content', null);
-								}
-							},
+                            toggleDeleteCommentButtonAction: function(comment) {
+                                if (KG.deleteCommentController.get('content') === comment) {
+                                    KG.deleteCommentController.set('content', null);
+                                } else {
+                                    KG.deleteCommentController.set('content', comment);
+                                }
+                            },
+
+                            deleteCommentButtonAction: function(comment) {
+                                if (KG.deleteCommentController.get('content') == comment) {
+                                    KG.core_note.deleteComment(comment);
+                                    KG.deleteCommentController.set('content', null);
+                                }
+                            },
 
                             confirmNoteAction: function() {
                                 var note = KG.activeNoteController.get('content');
