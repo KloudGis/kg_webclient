@@ -21,10 +21,11 @@ KG.core_layer = SC.Object.create({
 	
 	getLayersSelection: function(){
 		var layers = KG.layersController.get('content');
-		var sel = layers.filterProperty('visibility', YES).filterProperty('isSelectable', YES);
-		return sel;
+		if(!SC.none(layers) && layers.get('length') > 0){
+			var sel = layers.filterProperty('visibility', YES).filterProperty('isSelectable', YES);
+			return sel;
+		}
+		return [];
 	}
-	
-	
 	
 });
