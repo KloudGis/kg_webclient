@@ -1,6 +1,6 @@
 KG.core_highlight = SC.Object.create({
-	
-	clearHighlight: function(hl) {
+
+    clearHighlight: function(hl) {
         if (hl) {
             KG.core_leaflet.removeHighlight(hl);
         }
@@ -10,10 +10,14 @@ KG.core_highlight = SC.Object.create({
         if (!feature) {
             return NO;
         }
-        return KG.core_leaflet.addHighlight(feature.get('coords'), feature.get('geo_type'));
+        try {
+            return KG.core_leaflet.addHighlight(feature.get('coords'), feature.get('geo_type'));
+        } catch(e) {
+            return null;
+        }
     },
 
-	clearHighlightMarker: function(hlMarker) {
+    clearHighlightMarker: function(hlMarker) {
         if (hlMarker) {
             KG.core_leaflet.removeMarker(hlMarker);
         }
@@ -23,6 +27,10 @@ KG.core_highlight = SC.Object.create({
         if (!lonLat) {
             return NO;
         }
-        return KG.core_leaflet.addHighlightMarker(lonLat);
+        try {
+            return KG.core_leaflet.addHighlightMarker(lonLat);
+        } catch(e) {
+            return NO;
+        }
     }
 })
