@@ -145,6 +145,11 @@ SC.mixin(KG, {
                         this.gotoState('searchResultsState');
                     },
 
+					//wipe the search category results
+					clearSearchAction: function(){
+						KG.core_search.clearSearchFeatures();
+					},
+
                     //a note as been clicked -> activate the note
                     clickMarkerAction: function(marker) {
                         this.gotoState('navigationState');

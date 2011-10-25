@@ -312,11 +312,15 @@ KG.core_leaflet = SC.Object.create({
     },
 
     setCenter: function(center, zoom) {
+		if(!center){
+			return NO;
+		}
         if (!zoom) {
             zoom = this.map.getZoom();
         }
         SC.Logger.debug('setting the map center to: Lat:' + center.get('lat') + ' Lon:' + center.get('lon'));
         this.map.setView(new L.LatLng(center.get('lat'), center.get('lon')), zoom);
+		return YES;
     },
 
     addMarker: function(marker, click_target, click_cb) {
@@ -510,21 +514,22 @@ KG.core_leaflet = SC.Object.create({
         } else {
             geo_type = 'point';
         }
-        if (geo_type === 'point') {
+		//TODO Better support for multigeo
+        if (geo_type === 'point' || geo_type === 'multipoint') {
             var circleLocation = new L.LatLng(coordinates[0].y, coordinates[0].x);
             //8 pixels radius circle
             options.radius = 7;
             options.weight = 2;
             options.fill = YES;
             layer = new L.CircleMarker(circleLocation, options);
-        } else if (geo_type === 'linestring') {
+        } else if (geo_type === 'linestring' || geo_type === 'multilinestring') {
             var latlngs = [];
             coordinates.forEach(function(c) {
                 var coord = new L.LatLng(c.y, c.x);
                 latlngs.push(coord);
             });
             layer = new L.Polyline(latlngs, options);
-        } else if (geo_type === 'polygon') {
+        } else if (geo_type === 'polygon' || geo_type === 'multipolygon') {
             var latlngs = [];
             coordinates.forEach(function(c) {
                 var coord = new L.LatLng(c.y, c.x);
