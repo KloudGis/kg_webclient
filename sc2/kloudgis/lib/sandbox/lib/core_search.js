@@ -16,7 +16,8 @@ KG.core_search = SC.Object.create({
         console.log('search for:' + search);
         var query = SC.Query.local(KG.SearchCategory, {
             query_url: '/api_data/protected/features/count_search?search_string=%@&sandbox=%@'.fmt(search, KG.get('activeSandboxKey')),
-            conditions: 'count > 0'
+            conditions: 'count > 0',
+			orderBy: 'categoryLabel'
         });
         var records = store.find(query);
         KG.searchController.set('content', records);
@@ -56,7 +57,7 @@ KG.core_search = SC.Object.create({
                     }
                     KG.store.loadRecord(KG.SearchCategory, {
                         category: '*Google*',
-                        categoryLabel: 'Google',
+                        categoryLabel: '_Google',
                         count: data.results.length,
                         loaded_records: records,
                         search: search

@@ -28,7 +28,8 @@ var fr = {
 	"_searchResult": "%@ Résultats pour %@ dans %@",
 	"_unknown" : "Élément",
 	"_noteDateFormat": "%@/%@/%@",
-	"_commentDateFormat": "%@/%@/%@ à %@:%@"
+	"_commentDateFormat": "%@/%@/%@ à %@:%@",
+	"_Google": "Google"
 };
 
 var en = {
@@ -61,7 +62,8 @@ var en = {
 	"_searchResult": "%@ Results for %@ in %@",
 	"_unknown" : "Feature",
 	"_noteDateFormat": "%@/%@/%@",
-	"_commentDateFormat": "%@/%@/%@ at %@:%@"
+	"_commentDateFormat": "%@/%@/%@ at %@:%@",
+	"_Google": "Google"
 };
 
 if(KG.lang === 'fr'){

@@ -119,9 +119,9 @@
 
 #search-control{
 	left:50%;
-	margin:0 0 0 -1.75cm;
+	margin:0 0 0 -2cm;
 	bottom:1px;
-	width:3.5cm;
+	width:4cm;
 	overflow-x:hidden;
 	overflow-y:auto;
 	max-height:1.5cm;	
@@ -132,7 +132,7 @@
 
 #search-control.has-results{
 	background: rgba(0,0,0,0.6);
-	max-height:35%;	
+	max-height:30%;	
 }
 
 #search-control input{
@@ -146,7 +146,7 @@
 }
 
 .search-cat-item{
-	padding:0.2cm;
+	padding:0.1cm;
 	text-align: left;
 }
 
@@ -169,10 +169,18 @@
 	text-align:right;
 }
 
-.cat-title-label{
-	width:2cm;
+.cat-size-label{
+	max-width: 1.1cm;
+	white-space: nowrap;
 	overflow: hidden;
-	text-overflow:ellipsis;
+	text-overflow: ellipsis;
+}
+
+.cat-title-label{
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 2.2cm;
 }
 
 
