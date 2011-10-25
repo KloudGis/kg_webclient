@@ -116,8 +116,10 @@
 					<table class="popup-info-table more-features-zone">
 					<tr>
 					<td>
-						{{itemView.content.title}}			
-						</td>
+						{{#view class="label-ellipsis"}}
+							{{itemView.content.title}}
+						{{/view}}			
+					</td>
 					<td>
 						{{#view KG.Button sc_action="selectFeatureInspectorAction" class="popup-info-select" tagName="div" classBinding="isActive"}}	
 							<img src="resources/images/right_arrow_32.png"/>		
@@ -130,16 +132,18 @@
 		<table class="popup-info-master-row-table">
 		<tr>
 		<td>
-		{{#view KG.ExpandButtonView tagName="div" class="popup-info-expand" isVisibleBinding="KG.infoController.multipleFeatures" sclassBinding="isActive" expandedBinding="KG.infoController.listVisible"}}	
-			<img {{bindAttr src="logo"}}/>		
-		{{/view}}		
+			{{#view KG.ExpandButtonView tagName="div" class="popup-info-expand" isVisibleBinding="KG.infoController.multipleFeatures" sclassBinding="isActive" expandedBinding="KG.infoController.listVisible"}}	
+				<img {{bindAttr src="logo"}}/>		
+			{{/view}}		
 		</td>
 		<td>
 		{{#view KG.FeatureInfoPopupItemView class="popup-info-item" contentBinding="KG.infoController.content.firstObject"}}
 			<table class="popup-info-table">
 			<tr>
 			<td>
-				{{content.title}}			
+				{{#view class="label-ellipsis"}}
+					{{parentView.content.title}}
+				{{/view}}		
 			</td>
 			<td>
 				{{#view KG.Button sc_action="selectFeatureInspectorAction" class="popup-info-select" contentBinding="KG.infoController.content.firstObject" tagName="div" classBinding="isActive"}}	
@@ -225,12 +229,12 @@
 							<table class="search-category-table">
 							<tr>
 							<td>
-							{{#view class="cat-title-label" titleBinding="itemView.content.title"}}
+							{{#view class="cat-title-label label-ellipsis" titleBinding="itemView.content.title"}}
 								{{itemView.content.title}}
 							{{/view}}
 							</td>
 							<td>
-							{{#view class="cat-size-label capsule-label" tagName="span"}}
+							{{#view class="cat-size-label label-ellipsis capsule-label" tagName="span"}}
 								{{itemView.content.count}}
 							{{/view}}
 							</td>

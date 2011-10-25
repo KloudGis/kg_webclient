@@ -26,11 +26,16 @@
 .popup-info-table td{
 	vertical-align: middle;
 	width: 100%;
+	max-width:250px;
 	color: white;
 	white-space: nowrap;
 	padding: 0px;
 	margin: 0px;
 	text-align: right;
+}
+
+.popup-info-table td span{
+	
 }
 
 .more-features-zone{

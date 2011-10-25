@@ -171,15 +171,9 @@
 
 .cat-size-label{
 	max-width: 1.1cm;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
 }
 
 .cat-title-label{
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
 	max-width: 2.2cm;
 }
 
