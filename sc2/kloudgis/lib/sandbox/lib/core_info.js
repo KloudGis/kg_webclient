@@ -54,12 +54,13 @@ KG.core_info = SC.Object.create({
             KG.infoController.set('content', []);
         }
         if (SC.none(this._div_info)) {
-            this._div_info = document.createElement('div');
-            this._view_info = SC.View.create({
-                templateName: 'info-popup',
-            });
-            this._view_info.appendTo(this._div_info);
+            this._div_info = document.createElement('div');         
         }
+		this.clearViewInfo();
+		this._view_info = SC.View.create({
+            templateName: 'info-popup',
+        });
+        this._view_info.appendTo(this._div_info);
     },
 
     infoReady: function(records) {
@@ -88,6 +89,7 @@ KG.core_info = SC.Object.create({
 
     hideInfoPopup: function() {
         KG.core_leaflet.closePopup();
+		this.clearViewInfo();
     },
 
     expandPopupDidChange: function() {
@@ -97,5 +99,11 @@ KG.core_info = SC.Object.create({
             SC.run.end();
         },
         1);
-    }.observes('KG.infoController.listVisible')
+    }.observes('KG.infoController.listVisible'),
+
+	clearViewInfo: function(){
+		if(!SC.none(this._view_info)){
+			this._view_info.destroy();
+		}
+	}
 });
