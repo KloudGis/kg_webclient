@@ -1,3 +1,6 @@
+/**
+* Core functions to signup 
+**/
 KG.core_signup = SC.Object.create({
 
     globalError: '',

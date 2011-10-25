@@ -1,6 +1,9 @@
 //predefined queries
 KG.LAYER_QUERY = SC.Query.local(KG.Layer, {query_url: 'to_override'});
 
+/**
+* Core functions to manage the layers
+**/
 KG.core_layer = SC.Object.create({
 	
 	loadLayers:function(){

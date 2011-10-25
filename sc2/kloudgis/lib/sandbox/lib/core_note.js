@@ -1,5 +1,9 @@
 KG.createNoteImagePath = 'resources/images/note.png';
 KG.cancelCreateNoteImagePath = 'resources/images/note_cancel.png';
+
+/**
+* Core functions to manage the Notes
+**/
 KG.core_note = SC.Object.create({
 
     /* cache for refreshMarkers*/

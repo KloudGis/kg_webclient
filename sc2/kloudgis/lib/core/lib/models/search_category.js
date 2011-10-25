@@ -1,3 +1,6 @@
+/**
+* Search count result. Category with result count.
+**/
 KG.SearchCategory = KG.Record.extend({
 
     category: SC.Record.attr(String),

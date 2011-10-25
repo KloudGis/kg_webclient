@@ -1,3 +1,6 @@
+/**
+* View to render the sandbox list title.
+**/
 KG.TitleView = SC.View.extend({
 
     recordsReadyBinding: 'KG.sandboxesController.recordsReady',

@@ -1,3 +1,6 @@
+/**
+* Features found on search category selection.
+**/
 KG.searchResultsController = SC.ArrayProxy.create({
 	content: [],
 	closeLabel: "_closeSearch".loc(),

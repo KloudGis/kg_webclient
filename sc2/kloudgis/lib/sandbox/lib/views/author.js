@@ -1,3 +1,6 @@
+/**
+* View to show the author descriptor in a collectionview.
+**/
 KG.AuthorView = SC.View.extend({
 
 	authorLabel: function(){

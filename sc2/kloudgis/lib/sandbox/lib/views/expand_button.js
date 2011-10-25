@@ -1,3 +1,6 @@
+/**
+* Toggle Button to expend/collapse.  
+**/
 KG.ExpandButtonView = SC.Button.extend({
 	
 	tagName: 'div',
@@ -13,7 +16,6 @@ KG.ExpandButtonView = SC.Button.extend({
 	}.property('expanded'),
 	
 	mouseUp: function(e){
-		console.log('click ex/coll' );
 		this.set('expanded', !this.get('expanded'));
 		return NO;
 	}

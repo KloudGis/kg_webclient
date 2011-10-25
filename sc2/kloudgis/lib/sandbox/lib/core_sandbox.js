@@ -1,3 +1,6 @@
+/**
+* Core functions for the Sandbox page
+**/
 KG.core_sandbox = SC.Object.create({
 
     sandboxMeta: {},

@@ -1,3 +1,6 @@
+/**
+* Geometry bounds.  South-West and North-East envelope.
+**/
 KG.Bounds = SC.Object.extend({
 	
 	sw: null,

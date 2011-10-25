@@ -1,3 +1,6 @@
+/**
+* View for one of the signup field.  The actual textfield will forward the events to this parent view.
+**/
 KG.SignupField = SC.View.extend({
 	
 	classNames: 'signup-field'.w(),

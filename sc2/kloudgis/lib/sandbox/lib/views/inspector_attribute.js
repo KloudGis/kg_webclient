@@ -1,4 +1,6 @@
-//render an attribute in the inspector
+/**
+* View to render an attribute in the inspector.  Use the renderer propertie to set the renderer template.  read-only-renderer by default.
+**/
 KG.InspectorAttributeView = SC.View.extend({
 	
 	_renderer: null,

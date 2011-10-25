@@ -1,6 +1,9 @@
 require('./attribute');
 require('./lon_lat');
 require('./record');
+/**
+* The Feature class with the feature id (fid), featuretype (ft), attributes (attrs), ...
+**/
 KG.Feature = KG.Record.extend({
 
     fid: SC.Record.attr(Number),

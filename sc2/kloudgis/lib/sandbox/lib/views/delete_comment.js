@@ -1,3 +1,6 @@
+/**
+* Button to delete a note comment.  
+**/
 KG.DeleteCommentView = KG.Button.extend({
 	
 	isVisible: function(){

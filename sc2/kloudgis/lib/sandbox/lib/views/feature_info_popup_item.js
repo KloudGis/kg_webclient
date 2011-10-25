@@ -1,3 +1,6 @@
+/**
+*  One Feature in the featureinfo popup.
+**/
 KG.FeatureInfoPopupItemView = SC.Button.extend({
 	
 	classNames: 'info-popup-item'.w(),

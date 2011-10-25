@@ -1,4 +1,6 @@
-//simple textfield to forward the event to the parent
+/**
+* textfield to forward the event to the parent view
+**/
 KG.ForwardTextField = SC.TextField.extend({
   
   attributeBindings: ['type', 'placeholder', 'value', 'autocapitalize', 'autocorrect'],

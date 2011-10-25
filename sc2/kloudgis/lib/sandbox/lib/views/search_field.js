@@ -1,3 +1,6 @@
+/**
+* Search text field to perform a search of feature.
+**/
 KG.SearchField = KG.TextField.extend({
     type: "search",
 

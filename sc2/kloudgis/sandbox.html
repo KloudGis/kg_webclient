@@ -76,7 +76,7 @@
 					{{KG.activeNoteController.hideCommentsLabel}}
 				</a>
 			{{/view}}
-			{{#view KG.CommentContainerView class="note-comments-container" classBinding="KG.activeCommentsController.showing"}}
+			{{#view class="note-comments-container" classBinding="KG.activeCommentsController.showing"}}
 				{{#collection contentBinding="KG.activeCommentsController.content" tagName="ul" class="popup-comment-list no-style-list"}}
 					{{#view KG.Button tagName="div" sc_action="toggleDeleteCommentButtonAction"}}
 						<table style="width:100%">

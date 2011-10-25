@@ -1,3 +1,6 @@
+/**
+* Core functions for the login page.
+**/
 KG.core_login = SC.Object.create({
 	showLogin: NO,
     isBusy: NO,

@@ -1,3 +1,6 @@
+/**
+* Statechart for the home page
+**/
 SC.mixin(KG, {
     //global state chart
     statechart: SC.Statechart.create({

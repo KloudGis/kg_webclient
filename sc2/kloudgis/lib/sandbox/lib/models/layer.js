@@ -1,3 +1,6 @@
+/**
+* Layer class definition.
+**/
 KG.Layer = KG.Record.extend(
 /** @scope CoreKG.Layer.prototype */
 {

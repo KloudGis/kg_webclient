@@ -1,3 +1,6 @@
+/**
+* Core functions to manage the map (leaflet framework)
+**/
 KG.core_leaflet = SC.Object.create({
 
     map: null,

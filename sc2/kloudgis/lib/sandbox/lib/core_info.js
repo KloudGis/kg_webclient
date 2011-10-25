@@ -2,7 +2,9 @@
 KG.INFO_QUERY = SC.Query.remote(KG.Feature, {
     query_url: 'to_override'
 });
-
+/**
+* Core functions to perform feature info.
+**/
 KG.core_info = SC.Object.create({
 
     limit_query: 10,

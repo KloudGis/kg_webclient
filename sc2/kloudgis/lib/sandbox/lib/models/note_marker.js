@@ -1,3 +1,6 @@
+/**
+* Note marker definition.  A marker is rendered on the map.
+**/
 KG.NoteMarker = KG.Record.extend({
 
 	lon: SC.Record.attr(Number),

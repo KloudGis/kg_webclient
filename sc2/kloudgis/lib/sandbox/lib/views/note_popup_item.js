@@ -1,4 +1,6 @@
-//multiple note popup item
+/**
+* Render a note item in a list (such as the "multiple notes popup")
+**/
 KG.NotePopupItemView = SC.Button.extend({
 	
 	classNames: 'popup-note-item'.w(),

@@ -1,3 +1,6 @@
+/**
+* Comment for a Note.
+**/
 KG.Comment = KG.Record.extend({
 	
 	value: SC.Record.attr(String),

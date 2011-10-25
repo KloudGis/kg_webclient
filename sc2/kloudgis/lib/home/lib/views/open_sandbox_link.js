@@ -1,3 +1,6 @@
+/**
+* View to open a sandbox: Go to the sandbox page (map). 
+**/
 KG.OpenSandboxLinkView = SC.View.extend({
 	
 	attributeBindings: ['href'],

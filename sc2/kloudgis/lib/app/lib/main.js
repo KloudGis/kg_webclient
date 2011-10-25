@@ -11,6 +11,7 @@ KG = SC.Application.create({
 
 //jQuery extension
 $.extend({      
+		//extract from the URL a query value
         getQueryString: function (name) {           
             function parseParams() {
                 var params = {},
@@ -32,6 +33,7 @@ $.extend({
             return this.queryStringParams[name];
         },
 
+		//get/set a cookie
 		cookie : function (key, value, options) {
 
 		    // key and at least value given, set cookie...

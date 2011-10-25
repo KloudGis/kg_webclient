@@ -43,7 +43,6 @@ require("./controllers/delete_comment");
 require("./core_note");
 require("./models/note_marker");
 require("./views/note_popup_item");
-require("./views/comment_container");
 require("./views/comment_area");
 require("./views/author");
 require("./views/delete_comment");

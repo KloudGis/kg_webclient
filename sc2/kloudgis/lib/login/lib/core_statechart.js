@@ -1,3 +1,6 @@
+/**
+*  Statechart for the login page. 
+**/
 SC.mixin(KG, {
     //global state chart
     statechart: SC.Statechart.create({

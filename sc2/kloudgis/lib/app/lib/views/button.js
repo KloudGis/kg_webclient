@@ -1,3 +1,6 @@
+/**
+* Extend the SC.Button to add more attributes and send Statechart action
+**/
 var get = SC.get;
 KG.Button = SC.Button.extend({
 

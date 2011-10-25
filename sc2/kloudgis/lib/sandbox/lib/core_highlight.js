@@ -1,3 +1,6 @@
+/**
+* Core functions to perform highlights
+**/
 KG.core_highlight = SC.Object.create({
 
     clearHighlight: function(hl) {

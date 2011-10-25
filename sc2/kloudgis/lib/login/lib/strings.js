@@ -1,4 +1,6 @@
-
+/**
+* Localize the login page.
+**/
 var fr = { 
 	"_loginTitle": "Se connecter à Kloudgis",
 	"_email" : "Courriel:",

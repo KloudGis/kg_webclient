@@ -1,4 +1,6 @@
-//notes for the active note marker
+/**
+* List of note Comments for the active note.
+**/
 KG.activeCommentsController = SC.ArrayProxy.create({
 	content: null,
 	showComments: NO,

@@ -1,3 +1,6 @@
+/**
+* Sandbox record class.
+**/
 KG.Sandbox = KG.Record.extend({
 
 	name: SC.Record.attr(String),

@@ -1,3 +1,6 @@
+/**
+* Localize the page
+**/
 var fr = { 
 	"_homeTitle": "Kloudgis",
 	"_sandboxesListOne": "Votre projet:",

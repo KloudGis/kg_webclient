@@ -1,3 +1,6 @@
+/**
+* A position in Longitude/Latitude. 
+**/
 KG.LonLat = SC.Object.extend({
 	lon:null,
 	lat:null,

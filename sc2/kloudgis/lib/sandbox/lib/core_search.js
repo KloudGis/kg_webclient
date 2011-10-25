@@ -1,3 +1,6 @@
+/**
+* Core functions to perform searches
+**/
 KG.core_search = SC.Object.create({
 
     searchFeatures: function() {

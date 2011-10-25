@@ -1,3 +1,6 @@
+/**
+* Statechart for the sandbox page
+**/
 SC.mixin(KG, {
     //sandbox page state chart
     statechart: SC.Statechart.create({

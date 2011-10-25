@@ -1,4 +1,6 @@
-//notes for the active note marker
+/**
+* Multiples notes list for the popup.
+**/
 KG.notesPopupController = SC.ArrayProxy.create({
 	content: [],
 	marker: null,

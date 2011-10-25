@@ -1,3 +1,7 @@
+/**
+* Core functions for authentification
+**/
+
 //Auth properties
 SC.mixin(KG, {
     /**

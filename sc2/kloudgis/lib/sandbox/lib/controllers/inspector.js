@@ -1,5 +1,6 @@
-//selected feature in the inspector view
-//with all the attributes
+/**
+* List of feature attributes to render in the inspector.
+**/
 KG.inspectorController = SC.ArrayProxy.create({
 	//attributes
 	content: [],

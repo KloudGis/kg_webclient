@@ -1,3 +1,6 @@
+/**
+* The class for Note. A note have a position (coordinate), a title, a description, a list comments, ...
+**/
 KG.Note = KG.Record.extend({
 	
 	title: SC.Record.attr(String),

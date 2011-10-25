@@ -1,3 +1,6 @@
+/**
+* List of Search categories upon search request.
+**/
 KG.searchController = SC.ArrayProxy.create({
 	content: [],
 	searchHistorySize: 5,

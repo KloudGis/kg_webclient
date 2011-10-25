@@ -1,3 +1,6 @@
+/**
+* Core functions to manage the inspector.
+**/
 KG.core_inspector = SC.Object.create({
 	
 	_highlight: null,

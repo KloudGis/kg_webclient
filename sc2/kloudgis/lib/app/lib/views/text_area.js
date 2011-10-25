@@ -1,5 +1,7 @@
+/**
+* Extend the SC.TextArea to add more attributes and localize the placeholder
+**/
 KG.TextArea = SC.TextArea.extend({
-    //add more attributes (from autofocus)
     attributeBindings: ['placeholder', 'disabled'],
 
 	placeholder: function(){

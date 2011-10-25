@@ -1,3 +1,6 @@
+/**
+* Feature attribute.  Similar to AttributeEntry in Space.
+**/
 KG.Attribute = SC.Object.extend({
 	
 	name: null,

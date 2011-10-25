@@ -1,3 +1,6 @@
+/**
+* View (TextArea) to add comment.
+**/
 KG.CommentAreaView = KG.TextArea.extend({
 
     insertNewline: function(event) {
