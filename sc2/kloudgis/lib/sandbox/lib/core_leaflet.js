@@ -386,14 +386,30 @@ KG.core_leaflet = SC.Object.create({
             _native_marker: lmarker,
             isNewNote: YES,
             lon: function() {
+				if(SC.none(this._native_marker)){
+					return NO;
+				}
                 return this._native_marker._latlng.lng;
             }.property(),
             lat: function() {
+				if(SC.none(this._native_marker)){
+					return NO;
+				}
                 return this._native_marker._latlng.lat;
             }.property()
         });
         return marker;
     },
+
+	disableDraggableMarker: function(marker){
+		if(marker && marker._native_marker){
+			var nativ = marker._native_marker;
+			nativ.options.draggable = false;
+			if(nativ.dragging){
+				nativ.dragging.disable();
+			}
+		}
+	},
 
     addHighlightMarker: function(pos) {
         var lpos = new L.LatLng(pos.get('lat'), pos.get('lon'));

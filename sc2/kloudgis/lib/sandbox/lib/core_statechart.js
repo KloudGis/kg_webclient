@@ -426,7 +426,11 @@ SC.mixin(KG, {
                                 KG.core_note.commitModifications();
                                 KG.core_note.confirmCreateNote();
                                 this.gotoState('navigationState');
-                            }
+                            },
+
+							cancelCreateNoteAction: function(){
+								this.gotoState('navigationState');
+							}
 
                         }),
 

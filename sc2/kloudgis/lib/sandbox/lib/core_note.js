@@ -1,5 +1,5 @@
-KG.createNoteImagePath = 'resources/images/note.png';
-KG.cancelCreateNoteImagePath = 'resources/images/note_cancel.png';
+KG.createNoteImagePath = 'resources/images/note_32.png';
+KG.cancelCreateNoteImagePath = 'resources/images/note_32_cancel.png';
 
 /**
 * Core functions to manage the Notes
@@ -120,25 +120,36 @@ KG.core_note = SC.Object.create({
         var note;
         if (!SC.none(this.get('featureTemplate'))) {
             var feature = this.get('featureTemplate');
-            note = this._store.createRecord(KG.Note, {
-                coordinate: {
-                    x: feature.get('center').get('lon'),
-                    y: feature.get('center').get('lat'),
-                },
-                description: feature.get('title')
-            });
-            this._new_note_marker = KG.core_leaflet.addNewNoteMarker("", feature.get('center'));
+            var center = feature.get('center');
+            if (!SC.none(center) && center.get('lon') && center.get('lat')) {
+                note = this._store.createRecord(KG.Note, {
+                    coordinate: {
+                        x: feature.get('center').get('lon'),
+                        y: feature.get('center').get('lat'),
+                    },
+                    description: feature.get('title')
+                });
+                this._new_note_marker = KG.core_leaflet.addNewNoteMarker("", feature.get('center'));
+            }
         } else {
-            note = this._store.createRecord(KG.Note, {
-                coordinate: {
-                    x: this._new_note_marker.get('lon'),
-                    y: this._new_note_marker.get('lat')
-                }
-            });
+            if (this._new_note_marker.get('lon') && this._new_note_marker.get('lat')) {
+                note = this._store.createRecord(KG.Note, {
+                    coordinate: {
+                        x: this._new_note_marker.get('lon'),
+                        y: this._new_note_marker.get('lat')
+                    }
+                });
+            }
         }
-        this.activateNote(note, {
-            marker: this._new_note_marker
-        });
+        if (note) {
+			var marker = this._new_note_marker;
+			KG.core_leaflet.disableDraggableMarker(marker);
+            this.activateNote(note, {
+                marker: marker
+            });
+        }else{
+			KG.statechart.sendAction('cancelCreateNoteAction');
+		}
     },
 
     /**
@@ -364,7 +375,7 @@ KG.core_note = SC.Object.create({
         }
     },
 
-	/**
+    /**
 	* Fetch the comments for the active note.
 	**/
     fetchComments: function() {
@@ -373,7 +384,7 @@ KG.core_note = SC.Object.create({
         var note = KG.store.find(nested_note);
         note.onReady(null,
         function() {
-	        KG.activeCommentsController.set('isLoading', YES);
+            KG.activeCommentsController.set('isLoading', YES);
             KG.activeCommentsController.set('content', []);
             var comments = note.get('comments');
             var params = {
@@ -382,20 +393,20 @@ KG.core_note = SC.Object.create({
                 records: [],
             }
             if (params.length > 0) {
-				console.log('comments count:' + params.length);
+                console.log('comments count:' + params.length);
                 comments.forEach(function(comment) {
                     comment.onReady(KG.core_note, KG.core_note.commentReady, params);
-					
+
                 });
             } else {
-				console.log('NO comments');
+                console.log('NO comments');
                 KG.activeCommentsController.set('isLoading', NO);
                 KG.statechart.sendAction('commentsReadyEvent');
             }
         });
     },
 
-	/**
+    /**
 	* A comment from the active note is READY.  If no more comment, try to continue.
 	**/
     commentReady: function(comment, params) {
@@ -408,7 +419,7 @@ KG.core_note = SC.Object.create({
         }
     },
 
-	/**
+    /**
 	* Create a new Comment record.
 	**/
     addCommentToActiveNote: function(comment) {
@@ -429,7 +440,7 @@ KG.core_note = SC.Object.create({
         }
     },
 
-	/**
+    /**
 	* Delete a commment record and commit it to the server.
 	**/
     deleteComment: function(comment) {
@@ -437,7 +448,7 @@ KG.core_note = SC.Object.create({
         nested_note.get('comments').get('editableStoreIds').removeObject(comment.get('id'));
         comment.destroy();
         KG.activeCommentsController.get('content').removeObject(comment);
-		//commit only on record
+        //commit only on record
         KG.store.commitRecords(null, null, [comment.get('storeKey')]);
     }
 });

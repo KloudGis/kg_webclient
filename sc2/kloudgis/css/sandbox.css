@@ -43,7 +43,7 @@
 	z-index:9;
 	position: absolute;
 	text-align:center;
-	margin: 0.2cm;
+	margin: 0.1cm;
 	padding: 0.75em 0.5em;
 	border-radius: 0.2cm;
 	background-color: rgba(0,0,0,0.25);	
@@ -66,18 +66,18 @@
 }
 
 #back-home{
-	right:3px;
+	right:0px;
 	top:0px;
 }
 
 #create-note{
-	right:3px;
-	bottom:2cm;
+	left:50%;
+	margin-left:3cm;
+	bottom:1px;
+	margin-bottom:0;
 }
 
 #create-note button{
-	width: 48px;
-	height:48px;
 	padding:0;
 	border:none;
 	background: none;
@@ -85,8 +85,8 @@
 
 #position-label{
 	padding: 0.5em 1em;
-	right:3px;
-	bottom:0.5cm;
+	right:0px;
+	top:1cm;
 	text-shadow: 0px -1px 2px #fff;
 }
 
@@ -99,13 +99,13 @@
 	position: absolute;
 	left:50%;
 	top:0px;
-	width:3.5cm;
-	height:0.35cm;
-	margin-left:-1.75cm;
+	width:3cm;
+	height:18px;
+	margin-left:-1.5cm;
 	z-index:2;
 	text-align: center;
-	font-size: 0.35cm;
-	padding: 5px;
+	font-size: 12px;
+	font-weight: bold;
 	color: #333;
     background: rgba(255, 255, 255, 0.8);
 	box-shadow: 0 0 10px #333;
@@ -114,6 +114,7 @@
 
 #active-sandbox-label span{
 	display: block;
+	padding-top:2px;
 	width:100%;
 }
 
