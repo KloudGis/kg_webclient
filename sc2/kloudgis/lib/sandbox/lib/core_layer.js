@@ -17,7 +17,7 @@ KG.core_layer = SC.Object.create({
 		//FIXME: sortProperty is not yet implemented in beta3
 		var ordered = layers;//layers.sortProperty('renderOrder'); 
 		
-		ordered.filterProperty('visibility', YES).forEach(function(layer){
+		ordered.filterProperty('visibility', YES).filterProperty('canRender', YES).forEach(function(layer){
 			KG.core_leaflet.addWMSLayer(layer);
 		});
 	},
