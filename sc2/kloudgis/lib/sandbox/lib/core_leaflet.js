@@ -50,6 +50,7 @@ KG.core_leaflet = SC.Object.create({
 
         // initialize the map on the "map" div
         var map = new L.Map('map', {});
+/*
         //bug fix in LEAFLET
         L.Marker.prototype._removeIcon = function() {
             //add this if
@@ -92,7 +93,7 @@ KG.core_leaflet = SC.Object.create({
                 pane.appendChild(root);
             }
         };
-
+*/
         //	map.addControl(this.layerControl);
         map.setView(new L.LatLng(46, -72), 8).addLayer(mapquest);
 
