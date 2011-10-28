@@ -50,50 +50,6 @@ KG.core_leaflet = SC.Object.create({
 
         // initialize the map on the "map" div
         var map = new L.Map('map', {});
-/*
-        //bug fix in LEAFLET
-        L.Marker.prototype._removeIcon = function() {
-            //add this if
-            if (!this._map) {
-                this._map = map;
-            }
-            this._map._panes.markerPane.removeChild(this._icon);
-            if (this._shadow) {
-                this._map._panes.shadowPane.removeChild(this._shadow);
-            }
-            this._icon = this._shadow = null;
-        };
-
-        L.Path.prototype._updateSvgViewport = function() {
-            //add this if
-            if (!this._map) {
-                this._map = map;
-            }
-            this._updateViewport();
-            var vp = this._map._pathViewport,
-            min = vp.min,
-            max = vp.max,
-            width = max.x - min.x,
-            height = max.y - min.y,
-            root = this._map._pathRoot,
-            pane = this._map._panes.overlayPane;
-
-            // Hack to make flicker on drag end on mobile webkit less irritating
-            // Unfortunately I haven't found a good workaround for this yet
-            if (L.Browser.mobileWebkit) {
-                pane.removeChild(root);
-            }
-
-            L.DomUtil.setPosition(root, min);
-            root.setAttribute('width', width);
-            root.setAttribute('height', height);
-            root.setAttribute('viewBox', [min.x, min.y, width, height].join(' '));
-
-            if (L.Browser.mobileWebkit) {
-                pane.appendChild(root);
-            }
-        };
-*/
         //	map.addControl(this.layerControl);
         map.setView(new L.LatLng(46, -72), 8).addLayer(mapquest);
 
