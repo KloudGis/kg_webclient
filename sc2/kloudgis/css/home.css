@@ -39,17 +39,28 @@ body{
 	padding: 0.2cm;
 }
 
+.sandbox-list-item > span{
+	display: block;
+	width:100%;
+	text-align:right;
+	color:gray;
+	font-size:10px;
+}
+
 .open-sandbox-link {
 	display: block;
 	width: 100%;
 	color: #4183C4;
 	font-size: 0.5cm;
-	font-weight: bold;
 	background: url('../resources/images/arrow-40.png') 97% 50% no-repeat;
+	transition:font-size 0.3s ease-in;
+	-webkit-transition:font-size 0.3s ease-in;
+	-moz-transition:font-size 0.3s ease-in;
 }
 
 .open-sandbox-link:hover {
 	background: url('../resources/images/arrow-90.png') 97% 50% no-repeat;
+	font-size:0.55cm;
 }
 
 

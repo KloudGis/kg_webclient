@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>kloudgis/lib/sandbox/lib/core_note.js</string>
+	<string>kloudgis/lib/sandbox/lib/models/layer.js</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -566,14 +566,30 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>63</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>19</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>60</integer>
+				<key>line</key>
+				<integer>19</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>69</integer>
+				<key>line</key>
+				<integer>19</integer>
+			</dict>
 		</dict>
 		<key>kloudgis/lib/sandbox/lib/core_leaflet.js</key>
 		<dict>
@@ -601,7 +617,7 @@
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>218</integer>
+			<integer>197</integer>
 		</dict>
 		<key>kloudgis/lib/sandbox/lib/core_statechart.js</key>
 		<dict>
@@ -632,6 +648,20 @@
 				<key>line</key>
 				<integer>430</integer>
 			</dict>
+		</dict>
+		<key>kloudgis/lib/sandbox/lib/models/layer.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>39</integer>
+				<key>line</key>
+				<integer>10</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
 		</dict>
 		<key>kloudgis/lib/sandbox/lib/views/feature_info_popup_item.js</key>
 		<dict>
@@ -742,10 +772,11 @@
 		<string>kloudgis/sandbox.html</string>
 		<string>kloudgis/css/sandbox.css</string>
 		<string>kloudgis/lib/sandbox/lib/core_layer.js</string>
+		<string>kloudgis/lib/sandbox/lib/models/layer.js</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{460, 235}, {1155, 976}}</string>
+	<string>{{728, 58}, {1155, 976}}</string>
 </dict>
 </plist>
