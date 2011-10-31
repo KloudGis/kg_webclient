@@ -53,9 +53,9 @@ body{
 	color: #4183C4;
 	font-size: 0.5cm;
 	background: url('../resources/images/arrow-40.png') 97% 50% no-repeat;
-	transition:font-size 0.3s ease-in;
-	-webkit-transition:font-size 0.3s ease-in;
-	-moz-transition:font-size 0.3s ease-in;
+	transition:font-size 0.1s ease-in;
+	-webkit-transition:font-size 0.1s ease-in;
+	-moz-transition:font-size 0.1s ease-in;
 }
 
 .open-sandbox-link:hover {

@@ -392,6 +392,7 @@ KG.core_leaflet = SC.Object.create({
             layers: layer.get('name'),
             transparent: YES,
             format: 'image/png',
+			no_gwc: NO,
             kg_layer: layer.get('id'),
             kg_sandbox: KG.get('activeSandboxKey')
         });
