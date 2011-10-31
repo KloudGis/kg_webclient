@@ -90,7 +90,27 @@ KG.core_leaflet = SC.Object.create({
             L.DomEvent.addListener(this._popupMarker._wrapper, L.Draggable.MOVE, KG.core_leaflet.stopPropagation);
         }
         L.DomEvent.addListener(this._popupMarker._wrapper, 'mousewheel', KG.core_leaflet.stopPropagation);
+        L.DomEvent.addListener(this.map._container, 'mousedown', this._onMouseDown, this);
+		L.DomEvent.addListener(this.map._container, 'mouseup', this._onMouseUp, this);
+		L.DomEvent.addListener(this.map._container, 'click', this._onMouseClick, this);
     },
+
+
+	/** store the shift down status to bypass the next click event and therefore do not make a selection on shift drag  zoom **/
+	_shiftDown: NO,
+
+	_onMouseDown: function(e){
+		if (!e.shiftKey || ((e.which != 1) && (e.button != 1))) { return false; }
+		this._shiftDown = YES;
+	},
+	
+	_onMouseUp: function(e){	
+		setTimeout(function(){KG.core_leaflet._shiftDown = NO;}, 300);		
+	},
+	
+	_onMouseClick: function(e){	
+		this._shiftDown = NO;
+	},
 
     stopPropagation: function(e) {
         if (e.stopPropagation) {
@@ -99,7 +119,6 @@ KG.core_leaflet = SC.Object.create({
     },
 
     onZoom: function(e) {
-        //	console.log('on Zoom');
         SC.run.begin();
         KG.statechart.sendAction('mapZoomedAction', this);
         SC.run.end();
@@ -113,7 +132,9 @@ KG.core_leaflet = SC.Object.create({
     },
 
     onClick: function(e) {
-        //	console.log('on Click');
+        if(this._shiftDown){
+			return NO;
+		}
         SC.run.begin();
         KG.statechart.sendAction('clickOnMapAction', KG.LonLat.create({
             lon: e.latlng.lng,
@@ -272,15 +293,15 @@ KG.core_leaflet = SC.Object.create({
     },
 
     setCenter: function(center, zoom) {
-		if(!center){
-			return NO;
-		}
+        if (!center) {
+            return NO;
+        }
         if (!zoom) {
             zoom = this.map.getZoom();
         }
         SC.Logger.debug('setting the map center to: Lat:' + center.get('lat') + ' Lon:' + center.get('lon'));
         this.map.setView(new L.LatLng(center.get('lat'), center.get('lon')), zoom);
-		return YES;
+        return YES;
     },
 
     addMarker: function(marker, click_target, click_cb) {
@@ -343,30 +364,30 @@ KG.core_leaflet = SC.Object.create({
             _native_marker: lmarker,
             isNewNote: YES,
             lon: function() {
-				if(SC.none(this._native_marker)){
-					return NO;
-				}
+                if (SC.none(this._native_marker)) {
+                    return NO;
+                }
                 return this._native_marker._latlng.lng;
             }.property(),
             lat: function() {
-				if(SC.none(this._native_marker)){
-					return NO;
-				}
+                if (SC.none(this._native_marker)) {
+                    return NO;
+                }
                 return this._native_marker._latlng.lat;
             }.property()
         });
         return marker;
     },
 
-	disableDraggableMarker: function(marker){
-		if(marker && marker._native_marker){
-			var nativ = marker._native_marker;
-			nativ.options.draggable = false;
-			if(nativ.dragging){
-				nativ.dragging.disable();
-			}
-		}
-	},
+    disableDraggableMarker: function(marker) {
+        if (marker && marker._native_marker) {
+            var nativ = marker._native_marker;
+            nativ.options.draggable = false;
+            if (nativ.dragging) {
+                nativ.dragging.disable();
+            }
+        }
+    },
 
     addHighlightMarker: function(pos) {
         var lpos = new L.LatLng(pos.get('lat'), pos.get('lon'));
@@ -392,7 +413,7 @@ KG.core_leaflet = SC.Object.create({
             layers: layer.get('name'),
             transparent: YES,
             format: 'image/png',
-			no_gwc: NO,
+            no_gwc: NO,
             kg_layer: layer.get('id'),
             kg_sandbox: KG.get('activeSandboxKey')
         });
@@ -491,7 +512,7 @@ KG.core_leaflet = SC.Object.create({
         } else {
             geo_type = 'point';
         }
-		//TODO Better support for multigeo
+        //TODO Better support for multigeo
         if (geo_type === 'point' || geo_type === 'multipoint') {
             var circleLocation = new L.LatLng(coordinates[0].y, coordinates[0].x);
             //8 pixels radius circle
