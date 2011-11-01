@@ -16,7 +16,7 @@ KG.core_leaflet = SC.Object.create({
     hlNoteIcon: new L.Icon('resources/images/highlight.png'),
 
     //	layerControl: new L.Control.Layers(),
-    addToDocument: function() {
+    addToDocument: function(lon, lat, zoom) {
         /* var key = '8ccaf9c293f247d6b18a30fce375e298';
         var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/' + key + '/997/256/{z}/{x}/{y}.png',
         cloudmadeAttribution = 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
@@ -51,7 +51,10 @@ KG.core_leaflet = SC.Object.create({
         // initialize the map on the "map" div
         var map = new L.Map('map', {});
         //	map.addControl(this.layerControl);
-        map.setView(new L.LatLng(46, -72), 8).addLayer(mapquest);
+		lon = lon || -72;
+		lat = lat || 46;
+		zoom = zoom || 8;
+        map.setView(new L.LatLng(lat, lon), zoom).addLayer(mapquest);
 
         //this.layerControl.addBaseLayer(layer, "Base");
         this.map = map;
@@ -91,26 +94,30 @@ KG.core_leaflet = SC.Object.create({
         }
         L.DomEvent.addListener(this._popupMarker._wrapper, 'mousewheel', KG.core_leaflet.stopPropagation);
         L.DomEvent.addListener(this.map._container, 'mousedown', this._onMouseDown, this);
-		L.DomEvent.addListener(this.map._container, 'mouseup', this._onMouseUp, this);
-		L.DomEvent.addListener(this.map._container, 'click', this._onMouseClick, this);
+        L.DomEvent.addListener(this.map._container, 'mouseup', this._onMouseUp, this);
+        L.DomEvent.addListener(this.map._container, 'click', this._onMouseClick, this);
     },
 
+    /** store the shift down status to bypass the next click event and therefore do not make a selection on shift drag  zoom **/
+    _shiftDown: NO,
 
-	/** store the shift down status to bypass the next click event and therefore do not make a selection on shift drag  zoom **/
-	_shiftDown: NO,
+    _onMouseDown: function(e) {
+        if (!e.shiftKey || ((e.which != 1) && (e.button != 1))) {
+            return false;
+        }
+        this._shiftDown = YES;
+    },
 
-	_onMouseDown: function(e){
-		if (!e.shiftKey || ((e.which != 1) && (e.button != 1))) { return false; }
-		this._shiftDown = YES;
-	},
-	
-	_onMouseUp: function(e){	
-		setTimeout(function(){KG.core_leaflet._shiftDown = NO;}, 300);		
-	},
-	
-	_onMouseClick: function(e){	
-		this._shiftDown = NO;
-	},
+    _onMouseUp: function(e) {
+        setTimeout(function() {
+            KG.core_leaflet._shiftDown = NO;
+        },
+        300);
+    },
+
+    _onMouseClick: function(e) {
+        this._shiftDown = NO;
+    },
 
     stopPropagation: function(e) {
         if (e.stopPropagation) {
@@ -120,7 +127,8 @@ KG.core_leaflet = SC.Object.create({
 
     onZoom: function(e) {
         SC.run.begin();
-        KG.statechart.sendAction('mapZoomedAction', this);
+        KG.statechart.sendAction('mapZoomedAction', this);		
+        KG.core_sandbox.setCenter(this.getCenter(), this.getZoom());
         SC.run.end();
     },
 
@@ -128,13 +136,14 @@ KG.core_leaflet = SC.Object.create({
         //  console.log('on Move');
         SC.run.begin();
         KG.statechart.sendAction('mapMovedAction', this);
+        KG.core_sandbox.setCenter(this.getCenter(), this.getZoom());
         SC.run.end();
     },
 
     onClick: function(e) {
-        if(this._shiftDown){
-			return NO;
-		}
+        if (this._shiftDown) {
+            return NO;
+        }
         SC.run.begin();
         KG.statechart.sendAction('clickOnMapAction', KG.LonLat.create({
             lon: e.latlng.lng,
@@ -538,9 +547,7 @@ KG.core_leaflet = SC.Object.create({
         return layer;
     },
 
-    _temp: null,
-    _temp2: null,
-    printBoundsA: function() {
+    _temp: null, _temp2: null, printBoundsA: function() {
         if (!SC.none(this._temp)) {
             this.map.removeLayer(this._temp);
         }

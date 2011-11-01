@@ -9,6 +9,10 @@ KG.core_sandbox = SC.Object.create({
 
     mousePosition: null,
 
+    setCenter: function(lonLat, zoom) {
+        window.location.hash = 'lon:%@;lat:%@;zoom:%@'.fmt(lonLat.get('lon').toFixed(4), lonLat.get('lat').toFixed(4), zoom);
+    },
+
     authenticate: function() {
         var success = KG.core_auth.load(this, this.authenticateCallback);
         return success;
@@ -101,7 +105,17 @@ KG.core_sandbox = SC.Object.create({
     }.observes('sandboxMeta'),
 
     addMap: function() {
-        KG.core_leaflet.addToDocument();
+        var hashLoc = window.location.hash;
+        var lat, lon, zoom
+        if (hashLoc && hashLoc.length > 0) {
+            var tokens = hashLoc.split(';');
+            if (tokens.length === 3) {
+                lon = parseFloat(tokens[0].substring(5));
+                lat = parseFloat(tokens[1].substring(4));
+                zoom = parseInt(tokens[2].substring(5));
+            }
+        }
+        KG.core_leaflet.addToDocument(lon, lat, zoom);
     },
 
     createNote: function() {
