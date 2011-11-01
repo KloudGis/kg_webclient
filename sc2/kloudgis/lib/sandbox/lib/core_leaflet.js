@@ -17,15 +17,10 @@ KG.core_leaflet = SC.Object.create({
 
     //	layerControl: new L.Control.Layers(),
     addToDocument: function(lon, lat, zoom) {
-        /* var key = '8ccaf9c293f247d6b18a30fce375e298';
-        var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/' + key + '/997/256/{z}/{x}/{y}.png',
-        cloudmadeAttribution = 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
-        cloudmade = new L.TileLayer(cloudmadeUrl, {
-            maxZoom: 18,
-            attribution: cloudmadeAttribution
-        });*/
-
-        //patch to make the popup hide on Safari Mac.
+	
+	
+	
+		//patch to make the popup hide on Safari Mac.
         if ($.browser.safari && navigator.platform.indexOf('Mac') == 0) {
             L.Popup.prototype._close = function() {
                 if (this._opened) {
@@ -40,13 +35,35 @@ KG.core_leaflet = SC.Object.create({
             };
         }
 
-        var mapquestUrl = 'http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
+		var baseLayer;
+		var key = 'Anvn3DMhTFsggcirvNz1TNQrxCzksEg-b47gtD7AO1iOzZicEiF2mFZoleYMkX8z';
+		baseLayer = new L.BingLayer(key);
+		
+	
+		
+/*        var osmURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+		var at = 'OSM';
+		baseLayer = new L.TileLayer(osmURL, {
+		    maxZoom: 20,
+		    attribution: at
+		});
+		*/
+		
+	/*	var key = '8ccaf9c293f247d6b18a30fce375e298';
+        var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/' + key + '/997/256/{z}/{x}/{y}.png',
+        cloudmadeAttribution = 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
+        baseLayer = new L.TileLayer(cloudmadeUrl, {
+            maxZoom: 18,
+            attribution: cloudmadeAttribution
+        });
+   *?
+        /*var mapquestUrl = 'http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
         mapquestAttribution = "Data CC-By-SA by <a href='http://openstreetmap.org/' target='_blank'>OpenStreetMap</a>, Tiles Courtesy of <a href='http://open.mapquest.com' target='_blank'>MapQuest</a>",
-        mapquest = new L.TileLayer(mapquestUrl, {
+        baseLayer = new L.TileLayer(mapquestUrl, {
             maxZoom: 18,
             attribution: mapquestAttribution,
             subdomains: ['1', '2', '3', '4']
-        });
+        });*/
 
         // initialize the map on the "map" div
         var map = new L.Map('map', {});
@@ -54,7 +71,7 @@ KG.core_leaflet = SC.Object.create({
 		lon = lon || -72;
 		lat = lat || 46;
 		zoom = zoom || 8;
-        map.setView(new L.LatLng(lat, lon), zoom).addLayer(mapquest);
+        map.setView(new L.LatLng(lat, lon), zoom).addLayer(baseLayer);
 
         //this.layerControl.addBaseLayer(layer, "Base");
         this.map = map;
@@ -422,6 +439,9 @@ KG.core_leaflet = SC.Object.create({
             layers: layer.get('name'),
             transparent: YES,
             format: 'image/png',
+			tiled: YES,
+			tilesorigin:'0,0',
+			//set to YES to by pass geowebcache
             no_gwc: NO,
             kg_layer: layer.get('id'),
             kg_sandbox: KG.get('activeSandboxKey')
@@ -601,22 +621,122 @@ KG.core_leaflet = SC.Object.create({
 
 });
 
-/*var osmURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-var at = 'OSM';
-var layer = new L.TileLayer(osmURL, {
-    maxZoom: 20,
-    attribution: at
+//***********************************
+// From a pull request not yet integrated
+// https://github.com/CloudMade/Leaflet/pull/291
+// to remove when included in Leaflet
+
+L.BingLayer = L.TileLayer.extend({
+	options: {
+		subdomains: [0, 1, 2, 3],
+		attribution: 'Bing',
+	},
+
+	initialize: function(key, options) {
+		L.Util.setOptions(this, options);
+
+		this._key = key;
+		this._url = null;
+		this.meta = {};
+		this._update_tile = this._update;
+		this._update = function() {
+			if (this._url == null) return;
+			this._update_attribution();
+			this._update_tile();
+		};
+		this.loadMetadata();
+	},
+
+	tile2quad: function(x, y, z) {
+		var quad = '';
+		for (var i = z; i > 0; i--) {
+			var digit = 0;
+			var mask = 1 << (i - 1);
+			if ((x & mask) != 0) digit += 1;
+			if ((y & mask) != 0) digit += 2;
+			quad = quad + digit;
+		}
+		return quad;
+	},
+
+	getTileUrl: function(p, z) {
+		var subdomains = this.options.subdomains,
+			s = this.options.subdomains[(p.x + p.y) % subdomains.length];
+		return this._url.replace('{subdomain}', s)
+				.replace('{quadkey}', this.tile2quad(p.x, p.y, z))
+				.replace('{culture}', '');
+	},
+
+	loadMetadata: function() {
+		var _this = this;
+		var cbid = '_bing_metadata';
+		window[cbid] = function (meta) {
+			_this.meta = meta;
+			window[cbid] = undefined;
+			var e = document.getElementById(cbid);
+			e.parentNode.removeChild(e);
+			if (meta.errorDetails) {
+				alert("Got metadata" + meta.errorDetails);
+				return;
+			}
+			_this.initMetadata();
+		};
+		//AerialWithLabels,Aerial or Road
+		var url = "http://dev.virtualearth.net/REST/v1/Imagery/Metadata/Road?include=ImageryProviders&jsonp=" + cbid + "&key=" + this._key;
+		var script = document.createElement("script");
+		script.type = "text/javascript";
+		script.src = url;
+		script.id = cbid;
+		document.getElementsByTagName("head")[0].appendChild(script);
+	},
+
+	initMetadata: function() {
+		var r = this.meta.resourceSets[0].resources[0];
+		this.options.subdomains = r.imageUrlSubdomains;
+		this._url = r.imageUrl;
+		this._providers = [];
+		for (var i = 0; i < r.imageryProviders.length; i++) {
+			var p = r.imageryProviders[i];
+			for (var j = 0; j < p.coverageAreas.length; j++) {
+				var c = p.coverageAreas[j];
+				var coverage = {zoomMin: c.zoomMin, zoomMax: c.zoomMax, active: false};
+				var bounds = new L.LatLngBounds(
+						new L.LatLng(c.bbox[0]+0.01, c.bbox[1]+0.01),
+						new L.LatLng(c.bbox[2]-0.01, c.bbox[3]-0.01)
+				);
+				coverage.bounds = bounds;
+				coverage.attrib = p.attribution;
+				this._providers.push(coverage);
+			}
+		}
+		this._update();
+	},
+
+	_update_attribution: function() {
+		var bounds = this._map.getBounds();
+		var zoom = this._map.getZoom();
+		for (var i = 0; i < this._providers.length; i++) {
+			var p = this._providers[i];
+			if ((zoom <= p.zoomMax && zoom >= p.zoomMin) &&
+				this._intersects(bounds, p.bounds)) {
+				if (!p.active)
+					this._map.attributionControl.addAttribution(p.attrib);
+				p.active = true;
+			} else {
+				if (p.active)
+					this._map.attributionControl.removeAttribution(p.attrib);
+				p.active = false;
+			}
+		}
+	},
+
+	_intersects: function(obj1, obj2) /*-> Boolean*/ {
+		var sw = obj1.getSouthWest(),
+			ne = obj1.getNorthEast(),
+			sw2 = obj2.getSouthWest(),
+			ne2 = obj2.getNorthEast();
+
+		return (sw2.lat <= ne.lat) && (sw2.lng <= ne.lng) &&
+				(sw.lat <= ne2.lat) && (sw.lng <= ne2.lng);
+	}
 });
-*/
-
-//USA States test WMS
-/*var nexrad = new L.TileLayer.WMS("http://suite.opengeo.org/geoserver/usa/wms", {
-        layers: 'usa:states',
-        format: 'image/png',
-        transparent: true
-    });
-
-
-map.addLayer(nexrad);
-*/
-
