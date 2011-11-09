@@ -29,7 +29,9 @@ var fr = {
 	"_unknown" : "Élément",
 	"_noteDateFormat": "%@/%@/%@",
 	"_commentDateFormat": "%@/%@/%@ à %@:%@",
-	"_Google": "Google"
+	"_searchGoogle": "Rechercher Google",
+	"_searchGeonames": "Rechercher Geonames",
+	"_searchOSM": "Rechercher OSM"
 };
 
 var en = {
@@ -63,7 +65,9 @@ var en = {
 	"_unknown" : "Feature",
 	"_noteDateFormat": "%@/%@/%@",
 	"_commentDateFormat": "%@/%@/%@ at %@:%@",
-	"_Google": "Google"
+	"_searchGoogle": "Search Google",
+	"_searchGeonames": "Search Geonames",
+	"_searchOSM": "Search OSM"
 };
 
 if(KG.lang === 'fr'){

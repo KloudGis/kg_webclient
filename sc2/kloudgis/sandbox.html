@@ -242,6 +242,13 @@
 							</table>
 						{{/view}}
 					{{/collection}}
+					{{#collection contentBinding="KG.core_search.plugins" isVisibleBinding="KG.core_search.searchAsked" tagName="ul" class="search-cat-list no-style-list"}}
+						{{#view KG.Button class="search-plugin-item" tagName="div" sc_action="selectSearchPluginAction"}}
+							{{#view class="plugin-title-label label-ellipsis" titleBinding="itemView.content.title"}}
+								{{itemView.content.title}}
+							{{/view}}
+						{{/view}}
+					{{/collection}}
 				{{/view}}
 			</script>
 		</div>

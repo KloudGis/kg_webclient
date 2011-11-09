@@ -6,6 +6,7 @@ KG.searchResultsController = SC.ArrayProxy.create({
 	closeLabel: "_closeSearch".loc(),
 	listVisible: NO,
 	category: null,
+	plugin: null,
 	
 	listTitle: function(){
 		if(SC.none(this.get('content'))){
@@ -13,7 +14,10 @@ KG.searchResultsController = SC.ArrayProxy.create({
 		}else{
 			var cat = this.get('category');
 			if(SC.none(cat)){
-				return '';
+				var plugin = this.get('plugin');
+				if(!SC.none(plugin)){
+					return "_searchResult".loc(this.getPath('content.length'), plugin.get('searchValue'), plugin.get('pluginName'));
+				}
 			}else{
 				return "_searchResult".loc(this.getPath('content.length'), cat.get('search'), cat.get('title'));
 			}

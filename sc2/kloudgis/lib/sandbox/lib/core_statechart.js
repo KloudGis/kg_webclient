@@ -148,6 +148,13 @@ SC.mixin(KG, {
                         this.gotoState('searchResultsState');
                     },
 
+					//select a search plugin from the list
+					selectSearchPluginAction: function(plugin){
+						KG.searchResultsController.set('category', null);
+						KG.searchResultsController.set('plugin', plugin);
+						this.gotoState('searchResultsState');
+					},
+
 					//wipe the search category results
 					clearSearchAction: function(){
 						KG.core_search.clearSearchFeatures();
@@ -252,6 +259,12 @@ SC.mixin(KG, {
                             KG.searchResultsController.set('category', cat);
                             KG.core_search.showResults();
                         },
+
+						selectSearchPluginAction: function(plugin){
+							KG.searchResultsController.set('category', null);
+							KG.searchResultsController.set('plugin', plugin);
+							KG.core_search.showResults();
+						},
 
                         hideSearchResultAction: function() {
                             this.gotoState('navigationState');

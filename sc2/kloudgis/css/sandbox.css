@@ -121,12 +121,12 @@
 
 #search-control{
 	left:50%;
-	margin:0 0 0 -2cm;
+	margin:0 0 0 -2.25cm;
 	bottom:1px;
-	width:4cm;
+	width:4.5cm;
+	max-height:30%;	
 	overflow-x:hidden;
 	overflow-y:auto;
-	max-height:1.5cm;	
 	transition:all 0.3s ease-in;
 	-webkit-transition:all 0.3s ease-in;
 	-moz-transition:all 0.3s ease-in;
@@ -134,7 +134,7 @@
 
 #search-control.has-results{
 	background: rgba(0,0,0,0.6);
-	max-height:30%;	
+	max-height:40%;	
 }
 
 #search-control input{
@@ -176,8 +176,24 @@
 }
 
 .cat-title-label{
-	max-width: 2.2cm;
+	max-width: 2.4cm;
 }
 
+.search-plugin-item{
+	margin-top: 3px;
+	color: white;
+	padding:0.1cm;
+	text-align: center;
+	background:gray;
+	border-radius: 10px;
+}
 
+.search-plugin-item:hover{
+	background-color: rgba(0,0,0,0.5);
+	border-radius: 10px;
+}
+
+.cat-title-label{
+	max-width: 3cm;	
+}
 

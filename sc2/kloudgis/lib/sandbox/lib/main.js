@@ -21,6 +21,10 @@ require("./controllers/search");
 require("./controllers/search_results");
 require("./views/search_field");
 require("./views/search_result_label");
+//search plugins
+require("./search_plugins/core_google");
+require("./search_plugins/core_geonames");
+require("./search_plugins/core_osm");
 
 //inspector
 require("./core_inspector");

@@ -3,6 +3,13 @@
 **/
 KG.core_search = SC.Object.create({
 
+    plugins: [],
+	searchAsked: NO,
+
+    addPlugin: function(plugin) {
+        this.plugins.pushObject(plugin);
+    },
+
     searchFeatures: function() {
         var search = KG.searchController.get('searchValue');
         var content = KG.searchController.get('content');
@@ -16,57 +23,15 @@ KG.core_search = SC.Object.create({
         console.log('search for:' + search);
         var query = SC.Query.local(KG.SearchCategory, {
             query_url: '/api_data/protected/features/count_search?search_string=%@&sandbox=%@'.fmt(search, KG.get('activeSandboxKey')),
-            conditions: 'count > 0',
-			orderBy: 'categoryLabel'
+            conditions: 'count > 0 OR count = -1',
+            orderBy: 'categoryLabel'
         });
         var records = store.find(query);
         KG.searchController.set('content', records);
-        this.loadGoogleResults(search);
-    },
-
-    loadGoogleResults: function(search) {
-        $.ajax({
-            type: 'GET',
-            url: '/maps/api/geocode/json?address=%@&sensor=true'.fmt(search),
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-            context: this,
-            error: function(jqXHR, textStatus, errorThrown) {
-                SC.Logger.error('Google error: HTTP error status code: ' + jqXHR.status);
-            },
-            success: function(data, textStatus, jqXHR) {
-                console.log('Google success.');
-                if (data && data.results && data.results.length > 0) {
-                    var results = data.results,
-                    i, records = [];
-                    for (i = 0; i < results.length; i++) {
-                        var geo = {
-                            x: results[i].geometry.location.lng,
-                            y: results[i].geometry.location.lat
-                        };
-                        var lonLat = KG.LonLat.create({
-                            lon: geo.x,
-                            lat: geo.y
-                        });
-                        records.pushObject(SC.Object.create({
-                            title: results[i].formatted_address,
-                            coords: [geo],
-                            center: lonLat,
-							hasCreateNote: YES
-                        }));
-                    }
-                    KG.store.loadRecord(KG.SearchCategory, {
-                        category: '*Google*',
-                        categoryLabel: '_Google',
-                        count: data.results.length,
-                        loaded_records: records,
-                        search: search
-                    },
-                    900913);
-                }
-            },
-            async: YES
+        this.plugins.forEach(function(plugin) {
+            plugin.set('searchValue', search);
         });
+		this.set('searchAsked', YES);
     },
 
     clearSearchFeatures: function() {
@@ -80,13 +45,23 @@ KG.core_search = SC.Object.create({
             content.destroy();
         }
         KG.searchController.set('content', []);
+		this.set('searchAsked', NO);
     },
 
     showResults: function() {
         KG.searchResultsController.set('listVisible', YES);
-		var cat = KG.searchResultsController.get('category');
-        var records = cat.get('records');
-        KG.searchResultsController.set('content', records);
+        var cat = KG.searchResultsController.get('category');
+        if (SC.none(cat)) {
+            var plugin = KG.searchResultsController.get('plugin');
+            if (!SC.none(plugin)) {
+                plugin.loadRecords(null, function(records) {
+                    KG.searchResultsController.set('content', records);
+                });
+            }
+        } else {
+            var records = cat.get('records');
+            KG.searchResultsController.set('content', records);
+        }
     },
 
     hideResults: function() {

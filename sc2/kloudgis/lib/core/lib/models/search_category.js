@@ -7,7 +7,6 @@ KG.SearchCategory = KG.Record.extend({
     categoryLabel: SC.Record.attr(String),
     count: SC.Record.attr(Number),
 	search: SC.Record.attr(String),
-	loaded_records: SC.Record.attr(Array),
 
     title: function() {
     	var cat = this.get('categoryLabel');
@@ -21,9 +20,6 @@ KG.SearchCategory = KG.Record.extend({
     }.property('categoryLabel'),
 
     records: function() {
-		if(!SC.none(this.get('loaded_records'))){
-			return this.get('loaded_records');
-		}
 		var recordType = KG.Feature;
 		if(this.get('category') === '_notes_'){
 			recordType = KG.Note;
