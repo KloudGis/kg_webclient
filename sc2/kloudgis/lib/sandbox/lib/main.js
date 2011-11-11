@@ -58,3 +58,4 @@ require("./core_layer");
 
 //notification
 require("./core_notification");
+require("./models/message");

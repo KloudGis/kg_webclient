@@ -24,16 +24,19 @@ KG.core_notification = SC.Object.create({
             $.atmosphere.log('info', ["response.responseBody: " + response.responseBody]);
             if (response.status == 200) {
                 var data = response.responseBody;
+				var oData = JSON.parse(data);
+				var messData = KG.Message.create(oData);
+				console.log(messData);
             }
         }
     },
 
-	postMessage: function(mess){
+	postMessage: function(/*KG.Message*/message){
 		if(!this.connectedEndpoint){
 			return NO;
 		}
 		var sandbox = KG.get('activeSandboxKey');
         var location = '/api_notification/%@'.fmt(sandbox);
-		this.connectedEndpoint.push(location, null, $.atmosphere.request = {data: mess, headers: KG.core_auth.createAjaxRequestHeaders()});
+		this.connectedEndpoint.push(location, null, $.atmosphere.request = {data: JSON.stringify(message.toDatahash()), headers: KG.core_auth.createAjaxRequestHeaders()});
 	}
 });
