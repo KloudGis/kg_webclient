@@ -73,6 +73,10 @@ SC.mixin(KG, {
 
                 substatesAreConcurrent: YES,
 
+				enterState: function(){
+					KG.core_notification.listen();
+				},
+
                 //******************************
                 // Concurrent state for Inpector
                 // Inspector 

@@ -55,3 +55,6 @@ require("./views/delete_comment");
 require("./controllers/layers");
 require("./models/layer");
 require("./core_layer");
+
+//notification
+require("./core_notification");
