@@ -2,20 +2,20 @@
 KG.core_notification = SC.Object.create({
 
     connectedEndpoint: null,
-	callbackAdded: NO,
+    callbackAdded: NO,
 
-    listen: function() {
+    listen: function(){
         var sandbox = KG.get('activeSandboxKey');
         var location = '/api_notification/%@'.fmt(sandbox);
-		//close active if any to avoid multiple open stream
-		$.atmosphere.close();
+        //close active if any to avoid multiple open stream
+        $.atmosphere.close();
         $.atmosphere.subscribe(location, !this.callbackAdded ? this.atmosphereCallback: null, $.atmosphere.request = {
             transport: 'streaming',
-			//enable websocket when tomcat (server side) supports it
-			//transport: 'websocket',
-			headers: KG.core_auth.createAjaxRequestHeaders()
+            //enable websocket when tomcat (server side) supports it
+            //	transport: 'websocket',
+            headers: KG.core_auth.createAjaxRequestHeaders()
         });
-		this.callbackAdded = YES;
+        this.callbackAdded = YES;
         this.connectedEndpoint = $.atmosphere.response;
     },
 
@@ -26,28 +26,33 @@ KG.core_notification = SC.Object.create({
         $.atmosphere.log('info', ["response.status: " + response.status]);
 
         detectedTransport = response.transport;
-        if (response.transport != 'polling' && response.state != 'connected' && response.state != 'closed') {
+        if (response.transport != 'polling' && response.state != 'connected' && response.state != 'closed' && response.state != 'messagePublished') {
             $.atmosphere.log('info', ["response.responseBody: " + response.responseBody]);
             if (response.status == 200) {
                 var data = response.responseBody;
-				try{
-					var oData = JSON.parse(data);
-					var messData = KG.Message.create(oData);
-					console.log('Message received');
-					console.log(messData);
-				}catch(e){
-					console.log('NOTIFICATION: ' + e);
-				}	
+                try {
+                    var oData = JSON.parse(data);
+                    var messData = KG.Message.create(oData);
+                    console.log('Message received');
+                    console.log(messData);
+                } catch(e) {
+                    console.log('NOTIFICATION: ' + e);
+                }
             }
         }
     },
 
-	postMessage: function(/*KG.Message*/message){
-		if(!this.connectedEndpoint){
-			return NO;
-		}
-		var sandbox = KG.get('activeSandboxKey');
+    postMessage: function(
+    /*KG.Message*/
+    message) {
+        if (!this.connectedEndpoint) {
+            return NO;
+        }
+        var sandbox = KG.get('activeSandboxKey');
         var location = '/api_notification/%@'.fmt(sandbox);
-		this.connectedEndpoint.push(location, null, $.atmosphere.request = {data: JSON.stringify(message.toDatahash()), headers: KG.core_auth.createAjaxRequestHeaders()});
-	}
+        this.connectedEndpoint.push(location, null, $.atmosphere.request = {
+            data: JSON.stringify(message.toDatahash()),
+            headers: KG.core_auth.createAjaxRequestHeaders()
+        });
+    }
 });
