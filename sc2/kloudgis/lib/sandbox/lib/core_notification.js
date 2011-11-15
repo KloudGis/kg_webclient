@@ -4,11 +4,11 @@ KG.core_notification = SC.Object.create({
     connectedEndpoint: null,
     callbackAdded: NO,
 
-    listen: function(){
+    listen: function() {
         var sandbox = KG.get('activeSandboxKey');
         var location = '/api_notification/%@'.fmt(sandbox);
         //close active if any to avoid multiple open stream
-        $.atmosphere.close();
+        this.stopListen();
         $.atmosphere.subscribe(location, !this.callbackAdded ? this.atmosphereCallback: null, $.atmosphere.request = {
             transport: 'streaming',
             //enable websocket when tomcat (server side) supports it
@@ -17,7 +17,20 @@ KG.core_notification = SC.Object.create({
         });
         this.callbackAdded = YES;
         this.connectedEndpoint = $.atmosphere.response;
+        //renew the listen after 8 hours
+        this.timerId = setTimeout(function() {
+            KG.core_notification.listen();
+        },
+        8 * 60 * 60 * 1000);
     },
+
+	stopListen: function(){
+		$.atmosphere.close();
+		if(this.timerId){
+			clearTimeout(this.timerId);
+			this.timerId = null;
+		}
+	},
 
     atmosphereCallback: function(response) {
         // Websocket events.
