@@ -24,13 +24,13 @@ KG.core_notification = SC.Object.create({
         8 * 60 * 60 * 1000);
     },
 
-	stopListen: function(){
-		$.atmosphere.close();
-		if(this.timerId){
-			clearTimeout(this.timerId);
-			this.timerId = null;
-		}
-	},
+    stopListen: function() {
+        $.atmosphere.close();
+        if (this.timerId) {
+            clearTimeout(this.timerId);
+            this.timerId = null;
+        }
+    },
 
     atmosphereCallback: function(response) {
         // Websocket events.
@@ -43,13 +43,17 @@ KG.core_notification = SC.Object.create({
             $.atmosphere.log('info', ["response.responseBody: " + response.responseBody]);
             if (response.status == 200) {
                 var data = response.responseBody;
-                try {
-                    var oData = JSON.parse(data);
-                    var messData = KG.Message.create(oData);
-                    console.log('Message received');
-                    console.log(messData);
-                } catch(e) {
-                    console.log('NOTIFICATION: ' + e);
+                if (!data || data.charAt(0) !== '{') {
+                    console.log('Message ignored - Must be JSON format');
+                } else {
+                    try {
+                        var oData = JSON.parse(data);
+                        var messData = KG.Message.create(oData);
+                        console.log('Message received');
+                        console.log(messData);
+                    } catch(e) {
+                        console.log('NOTIFICATION: ' + e);
+                    }
                 }
             }
         }

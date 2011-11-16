@@ -31,7 +31,8 @@ var fr = {
 	"_commentDateFormat": "%@/%@/%@ à %@:%@",
 	"_searchGoogle": "Rechercher Google",
 	"_searchGeonames": "Rechercher Geonames",
-	"_searchOSM": "Rechercher OSM"
+	"_searchOSM": "Rechercher OSM",
+	"_searchYahoo" : "Rechercher Yahoo"
 };
 
 var en = {
@@ -67,7 +68,8 @@ var en = {
 	"_commentDateFormat": "%@/%@/%@ at %@:%@",
 	"_searchGoogle": "Search Google",
 	"_searchGeonames": "Search Geonames",
-	"_searchOSM": "Search OSM"
+	"_searchOSM": "Search OSM",
+	"_searchYahoo" : "Search Yahoo"
 };
 
 if(KG.lang === 'fr'){

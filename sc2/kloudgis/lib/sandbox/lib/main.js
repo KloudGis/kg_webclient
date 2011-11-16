@@ -25,6 +25,7 @@ require("./views/search_result_label");
 require("./search_plugins/core_google");
 require("./search_plugins/core_geonames");
 require("./search_plugins/core_osm");
+require("./search_plugins/core_yahoo");
 
 //inspector
 require("./core_inspector");
