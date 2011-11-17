@@ -32,7 +32,9 @@ var fr = {
 	"_searchGoogle": "Rechercher Google",
 	"_searchGeonames": "Rechercher Geonames",
 	"_searchOSM": "Rechercher OSM",
-	"_searchYahoo" : "Rechercher Yahoo"
+	"_searchYahoo" : "Rechercher Yahoo",
+	"_notificationTitle": "Notifications",
+	"_notificationClear": "Effacer"
 };
 
 var en = {
@@ -69,7 +71,9 @@ var en = {
 	"_searchGoogle": "Search Google",
 	"_searchGeonames": "Search Geonames",
 	"_searchOSM": "Search OSM",
-	"_searchYahoo" : "Search Yahoo"
+	"_searchYahoo" : "Search Yahoo",
+	"_notificationTitle": "Notifications",
+	"_notificationClear": "Clear"
 };
 
 if(KG.lang === 'fr'){
@@ -83,4 +87,6 @@ SC.run.schedule('render',null, function(){
 	console.log('localize page');
 	$('#back-home a').text("_backHome".loc());
 	$('#create-note a').text("_createNote".loc());
+	$('.notification-label').text("_notificationTitle".loc());
+	$('.notification-clear a').text("_notificationClear".loc());
 });

@@ -214,10 +214,26 @@
 				<span class="label-ellipsis"></span>
 			</span>
 			<script type="text/x-handlebars">
-				{{#view class="kg-controls" id="position-label" tagName="span"}}
-					{{KG.core_sandbox.latitudeLabel}}
-					{{KG.core_sandbox.longitudeLabel}}
+				{{#view id="notification-panel"}}
+					{{#view KG.NotificationButtonView id="notification-button" class="kg-controls clickable" tagName="span" sc_action="toggleNotificationPopupAction" classBinding="KG.notificationsController.activePopup"}}
+						{{#view class="capsule-label" isVisibleBinding="KG.notificationsController.hasNotification"}}
+							{{parentView.notificationCount}}
+						{{/view}}
+						<img {{bindAttr src="notificationImg"}}/>
 					{{/view}}
+					{{#view id="notification-popup" isVisibleBinding="KG.notificationsController.activePopup"}}
+						{{#view tagName="span" class="notification-label"}}
+						{{/view}}
+						{{#view KG.Button tagName="span" class="notification-clear"  isVisibleBinding="KG.notificationsController.hasNotification" sc_action="clearNotificationAction"}}
+							<a href="javascript:void(0)"></a>
+						{{/view}}
+						{{#collection contentBinding="KG.notificationsController.content" }}					
+							{{#view KG.NotificationView class="notification-item"}}
+								{{itemView.content.content}}
+							{{/view}}
+							{{/collection}}
+					{{/view}}
+				{{/view}}
 			</script>
 			<!-- search control in the bottom area -->
 			<script type="text/x-handlebars">			
@@ -250,6 +266,12 @@
 						{{/view}}
 					{{/collection}}
 				{{/view}}
+			</script>
+			<script type="text/x-handlebars">
+				{{#view class="kg-controls" id="position-label" tagName="span"}}
+					{{KG.core_sandbox.latitudeLabel}}
+					{{KG.core_sandbox.longitudeLabel}}
+					{{/view}}
 			</script>
 		</div>
 	</div>	

@@ -73,9 +73,9 @@ SC.mixin(KG, {
 
                 substatesAreConcurrent: YES,
 
-				enterState: function(){
-					KG.core_notification.listen();
-				},
+                enterState: function() {
+                    KG.core_notification.listen();
+                },
 
                 //******************************
                 // Concurrent state for Inpector
@@ -152,17 +152,17 @@ SC.mixin(KG, {
                         this.gotoState('searchResultsState');
                     },
 
-					//select a search plugin from the list
-					selectSearchPluginAction: function(plugin){
-						KG.searchResultsController.set('category', null);
-						KG.searchResultsController.set('plugin', plugin);
-						this.gotoState('searchResultsState');
-					},
+                    //select a search plugin from the list
+                    selectSearchPluginAction: function(plugin) {
+                        KG.searchResultsController.set('category', null);
+                        KG.searchResultsController.set('plugin', plugin);
+                        this.gotoState('searchResultsState');
+                    },
 
-					//wipe the search category results
-					clearSearchAction: function(){
-						KG.core_search.clearSearchFeatures();
-					},
+                    //wipe the search category results
+                    clearSearchAction: function() {
+                        KG.core_search.clearSearchFeatures();
+                    },
 
                     //a note as been clicked -> activate the note
                     clickMarkerAction: function(marker) {
@@ -180,6 +180,15 @@ SC.mixin(KG, {
                     //the user if definitly not logged in -> bring him back to the login page
                     authenficationFailed: function() {
                         window.location.href = "index.html";
+                    },
+
+                    toggleNotificationPopupAction: function() {
+                        KG.notificationsController.set('activePopup', !KG.notificationsController.get('activePopup'));
+                    },
+
+                    clearNotificationAction: function() {
+                        KG.notificationsController.set('content', []);
+                        KG.notificationsController.set('activePopup', NO);
                     },
 
                     //******************************
@@ -264,11 +273,11 @@ SC.mixin(KG, {
                             KG.core_search.showResults();
                         },
 
-						selectSearchPluginAction: function(plugin){
-							KG.searchResultsController.set('category', null);
-							KG.searchResultsController.set('plugin', plugin);
-							KG.core_search.showResults();
-						},
+                        selectSearchPluginAction: function(plugin) {
+                            KG.searchResultsController.set('category', null);
+                            KG.searchResultsController.set('plugin', plugin);
+                            KG.core_search.showResults();
+                        },
 
                         hideSearchResultAction: function() {
                             this.gotoState('navigationState');
@@ -300,7 +309,9 @@ SC.mixin(KG, {
                             if (KG.store.recordTypeFor(feature.get('storeKey')) === KG.Note) {
                                 var marker = KG.core_highlight.addHighlightMarker(feature.get('center'));
                                 KG.core_note.setHighlightMarker(marker);
-                                KG.core_note.activateNote(feature,{marker: marker});
+                                KG.core_note.activateNote(feature, {
+                                    marker: marker
+                                });
                                 this.gotoState('editNoteState');
                             }
                         }
@@ -445,9 +456,9 @@ SC.mixin(KG, {
                                 this.gotoState('navigationState');
                             },
 
-							cancelCreateNoteAction: function(){
-								this.gotoState('navigationState');
-							}
+                            cancelCreateNoteAction: function() {
+                                this.gotoState('navigationState');
+                            }
 
                         }),
 
@@ -529,7 +540,7 @@ SC.mixin(KG, {
                                     if (comment.length > 0) {
                                         KG.core_note.addCommentToActiveNote(comment);
                                     }
-                                }                         
+                                }
                             },
 
                             commentsReadyEvent: function() {

@@ -1,6 +1,6 @@
 //must include jquery.atmosphere.js ext dependency
 KG.core_notification = SC.Object.create({
-
+	
     connectedEndpoint: null,
     callbackAdded: NO,
 
@@ -48,9 +48,12 @@ KG.core_notification = SC.Object.create({
                 } else {
                     try {
                         var oData = JSON.parse(data);
-                        var messData = KG.Message.create(oData);
+                        var messageData = KG.Message.create(oData);
                         console.log('Message received');
-                        console.log(messData);
+                        console.log(messageData);
+						if(messageData.get('author') !== KG.core_auth.get('activeUser').email){
+							KG.notificationsController.pushObject(messageData);
+						}
                     } catch(e) {
                         console.log('NOTIFICATION: ' + e);
                     }
