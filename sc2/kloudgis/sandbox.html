@@ -15,6 +15,7 @@
 	<link rel="stylesheet" href="css/feature_info.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="css/inspector.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="css/search.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="css/notification.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="css/common.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="ext/leaflet/leaflet.css" type="text/css" media="screen" />
     <title>Kloudgis</title>
@@ -178,6 +179,18 @@
 			{{#view KG.TextField valueBinding="itemView.content.value" spellcheck="false" autocorrect="off" autocapitalize="off"}}
 			{{/view}}
 		</div>
+	</script>
+	
+	<!-- send notification panel -->
+	<script type="text/x-handlebars" data-template-name="send-text-notification">
+		<div id="send-notification-panel">
+			{{#view KG.Button class="x-button notification-close-button" classBinding="isActive" sc_action="closeSendNotificationAction" titleBinding="KG.sendNotificationController.closeLabel"}}
+			{{/view}}
+			{{#view KG.TextField valueBinding="KG.sendNotificationController.content" spellcheck="on" autocorrect="on" autocapitalize="on"}}
+			{{/view}}
+			{{#view KG.Button class="send-notification-button" classBinding="isActive" sc_action="sendNotificationAction"}}
+			{{/view}}
+		</div>
 	</script>	
   </head>
   <body>	
@@ -223,9 +236,12 @@
 						<img {{bindAttr src="notificationImg"}}/>
 					{{/view}}
 					{{#view id="notification-popup" isVisibleBinding="KG.notificationsController.activePopup"}}
-						{{#view tagName="span" class="notification-label"}}
+						{{#view class="notification-label"}}
 						{{/view}}
 						{{#view KG.Button tagName="span" class="notification-clear"  isVisibleBinding="KG.notificationsController.hasNotification" sc_action="clearNotificationAction"}}
+							<a href="javascript:void(0)"></a>
+						{{/view}}
+						{{#view KG.Button tagName="span" class="notification-send-text"  sc_action="sendTextNotificationAction"}}
 							<a href="javascript:void(0)"></a>
 						{{/view}}
 						{{#collection contentBinding="KG.notificationsController.content"}}					
@@ -241,6 +257,7 @@
 					{{/view}}
 				{{/view}}
 			</script>
+			
 			<!-- search control in the bottom area -->
 			<script type="text/x-handlebars">			
 				{{#view class="kg-controls" id="search-control" tagName="span" classBinding="KG.searchController.hasResults"}}

@@ -1,3 +1,84 @@
+/* search control on the bottom of the screen */
+#search-control{
+	left:50%;
+	margin:0 0 0 -2.25cm;
+	bottom:1px;
+	width:4.5cm;
+	max-height:30%;	
+	overflow-x:hidden;
+	overflow-y:auto;
+	transition:all 0.3s ease-in;
+	-webkit-transition:all 0.3s ease-in;
+	-moz-transition:all 0.3s ease-in;
+}
+
+#search-control.has-results{
+	background: rgba(0,0,0,0.6);
+	max-height:40%;	
+}
+
+#search-control input{
+	width:100%;
+}
+
+.search-cat-list{
+	font-size:14px;
+	padding-top: 10px;
+	margin:0;
+}
+
+.search-cat-item{
+	padding:0.1cm;
+	text-align: left;
+}
+
+.search-cat-item:hover{
+	background-color: rgba(0,0,0,0.5);
+	border-radius: 10px;
+}
+
+.search-category-table{
+	width:100%;
+	margin:0;
+	padding:0
+	border: none;
+	border-spacing: 0px;
+	color:white;
+}
+
+.search-category-table td{
+	vertical-align: middle;
+	text-align:right;
+}
+
+.cat-size-label{
+	max-width: 1.1cm;
+}
+
+.cat-title-label{
+	max-width: 2.4cm;
+}
+
+.search-plugin-item{
+	margin-top: 3px;
+	color: white;
+	padding:0.1cm;
+	text-align: center;
+	background:gray;
+	border-radius: 10px;
+}
+
+.search-plugin-item:hover{
+	background-color: rgba(0,0,0,0.5);
+	border-radius: 10px;
+}
+
+.cat-title-label{
+	max-width: 3cm;	
+}
+
+/* search results (middle of the screen)*/
+
 #search-result{
 	z-index:10;
 	position: absolute;
@@ -31,8 +112,8 @@
 
 .search-close-button{
 	float: right;
-	margin-top: -30px;
-	margin-right:-30px;
+	margin-top: -34px;
+	margin-right:-28px;
 }
 
 /* 2 fingers scroll on iOS.  iScroll4 can solve it.*/

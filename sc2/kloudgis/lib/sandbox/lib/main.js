@@ -64,3 +64,4 @@ require("./controllers/notifications");
 require("./views/notification");
 require("./views/notification_button");
 require("./models/message");
+require("./controllers/send_notification");

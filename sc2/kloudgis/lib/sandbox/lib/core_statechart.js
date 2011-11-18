@@ -191,6 +191,10 @@ SC.mixin(KG, {
                         KG.notificationsController.set('activePopup', NO);
                     },
 
+                    sendTextNotificationAction: function() {
+                        this.gotoState('sendNotificationState');
+                    },
+
                     //******************************
                     // Default state - Navigation
                     //******************************
@@ -586,8 +590,31 @@ SC.mixin(KG, {
                                 KG.core_note.zoomActiveNote();
                                 this.gotoState('navigationState');
                             }
-                        }),
-                    })
+                        })
+                    }),
+                    //******************************
+                    // Show a popup dialog to send a notification
+                    //******************************
+                    sendNotificationState: SC.State.extend({
+						
+						view: null,
+						
+						enterState:function(){
+							KG.sendNotificationController.set('showing', YES);
+							view = SC.View.create({templateName: 'send-text-notification'});
+							view.append();
+						},
+						
+						exitState:function(){
+							KG.sendNotificationController.set('showing', NO);
+							view.destroy();
+							view = null;
+						},
+											
+						closeSendNotificationAction:function(){
+							this.gotoState('navigationState');
+						}						
+					})
                 })
             })
         })

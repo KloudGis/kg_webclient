@@ -33,6 +33,7 @@ var fr = {
 	"_searchYahoo" : "Rechercher Yahoo",
 	"_notificationTitle": "Notifications",
 	"_notificationClear": "Effacer",
+	"_notificationSendText": "Envoyer un message",
 	"_textMessageTitle": " a envoyé un message à "
 };
 
@@ -71,6 +72,7 @@ var en = {
 	"_searchYahoo" : "Search Yahoo",
 	"_notificationTitle": "Notifications",
 	"_notificationClear": "Clear",
+	"_notificationSendText": "Send Message",
 	"_textMessageTitle": " send a text message at "
 };
 
@@ -87,4 +89,5 @@ SC.run.schedule('render',null, function(){
 	$('#create-note a').text("_createNote".loc());
 	$('.notification-label').text("_notificationTitle".loc());
 	$('.notification-clear a').text("_notificationClear".loc());
+	$('.notification-send-text a').text("_notificationSendText".loc());	
 });
