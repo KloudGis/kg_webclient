@@ -17,5 +17,5 @@ KG.Sandbox = KG.Record.extend({
             return "_sbDateFormat".loc(curr_year, curr_month, curr_day);
         }
         return '';
-    }.property('date'),
+    }.property('date')
 });

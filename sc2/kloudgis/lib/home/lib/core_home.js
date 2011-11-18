@@ -1,5 +1,5 @@
 //predefined queries
-KG.SANDBOX_QUERY = SC.Query.local(KG.Sandbox, {query_url: '/api_sandbox/protected/sandboxes', orderBy: 'name'});
+KG.SANDBOX_QUERY = SC.Query.local(KG.Sandbox, {query_url: '/api_sandbox/protected/sandboxes', orderBy: 'date DESC'});
 
 /**
 * Core functions for the home page
@@ -54,6 +54,9 @@ KG.core_home = SC.Object.create({
 
 $(document).ready(function() {
     KG.statechart.initStatechart();
+	 if ($.browser.isIphone) {
+		setTimeout(function() { window.scrollTo(0, 1) }, 1000);
+	 }
 });
 
 
