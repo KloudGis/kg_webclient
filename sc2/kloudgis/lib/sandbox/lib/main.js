@@ -7,6 +7,7 @@ require("kloudgis/auth/lib/main");
 require("kloudgis/core/lib/main_ds");
 require("kloudgis/core/lib/models/feature");
 require("kloudgis/core/lib/models/bounds");
+require("kloudgis/core/lib/core_date");
 require("./strings");
 require("./core_statechart");
 require("./core_sandbox");

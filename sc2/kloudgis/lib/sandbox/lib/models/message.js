@@ -12,6 +12,14 @@ KG.Message = SC.Object.extend({
 			content: this.content,
 			dateMillis: this.dateMillis
 		};
-	}
+	},
+	
+	formattedDate: function(){
+		  var date = this.get('dateMillis');
+	        if (date) {
+	            return KG.core_date.formatDate(date);
+	        }
+	        return '';
+	}.property('dateMillis')
 	
 });

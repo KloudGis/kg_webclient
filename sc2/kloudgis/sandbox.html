@@ -213,6 +213,7 @@
 			<span id="active-sandbox-label">	
 				<span class="label-ellipsis"></span>
 			</span>
+			<!-- notification icon in the top area -->
 			<script type="text/x-handlebars">
 				{{#view id="notification-panel"}}
 					{{#view KG.NotificationButtonView id="notification-button" class="kg-controls clickable" tagName="span" sc_action="toggleNotificationPopupAction" classBinding="KG.notificationsController.activePopup"}}
@@ -227,9 +228,14 @@
 						{{#view KG.Button tagName="span" class="notification-clear"  isVisibleBinding="KG.notificationsController.hasNotification" sc_action="clearNotificationAction"}}
 							<a href="javascript:void(0)"></a>
 						{{/view}}
-						{{#collection contentBinding="KG.notificationsController.content" }}					
+						{{#collection contentBinding="KG.notificationsController.content"}}					
 							{{#view KG.NotificationView class="notification-item"}}
-								{{itemView.content.content}}
+								{{#view class="notification-item-title"}}
+									<a {{bindAttr href="parentView.authorMailTo"}}> {{parentView.authorValue}}</a>{{parentView.titleValue}}{{parentView.dateValue}}
+								{{/view}}
+								{{#view class="notification-item-message"}}
+									{{parentView.messageValue}}
+								{{/view}}
 							{{/view}}
 							{{/collection}}
 					{{/view}}

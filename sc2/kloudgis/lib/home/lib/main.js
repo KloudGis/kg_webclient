@@ -1,5 +1,6 @@
 require("kloudgis/auth/lib/main");
 require("kloudgis/core/lib/main_ds");
+require("kloudgis/core/lib/core_date");
 require("./strings");
 require("./models/sandbox");
 require("./controllers/sandboxes");

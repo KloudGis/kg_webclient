@@ -12,19 +12,7 @@ KG.Comment = KG.Record.extend({
 	formattedDate: function(){
 		var date = this.getPath('date');
         if (date) {
-            var d = new Date(date);
-            var curr_day = d.getDate();
-            var curr_month = d.getMonth() + 1; //months are zero based
-            var curr_year = d.getFullYear();
-			var curr_hour = d.getHours();
-			if(curr_hour < 10){
-				curr_hour = '0' + curr_hour;
-			}
-			var curr_min = d.getMinutes();
-			if(curr_min < 10){
-				curr_min = '0' + curr_min;
-			}
-            return "_commentDateFormat".loc(curr_year, curr_month, curr_day, curr_hour, curr_min);
+            return KG.core_date.formatDate(date);
         }
 	}.property('date')
 });

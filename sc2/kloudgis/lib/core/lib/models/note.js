@@ -27,11 +27,10 @@ KG.Note = KG.Record.extend({
 	formattedDate: function() {
         var date = this.get('date');
         if (date) {
-            var d = new Date(date);
-            var curr_day = d.getDate();
-            var curr_month = d.getMonth() + 1; //months are zero based
-            var curr_year = d.getFullYear();
-            return "_noteDateFormat".loc(curr_year, curr_month, curr_day);
+            var date = this.getPath('date');
+	        if (date) {
+	            return KG.core_date.formatDate(date);
+	        }
         }
         return '';
     }.property('date'),

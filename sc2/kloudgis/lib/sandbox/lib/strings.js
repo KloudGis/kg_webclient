@@ -27,14 +27,13 @@ var fr = {
 	"_search": "Recherche...",
 	"_searchResult": "%@ Résultats pour %@ dans %@",
 	"_unknown" : "Élément",
-	"_noteDateFormat": "%@/%@/%@",
-	"_commentDateFormat": "%@/%@/%@ à %@:%@",
 	"_searchGoogle": "Rechercher Google",
 	"_searchGeonames": "Rechercher Geonames",
 	"_searchOSM": "Rechercher OSM",
 	"_searchYahoo" : "Rechercher Yahoo",
 	"_notificationTitle": "Notifications",
-	"_notificationClear": "Effacer"
+	"_notificationClear": "Effacer",
+	"_textMessageTitle": " a envoyé un message à "
 };
 
 var en = {
@@ -66,14 +65,13 @@ var en = {
 	"_search": "Search...",
 	"_searchResult": "%@ Results for %@ in %@",
 	"_unknown" : "Feature",
-	"_noteDateFormat": "%@/%@/%@",
-	"_commentDateFormat": "%@/%@/%@ at %@:%@",
 	"_searchGoogle": "Search Google",
 	"_searchGeonames": "Search Geonames",
 	"_searchOSM": "Search OSM",
 	"_searchYahoo" : "Search Yahoo",
 	"_notificationTitle": "Notifications",
-	"_notificationClear": "Clear"
+	"_notificationClear": "Clear",
+	"_textMessageTitle": " send a text message at "
 };
 
 if(KG.lang === 'fr'){
