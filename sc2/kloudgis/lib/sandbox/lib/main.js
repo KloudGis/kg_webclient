@@ -59,9 +59,11 @@ require("./models/layer");
 require("./core_layer");
 
 //notification
+require("./models/message");
 require("./core_notification");
 require("./controllers/notifications");
+require("./controllers/send_notification");
 require("./views/notification");
 require("./views/notification_button");
-require("./models/message");
-require("./controllers/send_notification");
+require("./views/text_notification_area");
+

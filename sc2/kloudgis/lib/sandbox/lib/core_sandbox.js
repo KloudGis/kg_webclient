@@ -153,8 +153,14 @@ KG.core_sandbox = SC.Object.create({
             },
             300);
         }
-    }
+    },
 
+	destroyAutosize: function(element){
+		var autoR = $(element).data('AutoResizer');
+		if(autoR){
+			autoR.destroy();
+		}
+	}
 });
 
 $(document).ready(function() {

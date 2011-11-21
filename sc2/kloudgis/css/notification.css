@@ -55,7 +55,11 @@
 .notification-send-text{
 	display:inline-block;
 	font-size:12px;
-	margin: 0px 0px 5px 10px
+	margin: 0px 0px 5px 10px;
+}
+
+.notification-send-text a{
+	color: #0078A8;
 }
 
 .notification-item{
@@ -88,6 +92,7 @@
 /*  Send notificaton panel */
 
 #send-notification-panel{
+	z-index:21;
 	position: absolute;
 	top:50%;
 	left:50%;
@@ -96,11 +101,37 @@
 	border-radius:10px;
 	background: rgba(255,255,255,0.9);
 	width:6cm;
-	height:2cm;
+	padding:0.3cm;
+	box-shadow: 2px 2px 3px #999; 
+	-webkit-box-shadow: 2px 2px 3px #999;
 }
 
 .notification-close-button{
 	float:right;
-	margin-right: -20px;
-	margin-top:-18px;
+	margin-right: -30px;
+	margin-top: -44px;
+}
+
+#send-notification-panel textarea{
+	width: 100%;
+	resize:none;
+	margin:5px 0 5px 0;
+}
+
+#send-notification-panel .send-notification-button{
+	margin-top:3px;
+	float: right;
+}
+
+#send-notification-panel .sc-checkbox{
+	display: inline-block;
+}
+
+#send-notification-panel span{
+	display: block;
+}
+
+#send-notification-panel .loading-image{
+	width:100%;
+	text-align:center;
 }

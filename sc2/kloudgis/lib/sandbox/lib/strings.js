@@ -34,7 +34,12 @@ var fr = {
 	"_notificationTitle": "Notifications",
 	"_notificationClear": "Effacer",
 	"_notificationSendText": "Envoyer un message",
-	"_textMessageTitle": " a envoyé un message à "
+	"_notificationSendButton": "Envoyer",
+	"_textMessageTitle": " a envoyé un message à ",
+	"_sendOnEnterTooltip" : "Envoyer le message en appuyant sur Retour",
+	"_failedToSendMessage": "Impossible d'envoyer le message.",
+	"_timeoutSendMessage" : "Erreur lors de l'envoi du message.",
+	"_sendMessageSuccessful" : "Message envoyé."
 };
 
 var en = {
@@ -72,8 +77,13 @@ var en = {
 	"_searchYahoo" : "Search Yahoo",
 	"_notificationTitle": "Notifications",
 	"_notificationClear": "Clear",
-	"_notificationSendText": "Send Message",
-	"_textMessageTitle": " send a text message at "
+	"_notificationSendText": "Send a Message",
+	"_notificationSendButton": "Send",
+	"_textMessageTitle": " send a text message at ",
+	"_sendOnEnterTooltip" : "Send the message on Enter",
+	"_failedToSendMessage": "Cannot send the message.",
+	"_timeoutSendMessage" : "Failed to send message.",
+	"_sendMessageSuccessful" : "Message envoyé."	
 };
 
 if(KG.lang === 'fr'){

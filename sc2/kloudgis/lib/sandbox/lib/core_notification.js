@@ -3,6 +3,7 @@ KG.core_notification = SC.Object.create({
 	
     connectedEndpoint: null,
     callbackAdded: NO,
+    postCallbackAdded: NO,
 
     listen: function() {
         var sandbox = KG.get('activeSandboxKey');
@@ -51,8 +52,10 @@ KG.core_notification = SC.Object.create({
                         var messageData = KG.Message.create(oData);
                         console.log('Message received');
                         console.log(messageData);
-						if(messageData.get('author') !== KG.core_auth.get('activeUser').email){
+						if(messageData.get('author') !== KG.core_auth.get('activeUser').user){
 							KG.notificationsController.pushObject(messageData);
+						}else{
+							KG.statechart.sendAction('notificationSent', messageData);
 						}
                     } catch(e) {
                         console.log('NOTIFICATION: ' + e);
@@ -71,8 +74,11 @@ KG.core_notification = SC.Object.create({
         var sandbox = KG.get('activeSandboxKey');
         var location = '/api_notification/%@'.fmt(sandbox);
         this.connectedEndpoint.push(location, null, $.atmosphere.request = {
-            data: JSON.stringify(message.toDatahash()),
+            data: JSON.stringify(message.toDataHash()),
             headers: KG.core_auth.createAjaxRequestHeaders()
         });
+		
+		return YES;
     }
+
 });

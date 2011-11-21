@@ -5,7 +5,16 @@ KG.Message = SC.Object.extend({
 	content: null,
 	dateMillis: null,
 	
-	toDatahash:function(){
+	formattedContent: function(){
+		var content = this.get('content');
+		if(content){
+			//replace \n with <br> to enforce line break
+			return content.replace(/\n/g, '<br>');
+		}
+		return content;
+	}.property('content'),
+	
+	toDataHash:function(){
 		return {
 			author: this.author,
 			type : this.type,
@@ -20,6 +29,16 @@ KG.Message = SC.Object.extend({
 	            return KG.core_date.formatDate(date);
 	        }
 	        return '';
-	}.property('dateMillis')
+	}.property('dateMillis'),
+	
+	/* to be used by SC.isEqual*/
+	isEqual: function(b){
+		if(b.toDataHash){
+			var aH = this.toDataHash();
+			var bH = b.toDataHash();
+			return aH.author === bH.author && aH.type  === bH.type && aH.content === bH.content && aH.dateMillis === bH.dateMillis;
+		}
+		return NO;
+	}
 	
 });

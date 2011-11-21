@@ -17,6 +17,6 @@ KG.NotificationView = SC.View.extend({
 	}.property('content'),
 	
 	messageValue:function(){
-		return this.getPath('contentView.content.content');
+		return this.getPath('contentView.content.formattedContent');
 	}.property('content')
 })
