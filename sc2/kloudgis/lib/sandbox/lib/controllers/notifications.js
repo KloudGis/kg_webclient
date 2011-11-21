@@ -8,5 +8,5 @@ KG.notificationsController = SC.ArrayProxy.create({
 	
 	hasNotification: function(){
 		return this.get('length') > 0;
-	}.property('length'),
+	}.property('length')
 });

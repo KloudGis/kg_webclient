@@ -53,7 +53,9 @@ KG.core_notification = SC.Object.create({
                         console.log('Message received');
                         console.log(messageData);
 						if(messageData.get('author') !== KG.core_auth.get('activeUser').user){
-							KG.notificationsController.pushObject(messageData);
+							if(messageData.get('type') === 'text'){
+								KG.notificationsController.insertAt(0, messageData);
+							}
 						}else{
 							KG.statechart.sendAction('notificationSent', messageData);
 						}

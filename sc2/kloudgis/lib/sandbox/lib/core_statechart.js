@@ -610,6 +610,7 @@ SC.mixin(KG, {
                             });
                             view.append();
                             KG.core_sandbox.autosize('#send-notification-panel textarea');
+							this.focusArea();							
                         },
 
                         exitState: function() {
@@ -626,9 +627,14 @@ SC.mixin(KG, {
 							KG.sendNotificationController.set('content', '');							
                         },
 
+						focusArea:function(){
+							setTimeout(function(){$('#send-notification-panel textarea').focus();},300);
+						},
+
 						sendNotificationButtonAction: function(){
 							setTimeout(function(){$('#send-notification-panel textarea').data('AutoResizer').check();},305);	
 							this.sendNotificationAction();
+							this.focusArea();
 						},
 
                         sendNotificationAction: function() {
