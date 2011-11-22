@@ -25,6 +25,7 @@
 	left:3px;
 	top:33px;
 	min-width:6cm;
+	padding:8px;
 	background: rgba(255,255,255,0.9);
 	border-top-right-radius: 6px;
 	border-bottom-right-radius: 6px;
@@ -38,14 +39,12 @@
 	text-align:center;
 	font-size:13px;
 	font-weight:bold;
-	margin: 5px 0px 1px 10px
 }
 
 .notification-clear{
 	display:inline-block;
 	float: right;
 	font-size:12px;
-	margin: 0px 10px 5px 0px
 }
 
 .notification-clear a{ 
@@ -55,7 +54,7 @@
 .notification-send-text{
 	display:inline-block;
 	font-size:12px;
-	margin: 0px 0px 5px 10px;
+	margin: 0 0 5px 0px;
 }
 
 .notification-send-text a{
@@ -64,7 +63,7 @@
 
 .notification-item{
 	border-top:1px solid #E6E6E6;
-	padding:5px 10px 5px 10px;
+	padding:5px 0 0 0;
 }
 
 .notification-item-title{
