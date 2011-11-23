@@ -93,6 +93,12 @@ KG.core_sandbox = SC.Object.create({
             success: function(data, textStatus, jqXHR) {
                 console.log('SB Meta success.');
                 this.set('sandboxMeta', data);
+				var lat = data.lat;
+				var lon = data.lon;
+				var zoom = data.zoom;
+				if(lat && lon){
+					KG.core_leaflet.setCenter(KG.LonLat.create({lon: lon, lat:lat}), zoom);
+				}
             },
             async: YES
         });
@@ -114,7 +120,7 @@ KG.core_sandbox = SC.Object.create({
                 lat = parseFloat(tokens[1].substring(4));
                 zoom = parseInt(tokens[2].substring(5));
             }
-        }
+        }	
         KG.core_leaflet.addToDocument(lon, lat, zoom);
     },
 
