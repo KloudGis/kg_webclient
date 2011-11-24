@@ -2,15 +2,17 @@ KG.core_date = SC.Object.create({
 	
 	formatDate: function(timeMillis){
         if (timeMillis) {
+			//date from millis
             var d = new Date(timeMillis);
             var day = d.getDate();
             var month = d.getMonth() + 1; //months are zero based
-            var year = d.getFullYear();			
+            var year = d.getFullYear();		
+			//now	
             var today = new Date();
 			var curr_day = today.getDate();
 	        var curr_month = today.getMonth() + 1; //months are zero based
 	        var curr_year = today.getFullYear();
-			//today
+			//add zeros			
 			var hour = d.getHours();
 			if(hour < 10){
 				hour = '0' + hour;
@@ -22,6 +24,12 @@ KG.core_date = SC.Object.create({
 			if(curr_day === day && curr_month === month && curr_year == year){			
 				return "%@:%@".fmt(hour, min);
 			}else{
+				if(month < 10){
+					month = '0' + month;
+				}
+				if(day < 10){
+					day = '0' + day;
+				}
 				return "%@-%@-%@ %@:%@".fmt(year, month, day, hour, min);
 			}
         }
