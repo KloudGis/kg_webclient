@@ -98,6 +98,6 @@ SC.run.schedule('render',null, function(){
 	$('#back-home a').text("_backHome".loc());
 	$('#create-note a').text("_createNote".loc());
 	$('.notification-label').text("_notificationTitle".loc());
-	$('.notification-clear a').text("_notificationClear".loc());
-	$('.notification-send-text a').text("_notificationSendText".loc());	
+	$('#notification-clear-button').text("_notificationClear".loc());
+	$('#notification-send-button').text("_notificationSendText".loc());	
 });

@@ -39,31 +39,25 @@
 	text-align:center;
 	font-size:13px;
 	font-weight:bold;
+	padding-bottom:30px;
 }
 
-.notification-clear{
-	display:inline-block;
-	float: right;
-	font-size:12px;
+#notification-clear-button{
+	position: absolute;
+	right:5px;
+	top:28px;
 }
 
-.notification-clear a{ 
-	color:black;
-}
-
-.notification-send-text{
-	display:inline-block;
-	font-size:12px;
-	margin: 0 0 5px 0px;
-}
-
-.notification-send-text a{
-	color: #0078A8;
+#notification-send-button{
+	position: absolute;
+	left:5px;
+	top:28px;
 }
 
 .notification-item{
 	border-top:1px solid #E6E6E6;
-	padding:5px 0 0 0;
+	margin-top:5px;
+	padding-top:5px;
 }
 
 .notification-item-title{

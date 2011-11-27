@@ -6,6 +6,8 @@ KG.Button = SC.Button.extend({
 
     attributeBindings: ['type', 'disabled', 'title'],
 
+    disableTouch: NO,
+
     label_loc: function() {
         return this.get('label').loc();
     }.property('label'),
@@ -32,9 +34,14 @@ KG.Button = SC.Button.extend({
         return NO;
     },
 
-	//SC2 beta3- Bug with touch events => Duplicate events on touch device: One for the touch and one for mouse.  
-	//desactivate the touch specifics events
-    touchStart: function(touch) {},
+    touchStart: function(touch) {
+        this._super(touch);
+		return NO;//no bubble
+    },
 
-    touchEnd: function(touch) {}
+    touchEnd: function(touch) {
+        this._super(touch);
+		return NO;//no bubble
+    }
+
 });

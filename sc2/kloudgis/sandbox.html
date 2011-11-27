@@ -245,12 +245,11 @@
 					{{#view id="notification-popup" isVisibleBinding="KG.notificationsController.activePopup"}}
 						{{#view class="notification-label"}}
 						{{/view}}
-						{{#view KG.Button tagName="span" class="notification-clear"  isVisibleBinding="KG.notificationsController.hasNotification" sc_action="clearNotificationAction"}}
-							<a href="javascript:void(0)"></a>
-						{{/view}}
-						{{#view KG.Button tagName="span" class="notification-send-text"  sc_action="sendTextNotificationAction"}}
-							<a href="javascript:void(0)"></a>
-						{{/view}}
+						<div>
+						{{view KG.Button id="notification-send-button" tagName="span" class="white-button"  sc_action="sendTextNotificationAction"}}
+						{{view KG.Button id="notification-clear-button" tagName="span" class="red-button" 
+						 isVisibleBinding="KG.notificationsController.hasNotification" sc_action="clearNotificationAction"}}						
+						</div>
 						{{#collection contentBinding="KG.notificationsController.content"}}					
 							{{#view KG.NotificationView class="notification-item"}}
 								{{#view class="notification-item-title"}}
