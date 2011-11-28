@@ -647,7 +647,7 @@ SC.mixin(KG, {
                                 var notification = KG.Message.create({
                                     type: 'text',
                                     author: KG.core_auth.get('activeUser').user,
-                                    content: message,
+                                    content: {text:message},
                                     dateMillis: new Date().getTime()
                                 });
                                 KG.sendNotificationController.set('pendingNotification', notification);

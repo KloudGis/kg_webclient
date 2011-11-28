@@ -6,7 +6,7 @@ KG.Message = SC.Object.extend({
 	dateMillis: null,
 	
 	formattedContent: function(){
-		var content = this.get('content');
+		var content = this.getPath('content.text');
 		if(content){
 			//replace \n with <br> to enforce line break
 			return content.replace(/\n/g, '<br>');
@@ -36,7 +36,7 @@ KG.Message = SC.Object.extend({
 		if(b.toDataHash){
 			var aH = this.toDataHash();
 			var bH = b.toDataHash();
-			return aH.author === bH.author && aH.type  === bH.type && aH.content === bH.content && aH.dateMillis === bH.dateMillis;
+			return JSON.stringify(aH) === JSON.stringify(bH);
 		}
 		return NO;
 	}

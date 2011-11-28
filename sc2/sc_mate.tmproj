@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>kloudgis/index.html</string>
+	<string>kloudgis/css/notification.css</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -49,6 +49,36 @@
 				<integer>16</integer>
 				<key>line</key>
 				<integer>17</integer>
+			</dict>
+		</dict>
+		<key>kloudgis/assets/bpm_libs.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>31</integer>
+				<key>line</key>
+				<integer>22636</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>22604</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>22636</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>31</integer>
+				<key>line</key>
+				<integer>22636</integer>
 			</dict>
 		</dict>
 		<key>kloudgis/assets/home_lib.js</key>
@@ -108,6 +138,62 @@
 				<key>line</key>
 				<integer>569</integer>
 			</dict>
+		</dict>
+		<key>kloudgis/css/common.css</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>95</integer>
+				<key>line</key>
+				<integer>20</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>kloudgis/css/note.css</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>1</integer>
+				<key>line</key>
+				<integer>120</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>94</integer>
+		</dict>
+		<key>kloudgis/css/notification.css</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>18</integer>
+				<key>line</key>
+				<integer>41</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>9</integer>
+		</dict>
+		<key>kloudgis/css/sandbox.css</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>124</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>22</integer>
 		</dict>
 		<key>kloudgis/css/signup.css</key>
 		<dict>
@@ -172,7 +258,7 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>43</integer>
+				<integer>4</integer>
 				<key>line</key>
 				<integer>2</integer>
 			</dict>
@@ -189,6 +275,20 @@
 				<integer>0</integer>
 				<key>line</key>
 				<integer>1</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>kloudgis/lib/app/lib/views/button.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>23</integer>
+				<key>line</key>
+				<integer>43</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -513,6 +613,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>kloudgis/lib/sandbox/lib/strings.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>30</integer>
+				<key>line</key>
+				<integer>100</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>50</integer>
+		</dict>
 		<key>kloudgis/lib/sandbox/lib/views/feature_info_popup_item.js</key>
 		<dict>
 			<key>caret</key>
@@ -557,6 +671,20 @@
 				<integer>109</integer>
 			</dict>
 		</dict>
+		<key>kloudgis/sandbox.html</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>204</integer>
+				<key>line</key>
+				<integer>238</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>212</integer>
+		</dict>
 		<key>kloudgis/spinner.html</key>
 		<dict>
 			<key>caret</key>
@@ -576,6 +704,14 @@
 	<array>
 		<string>kloudgis/kloudgis.manifest</string>
 		<string>kloudgis/index.html</string>
+		<string>kloudgis/sandbox.html</string>
+		<string>kloudgis/lib/app/lib/views/button.js</string>
+		<string>kloudgis/assets/bpm_libs.js</string>
+		<string>kloudgis/css/note.css</string>
+		<string>kloudgis/css/notification.css</string>
+		<string>kloudgis/css/common.css</string>
+		<string>kloudgis/lib/sandbox/lib/strings.js</string>
+		<string>kloudgis/css/sandbox.css</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>

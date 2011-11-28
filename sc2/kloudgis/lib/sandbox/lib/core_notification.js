@@ -7,7 +7,7 @@ KG.core_notification = SC.Object.create({
 
     listen: function() {
         var sandbox = KG.get('activeSandboxKey');
-        var location = '/api_notification/%@/general'.fmt(sandbox);
+        var location = '/api_notification/general?sandbox=%@'.fmt(sandbox);
         //close active if any to avoid multiple open stream
         this.stopListen();
         $.atmosphere.subscribe(location, !this.callbackAdded ? this.atmosphereCallback: null, $.atmosphere.request = {
@@ -55,7 +55,16 @@ KG.core_notification = SC.Object.create({
 						if(messageData.get('author') !== KG.core_auth.get('activeUser').user){
 							if(messageData.get('type') === 'text'){
 								KG.notificationsController.insertAt(0, messageData);
-							}
+							}else if(messageData.get('type') === 'trx'){
+								if(messageData.content.featuretype === 'sys_note'){
+									//note modified : refresh
+									console.log('Transaction on Note => Refresh');
+									KG.core_note.refreshMarkers(YES);
+								}else if(messageData.content.featuretype === 'sys_note_comment'){
+									console.log('Transaction on Comments => Fetch comments');
+									KG.core_note.fetchComments();
+								}
+							}							
 						}else{
 							KG.statechart.sendAction('notificationSent', messageData);
 						}
@@ -74,7 +83,7 @@ KG.core_notification = SC.Object.create({
             return NO;
         }
         var sandbox = KG.get('activeSandboxKey');
-        var location = '/api_notification/%@/general'.fmt(sandbox);
+        var location = '/api_notification/general?sandbox=%@'.fmt(sandbox);
         this.connectedEndpoint.push(location, null, $.atmosphere.request = {
             data: JSON.stringify(message.toDataHash()),
             headers: KG.core_auth.createAjaxRequestHeaders()

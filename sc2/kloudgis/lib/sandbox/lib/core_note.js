@@ -142,14 +142,14 @@ KG.core_note = SC.Object.create({
             }
         }
         if (note) {
-			var marker = this._new_note_marker;
-			KG.core_leaflet.disableDraggableMarker(marker);
+            var marker = this._new_note_marker;
+            KG.core_leaflet.disableDraggableMarker(marker);
             this.activateNote(note, {
                 marker: marker
             });
-        }else{
-			KG.statechart.sendAction('cancelCreateNoteAction');
-		}
+        } else {
+            KG.statechart.sendAction('cancelCreateNoteAction');
+        }
     },
 
     /**
@@ -381,29 +381,31 @@ KG.core_note = SC.Object.create({
     fetchComments: function() {
         console.log('refresh comments');
         var nested_note = KG.activeNoteController.get('content');
-        var note = KG.store.find(nested_note);
-        note.onReady(null,
-        function() {
-            KG.activeCommentsController.set('isLoading', YES);
-            KG.activeCommentsController.set('content', []);
-            var comments = note.get('comments');
-            var params = {
-                count: 0,
-                length: nested_note.getPath('comments.length'),
-                records: [],
-            }
-            if (params.length > 0) {
-                console.log('comments count:' + params.length);
-                comments.forEach(function(comment) {
-                    comment.onReady(KG.core_note, KG.core_note.commentReady, params);
+        if (!SC.none(nested_note)) {
+            var note = KG.store.find(nested_note);
+            note.onReady(null,
+            function() {
+                KG.activeCommentsController.set('isLoading', YES);
+                KG.activeCommentsController.set('content', []);
+                var comments = note.get('comments');
+                var params = {
+                    count: 0,
+                    length: nested_note.getPath('comments.length'),
+                    records: [],
+                }
+                if (params.length > 0) {
+                    console.log('comments count:' + params.length);
+                    comments.forEach(function(comment) {
+                        comment.onReady(KG.core_note, KG.core_note.commentReady, params);
 
-                });
-            } else {
-                console.log('NO comments');
-                KG.activeCommentsController.set('isLoading', NO);
-                KG.statechart.sendAction('commentsReadyEvent');
-            }
-        });
+                    });
+                } else {
+                    console.log('NO comments');
+                    KG.activeCommentsController.set('isLoading', NO);
+                    KG.statechart.sendAction('commentsReadyEvent');
+                }
+            });
+        }
     },
 
     /**
