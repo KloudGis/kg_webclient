@@ -246,7 +246,7 @@
 						{{#view class="notification-label"}}
 						{{/view}}
 						<div>
-						{{view KG.Button id="notification-send-button" tagName="span" class="white-button"  sc_action="sendTextNotificationAction"}}
+						{{view KG.Button id="notification-send-button" tagName="span" class="white-button" classBinding="KG.notificationsController.hasNotification" sc_action="sendTextNotificationAction"}}
 						{{view KG.Button id="notification-clear-button" tagName="span" class="red-button" 
 						 isVisibleBinding="KG.notificationsController.hasNotification" sc_action="clearNotificationAction"}}						
 						</div>

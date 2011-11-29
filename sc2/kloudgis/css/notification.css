@@ -44,14 +44,22 @@
 
 #notification-clear-button{
 	position: absolute;
-	right:5px;
+	right:8px;
 	top:28px;
 }
 
 #notification-send-button{
 	position: absolute;
-	left:5px;
 	top:28px;
+	left:20px;
+	right:20px;
+	text-align: center;
+}
+
+
+#notification-send-button.has-notification{
+	left:8px;
+	right:auto;
 }
 
 .notification-item{
