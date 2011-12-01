@@ -444,7 +444,8 @@ KG.core_leaflet = SC.Object.create({
 			//set to YES to by pass geowebcache
             no_gwc: NO,
             kg_layer: layer.get('id'),
-            kg_sandbox: KG.get('activeSandboxKey')
+            kg_sandbox: KG.get('activeSandboxKey'),
+			auth_token: KG.core_auth.get('authenticationToken')
         });
         layer._native_layer = wms;
         this.map.addLayer(wms);
