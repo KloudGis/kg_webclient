@@ -120,9 +120,9 @@ KG.Store = SC.DataSource.extend({
         var url;
         if (!SC.none(id)) {
             if (rtype === KG.Note) {
-                url = '/api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+                url = KG.get('serverHost') + 'api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             } else if (rtype === KG.Comment) {
-                url = '/api_data/protected/comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+                url = KG.get('serverHost') + 'api_data/protected/comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             }
             if (url) {
                 this.ajaxSupport(store, storeKey, 'GET', url);
@@ -135,9 +135,9 @@ KG.Store = SC.DataSource.extend({
     createRecord: function(store, storeKey) {
         var rtype = store.recordTypeFor(storeKey);
         if (rtype === KG.Note) {
-            url = '/api_data/protected/notes?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
+            url = KG.get('serverHost') + 'api_data/protected/notes?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
         } else if (rtype === KG.Comment) {
-            url = '/api_data/protected/comments?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
+            url = KG.get('serverHost') + 'api_data/protected/comments?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
         }
         if (url) {
             this.ajaxSupport(store, storeKey, 'POST', url, JSON.stringify(store.readDataHash(storeKey)));
@@ -152,9 +152,9 @@ KG.Store = SC.DataSource.extend({
         var url;
         if (!SC.none(id)) {
             if (rtype === KG.Note) {
-                url = '/api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+                url = KG.get('serverHost') + 'api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             } else if (rtype === KG.Comment) {
-                url = '/api_data/protected/comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+                url = KG.get('serverHost') + 'api_data/protected/comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             }
         }
         if (url) {
@@ -170,9 +170,9 @@ KG.Store = SC.DataSource.extend({
         var url;
         if (!SC.none(id)) {
             if (rtype === KG.Note) {
-                url = '/api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+                url = KG.get('serverHost') + 'api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             } else if (rtype === KG.Comment) {
-                url = '/api_data/protected/comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+                url = KG.get('serverHost') + 'api_data/protected/comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             }
         }
         if (url) {

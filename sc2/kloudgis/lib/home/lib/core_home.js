@@ -1,5 +1,5 @@
 //predefined queries
-KG.SANDBOX_QUERY = SC.Query.local(KG.Sandbox, {query_url: '/api_sandbox/protected/sandboxes', orderBy: 'date DESC'});
+KG.SANDBOX_QUERY = SC.Query.local(KG.Sandbox, {query_url: KG.get('serverHost') + 'api_sandbox/protected/sandboxes', orderBy: 'date DESC'});
 
 /**
 * Core functions for the home page

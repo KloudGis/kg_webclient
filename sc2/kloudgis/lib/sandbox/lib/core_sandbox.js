@@ -23,7 +23,7 @@ KG.core_sandbox = SC.Object.create({
             //attempt to login to map service first to make the map rendering ready quickly
             $.ajax({
                 type: 'POST',
-                url: '/api_map/public/login?sandbox=%@'.fmt(KG.get('activeSandboxKey')),
+                url: KG.get('serverHost') + 'api_map/public/login?sandbox=%@'.fmt(KG.get('activeSandboxKey')),
                 dataType: 'json',
                 headers: KG.core_auth.createAjaxRequestHeaders(),
                 contentType: 'application/json; charset=utf-8',
@@ -46,7 +46,7 @@ KG.core_sandbox = SC.Object.create({
     membershipCheck: function() {
         $.ajax({
             type: 'GET',
-            url: '/api_data/protected/members/logged_member?sandbox=%@'.fmt(KG.get('activeSandboxKey')),
+            url: KG.get('serverHost') + 'api_data/protected/members/logged_member?sandbox=%@'.fmt(KG.get('activeSandboxKey')),
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             headers: KG.core_auth.createAjaxRequestHeaders(),
@@ -67,7 +67,7 @@ KG.core_sandbox = SC.Object.create({
     fetchSandboxMeta: function() {
         $.ajax({
             type: 'GET',
-            url: '/api_sandbox/protected/sandboxes/%@/meta'.fmt(KG.get('activeSandboxKey')),
+            url: KG.get('serverHost') + 'api_sandbox/protected/sandboxes/%@/meta'.fmt(KG.get('activeSandboxKey')),
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             headers: KG.core_auth.createAjaxRequestHeaders(),

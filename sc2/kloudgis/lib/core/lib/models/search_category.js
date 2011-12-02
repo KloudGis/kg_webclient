@@ -25,7 +25,7 @@ KG.SearchCategory = KG.Record.extend({
 			recordType = KG.Note;
 		}
         var query = SC.Query.remote(recordType, {
-            query_url: '/api_data/protected/features/search?category=%@&search_string=%@&sandbox=%@'.fmt(this.get('category'), this.get('search'), KG.get('activeSandboxKey')),
+            query_url: KG.get('serverHost') + 'api_data/protected/features/search?category=%@&search_string=%@&sandbox=%@'.fmt(this.get('category'), this.get('search'), KG.get('activeSandboxKey')),
             conditions: 'count > 0'
         });
         return KG.store.find(query);

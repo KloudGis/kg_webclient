@@ -43,7 +43,7 @@ KG.core_info = SC.Object.create({
             console.log('info controller did destroy content');
         }
         if (layers.length > 0) {
-            var url = '/api_data/protected/features/features_at?sandbox=%@&lat=%@&lon=%@&one_pixel=%@&limit=%@&layers=%@'.fmt(KG.get('activeSandboxKey'), lonLat.get('lat'), lonLat.get('lon'), onePixel, this.get('limit_query'), layers);
+            var url = KG.get('serverHost') + 'api_data/protected/features/features_at?sandbox=%@&lat=%@&lon=%@&one_pixel=%@&limit=%@&layers=%@'.fmt(KG.get('activeSandboxKey'), lonLat.get('lat'), lonLat.get('lon'), onePixel, this.get('limit_query'), layers);
             KG.INFO_QUERY.set('query_url', url);
             KG.INFO_QUERY._lonLat = lonLat;
             var records = KG.store.find(KG.INFO_QUERY);

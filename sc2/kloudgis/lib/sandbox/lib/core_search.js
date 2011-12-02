@@ -22,7 +22,7 @@ KG.core_search = SC.Object.create({
         }
         console.log('search for:' + search);
         var query = SC.Query.local(KG.SearchCategory, {
-            query_url: '/api_data/protected/features/count_search?search_string=%@&sandbox=%@'.fmt(search, KG.get('activeSandboxKey')),
+            query_url: KG.get('serverHost') + 'api_data/protected/features/count_search?search_string=%@&sandbox=%@'.fmt(search, KG.get('activeSandboxKey')),
             conditions: 'count > 0 OR count = -1',
             orderBy: 'categoryLabel'
         });

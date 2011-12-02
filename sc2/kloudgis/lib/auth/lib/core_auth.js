@@ -42,7 +42,7 @@ KG.core_auth = SC.Object.create({
         };
         $.ajax({
             type: 'POST',
-            url: '/api_auth/public/login',
+            url: KG.get('serverHost') + 'api_auth/public/login',
             data: JSON.stringify(postData),
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
@@ -76,7 +76,7 @@ KG.core_auth = SC.Object.create({
         };
 
         // Call server
-        var url = '/api_auth/public/login';
+        var url = KG.get('serverHost') + 'api_auth/public/login';
         var context = {
             rememberMe: rememberMe,
             callbackTarget: cb_target,
@@ -168,28 +168,28 @@ KG.core_auth = SC.Object.create({
         console.log('Logging out');
         //tell the server about the logout (invalidate token and destroy the session)
 		//auth service
-        var url = '/api_auth/public/logout';
+        var url = KG.get('serverHost') + 'api_auth/public/logout';
         $.ajax({
             type: 'POST',
             url: url,
             async: YES
         });
 		//sandbox service
-		url = '/api_sandbox/public/logout';
+		url = KG.get('serverHost') + 'api_sandbox/public/logout';
         $.ajax({
             type: 'POST',
             url: url,
             async: YES
         });
 		//data service
-		url = '/api_data/public/logout';
+		url = KG.get('serverHost') + 'api_data/public/logout';
         $.ajax({
             type: 'POST',
             url: url,
             async: YES
         });
 		//map service
-		url = '/api_map/public/logout';
+		url = KG.get('serverHost') + 'api_map/public/logout';
         $.ajax({
             type: 'POST',
             url: url,

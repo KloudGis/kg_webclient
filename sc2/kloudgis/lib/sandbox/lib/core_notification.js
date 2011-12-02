@@ -7,7 +7,7 @@ KG.core_notification = SC.Object.create({
 
     listen: function() {
         var sandbox = KG.get('activeSandboxKey');
-        var location = '/api_notification/general?sandbox=%@'.fmt(sandbox);
+        var location = KG.get('serverHost') + 'api_notification/general?sandbox=%@'.fmt(sandbox);
         //close active if any to avoid multiple open stream
         this.stopListen();
         $.atmosphere.subscribe(location, !this.callbackAdded ? this.atmosphereCallback: null, $.atmosphere.request = {
@@ -83,7 +83,7 @@ KG.core_notification = SC.Object.create({
             return NO;
         }
         var sandbox = KG.get('activeSandboxKey');
-        var location = '/api_notification/general?sandbox=%@'.fmt(sandbox);
+        var location = KG.get('serverHost') + 'api_notification/general?sandbox=%@'.fmt(sandbox);
         this.connectedEndpoint.push(location, null, $.atmosphere.request = {
             data: JSON.stringify(message.toDataHash()),
             headers: KG.core_auth.createAjaxRequestHeaders()
