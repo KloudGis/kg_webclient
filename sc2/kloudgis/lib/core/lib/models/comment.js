@@ -3,16 +3,16 @@
 **/
 KG.Comment = KG.Record.extend({
 	
-	value: SC.Record.attr(String),
+	comment: SC.Record.attr(String),
 	author: SC.Record.attr(Number),
 	author_descriptor: SC.Record.attr(String),
-	date: SC.Record.attr(Number),
+	date_create: SC.Record.attr(Number),
 	note: SC.Record.toOne('KG.Note', {inverse: 'comments', isMaster: YES}),
 	
 	formattedDate: function(){
-		var date = this.getPath('date');
+		var date = this.getPath('date_create');
         if (date) {
             return KG.core_date.formatDate(date);
         }
-	}.property('date')
+	}.property('date_create')
 });

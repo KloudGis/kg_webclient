@@ -81,12 +81,18 @@ KG.core_sandbox = SC.Object.create({
             success: function(data, textStatus, jqXHR) {
                 console.log('SB Meta success.');
                 this.set('sandboxMeta', data);
-				var lat = data.lat;
-				var lon = data.lon;
-				var zoom = data.zoom;
-				if(lat && lon){
-					KG.core_leaflet.setCenter(KG.LonLat.create({lon: lon, lat:lat}), zoom);
-				}
+                var lat = data.lat;
+                var lon = data.lon;
+                var zoom = data.zoom;
+				var hash = this.extractHashValues();
+                if (!hash['lon']) {
+                    if (lat && lon) {
+                        KG.core_leaflet.setCenter(KG.LonLat.create({
+                            lon: lon,
+                            lat: lat
+                        }), zoom);
+                    }
+                }
             },
             async: YES
         });
@@ -98,18 +104,24 @@ KG.core_sandbox = SC.Object.create({
         this.set('isSandboxOwner', KG.core_auth.get('activeUser').id === this.get('sandboxMeta').owner)
     }.observes('sandboxMeta'),
 
-    addMap: function() {
+    extractHashValues: function() {
         var hashLoc = window.location.hash;
-        var lat, lon, zoom
         if (hashLoc && hashLoc.length > 0) {
             var tokens = hashLoc.split(';');
             if (tokens.length === 3) {
-                lon = parseFloat(tokens[0].substring(5));
-                lat = parseFloat(tokens[1].substring(4));
-                zoom = parseInt(tokens[2].substring(5));
+                return {
+                    lon: parseFloat(tokens[0].substring(5)),
+                    lat: parseFloat(tokens[1].substring(4)),
+                    zoom: parseInt(tokens[2].substring(5))
+                }
             }
-        }	
-        KG.core_leaflet.addToDocument(lon, lat, zoom);
+        }
+		return {};
+    },
+
+    addMap: function() {
+		var hash = this.extractHashValues();
+        KG.core_leaflet.addToDocument(hash.lon, hash.lat, hash.zoom);
     },
 
     createNote: function() {
@@ -149,18 +161,18 @@ KG.core_sandbox = SC.Object.create({
         }
     },
 
-	destroyAutosize: function(element){
-		var autoR = $(element).data('AutoResizer');
-		if(autoR){
-			autoR.destroy();
-		}
-	}
+    destroyAutosize: function(element) {
+        var autoR = $(element).data('AutoResizer');
+        if (autoR) {
+            autoR.destroy();
+        }
+    }
 });
 
 $(document).ready(function() {
     KG.statechart.initStatechart();
     if ($.browser.isIphone) {
-		//tweaks to hide the address bar
+        //tweaks to hide the address bar
         $('#box').addClass('mobile');
         setTimeout(function() {
             window.scrollTo(0, 1);

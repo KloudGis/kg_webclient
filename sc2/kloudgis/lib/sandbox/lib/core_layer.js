@@ -1,13 +1,9 @@
-//predefined queries
-KG.LAYER_QUERY = SC.Query.local(KG.Layer, {query_url: 'to_override'});
-
 /**
 * Core functions to manage the layers
 **/
 KG.core_layer = SC.Object.create({
 	
-	loadLayers:function(){
-		KG.LAYER_QUERY.set('query_url', KG.get('serverHost') + 'api_data/protected/layers?sandbox=%@'.fmt(KG.get('activeSandboxKey')));
+	loadLayers:function(){		
 		var layers = KG.store.find(KG.LAYER_QUERY);
 		KG.layersController.set('content', layers);
 		layers.onReady(this, this._layersReady);

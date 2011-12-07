@@ -3,7 +3,6 @@
 **/
 KG.SearchCategory = KG.Record.extend({
 
-    category: SC.Record.attr(String),
     categoryLabel: SC.Record.attr(String),
     count: SC.Record.attr(Number),
 	search: SC.Record.attr(String),
@@ -20,15 +19,12 @@ KG.SearchCategory = KG.Record.extend({
     }.property('categoryLabel'),
 
     records: function() {
-		var recordType = KG.Feature;
-		if(this.get('category') === '_notes_'){
-			recordType = KG.Note;
+		var query = KG.SEARCH_RESULT_FEATURE_QUERY;
+		if(this.get('categoryLabel') === '_notes_'){
+			query = KG.SEARCH_RESULT_NOTE_QUERY;
 		}
-        var query = SC.Query.remote(recordType, {
-            query_url: KG.get('serverHost') + 'api_data/protected/features/search?category=%@&search_string=%@&sandbox=%@'.fmt(this.get('category'), this.get('search'), KG.get('activeSandboxKey')),
-            conditions: 'count > 0'
-        });
+		query.category = this.get('id');
+		query.search = this.get('search');
         return KG.store.find(query);
-    }.property(),
-
+    }.property()
 });

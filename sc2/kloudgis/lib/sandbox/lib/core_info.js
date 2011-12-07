@@ -1,7 +1,5 @@
 //predefined queries
-KG.INFO_QUERY = SC.Query.remote(KG.Feature, {
-    query_url: 'to_override'
-});
+
 /**
 * Core functions to perform feature info.
 **/
@@ -43,9 +41,11 @@ KG.core_info = SC.Object.create({
             console.log('info controller did destroy content');
         }
         if (layers.length > 0) {
-            var url = KG.get('serverHost') + 'api_data/protected/features/features_at?sandbox=%@&lat=%@&lon=%@&one_pixel=%@&limit=%@&layers=%@'.fmt(KG.get('activeSandboxKey'), lonLat.get('lat'), lonLat.get('lon'), onePixel, this.get('limit_query'), layers);
-            KG.INFO_QUERY.set('query_url', url);
-            KG.INFO_QUERY._lonLat = lonLat;
+			KG.INFO_QUERY.lat = lonLat.get('lat');
+			KG.INFO_QUERY.lon = lonLat.get('lon');
+		    KG.INFO_QUERY.one_pixel = onePixel;
+		 	KG.INFO_QUERY.limit_query = this.get('limit_query');
+		 	KG.INFO_QUERY.layers = layers;           
             var records = KG.store.find(KG.INFO_QUERY);
             KG.infoController.set('content', records);
             records.onReady(this, this.infoReady);

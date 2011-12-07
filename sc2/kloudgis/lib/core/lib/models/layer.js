@@ -9,7 +9,7 @@ KG.Layer = KG.Record.extend(
     renderOrder: SC.Record.attr(Number),
     isSelectable: SC.Record.attr(Boolean),
     canRender: SC.Record.attr(Boolean),
-	featuretype: SC.Record.attr(String),
+	ft_it: SC.Record.attr(Number),
 	//wms param
     name: SC.Record.attr(String),
     url: SC.Record.attr(String),

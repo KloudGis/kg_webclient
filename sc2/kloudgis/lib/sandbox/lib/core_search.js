@@ -21,12 +21,8 @@ KG.core_search = SC.Object.create({
             content.destroy();
         }
         console.log('search for:' + search);
-        var query = SC.Query.local(KG.SearchCategory, {
-            query_url: KG.get('serverHost') + 'api_data/protected/features/count_search?search_string=%@&sandbox=%@'.fmt(search, KG.get('activeSandboxKey')),
-            conditions: 'count > 0 OR count = -1',
-            orderBy: 'categoryLabel'
-        });
-        var records = store.find(query);
+		KG.SEARCH_QUERY.search = search;
+        var records = store.find(KG.SEARCH_QUERY);
         KG.searchController.set('content', records);
         this.plugins.forEach(function(plugin) {
             plugin.set('searchValue', search);

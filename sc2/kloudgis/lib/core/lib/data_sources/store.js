@@ -71,11 +71,29 @@ KG.Store = SC.DataSource.extend({
     @returns {Boolean} YES if you can handle fetching the query, NO otherwise
   */
     fetch: function(store, query) {
-        console.log('fetch url:%@'.fmt(query.get('query_url')));
-        if (!SC.none(query.get('query_url'))) {
+        var query_url;
+        if (query === KG.LAYER_QUERY) {
+            query_url = KG.get('serverHost') + 'api_data/protected/layers?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
+        } else if (query === KG.FEATURETYPE_QUERY) {
+            query_url = KG.get('serverHost') + 'api_data/protected/featuretypes?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
+        } else if (query === KG.ATTRTYPE_QUERY) {
+            query_url = KG.get('serverHost') + 'api_data/protected/attrtypes?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
+        } else if (query === KG.SEARCH_QUERY) {
+            query_url = KG.get('serverHost') + 'api_data/protected/features/count_search?search_string=%@&sandbox=%@'.fmt(query.search, KG.get('activeSandboxKey'));
+        } else if (query === KG.INFO_QUERY) {
+            query_url = KG.get('serverHost') + 'api_data/protected/features/features_at?sandbox=%@&lat=%@&lon=%@&one_pixel=%@&limit=%@&layers=%@'.fmt(KG.get('activeSandboxKey'), query.lat, query.lon, query.one_pixel, query.limit_query, query.layers);
+        } else if (query === KG.NOTE_MARKER_QUERY) {
+            var fatBounds = query.fat_bounds;
+            query_url = KG.get('serverHost') + 'api_data/protected/notes/clusters?sw_lon=%@&ne_lat=%@&ne_lon=%@&sw_lat=%@&distance=%@&sandbox=%@'.fmt(fatBounds.getPath('sw.lon'), fatBounds.getPath('sw.lat'), fatBounds.getPath('ne.lon'), fatBounds.getPath('ne.lat'), query.distance, KG.get('activeSandboxKey'));
+        } else if (query === KG.SEARCH_RESULT_NOTE_QUERY || query === KG.SEARCH_RESULT_FEATURE_QUERY) {
+            query_url = KG.get('serverHost') + 'api_data/protected/features/search?category=%@&search_string=%@&sandbox=%@'.fmt(query.category, query.search, KG.get('activeSandboxKey'));
+        } else if(query === KG.SANDBOX_QUERY){
+			query_url = KG.get('serverHost') + 'api_sandbox/protected/sandboxes';
+		}
+        if (!SC.none(query_url)) {
             $.ajax({
                 type: 'GET',
-                url: query.get('query_url'),
+                url: query_url,
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
                 context: this,
@@ -85,9 +103,9 @@ KG.Store = SC.DataSource.extend({
                     SC.run.begin();
                     SC.Logger.error('Load error: HTTP error status code: ' + jqXHR.status);
                     store.dataSourceDidErrorQuery(query, errorThrown);
-					if (KG.statechart) {
-	                    KG.statechart.sendAction('httpError', jqXHR.status);
-	                }
+                    if (KG.statechart) {
+                        KG.statechart.sendAction('httpError', jqXHR.status);
+                    }
                     SC.run.end();
                 },
                 success: function(data, textStatus, jqXHR) {
@@ -123,6 +141,10 @@ KG.Store = SC.DataSource.extend({
                 url = KG.get('serverHost') + 'api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             } else if (rtype === KG.Comment) {
                 url = KG.get('serverHost') + 'api_data/protected/comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+            } else if (rtype === KG.Featuretype) {
+                url = KG.get('serverHost') + 'api_data/protected/featuretypes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+            } else if (rtype === KG.Attrtype) {
+                url = KG.get('serverHost') + 'api_data/protected/attrtypes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             }
             if (url) {
                 this.ajaxSupport(store, storeKey, 'GET', url);

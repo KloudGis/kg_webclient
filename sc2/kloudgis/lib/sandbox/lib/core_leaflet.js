@@ -67,12 +67,11 @@ KG.core_leaflet = SC.Object.create({
 
         // initialize the map on the "map" div
         var map = new L.Map('map', {});
-        //	map.addControl(this.layerControl);
+		//default QUEBEC
 		lon = lon || -72;
 		lat = lat || 46;
-		zoom = zoom || 8;
+		zoom = zoom || 5;
         map.setView(new L.LatLng(lat, lon), zoom).addLayer(baseLayer);
-
         //this.layerControl.addBaseLayer(layer, "Base");
         this.map = map;
         this.map.on('zoomend', this.onZoom, this);
@@ -505,10 +504,12 @@ KG.core_leaflet = SC.Object.create({
         }
     },
 
-    addHighlight: function(coords, geo_type) {
-        if (!coords) {
+    addHighlight: function(geo) {
+        if (!geo) {
             return NO;
         }
+		var coords = geo.coords;
+		var geo_type = geo.geo_type;
         var options = {
             color: '#0033ff',
             weight: 5,

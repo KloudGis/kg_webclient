@@ -75,6 +75,9 @@ SC.mixin(KG, {
 
                 enterState: function() {
                     KG.core_notification.listen();
+					//fetch the featuretypes and attrtypes locally
+					KG.store.find(KG.FEATURETYPE_QUERY);
+					KG.store.find(KG.ATTRTYPE_QUERY);
                 },
 
                 //******************************

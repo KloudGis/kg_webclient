@@ -7,7 +7,8 @@ KG.Note = KG.Record.extend({
 	description: SC.Record.attr(String),
 	author: SC.Record.attr(Number),
 	author_descriptor: SC.Record.attr(String),
-	date: SC.Record.attr(Number),
+	date_create: SC.Record.attr(Number),
+	date_update: SC.Record.attr(Number),
 	coordinate: SC.Record.attr(Object),
 	comments: SC.Record.toMany('KG.Comment', {inverse: 'note', isMaster: NO}),
 	
@@ -25,15 +26,12 @@ KG.Note = KG.Record.extend({
 	}.property('coordinate'),
 	
 	formattedDate: function() {
-        var date = this.get('date');
+        var date = this.get('date_create');
         if (date) {
-            var date = this.getPath('date');
-	        if (date) {
-	            return KG.core_date.formatDate(date);
-	        }
+	        return KG.core_date.formatDate(date);
         }
         return '';
-    }.property('date'),
+    }.property('date_create'),
 
 	authorFormatted: function() {
         var a = this.getPath('author_descriptor');

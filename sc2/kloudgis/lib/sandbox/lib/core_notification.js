@@ -1,6 +1,6 @@
 //must include jquery.atmosphere.js ext dependency
 KG.core_notification = SC.Object.create({
-	
+
     connectedEndpoint: null,
     callbackAdded: NO,
     postCallbackAdded: NO,
@@ -52,22 +52,29 @@ KG.core_notification = SC.Object.create({
                         var messageData = KG.Message.create(oData);
                         console.log('Message received');
                         console.log(messageData);
-						if(messageData.get('author') !== KG.core_auth.get('activeUser').user){
-							if(messageData.get('type') === 'text'){
-								KG.notificationsController.insertAt(0, messageData);
-							}else if(messageData.get('type') === 'trx'){
-								if(messageData.content.featuretype === 'sys_note'){
-									//note modified : refresh
-									console.log('Transaction on Note => Refresh');
-									KG.core_note.refreshMarkers(YES);
-								}else if(messageData.content.featuretype === 'sys_note_comment'){
-									console.log('Transaction on Comments => Fetch comments');
-									KG.core_note.fetchComments();
-								}
-							}							
-						}else{
-							KG.statechart.sendAction('notificationSent', messageData);
-						}
+                        if (messageData.get('author') !== KG.core_auth.get('activeUser').user) {
+                            if (messageData.get('type') === 'text') {
+                                KG.notificationsController.insertAt(0, messageData);
+                            } else if (messageData.get('type') === 'trx') {
+                                if (messageData.content.ft_id === -10) {
+                                    //note modified : refresh
+                                    if (messageData.content.trx_type === 2) {
+                                        //modification --> ?
+                                        } else {
+                                        console.log('Transaction on note => Refresh the markers');
+                                        KG.core_note.refreshMarkers(YES);
+                                    }
+                                } else if (messageData.content.ft_id === -11) {
+                                    var aNote = KG.activeNoteController.get('content');
+                                   // if (!SC.none(aNote) && aNote.get('id') === messageData.content.fid) {
+                                        console.log('Transaction on Comments => Fetch comments');
+                                        KG.core_note.fetchComments(YES);
+                                   // }
+                                }
+                            }
+                        } else {
+                            KG.statechart.sendAction('notificationSent', messageData);
+                        }
                     } catch(e) {
                         console.log('NOTIFICATION: ' + e);
                     }
@@ -88,8 +95,8 @@ KG.core_notification = SC.Object.create({
             data: JSON.stringify(message.toDataHash()),
             headers: KG.core_auth.createAjaxRequestHeaders()
         });
-		
-		return YES;
+
+        return YES;
     }
 
 });

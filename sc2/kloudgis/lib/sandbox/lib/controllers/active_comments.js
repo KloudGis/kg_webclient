@@ -13,8 +13,8 @@ KG.activeCommentsController = SC.ArrayProxy.create({
 			return [];
 		}
 		return array.sort(function(a,b){
-			var d1 = a.get('date');
-			var d2 = b.get('date');
+			var d1 = a.get('date_create');
+			var d2 = b.get('date_create');
 			return d1-d2;
 		});
 	},

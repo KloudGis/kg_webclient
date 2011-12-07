@@ -2,12 +2,33 @@ require("sproutcore-datastore");
 require("./data_sources/store");
 require("./models/record");
 require("./models/note");
+require("./models/note_marker");
 require("./models/comment");
+require("./models/feature");
+require("./models/featuretype");
+require("./models/attrtype");
+require("./models/layer");
+require("./models/search_category");
+require("./models/sandbox");
 
 KG.store = SC.Store.create({
     commitRecordsAutomatically: NO
 }).from('KG.Store');
 
+//LOCAL QUERY
+KG.SANDBOX_QUERY = SC.Query.local(KG.Sandbox, {orderBy: 'date DESC'});
+KG.LAYER_QUERY = SC.Query.local(KG.Layer);
+KG.FEATURETYPE_QUERY = SC.Query.local(KG.Featuretype);
+KG.ATTRTYPE_QUERY = SC.Query.local(KG.Attrtype);
+KG.SEARCH_QUERY = SC.Query.local(KG.SearchCategory, {
+    conditions: 'count > 0 OR count = -1',
+    orderBy: 'categoryLabel'
+});
+//REMOTE QUERY
+KG.INFO_QUERY = SC.Query.remote(KG.Feature);
+KG.NOTE_MARKER_QUERY = SC.Query.remote(KG.NoteMarker);
+KG.SEARCH_RESULT_NOTE_QUERY = SC.Query.remote(KG.Note, {conditions: 'count > 0'});
+KG.SEARCH_RESULT_FEATURE_QUERY = SC.Query.remote(KG.Feature, {conditions: 'count > 0'});
 
 //SC.RECORDARRAY
 //add onReady, onError support to RecordArrays
@@ -87,7 +108,7 @@ SC.RecordArray.reopen({
 SC.Record.reopen({
     _readyQueue: null,
     _errorQueue: null,
-	_destroyQueue: null,
+    _destroyQueue: null,
 
     onReady: function(target, method, params) {
         if (this.get('status') & SC.Record.READY) {
@@ -107,7 +128,7 @@ SC.Record.reopen({
     },
 
     _onReady: function() {
-	//	console.log('onReady status is '  + this.get('status'));
+        //	console.log('onReady status is '  + this.get('status'));
         if (this.get('status') & SC.Record.READY) {
             var queue = this._readyQueue;
             var idx, len;
@@ -156,7 +177,7 @@ SC.Record.reopen({
         this.removeObserver('status', this, this._onError);
     },
 
-	onDestroyedClean: function(target, method, params) {
+    onDestroyedClean: function(target, method, params) {
         if (this.get('status') === SC.Record.DESTROYED_CLEAN) {
             method.call(target, this, params);
         } else {
@@ -189,4 +210,3 @@ SC.Record.reopen({
         this.removeObserver('status', this, this._onDestroyedClean);
     }
 });
-

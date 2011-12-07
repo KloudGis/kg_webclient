@@ -14,7 +14,7 @@ KG.core_highlight = SC.Object.create({
             return NO;
         }
         try {
-            return KG.core_leaflet.addHighlight(feature.get('coords'), feature.get('geo_type'));
+            return KG.core_leaflet.addHighlight(feature.get('geo'));
         } catch(e) {
             return null;
         }

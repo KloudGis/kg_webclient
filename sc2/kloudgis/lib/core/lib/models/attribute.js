@@ -1,22 +1,31 @@
-/**
-* Feature attribute.  Similar to AttributeEntry in Space.
-**/
+/*
+	Wrapper on a feature with a specific attrtype.
+*/
 KG.Attribute = SC.Object.extend({
 	
-	name: null,
-	value: null,
-	renderer: null,// 'text-renderer',
-	isDirty: NO,
+	feature: null,
+	attrtype: null,
 	
-	charCount: function(){
-		var v = this.get('value');
-		if(v && v.length){
-			return v.length; 
+	label: function(){
+		return this.getPath('attrtype.label'); 
+	}.property().cacheable(),
+	
+	renderer: function(){
+		var type = this.getPath('attrtype.type'); 
+		if(!type || type === 'text'){
+			return 'text-renderer';
 		}
-		return 0;
-	}.property('value'),
+		return 'read-only-renderer';
+	}.property(), 
+		
+	value: function(key, value){
+		var ref = this.getPath('attrtype.attr_ref');
+		var feature = this.get('feature');
+		if(value){
+			feature.set(ref, value);
+		}
+		return feature.get(ref);
+	}.property()
+
 	
-	valueDidChange: function(){
-		this.set('isDirty', YES);
-	}.observes('value')
 });

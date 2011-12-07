@@ -87,7 +87,7 @@
 							{{authorLabel}}																			
 						{{/view}}
 						{{#view class="note-comment-content"}}
-							{{itemView.content.value}}
+							{{itemView.content.comment}}
 						{{/view}}
 						{{#view class="note-comment-date"}}
 							{{itemView.content.formattedDate}}
@@ -162,7 +162,7 @@
 		<!-- Inspector renderers -->
 	<script type="text/x-handlebars" data-template-name="read-only-renderer">
 		<span class="inspector-attr-name">
-			{{itemView.content.name}}
+			{{itemView.content.label}}
 		</span>	
 
 		<div class="inspector-attr-value">
@@ -173,7 +173,7 @@
 	</script>
 	<script type="text/x-handlebars" data-template-name="text-renderer">
 		<span class="inspector-attr-name">
-			{{itemView.content.name}}
+			{{itemView.content.label}}
 		</span>	
 		<div class="inspector-attr-value">
 			{{#view KG.TextField valueBinding="itemView.content.value" spellcheck="false" autocorrect="off" autocapitalize="off"}}

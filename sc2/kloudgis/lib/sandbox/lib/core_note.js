@@ -282,10 +282,9 @@ KG.core_note = SC.Object.create({
                 var content = KG.noteMarkersController.get('content');
                 content.destroy();
             }
-            var query = SC.Query.remote(KG.NoteMarker, {
-                query_url: KG.get('serverHost') + 'api_data/protected/notes/clusters?sw_lon=%@&ne_lat=%@&ne_lon=%@&sw_lat=%@&distance=%@&sandbox=%@'.fmt(fatBounds.getPath('sw.lon'), fatBounds.getPath('sw.lat'), fatBounds.getPath('ne.lon'), fatBounds.getPath('ne.lat'), dist, KG.get('activeSandboxKey'))
-            });
-            var newMarkers = KG.store.find(query);
+            KG.NOTE_MARKER_QUERY.fat_bounds = fatBounds;
+			KG.NOTE_MARKER_QUERY.distance = dist;
+            var newMarkers = KG.store.find(KG.NOTE_MARKER_QUERY);
             newMarkers.onReady(this, this.markersReady);
             KG.noteMarkersController.set('content', newMarkers);
             this._bounds = fatBounds;
@@ -378,21 +377,21 @@ KG.core_note = SC.Object.create({
     /**
 	* Fetch the comments for the active note.
 	**/
-    fetchComments: function() {
+    fetchComments: function(refresh) {
         console.log('refresh comments');
         var nested_note = KG.activeNoteController.get('content');
         if (!SC.none(nested_note)) {
             var note = KG.store.find(nested_note);
-            note.onReady(null,
-            function() {
-                KG.activeCommentsController.set('isLoading', YES);
-                KG.activeCommentsController.set('content', []);
+			var onReady = function() {
+                if(!refresh){
+					KG.activeCommentsController.set('isLoading', YES);            
+				}
                 var comments = note.get('comments');
                 var params = {
                     count: 0,
-                    length: nested_note.getPath('comments.length'),
-                    records: [],
-                }
+                    length: comments.get('length'),
+                    records: []
+                };
                 if (params.length > 0) {
                     console.log('comments count:' + params.length);
                     comments.forEach(function(comment) {
@@ -402,9 +401,15 @@ KG.core_note = SC.Object.create({
                 } else {
                     console.log('NO comments');
                     KG.activeCommentsController.set('isLoading', NO);
+					KG.activeCommentsController.set('content', []);
                     KG.statechart.sendAction('commentsReadyEvent');
                 }
-            });
+            };
+			if(refresh){
+				note.refresh(YES, onReady);
+			}else{
+            	note.onReady(null, onReady);
+			}
         }
     },
 
@@ -428,7 +433,7 @@ KG.core_note = SC.Object.create({
         var nested_note = KG.activeNoteController.get('content');
         if (nested_note) {
             var rec_comment = KG.store.createRecord(KG.Comment, {
-                value: comment,
+                comment: comment,
                 note: nested_note.get('id')
             });
             //commit only this record
