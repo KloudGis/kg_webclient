@@ -50,26 +50,17 @@ KG.core_notification = SC.Object.create({
                     try {
                         var oData = JSON.parse(data);
                         var messageData = KG.Message.create(oData);
-                        console.log('Message received');
-                        console.log(messageData);
                         if (messageData.get('author') !== KG.core_auth.get('activeUser').user) {
                             if (messageData.get('type') === 'text') {
                                 KG.notificationsController.insertAt(0, messageData);
-                            } else if (messageData.get('type') === 'trx') {
-                                if (messageData.content.ft_id === -10) {
-                                    //note modified : refresh
-                                    if (messageData.content.trx_type === 2) {
-                                        //modification --> ?
-                                        } else {
-                                        console.log('Transaction on note => Refresh the markers');
-                                        KG.core_note.refreshMarkers(YES);
-                                    }
-                                } else if (messageData.content.ft_id === -11) {
-                                    var aNote = KG.activeNoteController.get('content');
-                                   // if (!SC.none(aNote) && aNote.get('id') === messageData.content.fid) {
-                                        console.log('Transaction on Comments => Fetch comments');
-                                        KG.core_note.fetchComments(YES);
-                                   // }
+                            } else if (messageData.get('type') === 'note') {
+								console.log('Note message: ' + messageData.getPath('content.modif_type'));
+                                KG.core_note.refreshMarkers(YES);
+                            } else if (messageData.get('type') === 'note_comment') {
+                                var aNote = KG.activeNoteController.get('content');
+                                if (!SC.none(aNote) && aNote.get('id') === messageData.getPath('content.note_id')) {
+									console.log('Comment for active note: ' + messageData.getPath('content.modif_type'));
+                                    KG.core_note.fetchComments(YES);
                                 }
                             }
                         } else {
