@@ -42,6 +42,15 @@ KG.Button = SC.Button.extend({
     touchEnd: function(touch) {
         this._super(touch);
 		return NO;//no bubble
-    }
+    },
+
+	touchCancel: function(touch){
+		
+	},
+	
+	touchMove: function(touch){
+		
+	}
+	
 
 });

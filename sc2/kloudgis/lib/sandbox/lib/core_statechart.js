@@ -63,6 +63,7 @@ SC.mixin(KG, {
             //login successful on the map service.  We can add the layers
             mapLoginSucceeded: function() {
                 KG.core_layer.loadLayers();
+                KG.core_bookmark.loadBookmarks();
             },
 
             //******************************
@@ -75,9 +76,9 @@ SC.mixin(KG, {
 
                 enterState: function() {
                     KG.core_notification.listen();
-					//fetch the featuretypes and attrtypes locally
-					KG.store.find(KG.FEATURETYPE_QUERY);
-					KG.store.find(KG.ATTRTYPE_QUERY);
+                    //fetch the featuretypes and attrtypes locally
+                    KG.store.find(KG.FEATURETYPE_QUERY);
+                    KG.store.find(KG.ATTRTYPE_QUERY);
                 },
 
                 //******************************
@@ -124,6 +125,169 @@ SC.mixin(KG, {
 
                         closeInspectorAction: function() {
                             this.gotoState('inspectorHiddenState');
+                        }
+                    })
+                }),
+
+                //******************************
+                // Concurrent state for Popup that 
+                // cannot be visible at the same time.
+                // Map Interaction
+                //******************************
+                interactionPopupState: SC.State.extend({
+                    initialSubstate: 'noPopupState',
+
+                    toggleNotificationPopupAction: function() {
+                        this.gotoState('notificationPopupState');
+                    },
+
+                    toggleBookmarkPopupAction: function() {
+                        this.gotoState('bookmarkPopupState');
+                    },
+
+                    //******************************
+                    // No popup visible
+                    //******************************
+                    noPopupState: SC.State.extend({
+
+}),
+
+                    //******************************
+                    // Notification Popup
+                    //******************************
+                    notificationPopupState: SC.State.extend({
+
+                        enterState: function() {
+                            KG.notificationsController.set('activePopup', YES);
+                        },
+
+                        exitState: function() {
+                            KG.notificationsController.set('activePopup', NO);
+                        },
+
+                        sendTextNotificationAction: function() {
+                            this.gotoState('sendNotificationState');
+                        },
+
+                        toggleNotificationPopupAction: function() {
+                            this.gotoState('noPopupState');
+                        },
+
+                        clearNotificationAction: function() {
+                            KG.notificationsController.set('content', []);
+                            this.gotoState('noPopupState');
+                        }
+                    }),
+
+                    //******************************
+                    // Show a popup dialog to send a notification
+                    //******************************
+                    sendNotificationState: SC.State.extend({
+
+                        view: null,
+                        timeout: null,
+
+                        enterState: function() {
+                            KG.sendNotificationController.set('showing', YES);
+                            view = SC.View.create({
+                                templateName: 'send-text-notification'
+                            });
+                            view.append();
+                            KG.core_sandbox.autosize('#send-notification-panel textarea');
+                            this.focusArea();
+                        },
+
+                        exitState: function() {
+                            KG.sendNotificationController.set('showing', NO);
+                            KG.core_sandbox.destroyAutosize('#send-notification-panel textarea');
+                            view.destroy();
+                            view = null;
+                            if (this.timeout) {
+                                clearTimeout(this.timeout);
+                                this.timeout = null;
+                            }
+                            KG.sendNotificationController.set('pendingMessage', null);
+                            KG.sendNotificationController.set('feedbackMessage', '');
+                            KG.sendNotificationController.set('content', '');
+                        },
+
+                        focusArea: function() {
+                            setTimeout(function() {
+                                $('#send-notification-panel textarea').focus();
+                            },
+                            300);
+                        },
+
+                        sendNotificationButtonAction: function() {
+                            setTimeout(function() {
+                                $('#send-notification-panel textarea').data('AutoResizer').check();
+                            },
+                            305);
+                            this.sendNotificationAction();
+                            this.focusArea();
+                        },
+
+                        sendNotificationAction: function() {
+                            var message = KG.sendNotificationController.get('content');
+                            if (message && message.length > 0) {
+                                KG.sendNotificationController.set('content', '');
+                                if (this.timeout) {
+                                    clearTimeout(this.timeout);
+                                }
+                                var notification = KG.Message.create({
+                                    type: 'text',
+                                    author: KG.core_auth.get('activeUser').user,
+                                    content: {
+                                        text: message
+                                    },
+                                    dateMillis: new Date().getTime()
+                                });
+                                KG.sendNotificationController.set('pendingNotification', notification);
+                                var ret = KG.core_notification.postMessage(notification);
+                                if (!ret) {
+                                    KG.sendNotificationController.set('feedbackMessage', '_failedToSendMessage'.loc());
+                                } else {
+                                    KG.sendNotificationController.set('feedbackMessage', '');
+                                    //10s timeout
+                                    this.timeout = setTimeout(function() {
+                                        KG.sendNotificationController.set('pendingNotification', null);
+                                        KG.sendNotificationController.set('feedbackMessage', '_timeoutSendMessage'.loc());
+                                    },
+                                    10000);
+                                }
+                            }
+                        },
+
+                        notificationSent: function(message) {
+                            var pending = KG.sendNotificationController.get('pendingNotification');
+                            if (message && pending && SC.isEqual(message, pending)) {
+                                KG.sendNotificationController.set('pendingNotification', null);
+                                KG.sendNotificationController.set('feedbackMessage', '_sendMessageSuccessful'.loc());
+                                if (this.timeout) {
+                                    clearTimeout(this.timeout);
+                                }
+                            }
+                        },
+
+                        closeSendNotificationAction: function() {
+                            this.gotoState('navigationState');
+                        }
+                    }),
+
+                    //******************************
+                    // Bookmark Popup
+                    //******************************
+                    bookmarkPopupState: SC.State.extend({
+                        enterState: function() {
+                            KG.bookmarksController.set('activePopup', YES);
+                        },
+
+                        exitState: function() {
+                            KG.bookmarksController.set('activePopup', NO);
+                        },
+
+                        toggleBookmarkPopupAction: function() {
+                            this.gotoState('noPopupState');
                         }
                     })
                 }),
@@ -183,19 +347,6 @@ SC.mixin(KG, {
                     //the user if definitly not logged in -> bring him back to the login page
                     authenficationFailed: function() {
                         window.location.href = "index.html";
-                    },
-
-                    toggleNotificationPopupAction: function() {
-                        KG.notificationsController.set('activePopup', !KG.notificationsController.get('activePopup'));
-                    },
-
-                    clearNotificationAction: function() {
-                        KG.notificationsController.set('content', []);
-                        KG.notificationsController.set('activePopup', NO);
-                    },
-
-                    sendTextNotificationAction: function() {
-                        this.gotoState('sendNotificationState');
                     },
 
                     //******************************
@@ -454,7 +605,7 @@ SC.mixin(KG, {
                                 KG.core_note.rollbackModifications();
                                 KG.activeNoteController.set('content', null);
                                 KG.core_note.clearCreateNote();
-								KG.core_sandbox.destroyAutosize('#note-description-area');
+                                KG.core_sandbox.destroyAutosize('#note-description-area');
                             },
 
                             confirmNoteAction: function() {
@@ -516,7 +667,7 @@ SC.mixin(KG, {
                                 KG.activeCommentsController.set('showComments', NO);
                                 KG.activeCommentsController.set('showing', NO);
                                 KG.deleteCommentController.set('content', null);
-								KG.core_sandbox.destroyAutosize('#note-description-area');
+                                KG.core_sandbox.destroyAutosize('#note-description-area');
                             },
 
                             showCommentsAction: function() {
@@ -550,7 +701,7 @@ SC.mixin(KG, {
                                         KG.core_note.addCommentToActiveNote(comment);
                                     }
                                 }
-								KG.newCommentController.set('content', '');
+                                KG.newCommentController.set('content', '');
                             },
 
                             commentsReadyEvent: function() {
@@ -597,90 +748,6 @@ SC.mixin(KG, {
                                 this.gotoState('navigationState');
                             }
                         })
-                    }),
-                    //******************************
-                    // Show a popup dialog to send a notification
-                    //******************************
-                    sendNotificationState: SC.State.extend({
-
-                        view: null,
-                        timeout: null,
-
-                        enterState: function() {
-                            KG.sendNotificationController.set('showing', YES);
-                            view = SC.View.create({
-                                templateName: 'send-text-notification'
-                            });
-                            view.append();
-                            KG.core_sandbox.autosize('#send-notification-panel textarea');
-							this.focusArea();							
-                        },
-
-                        exitState: function() {
-                            KG.sendNotificationController.set('showing', NO);
-							KG.core_sandbox.destroyAutosize('#send-notification-panel textarea');
-                            view.destroy();
-                            view = null;
-                            if (this.timeout) {
-                                clearTimeout(this.timeout);
-                                this.timeout = null;
-                            }
-                            KG.sendNotificationController.set('pendingMessage', null);
-                            KG.sendNotificationController.set('feedbackMessage', '');
-							KG.sendNotificationController.set('content', '');							
-                        },
-
-						focusArea:function(){
-							setTimeout(function(){$('#send-notification-panel textarea').focus();},300);
-						},
-
-						sendNotificationButtonAction: function(){
-							setTimeout(function(){$('#send-notification-panel textarea').data('AutoResizer').check();},305);	
-							this.sendNotificationAction();
-							this.focusArea();
-						},
-
-                        sendNotificationAction: function() {
-                            var message = KG.sendNotificationController.get('content');
-                            if (message && message.length > 0) {
-								KG.sendNotificationController.set('content', '');															
-                                if (this.timeout) {
-                                    clearTimeout(this.timeout);
-                                }
-                                var notification = KG.Message.create({
-                                    type: 'text',
-                                    author: KG.core_auth.get('activeUser').user,
-                                    content: {text:message},
-                                    dateMillis: new Date().getTime()
-                                });
-                                KG.sendNotificationController.set('pendingNotification', notification);
-                                var ret = KG.core_notification.postMessage(notification);
-                                if (!ret) {
-                                    KG.sendNotificationController.set('feedbackMessage', '_failedToSendMessage'.loc());
-                                } else {
-                                    KG.sendNotificationController.set('feedbackMessage', '');
-									//10s timeout
-									this.timeout = setTimeout(function(){										
-										KG.sendNotificationController.set('pendingNotification', null);
-										KG.sendNotificationController.set('feedbackMessage', '_timeoutSendMessage'.loc());},10000);
-                                }								
-                            }
-                        },
-
-						notificationSent: function(message){
-							var pending = KG.sendNotificationController.get('pendingNotification');
-							if(message && pending && SC.isEqual(message, pending)){
-								KG.sendNotificationController.set('pendingNotification', null);
-								KG.sendNotificationController.set('feedbackMessage', '_sendMessageSuccessful'.loc());
-								if (this.timeout) {
-                                    clearTimeout(this.timeout);
-                                }
-							}
-						},
-
-                        closeSendNotificationAction: function() {
-                            this.gotoState('navigationState');
-                        }
                     })
                 })
             })

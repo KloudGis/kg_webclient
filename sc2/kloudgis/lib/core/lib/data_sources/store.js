@@ -74,6 +74,8 @@ KG.Store = SC.DataSource.extend({
         var query_url;
         if (query === KG.LAYER_QUERY) {
             query_url = KG.get('serverHost') + 'api_data/protected/layers?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
+        } else if (query === KG.BOOKMARK_QUERY) {
+            query_url = KG.get('serverHost') + 'api_data/protected/bookmarks?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
         } else if (query === KG.FEATURETYPE_QUERY) {
             query_url = KG.get('serverHost') + 'api_data/protected/featuretypes?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
         } else if (query === KG.ATTRTYPE_QUERY) {
@@ -87,9 +89,9 @@ KG.Store = SC.DataSource.extend({
             query_url = KG.get('serverHost') + 'api_data/protected/notes/clusters?sw_lon=%@&ne_lat=%@&ne_lon=%@&sw_lat=%@&distance=%@&sandbox=%@'.fmt(fatBounds.getPath('sw.lon'), fatBounds.getPath('sw.lat'), fatBounds.getPath('ne.lon'), fatBounds.getPath('ne.lat'), query.distance, KG.get('activeSandboxKey'));
         } else if (query === KG.SEARCH_RESULT_NOTE_QUERY || query === KG.SEARCH_RESULT_FEATURE_QUERY) {
             query_url = KG.get('serverHost') + 'api_data/protected/features/search?category=%@&search_string=%@&sandbox=%@'.fmt(query.category, query.search, KG.get('activeSandboxKey'));
-        } else if(query === KG.SANDBOX_QUERY){
-			query_url = KG.get('serverHost') + 'api_sandbox/protected/sandboxes';
-		}
+        } else if (query === KG.SANDBOX_QUERY) {
+            query_url = KG.get('serverHost') + 'api_sandbox/protected/sandboxes';
+        }
         if (!SC.none(query_url)) {
             $.ajax({
                 type: 'GET',

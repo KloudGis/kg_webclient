@@ -10,16 +10,18 @@ require("./models/attrtype");
 require("./models/layer");
 require("./models/search_category");
 require("./models/sandbox");
+require("./models/bookmark");
 
 KG.store = SC.Store.create({
     commitRecordsAutomatically: NO
 }).from('KG.Store');
 
 //LOCAL QUERY
-KG.SANDBOX_QUERY = SC.Query.local(KG.Sandbox, {orderBy: 'date DESC'});
+KG.SANDBOX_QUERY = SC.Query.local(KG.Sandbox, {orderBy: 'date_create DESC'});
 KG.LAYER_QUERY = SC.Query.local(KG.Layer);
-KG.FEATURETYPE_QUERY = SC.Query.local(KG.Featuretype);
-KG.ATTRTYPE_QUERY = SC.Query.local(KG.Attrtype);
+KG.BOOKMARK_QUERY = SC.Query.local(KG.Bookmark, {orderBy: 'label'});
+KG.FEATURETYPE_QUERY = SC.Query.local(KG.Featuretype, {orderBy: 'label'});
+KG.ATTRTYPE_QUERY = SC.Query.local(KG.Attrtype, {orderBy: 'label'});
 KG.SEARCH_QUERY = SC.Query.local(KG.SearchCategory, {
     conditions: 'count > 0 OR count = -1',
     orderBy: 'categoryLabel'

@@ -5,6 +5,14 @@
   	-o-text-overflow: ellipsis;
   	-ms-text-overflow: ellipsis;
 }
+
+.unselectable {
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   user-select: none;
+}
+
 .red-button, .white-button{
 	color: #fff;
 	font-size: 12px;

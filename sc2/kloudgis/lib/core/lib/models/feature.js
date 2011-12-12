@@ -9,7 +9,6 @@ KG.Feature = KG.Record.extend({
 
     fid: SC.Record.attr(Number),
     ft_id: SC.Record.attr(Number),
-    date_create: SC.Record.attr(Number),
     user_create: SC.Record.attr(Number),
     date_update: SC.Record.attr(Number),
     user_update: SC.Record.attr(Number),

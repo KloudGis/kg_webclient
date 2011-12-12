@@ -1,0 +1,33 @@
+#bookmark-panel{
+	position: absolute;
+	left:50%;
+	top:0px;
+	margin-left:-2.5cm;
+}
+
+#bookmark-button{
+	width:0.7cm;
+	height:0.7cm;
+}
+
+/* Button when the popup is visible*/
+#bookmark-button.active-popup{
+	background: rgba(255,255,255,0.9);
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+#bookmark-popup{
+	z-index:20;
+	position: absolute;
+	left:0.1cm;
+	top:0.95cm;
+	width:6cm;
+	padding:0.2cm;
+	background: rgba(255,255,255,0.9);
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
+	border-bottom-left-radius: 6px;
+	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+}

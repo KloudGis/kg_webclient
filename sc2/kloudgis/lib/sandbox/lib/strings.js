@@ -35,6 +35,9 @@ var fr = {
 	"_notificationClear": "Effacer",
 	"_notificationSendText": "Envoyer un message",
 	"_notificationSendButton": "Envoyer",
+	"_bookmarkTitle": "Signets",
+	"_bookmarkAdd": "Ajouter",
+	"_bookmarkDelete": "Supprimer",
 	"_textMessageTitle": " a envoyé un message à ",
 	"_sendOnEnterTooltip" : "Envoyer le message en appuyant sur Retour",
 	"_failedToSendMessage": "Impossible d'envoyer le message.",
@@ -79,6 +82,9 @@ var en = {
 	"_notificationClear": "Clear",
 	"_notificationSendText": "Send a Message",
 	"_notificationSendButton": "Send",
+	"_bookmarkTitle": "Bookmarks",
+	"_bookmarkAdd": "Add",
+	"_bookmarkDelete": "Delete",
 	"_textMessageTitle": " send a text message at ",
 	"_sendOnEnterTooltip" : "Send the message on Enter",
 	"_failedToSendMessage": "Cannot send the message.",
@@ -97,7 +103,10 @@ SC.run.schedule('render',null, function(){
 	console.log('localize page');
 	$('#back-home a').text("_backHome".loc());
 	$('#create-note a').text("_createNote".loc());
-	$('.notification-label').text("_notificationTitle".loc());
+	$('#notification-label').text("_notificationTitle".loc());
 	$('#notification-clear-button').text("_notificationClear".loc());
 	$('#notification-send-button').text("_notificationSendText".loc());	
+	$('#bookmark-label').text("_bookmarkTitle".loc());
+	$('#bookmark-add-button').text("_bookmarkAdd".loc());
+	$('#bookmark-modify-button').text("_bookmarkDelete".loc());
 });

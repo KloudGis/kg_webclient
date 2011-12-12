@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>kloudgis/lib/sandbox/lib/core_notification.js</string>
+	<string>kloudgis/lib/sandbox/lib/controllers/bookmarks.js</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -425,6 +425,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>kloudgis/lib/core/lib/models/note.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>40</integer>
+				<key>line</key>
+				<integer>28</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>kloudgis/lib/core/lib/models/record.js</key>
 		<dict>
 			<key>caret</key>
@@ -555,6 +569,20 @@
 				<integer>3</integer>
 			</dict>
 		</dict>
+		<key>kloudgis/lib/sandbox/lib/controllers/bookmarks.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>12</integer>
+				<key>line</key>
+				<integer>4</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>kloudgis/lib/sandbox/lib/controllers/info.js</key>
 		<dict>
 			<key>caret</key>
@@ -641,6 +669,50 @@
 				<integer>2</integer>
 			</dict>
 		</dict>
+		<key>kloudgis/lib/sandbox/lib/controllers/notifications.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>3</integer>
+				<key>line</key>
+				<integer>2</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+		</dict>
+		<key>kloudgis/lib/sandbox/lib/core_bookmark.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>kloudgis/lib/sandbox/lib/core_info.js</key>
 		<dict>
 			<key>caret</key>
@@ -683,6 +755,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>kloudgis/lib/sandbox/lib/core_leaflet.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>33</integer>
+				<key>line</key>
+				<integer>39</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>25</integer>
+		</dict>
 		<key>kloudgis/lib/sandbox/lib/core_note.js</key>
 		<dict>
 			<key>caret</key>
@@ -702,14 +788,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>37</integer>
+				<integer>45</integer>
 				<key>line</key>
-				<integer>71</integer>
+				<integer>61</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>35</integer>
+			<integer>33</integer>
 		</dict>
 		<key>kloudgis/lib/sandbox/lib/core_sandbox.js</key>
 		<dict>
@@ -825,7 +911,7 @@
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>32</integer>
+			<integer>79</integer>
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
@@ -858,19 +944,15 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>kloudgis/lib/sandbox/lib/core_note.js</string>
-		<string>kloudgis/sandbox.html</string>
-		<string>kloudgis/lib/sandbox/lib/controllers/active_comments.js</string>
-		<string>kloudgis/lib/sandbox/lib/controllers/active_note.js</string>
-		<string>kloudgis/lib/sandbox/lib/controllers/new_comment.js</string>
-		<string>kloudgis/assets/bpm_libs.js</string>
-		<string>kloudgis/assets/sandbox_lib.js</string>
-		<string>kloudgis/lib/sandbox/lib/core_notification.js</string>
-		<string>kloudgis/lib/sandbox/lib/core_statechart.js</string>
+		<string>kloudgis/lib/core/lib/models/note.js</string>
+		<string>kloudgis/lib/sandbox/lib/core_bookmark.js</string>
+		<string>kloudgis/lib/sandbox/lib/controllers/bookmarks.js</string>
+		<string>kloudgis/lib/sandbox/lib/controllers/notes_popup.js</string>
+		<string>kloudgis/lib/sandbox/lib/controllers/notifications.js</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{637, 60}, {884, 968}}</string>
+	<string>{{848, 273}, {1326, 968}}</string>
 </dict>
 </plist>

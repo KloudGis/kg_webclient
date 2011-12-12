@@ -65,3 +65,9 @@ require("./views/notification");
 require("./views/notification_button");
 require("./views/text_notification_area");
 
+//bookmark
+require("./core_bookmark");
+require("./controllers/bookmarks");
+require("./views/bookmark_button");
+require("./views/bookmark");
+require("./views/delete_bookmark");
