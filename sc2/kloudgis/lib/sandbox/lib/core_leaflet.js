@@ -347,6 +347,12 @@ KG.core_leaflet = SC.Object.create({
             click_cb.call(click_target, marker);
             SC.run.end();
         });
+		lmarker.on('dragend',
+        function() {
+            SC.run.begin();
+            KG.statechart.sendAction('markerDragEnded', lmarker._latlng.lng, lmarker._latlng.lat);
+            SC.run.end();
+        })
         marker._native_marker = lmarker;
     },
 
@@ -402,6 +408,16 @@ KG.core_leaflet = SC.Object.create({
             }.property()
         });
         return marker;
+    },
+
+	enableDraggableMarker: function(marker) {
+        if (marker && marker._native_marker) {
+            var nativ = marker._native_marker;
+            nativ.options.draggable = true;
+            if (nativ.dragging) {
+                nativ.dragging.enable();
+            }
+        }
     },
 
     disableDraggableMarker: function(marker) {
@@ -460,7 +476,7 @@ KG.core_leaflet = SC.Object.create({
 
     showPopupMarker: function(marker, content) {
         var popup = this._popupMarker;
-        popup.setLatLng(new L.LatLng(marker.get('lat'), marker.get('lon')));
+        this.updatePopupMarkerPosition(marker.get('lon'),marker.get('lat'));
         popup.setContent(content);
         if (!popup._opened) {
             this.map.openPopup(popup);
@@ -475,6 +491,11 @@ KG.core_leaflet = SC.Object.create({
         },
         1);
     },
+
+	updatePopupMarkerPosition: function(lon, lat){
+		var popup = this._popupMarker;
+		popup.setLatLng(new L.LatLng(lat, lon));
+	},
 
     closePopup: function() {
         this.map.closePopup();

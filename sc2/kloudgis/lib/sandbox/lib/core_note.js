@@ -195,6 +195,7 @@ KG.core_note = SC.Object.create({
         });
         this._view_active_note.appendTo(noteDiv);
         KG.activeNoteController.set('marker', marker);
+		KG.core_leaflet.enableDraggableMarker(marker);
         KG.activeNoteController.set('content', note);
         setTimeout(function() {
             if (!SC.none(marker)) {
@@ -457,5 +458,15 @@ KG.core_note = SC.Object.create({
         KG.activeCommentsController.get('content').removeObject(comment);
         //commit only on record
         KG.store.commitRecords(null, null, [comment.get('storeKey')]);
-    }
+    },
+
+	updatePosition: function(lon, lat){
+		KG.activeNoteController.get('content').set('coordinate', {x: lon, y: lat});
+		var marker = KG.activeNoteController.get('marker');
+		var dataHash = KG.store.readDataHash(marker.get('storeKey'));
+		dataHash.lat = lat;
+		dataHash.lon = lon;
+		KG.store.pushRetrieve(null, null, dataHash, marker.get('storeKey'));
+		KG.core_leaflet.updatePopupMarkerPosition(lon,lat);
+	}
 });

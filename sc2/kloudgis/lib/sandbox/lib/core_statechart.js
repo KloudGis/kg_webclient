@@ -726,6 +726,8 @@ SC.mixin(KG, {
                         // Detail view on the active Note
                         //******************************
                         editNoteState: SC.State.extend({
+							
+							dirtyMarker: NO,
 
                             enterState: function() {
                                 console.log('enter editNoteState');
@@ -734,7 +736,7 @@ SC.mixin(KG, {
                                 KG.activeCommentsController.set('showComments', YES);
                                 KG.activeCommentsController.set('showing', NO);
                                 KG.activeCommentsController.set('isLoading', NO);
-                                KG.core_sandbox.autosize('#note-description-area');
+                                KG.core_sandbox.autosize('#note-description-area');					
                             },
 
                             exitState: function() {
@@ -746,6 +748,10 @@ SC.mixin(KG, {
                                 KG.activeCommentsController.set('showing', NO);
                                 KG.deleteCommentController.set('content', null);
                                 KG.core_sandbox.destroyAutosize('#note-description-area');
+								if(this.dirtyMarker){
+									KG.core_note.refreshMarkers(YES);
+									this.dirtyMarker = NO;
+								}
                             },
 
                             showCommentsAction: function() {
@@ -823,7 +829,12 @@ SC.mixin(KG, {
                             zoomNoteAction: function() {
                                 KG.core_note.zoomActiveNote();
                                 this.gotoState('navigationState');
-                            }
+                            },
+							
+							markerDragEnded: function(lon, lat){
+								this.dirtyMarker = YES;
+								KG.core_note.updatePosition(lon, lat);
+							}
                         })
                     })
                 })

@@ -4,6 +4,8 @@
 KG.activeNoteController = SC.Object.create({
     content: null,
 
+	marker: null,
+
     titleLabel: function() {
         return "_noteTitle".loc();
     }.property(),
