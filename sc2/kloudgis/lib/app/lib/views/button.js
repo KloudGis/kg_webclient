@@ -17,6 +17,9 @@ KG.Button = SC.Button.extend({
         var action = get(this, 'sc_action')
         if (action && KG.statechart) {
             KG.statechart.sendAction(action, this.get('content') || this.getPath('itemView.content'));
+			if(this.postAction){
+				this.postAction();
+			}
         }
         if (e.stopPropagation) {
             e.stopPropagation();
@@ -29,6 +32,9 @@ KG.Button = SC.Button.extend({
             var action = get(this, 'sc_action')
             if (action && KG.statechart) {
                 KG.statechart.sendAction(action, this.get('content') || this.getPath('itemView.content'));
+				if(this.postAction){
+					this.postAction();
+				}
             }
         }
         return NO;
@@ -42,15 +48,5 @@ KG.Button = SC.Button.extend({
     touchEnd: function(touch) {
         this._super(touch);
 		return NO;//no bubble
-    },
-
-	touchCancel: function(touch){
-		
-	},
-	
-	touchMove: function(touch){
-		
-	}
-	
-
+    }	
 });

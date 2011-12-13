@@ -21,7 +21,6 @@
 
 .multiple-notes-item:hover{
 	background: rgba(0,0,255,0.5);
-	border-radius:1em;
 	color: white;
 }
 

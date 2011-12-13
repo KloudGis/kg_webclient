@@ -147,6 +147,8 @@ KG.Store = SC.DataSource.extend({
                 url = KG.get('serverHost') + 'api_data/protected/featuretypes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             } else if (rtype === KG.Attrtype) {
                 url = KG.get('serverHost') + 'api_data/protected/attrtypes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+            } else if (rtype === KG.Bookmark) {
+                url = KG.get('serverHost') + 'api_data/protected/bookmarks/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             }
             if (url) {
                 this.ajaxSupport(store, storeKey, 'GET', url);
@@ -162,6 +164,8 @@ KG.Store = SC.DataSource.extend({
             url = KG.get('serverHost') + 'api_data/protected/notes?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
         } else if (rtype === KG.Comment) {
             url = KG.get('serverHost') + 'api_data/protected/comments?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
+        } else if (rtype === KG.Bookmark) {
+            url = KG.get('serverHost') + 'api_data/protected/bookmarks?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
         }
         if (url) {
             this.ajaxSupport(store, storeKey, 'POST', url, JSON.stringify(store.readDataHash(storeKey)));
@@ -179,6 +183,8 @@ KG.Store = SC.DataSource.extend({
                 url = KG.get('serverHost') + 'api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             } else if (rtype === KG.Comment) {
                 url = KG.get('serverHost') + 'api_data/protected/comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+            } else if (rtype === KG.Bookmark) {
+                url = KG.get('serverHost') + 'api_data/protected/bookmarks/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             }
         }
         if (url) {
@@ -197,6 +203,8 @@ KG.Store = SC.DataSource.extend({
                 url = KG.get('serverHost') + 'api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             } else if (rtype === KG.Comment) {
                 url = KG.get('serverHost') + 'api_data/protected/comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+            } else if (rtype === KG.Bookmark) {
+                url = KG.get('serverHost') + 'api_data/protected/bookmarks/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             }
         }
         if (url) {

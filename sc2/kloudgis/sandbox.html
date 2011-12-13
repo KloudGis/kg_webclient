@@ -198,6 +198,17 @@
 				<img {{bindAttr src="loadingImage"}} alt="Loading"/>
 		  	{{/view}}		
 		</div>
+	</script>
+	<!-- add bookmark panel -->
+	<script type="text/x-handlebars" data-template-name="add-bookmark">
+		<div id="add-bookmark-panel">
+			{{KG.addBookmarkController.addBookmarkLabel}}
+			{{view KG.Button class="x-button bookmark-close-button" classBinding="isActive" sc_action="closeAddBookmarkAction" titleBinding="KG.addBookmarkController.closeTitle"}}
+			{{view KG.TextField valueBinding="KG.addBookmarkController.content" nl_sc_action="addBookmarkAction"}}
+			{{#view KG.Button class="white-button add-bookmark-button" classBinding="isActive" sc_action="addBookmarkAction"}}
+				{{KG.addBookmarkController.addLabel}}
+			{{/view}}		
+		</div>
 	</script>	
   </head>
 <!-- *** BODY *** -->
@@ -271,26 +282,28 @@
 					{{#view KG.BookmarkButtonView id="bookmark-button" class="kg-controls clickable" tagName="span" sc_action="toggleBookmarkPopupAction" classBinding="KG.bookmarksController.activePopup"}}
 						<img {{bindAttr src="bookmarkImg"}}/>
 					{{/view}}
-					{{#view id="bookmark-popup" isVisibleBinding="KG.bookmarksController.activePopup"}}
-						{{#view id="bookmark-label"}}
-						{{/view}}
-						<div>
+					{{#view id="bookmark-popup" isVisibleBinding="KG.bookmarksController.activePopup"}}						
+						<div id="bookmark-top-bar">
+							{{view id="bookmark-label"}}
 							{{view KG.Button id="bookmark-add-button" tagName="span" class="white-button unselectable" sc_action="addBookmarkAction"}}
-							{{view KG.Button id="bookmark-modify-button" tagName="span" class="red-button unselectable" sc_action="modifyBookmarkAction"}}											
+							{{view KG.EditBookmarkButtonView id="bookmark-edit-button" tagName="span" class="white-button unselectable" sc_action="editBookmarkAction"}}											
 						</div>
-						{{#collection contentBinding="KG.bookmarksController.content"}}					
-							{{#view KG.BookmarkView class="bookmark-item"}}
-								{{#view class="bookmark-item-label"}}
-									{{parentView.labelValue}}
+						{{#collection id="bookmark-list" contentBinding="KG.bookmarksController.content" tagName="table"}}	
+								{{#view KG.Button class="bookmark-item-label" tagName="td" sc_action="selectBookmarkAction"}}
+									{{itemView.content.label}}
+								{{/view}}								
+								{{#view KG.Button class="bookmark-item-author" tagName="td" sc_action="selectBookmarkAction"}}
+									{{itemView.content.user_descriptor}}
 								{{/view}}
-								{{#view class="bookmark-item-date"}}
-									{{parentView.dateValue}}
+								{{#view KG.Button class="bookmark-item-date" tagName="td" sc_action="selectBookmarkAction"}}
+									{{itemView.content.formattedDate}}
 								{{/view}}
-								{{#view KG.DeleteBookmarkView class="bookmark-delete red-button unselectable"}}
-									-
+								{{#view tagName="td" isVisibleBinding="KG.bookmarksController.editMode"}}
+									{{#view KG.Button class="bookmark-delete red-button unselectable" sc_action="deleteBookmarkAction"}}
+										-
+									{{/view}}
 								{{/view}}
-							{{/view}}
-							{{/collection}}
+						{{/collection}}
 					{{/view}}
 				{{/view}}
 			</script>
@@ -363,7 +376,7 @@
 						</td>
 						<td class="search-select-cell">
 							{{#view KG.Button isVisibleBinding="itemView.content.hasCreateNote" class="search-create-note" tagName="div" classBinding="isActive" sc_action="createNoteFromFeatureAction"}}	
-								<img src="resources/images/note_32.png"/>		
+								<img src="resources/images/note.png"/>		
 							{{/view}}
 						</td>
 					</tr>

@@ -3,5 +3,6 @@
 **/
 KG.bookmarksController = SC.ArrayProxy.create({
 	content: [],
-	activePopup: NO
+	activePopup: NO,
+	editMode: NO,
 });

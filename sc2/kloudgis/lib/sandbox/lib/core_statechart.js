@@ -149,8 +149,8 @@ SC.mixin(KG, {
                     // No popup visible
                     //******************************
                     noPopupState: SC.State.extend({
-
-}),
+						//nothing to do so far
+					}),
 
                     //******************************
                     // Notification Popup
@@ -189,10 +189,10 @@ SC.mixin(KG, {
 
                         enterState: function() {
                             KG.sendNotificationController.set('showing', YES);
-                            view = SC.View.create({
+                            this.view = SC.View.create({
                                 templateName: 'send-text-notification'
                             });
-                            view.append();
+                            this.view.append();
                             KG.core_sandbox.autosize('#send-notification-panel textarea');
                             this.focusArea();
                         },
@@ -200,8 +200,8 @@ SC.mixin(KG, {
                         exitState: function() {
                             KG.sendNotificationController.set('showing', NO);
                             KG.core_sandbox.destroyAutosize('#send-notification-panel textarea');
-                            view.destroy();
-                            view = null;
+                            this.view.destroy();
+                            this.view = null;
                             if (this.timeout) {
                                 clearTimeout(this.timeout);
                                 this.timeout = null;
@@ -270,7 +270,7 @@ SC.mixin(KG, {
                         },
 
                         closeSendNotificationAction: function() {
-                            this.gotoState('navigationState');
+                            this.gotoState('noPopupState');
                         }
                     }),
 
@@ -278,6 +278,9 @@ SC.mixin(KG, {
                     // Bookmark Popup
                     //******************************
                     bookmarkPopupState: SC.State.extend({
+
+                        initialSubstate: 'normalModeState',
+
                         enterState: function() {
                             KG.bookmarksController.set('activePopup', YES);
                         },
@@ -288,7 +291,82 @@ SC.mixin(KG, {
 
                         toggleBookmarkPopupAction: function() {
                             this.gotoState('noPopupState');
-                        }
+                        },
+
+                        normalModeState: SC.State.extend({
+	
+                            selectBookmarkAction: function(bookmark) {
+								KG.core_bookmark.gotoBookmark(bookmark);
+								this.gotoState('noPopupState');
+							},
+
+                            editBookmarkAction: function() {
+								this.gotoState('editModeState');
+							},
+							
+							addBookmarkAction: function(){
+								this.gotoState('addModeState');
+							}
+                        }),
+
+                        editModeState: SC.State.extend({
+							
+							enterState:function(){
+								KG.bookmarksController.set('editMode', YES);
+							},
+							
+							exitState: function(){
+								KG.bookmarksController.set('editMode', NO);
+							},
+							
+							deleteBookmarkAction: function(bookmark){
+								KG.core_bookmark.deleteBookmark(bookmark);
+							},
+
+                            editBookmarkAction: function() {
+								this.gotoState('normalModeState');
+							},
+							
+							addBookmarkAction: function(){
+								this.gotoState('addModeState');
+							}
+                        }),
+
+						addModeState: SC.State.extend({
+							view: null,
+							
+							enterState:function(){
+	                            this.view = SC.View.create({
+	                                templateName: 'add-bookmark'
+	                            });
+	                            this.view.append();
+								setTimeout(function() {
+	                                $('#add-bookmark-panel input').focus();
+	                            },
+	                            300);
+							},
+							
+							exitState: function(){
+								this.view.destroy();
+								KG.addBookmarkController.set('content', '');
+							},
+							
+							addBookmarkAction: function(){
+								var label = KG.addBookmarkController.get('content');
+								var center = KG.core_leaflet.getCenter();
+								var zoom = KG.core_leaflet.getZoom();
+								KG.core_bookmark.addBookmark(label, center, zoom);								
+								this.gotoState('normalModeState');
+							},
+							
+							closeAddBookmarkAction: function(){
+								this.gotoState('noPopupState');
+							},
+							
+							editBookmarkAction: function() {
+								this.gotoState('editModeState');
+							},
+                        })
                     })
                 }),
 
@@ -732,7 +810,6 @@ SC.mixin(KG, {
 
                             confirmNoteAction: function() {
                                 var note = KG.activeNoteController.get('content');
-                                console.log('status is' + note.get('status'));
                                 KG.core_note.commitModifications();
                                 this.gotoState('navigationState');
                             },

@@ -1,6 +1,6 @@
 KG.NotificationButtonView = KG.Button.extend({
 	notificationPath: 'resources/images/notification.png',
-	notificationActivePath:  'resources/images/notification_active.png',
+	notificationActivePath:  'resources/images/notification.png',
 	
 	activatedBinding: "KG.notificationsController.activePopup",
 	

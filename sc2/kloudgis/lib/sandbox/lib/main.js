@@ -68,6 +68,6 @@ require("./views/text_notification_area");
 //bookmark
 require("./core_bookmark");
 require("./controllers/bookmarks");
+require("./controllers/add_bookmark");
 require("./views/bookmark_button");
-require("./views/bookmark");
-require("./views/delete_bookmark");
+require("./views/edit_bookmark_button");

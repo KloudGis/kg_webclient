@@ -31,3 +31,99 @@
 	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
 	-webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
 }
+
+#bookmark-top-bar{
+	width:100%;
+}
+
+#bookmark-label{
+	text-align:center;
+	font-size:13px;
+	font-weight:bold;
+	padding-bottom:0.2cm;
+}
+
+#bookmark-add-button{
+	margin-left: 0.5cm;
+}
+
+#bookmark-edit-button{
+	margin-left: 1.5cm;
+}
+
+#bookmark-list{
+	width:100%;
+	border-collapse:collapse;
+	margin-top:0.4cm;
+}
+
+#bookmark-list tr{
+	padding-bottom:1px;
+	border-bottom:1px solid #E6E6E6;
+}
+
+#bookmark-list tr:hover{
+	background: rgba(0,0,255,0.5);
+	border-radius:10px;
+	color: white;
+}
+
+#bookmark-list tr:last-child{
+	border-bottom:none;
+}
+
+#bookmark-list td{
+	padding-top:5px;
+	padding-bottom:5px;
+	vertical-align:middle;
+	cursor: pointer;
+}
+
+#bookmark-list  tr td:nth-child(1){
+	font-size:14px;
+	text-align:center;
+}
+
+#bookmark-list tr td:nth-child(2){
+	white-space: nowrap;
+	font-size:11px;
+}
+
+#bookmark-list tr td:nth-child(3){
+	white-space: nowrap;
+	font-style: italic;
+	font-size:10px;
+}
+
+
+/*  Add Bookmark panel */
+
+#add-bookmark-panel{
+	z-index:21;
+	position: absolute;
+	top:50%;
+	left:50%;
+	margin-top:-1cm;
+	margin-left:-3cm;
+	border-radius:10px;
+	background: rgba(255,255,255,0.9);
+	width:6cm;
+	padding:0.3cm;
+	box-shadow: 2px 2px 3px #999; 
+	-webkit-box-shadow: 2px 2px 3px #999;
+}
+
+#add-bookmark-panel input{
+	width: 100%;
+}
+
+.bookmark-close-button{
+	float:right;
+	margin-right: -30px;
+	margin-top: -26px;
+}
+
+#add-bookmark-panel .add-bookmark-button{
+	margin-top:6px;
+	float: right;
+}

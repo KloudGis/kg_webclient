@@ -3,6 +3,7 @@ var fr = {
 	"_Map": "Carte",
 	"_Note": "Note",
 	"_Notes": "%@ Notes",
+	"_notes_": "Notes",
 	"_createNote": "Créer une note",
 	"_cancelCreateNote": "Annuler la création",
 	"_newNote" : "Nouvelle note",
@@ -37,7 +38,9 @@ var fr = {
 	"_notificationSendButton": "Envoyer",
 	"_bookmarkTitle": "Signets",
 	"_bookmarkAdd": "Ajouter",
-	"_bookmarkDelete": "Supprimer",
+	"_bookmarkEdit": "Modifier",
+	"_bookmarkDialogTitle": "Ajouter un signet",
+	"_bookmarkCloseDialogTitle": "Fermer la fenêtre d'ajout de signet",
 	"_textMessageTitle": " a envoyé un message à ",
 	"_sendOnEnterTooltip" : "Envoyer le message en appuyant sur Retour",
 	"_failedToSendMessage": "Impossible d'envoyer le message.",
@@ -50,6 +53,7 @@ var en = {
 	"_Map": "Map",
 	"_Note": "Note",
 	"_Notes": "%@ Notes",
+	"_notes_": "Notes",
 	"_createNote": "Create Note",
 	"_cancelCreateNote": "Cancel create note",
 	"_newNote" : "New note",
@@ -84,7 +88,9 @@ var en = {
 	"_notificationSendButton": "Send",
 	"_bookmarkTitle": "Bookmarks",
 	"_bookmarkAdd": "Add",
-	"_bookmarkDelete": "Delete",
+	"_bookmarkEdit": "Edit",
+	"_bookmarkDialogTitle": "Add a Bookmark",
+	"_bookmarkCloseDialogTitle": "Close the add bookmark dialog",
 	"_textMessageTitle": " send a text message at ",
 	"_sendOnEnterTooltip" : "Send the message on Enter",
 	"_failedToSendMessage": "Cannot send the message.",
@@ -108,5 +114,5 @@ SC.run.schedule('render',null, function(){
 	$('#notification-send-button').text("_notificationSendText".loc());	
 	$('#bookmark-label').text("_bookmarkTitle".loc());
 	$('#bookmark-add-button').text("_bookmarkAdd".loc());
-	$('#bookmark-modify-button').text("_bookmarkDelete".loc());
+	$('#bookmark-edit-button').text("_bookmarkEdit".loc());
 });

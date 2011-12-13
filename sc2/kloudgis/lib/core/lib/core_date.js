@@ -1,6 +1,15 @@
 KG.core_date = SC.Object.create({
 	
 	formatDate: function(timeMillis){
+		return this._formatDate(timeMillis, NO);
+	},
+	
+	formatDateSimple: function(timeMillis){
+		return this._formatDate(timeMillis, YES);
+	},
+	
+	
+	_formatDate: function(timeMillis, simple){
         if (timeMillis) {
 			//date from millis
             var d = new Date(timeMillis);
@@ -30,7 +39,11 @@ KG.core_date = SC.Object.create({
 				if(day < 10){
 					day = '0' + day;
 				}
-				return "%@-%@-%@ %@:%@".fmt(year, month, day, hour, min);
+				if(simple){
+					return "%@-%@-%@".fmt(year, month, day);
+				}else{
+					return "%@-%@-%@ %@:%@".fmt(year, month, day, hour, min);
+				}
 			}
         }
 	}

@@ -1,5 +1,5 @@
-KG.createNoteImagePath = 'resources/images/note_32.png';
-KG.cancelCreateNoteImagePath = 'resources/images/note_32_cancel.png';
+KG.createNoteImagePath = 'resources/images/note.png';
+KG.cancelCreateNoteImagePath = 'resources/images/note.png';
 
 /**
 * Core functions to manage the Notes
