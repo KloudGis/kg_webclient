@@ -10,6 +10,20 @@ KG = SC.Application.create({
 	serverHost: '/'
 });
 
+//temp fix on jQuery1.6.2 (to remove with 1.7)
+(function(){
+    // remove layerX and layerY
+    var all = $.event.props,
+        len = all.length,
+        res = [];
+    while (len--) {
+      var el = all[len];
+      if (el != 'layerX' && el != 'layerY') res.push(el);
+    }
+    $.event.props = res;
+}());
+//end temp fix
+
 //jQuery extension
 $.extend({
     //extract from the URL a query value

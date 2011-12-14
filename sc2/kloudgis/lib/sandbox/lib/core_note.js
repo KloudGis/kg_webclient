@@ -312,13 +312,13 @@ KG.core_note = SC.Object.create({
         for (i = 0; i < len; i++) {
             var marker = KG.noteMarkersController.objectAt(i);
             if (marker) {
-                console.log('ADD marker with id=' + marker.get('id'));
+                //console.log('ADD marker with id=' + marker.get('id'));
                 KG.core_leaflet.addMarker(marker, this, this.markerClicked);
             }
         }
         params.olds.forEach(function(old) {
             if (markers.indexOf(old) === -1) {
-                console.log('Remove marker with id=' + old.get('id'));
+                //console.log('Remove marker with id=' + old.get('id'));
                 KG.core_leaflet.removeMarker(old);
                 var rtype = old.get('store').recordTypeFor(old.get('storeKey'));
                 KG.store.unloadRecord(rtype, old.get('id'));
