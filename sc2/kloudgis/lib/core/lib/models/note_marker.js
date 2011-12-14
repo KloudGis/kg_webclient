@@ -8,8 +8,6 @@ KG.NoteMarker = KG.Record.extend({
 
 	tip: SC.Record.attr(String),
 	
-	isOnMap: NO,
-	
 	features: SC.Record.toMany('KG.Note',{
 			isMaster: YES
 	}),

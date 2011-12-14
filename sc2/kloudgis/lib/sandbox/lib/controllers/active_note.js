@@ -4,7 +4,7 @@
 KG.activeNoteController = SC.Object.create({
     content: null,
 
-	marker: null,
+    marker: null,
 
     titleLabel: function() {
         return "_noteTitle".loc();
@@ -48,12 +48,16 @@ KG.activeNoteController = SC.Object.create({
         if (this.getPath('content.status') & SC.Record.BUSY) {
             return YES;
         }
+        return ! this.canEdit();
+    }.property('content.status', 'content.author'),
+
+    canEdit: function() {
         var auth = this.getPath('content.author');
         if (!auth || auth === KG.core_auth.get('activeUser').id) {
-            return NO;
+            return YES;
         }
-        return YES;
-    }.property('content.status', 'content.author'),
+        return NO;
+    },
 
     isUpdateVisible: function() {
         return ! this.get('isDisabled');
@@ -61,8 +65,7 @@ KG.activeNoteController = SC.Object.create({
 
     isDeleteVisible: function() {
         var auth = this.getPath('content.author');
-        if (this.getPath('content.status') !== SC.Record.READY_NEW && 
-(!auth || auth === KG.core_auth.get('activeUser').id || KG.core_sandbox.get('isSandboxOwner'))) {
+        if (this.getPath('content.status') !== SC.Record.READY_NEW && (!auth || auth === KG.core_auth.get('activeUser').id || KG.core_sandbox.get('isSandboxOwner'))) {
             return YES;
         }
         return NO;

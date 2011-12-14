@@ -353,6 +353,12 @@ KG.core_leaflet = SC.Object.create({
             KG.statechart.sendAction('markerDragEnded', lmarker._latlng.lng, lmarker._latlng.lat);
             SC.run.end();
         })
+		if(!SC.none(marker._native_marker)){
+			var map = this.map;
+			var old_native = marker._native_marker;
+			//differred to avoid flickering
+			setTimeout(function(){map.removeLayer(old_native);}, 250);		
+		}
         marker._native_marker = lmarker;
     },
 

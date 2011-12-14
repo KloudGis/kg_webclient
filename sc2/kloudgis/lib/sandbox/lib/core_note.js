@@ -194,8 +194,11 @@ KG.core_note = SC.Object.create({
         });
         this._view_active_note.appendTo(noteDiv);
         KG.activeNoteController.set('marker', marker);
-		KG.core_leaflet.enableDraggableMarker(marker);
         KG.activeNoteController.set('content', note);
+        if (KG.activeNoteController.canEdit()) {
+            console.log('note is draggable');
+            KG.core_leaflet.enableDraggableMarker(marker);
+        }
         setTimeout(function() {
             if (!SC.none(marker)) {
                 SC.run.begin();
@@ -278,14 +281,18 @@ KG.core_note = SC.Object.create({
         if (force || SC.none(this._zoom) || this._zoom != zoom || SC.none(this._bounds) || !this._bounds.contains(bounds)) {
             var fatBounds = KG.core_leaflet.getFatBounds();
             var dist = KG.core_leaflet.pixelsToWorld(20); //cluster within 20 pixels
+            var currentMarkers = [];
             if (KG.noteMarkersController.get('content')) {
                 var content = KG.noteMarkersController.get('content');
+                currentMarkers = content.toArray();
                 content.destroy();
             }
             KG.NOTE_MARKER_QUERY.fat_bounds = fatBounds;
-			KG.NOTE_MARKER_QUERY.distance = dist;
+            KG.NOTE_MARKER_QUERY.distance = dist;
             var newMarkers = KG.store.find(KG.NOTE_MARKER_QUERY);
-            newMarkers.onReady(this, this.markersReady);
+            newMarkers.onReady(this, this.markersReady, {
+                olds: currentMarkers
+            });
             KG.noteMarkersController.set('content', newMarkers);
             this._bounds = fatBounds;
             this._zoom = zoom;
@@ -297,28 +304,26 @@ KG.core_note = SC.Object.create({
     /**
 	* Markers from the server are now READY
 	**/
-    markersReady: function(markers) {
+    markersReady: function(markers, params) {
         markers.offReady();
         KG.notesPopupController.set('marker', null);
-        var rtype = markers.getPath('query.recordType');
-        var loadedMarkers = KG.store.find(rtype);
-        loadedMarkers.forEach(function(old) {
-            KG.core_leaflet.removeMarker(old);
-            old.set('isOnMap', NO);
+        var i;
+        var len = markers.get('length');
+        for (i = 0; i < len; i++) {
+            var marker = KG.noteMarkersController.objectAt(i);
+            if (marker) {
+                console.log('ADD marker with id=' + marker.get('id'));
+                KG.core_leaflet.addMarker(marker, this, this.markerClicked);
+            }
+        }
+        params.olds.forEach(function(old) {
             if (markers.indexOf(old) === -1) {
+                console.log('Remove marker with id=' + old.get('id'));
+                KG.core_leaflet.removeMarker(old);
+                var rtype = old.get('store').recordTypeFor(old.get('storeKey'));
                 KG.store.unloadRecord(rtype, old.get('id'));
             }
         });
-        var i;
-        for (i = 0; i < markers.get('length'); i++) {
-            var marker = KG.noteMarkersController.objectAt(i);
-            if (marker) {
-                if (!marker.get('isOnMap')) {
-                    KG.core_leaflet.addMarker(marker, this, this.markerClicked);
-                    marker.set('isOnMap', YES);
-                }
-            }
-        }
         //readd the hl marker if any (to put it on top)
         if (this._highlightMarker) {
             KG.core_leaflet.reAddMarker(this._highlightMarker);
@@ -382,10 +387,10 @@ KG.core_note = SC.Object.create({
         var nested_note = KG.activeNoteController.get('content');
         if (!SC.none(nested_note)) {
             var note = KG.store.find(nested_note);
-			var onReady = function() {
-                if(!refresh){
-					KG.activeCommentsController.set('isLoading', YES);            
-				}
+            var onReady = function() {
+                if (!refresh) {
+                    KG.activeCommentsController.set('isLoading', YES);
+                }
                 var comments = note.get('comments');
                 var params = {
                     count: 0,
@@ -401,15 +406,15 @@ KG.core_note = SC.Object.create({
                 } else {
                     console.log('NO comments');
                     KG.activeCommentsController.set('isLoading', NO);
-					KG.activeCommentsController.set('content', []);
+                    KG.activeCommentsController.set('content', []);
                     KG.statechart.sendAction('commentsReadyEvent');
                 }
             };
-			if(refresh){
-				note.refresh(YES, onReady);
-			}else{
-            	note.onReady(null, onReady);
-			}
+            if (refresh) {
+                note.refresh(YES, onReady);
+            } else {
+                note.onReady(null, onReady);
+            }
         }
     },
 
@@ -459,13 +464,16 @@ KG.core_note = SC.Object.create({
         KG.store.commitRecords(null, null, [comment.get('storeKey')]);
     },
 
-	updatePosition: function(lon, lat){
-		KG.activeNoteController.get('content').set('coordinate', {x: lon, y: lat});
-		var marker = KG.activeNoteController.get('marker');
-		/*var dataHash = KG.store.readDataHash(marker.get('storeKey'));
+    updatePosition: function(lon, lat) {
+        KG.activeNoteController.get('content').set('coordinate', {
+            x: lon,
+            y: lat
+        });
+        var marker = KG.activeNoteController.get('marker');
+        /*var dataHash = KG.store.readDataHash(marker.get('storeKey'));
 		dataHash.lat = lat;
 		dataHash.lon = lon;
 		KG.store.pushRetrieve(null, null, dataHash, marker.get('storeKey'));*/
-		KG.core_leaflet.updatePopupMarkerPosition(lon,lat);
-	}
+        KG.core_leaflet.updatePopupMarkerPosition(lon, lat);
+    }
 });
