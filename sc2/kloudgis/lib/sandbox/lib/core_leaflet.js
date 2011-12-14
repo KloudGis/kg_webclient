@@ -385,7 +385,7 @@ KG.core_leaflet = SC.Object.create({
         lmarker.on('dragend',
         function() {
             SC.run.begin();
-            KG.statechart.sendAction('notePositionSetAction');
+            KG.statechart.sendAction('notePositionSetAction', lmarker._latlng.lng, lmarker._latlng.lat);
             SC.run.end();
         })
         lmarker.bindPopup(popupContent);

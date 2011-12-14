@@ -605,6 +605,10 @@ SC.mixin(KG, {
                         exitState: function() {
                             KG.core_leaflet.closePopup();
                             KG.core_note.clearCreateNote();
+							var marker = KG.activeNoteController.get('marker');
+							if(marker){
+								KG.core_leaflet.disableDraggableMarker(marker);
+							}
                         },
 
                         mapMovedAction: function() {
@@ -680,7 +684,7 @@ SC.mixin(KG, {
 
                             exitState: function() {
                                 console.log('exit createNoteState');
-                                KG.core_note.rollbackModifications();
+                                KG.core_note.rollbackModifications();								
                                 KG.activeNoteController.set('content', null);
                                 KG.core_note.clearCreateNote();
                                 KG.core_sandbox.destroyAutosize('#note-description-area');
@@ -695,7 +699,11 @@ SC.mixin(KG, {
 
                             cancelCreateNoteAction: function() {
                                 this.gotoState('navigationState');
-                            }
+                            },
+
+							notePositionSetAction: function(lon,lat){
+								KG.core_note.updatePosition(lon, lat);
+							}
 
                         }),
 

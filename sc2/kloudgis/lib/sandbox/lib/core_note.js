@@ -143,7 +143,6 @@ KG.core_note = SC.Object.create({
         }
         if (note) {
             var marker = this._new_note_marker;
-            KG.core_leaflet.disableDraggableMarker(marker);
             this.activateNote(note, {
                 marker: marker
             });
@@ -463,10 +462,10 @@ KG.core_note = SC.Object.create({
 	updatePosition: function(lon, lat){
 		KG.activeNoteController.get('content').set('coordinate', {x: lon, y: lat});
 		var marker = KG.activeNoteController.get('marker');
-		var dataHash = KG.store.readDataHash(marker.get('storeKey'));
+		/*var dataHash = KG.store.readDataHash(marker.get('storeKey'));
 		dataHash.lat = lat;
 		dataHash.lon = lon;
-		KG.store.pushRetrieve(null, null, dataHash, marker.get('storeKey'));
+		KG.store.pushRetrieve(null, null, dataHash, marker.get('storeKey'));*/
 		KG.core_leaflet.updatePopupMarkerPosition(lon,lat);
 	}
 });
