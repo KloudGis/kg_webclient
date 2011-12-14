@@ -1,7 +1,7 @@
 KG.NotificationView = SC.View.extend({
 	
 	authorValue:function(){
-		return this.getPath('contentView.content.author');
+		return this.getPath('contentView.content.user_descriptor');
 	}.property('content'),
 	
 	authorMailTo: function(){

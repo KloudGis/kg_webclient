@@ -288,7 +288,7 @@
 							{{view KG.Button id="bookmark-add-button" tagName="span" class="white-button unselectable" sc_action="addBookmarkAction"}}
 							{{view KG.EditBookmarkButtonView id="bookmark-edit-button" tagName="span" class="white-button unselectable" sc_action="editBookmarkAction"}}											
 						</div>
-						{{#collection id="bookmark-list" contentBinding="KG.bookmarksController.content" tagName="table"}}	
+						{{#collection id="bookmark-list" contentBinding="KG.bookmarksController.content" tagName="table" itemViewClass="KG.BookmarkItemView" classBinding="KG.bookmarksController.editMode"}}	
 								{{#view KG.Button class="bookmark-item-label" tagName="td" sc_action="selectBookmarkAction"}}
 									{{itemView.content.label}}
 								{{/view}}								

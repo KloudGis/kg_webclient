@@ -236,6 +236,7 @@ SC.mixin(KG, {
                                 }
                                 var notification = KG.Message.create({
                                     type: 'text',
+									user_descriptor: KG.core_sandbox.get('membership').user_descriptor,
                                     author: KG.core_auth.get('activeUser').user,
                                     content: {
                                         text: message
@@ -283,6 +284,7 @@ SC.mixin(KG, {
 
                         enterState: function() {
                             KG.bookmarksController.set('activePopup', YES);
+							KG.core_bookmark.refreshBookmarks();
                         },
 
                         exitState: function() {
@@ -292,6 +294,10 @@ SC.mixin(KG, {
                         toggleBookmarkPopupAction: function() {
                             this.gotoState('noPopupState');
                         },
+
+						refreshBookmarkAction: function(){
+							KG.core_bookmark.refreshBookmarks();
+						},
 
                         normalModeState: SC.State.extend({
 	

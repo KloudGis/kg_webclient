@@ -6,6 +6,10 @@ KG.core_bookmark = SC.Object.create({
         bm.onReady(this, this._bmReady);
     },
 
+	refreshBookmarks: function(){
+		 KG.bookmarksController.get('content').refresh();
+	},
+
     _bmReady: function(bookmarks) {
         //?
     },

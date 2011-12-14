@@ -58,18 +58,12 @@
 }
 
 #bookmark-list tr{
-	padding-bottom:1px;
-	border-bottom:1px solid #E6E6E6;
+	padding-bottom:2px;
 }
 
 #bookmark-list tr:hover{
 	background: rgba(0,0,255,0.5);
-	border-radius:10px;
 	color: white;
-}
-
-#bookmark-list tr:last-child{
-	border-bottom:none;
 }
 
 #bookmark-list td{
@@ -77,22 +71,34 @@
 	padding-bottom:5px;
 	vertical-align:middle;
 	cursor: pointer;
+	border:1px solid #E6E6E6;
 }
 
 #bookmark-list  tr td:nth-child(1){
 	font-size:14px;
 	text-align:center;
+	border-right:none;
+	min-width: 80px;
 }
 
 #bookmark-list tr td:nth-child(2){
-	white-space: nowrap;
 	font-size:11px;
+	border-right:none;
+	border-left:none;
 }
 
 #bookmark-list tr td:nth-child(3){
-	white-space: nowrap;
 	font-style: italic;
-	font-size:10px;
+	font-size:11px;
+	border-left:none;
+}
+
+#bookmark-list.edit-mode tr td:nth-child(3){
+	border-right:none;
+}
+
+#bookmark-list tr td:nth-child(4){
+	border-left:none;
 }
 
 

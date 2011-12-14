@@ -1,6 +1,7 @@
 KG.Message = SC.Object.extend({
 	
 	author: null,
+	user_descriptor: null,
 	type: null,
 	content: null,
 	dateMillis: null,
@@ -17,6 +18,7 @@ KG.Message = SC.Object.extend({
 	toDataHash:function(){
 		return {
 			author: this.author,
+			user_descriptor: this.user_descriptor,
 			type : this.type,
 			content: this.content,
 			dateMillis: this.dateMillis

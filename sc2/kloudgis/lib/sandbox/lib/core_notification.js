@@ -51,19 +51,24 @@ KG.core_notification = SC.Object.create({
                         var oData = JSON.parse(data);
                         var messageData = KG.Message.create(oData);
                         if (messageData.get('author') !== KG.core_auth.get('activeUser').user) {
-                            if (messageData.get('type') === 'text') {
+							
+                            if (messageData.get('type') === 'text') {				//text message (Chat)
                                 KG.notificationsController.insertAt(0, messageData);
-                            } else if (messageData.get('type') === 'note') {
-								console.log('Note message: ' + messageData.getPath('content.modif_type'));
+                            } else if (messageData.get('type') === 'note') {		//message related to Note
                                 KG.core_note.refreshMarkers(YES);
-                            } else if (messageData.get('type') === 'note_comment') {
+                            } else if (messageData.get('type') === 'note_comment') {//message related to Note Comment
                                 var aNote = KG.activeNoteController.get('content');
                                 if (!SC.none(aNote) && aNote.get('id') === messageData.getPath('content.note_id')) {
-									console.log('Comment for active note: ' + messageData.getPath('content.modif_type'));
+									//reload the comments if the change is for the active note
                                     KG.core_note.fetchComments(YES);
                                 }
+                            } else if (messageData.get('type') === 'bookmark') {	//message related to Bookmark
+								if(messageData.getPath('content.modif_type') === 'delete'){
+									KG.store.unloadRecord(KG.Bookmark, messageData.getPath('content.id'));
+								}
+                                KG.statechart.sendAction('refreshBookmarkAction');
                             }
-                        } else {
+                        } else {//message from current user: Confirmation feedback
                             KG.statechart.sendAction('notificationSent', messageData);
                         }
                     } catch(e) {
