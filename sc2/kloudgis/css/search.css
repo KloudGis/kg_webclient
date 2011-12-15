@@ -28,13 +28,16 @@
 }
 
 .search-cat-item{
+	margin-top:2px;
 	padding:0.1cm;
 	text-align: left;
+	border-radius: 10px;
+	border: 1px solid rgba(0,0,0,0.5);
+	cursor: pointer;
 }
 
 .search-cat-item:hover{
 	background-color: rgba(0,0,0,0.5);
-	border-radius: 10px;
 }
 
 .search-category-table{
@@ -66,6 +69,7 @@
 	text-align: center;
 	background:gray;
 	border-radius: 10px;
+	cursor: pointer;
 }
 
 .search-plugin-item:hover{
@@ -144,12 +148,15 @@
 }
 
 .search-result-list li{
+	margin-top:2px;
 	padding:0 0.5em 0 0.5em;
+	border-radius: 10px;
+	border: 1px solid rgba(0,0,0,0.5);
+	cursor: pointer;
 }
 
 .search-result-list li:hover{
 	background: rgba(0,0,0,0.5);
-	border-radius:1em;
 }
 
 .search-result-table{

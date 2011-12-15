@@ -65,6 +65,7 @@
 	height:30px;
 	border:none;
 	background: url(../resources/images/closebox.png);
+	cursor: pointer;
 }
 
 .capsule-label{
