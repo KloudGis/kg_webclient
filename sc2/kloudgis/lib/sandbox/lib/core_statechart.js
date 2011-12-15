@@ -650,13 +650,11 @@ SC.mixin(KG, {
                                 },
                                 500);
                                 KG.core_note.locateNote();
-                                KG.core_note.set('createNoteLabel', "_cancelCreateNote".loc());
-                                KG.core_note.set('createNoteImg', KG.get('cancelCreateNoteImagePath'));
+                                KG.activeNoteController.set('createNoteLabel', "_cancelCreateNote".loc());
                             },
 
                             exitState: function() {
-                                KG.core_note.set('createNoteLabel', "_createNote".loc());
-                                KG.core_note.set('createNoteImg', KG.get('createNoteImagePath'));
+                                KG.activeNoteController.set('createNoteLabel', "_createNote".loc());
                             },
 
                             hideMarkerPopupAction: function() {},
@@ -727,6 +725,7 @@ SC.mixin(KG, {
                                 console.log('exit multiple notes');
                                 KG.notesPopupController.set('marker', null);
                                 KG.notesPopupController.set('content', []);
+								KG.core_note.cleanUpMultipleNotesElements();
                             },
 
                             noteSelectedAction: function(note, params) {

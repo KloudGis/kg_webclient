@@ -1,6 +1,3 @@
-KG.createNoteImagePath = 'resources/images/note.png';
-KG.cancelCreateNoteImagePath = 'resources/images/note.png';
-
 /**
 * Core functions to manage the Notes
 **/
@@ -11,18 +8,11 @@ KG.core_note = SC.Object.create({
     _zoom: null,
 
     /* elements for the active note view*/
-    _div_active_note: null,
     _view_active_note: null,
     _new_note_marker: null,
 
-    /* Super element to put in a note marker popup */
-    _div_multiple_notes: null,
     /* SC view to generate html bind on the  KG.notesPopupController*/
     _view_multiple_notes: null,
-
-    /* label and image for the create note control*/
-    createNoteLabel: "_createNote".loc(),
-    createNoteImg: KG.createNoteImagePath,
 
     /* chained store to perform modifications*/
     _store: null,
@@ -185,10 +175,7 @@ KG.core_note = SC.Object.create({
 	**/
     continueActivateNote: function(note, marker) {
         this.cleanUpActiveNoteElements();
-        var noteDiv = this._div_active_note;
-        if (SC.none(noteDiv)) {
-            var noteDiv = this._div_active_note = document.createElement('div');
-        }
+        var noteDiv = document.createElement('div');
         this._view_active_note = SC.View.create({
             templateName: 'active-note-popup',
         });
@@ -215,6 +202,17 @@ KG.core_note = SC.Object.create({
     cleanUpActiveNoteElements: function() {
         if (!SC.none(this._view_active_note)) {
             this._view_active_note.destroy();
+            this._view_active_note = null;
+        }
+    },
+
+    /**
+	* cleanup the view used to render the active note.
+	**/
+    cleanUpMultipleNotesElements: function() {
+        if (!SC.none(this._view_multiple_notes)) {
+            this._view_multiple_notes.destroy();
+            this._view_multiple_notes = null;
         }
     },
 
@@ -226,16 +224,14 @@ KG.core_note = SC.Object.create({
 	* More then one note to activate. Show a list of notes.
 	**/
     activateMultipleNotes: function(notes, marker) {
+        this.cleanUpMultipleNotesElements();
         KG.notesPopupController.set('marker', marker);
         KG.notesPopupController.set('content', notes);
-        if (SC.none(this._div_multiple_notes)) {
-            this._div_multiple_notes = document.createElement('div');
-            this._view_multiple_notes = SC.View.create({
-                templateName: 'notes-marker-popup',
-            });
-            this._view_multiple_notes.appendTo(this._div_multiple_notes);
-        }
-        var div = this._div_multiple_notes;
+        var div = document.createElement('div');
+        this._view_multiple_notes = SC.View.create({
+            templateName: 'notes-marker-popup',
+        });
+        this._view_multiple_notes.appendTo(div);
         setTimeout(function() {
             SC.run.begin();
             KG.core_leaflet.showPopupMarker(marker, div);
@@ -276,6 +272,7 @@ KG.core_note = SC.Object.create({
 	* flush and recalculate the note clusters
 	**/
     refreshMarkers: function(force) {
+	console.log('Refresh markers, Force:' + force);
         var bounds = KG.core_leaflet.getBounds();
         var zoom = KG.core_leaflet.getZoom();
         if (force || SC.none(this._zoom) || this._zoom != zoom || SC.none(this._bounds) || !this._bounds.contains(bounds)) {
@@ -307,23 +304,27 @@ KG.core_note = SC.Object.create({
     markersReady: function(markers, params) {
         markers.offReady();
         KG.notesPopupController.set('marker', null);
+
+        params.olds.forEach(function(old) {
+            if (markers.indexOf(old) !== -1) {
+				//remove the shadow but keep the markers because it is still visible - will be removed on insert of the new one
+                KG.core_leaflet.removeShadow(old);             
+            }else{
+				//completly remove the marker - no good anymore
+				KG.core_leaflet.removeMarker(old);
+                var rtype = old.get('store').recordTypeFor(old.get('storeKey'));
+                KG.store.unloadRecord(rtype, old.get('id'));
+			}
+        });
         var i;
         var len = markers.get('length');
         for (i = 0; i < len; i++) {
             var marker = KG.noteMarkersController.objectAt(i);
             if (marker) {
-                //console.log('ADD marker with id=' + marker.get('id'));
+                //add the marker - If the marker was already visible, it replace it (remove the old one)
                 KG.core_leaflet.addMarker(marker, this, this.markerClicked);
             }
         }
-        params.olds.forEach(function(old) {
-            if (markers.indexOf(old) === -1) {
-                //console.log('Remove marker with id=' + old.get('id'));
-                KG.core_leaflet.removeMarker(old);
-                var rtype = old.get('store').recordTypeFor(old.get('storeKey'));
-                KG.store.unloadRecord(rtype, old.get('id'));
-            }
-        });
         //readd the hl marker if any (to put it on top)
         if (this._highlightMarker) {
             KG.core_leaflet.reAddMarker(this._highlightMarker);
@@ -469,8 +470,8 @@ KG.core_note = SC.Object.create({
             x: lon,
             y: lat
         });
-        var marker = KG.activeNoteController.get('marker');
-        /*var dataHash = KG.store.readDataHash(marker.get('storeKey'));
+        /*var marker = KG.activeNoteController.get('marker');
+        var dataHash = KG.store.readDataHash(marker.get('storeKey'));
 		dataHash.lat = lat;
 		dataHash.lon = lon;
 		KG.store.pushRetrieve(null, null, dataHash, marker.get('storeKey'));*/

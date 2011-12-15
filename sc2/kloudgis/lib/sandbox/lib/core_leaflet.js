@@ -17,10 +17,8 @@ KG.core_leaflet = SC.Object.create({
 
     //	layerControl: new L.Control.Layers(),
     addToDocument: function(lon, lat, zoom) {
-	
-	
-	
-		//patch to make the popup hide on Safari Mac.
+
+        //patch to make the popup hide on Safari Mac.
         if ($.browser.safari && navigator.platform.indexOf('Mac') == 0) {
             L.Popup.prototype._close = function() {
                 if (this._opened) {
@@ -35,21 +33,19 @@ KG.core_leaflet = SC.Object.create({
             };
         }
 
-		var baseLayer;
-		var key = 'Anvn3DMhTFsggcirvNz1TNQrxCzksEg-b47gtD7AO1iOzZicEiF2mFZoleYMkX8z';
-		baseLayer = new L.BingLayer(key);
-		
-	
-		
-/*        var osmURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        var baseLayer;
+        var key = 'Anvn3DMhTFsggcirvNz1TNQrxCzksEg-b47gtD7AO1iOzZicEiF2mFZoleYMkX8z';
+        baseLayer = new L.BingLayer(key);
+
+        /*        var osmURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 		var at = 'OSM';
 		baseLayer = new L.TileLayer(osmURL, {
 		    maxZoom: 20,
 		    attribution: at
 		});
 		*/
-		
-	/*	var key = '8ccaf9c293f247d6b18a30fce375e298';
+
+        /*	var key = '8ccaf9c293f247d6b18a30fce375e298';
         var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/' + key + '/997/256/{z}/{x}/{y}.png',
         cloudmadeAttribution = 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
         baseLayer = new L.TileLayer(cloudmadeUrl, {
@@ -67,10 +63,10 @@ KG.core_leaflet = SC.Object.create({
 
         // initialize the map on the "map" div
         var map = new L.Map('map', {});
-		//default QUEBEC
-		lon = lon || -72;
-		lat = lat || 46;
-		zoom = zoom || 5;
+        //default QUEBEC
+        lon = lon || -72;
+        lat = lat || 46;
+        zoom = zoom || 5;
         map.setView(new L.LatLng(lat, lon), zoom).addLayer(baseLayer);
         //this.layerControl.addBaseLayer(layer, "Base");
         this.map = map;
@@ -143,7 +139,7 @@ KG.core_leaflet = SC.Object.create({
 
     onZoom: function(e) {
         SC.run.begin();
-        KG.statechart.sendAction('mapZoomedAction', this);		
+        KG.statechart.sendAction('mapZoomedAction', this);
         KG.core_sandbox.setCenter(this.getCenter(), this.getZoom());
         SC.run.end();
     },
@@ -347,18 +343,21 @@ KG.core_leaflet = SC.Object.create({
             click_cb.call(click_target, marker);
             SC.run.end();
         });
-		lmarker.on('dragend',
+        lmarker.on('dragend',
         function() {
             SC.run.begin();
             KG.statechart.sendAction('markerDragEnded', lmarker._latlng.lng, lmarker._latlng.lat);
             SC.run.end();
         })
-		if(!SC.none(marker._native_marker)){
-			var map = this.map;
-			var old_native = marker._native_marker;
-			//differred to avoid flickering
-			setTimeout(function(){map.removeLayer(old_native);}, 250);		
-		}
+        if (!SC.none(marker._native_marker)) {
+            var map = this.map;
+            var old_native = marker._native_marker;
+            //differred to avoid flickering
+            setTimeout(function() {
+                map.removeLayer(old_native);
+            },
+            250);
+        }
         marker._native_marker = lmarker;
     },
 
@@ -416,7 +415,7 @@ KG.core_leaflet = SC.Object.create({
         return marker;
     },
 
-	enableDraggableMarker: function(marker) {
+    enableDraggableMarker: function(marker) {
         if (marker && marker._native_marker) {
             var nativ = marker._native_marker;
             nativ.options.draggable = true;
@@ -451,6 +450,12 @@ KG.core_leaflet = SC.Object.create({
                 return this._native_marker._latlng.lat;
             }.property()
         });
+		lmarker.on('dragend',
+        function() {
+            SC.run.begin();
+            KG.statechart.sendAction('markerDragEnded', lmarker._latlng.lng, lmarker._latlng.lat);
+            SC.run.end();
+        })
         this.map.addLayer(lmarker);
         return marker;
     },
@@ -460,13 +465,13 @@ KG.core_leaflet = SC.Object.create({
             layers: layer.get('name'),
             transparent: YES,
             format: 'image/png',
-			tiled: YES,
-			tilesorigin:'0,0',
-			//set to YES to by pass geowebcache
+            tiled: YES,
+            tilesorigin: '0,0',
+            //set to YES to by pass geowebcache
             no_gwc: NO,
             kg_layer: layer.get('id'),
             kg_sandbox: KG.get('activeSandboxKey'),
-			auth_token: KG.core_auth.get('authenticationToken')
+            auth_token: KG.core_auth.get('authenticationToken')
         });
         layer._native_layer = wms;
         this.map.addLayer(wms);
@@ -482,7 +487,7 @@ KG.core_leaflet = SC.Object.create({
 
     showPopupMarker: function(marker, content) {
         var popup = this._popupMarker;
-        this.updatePopupMarkerPosition(marker.get('lon'),marker.get('lat'));
+        this.updatePopupMarkerPosition(marker.get('lon'), marker.get('lat'));
         popup.setContent(content);
         if (!popup._opened) {
             this.map.openPopup(popup);
@@ -498,10 +503,10 @@ KG.core_leaflet = SC.Object.create({
         1);
     },
 
-	updatePopupMarkerPosition: function(lon, lat){
-		var popup = this._popupMarker;
-		popup.setLatLng(new L.LatLng(lat, lon));
-	},
+    updatePopupMarkerPosition: function(lon, lat) {
+        var popup = this._popupMarker;
+        popup.setLatLng(new L.LatLng(lat, lon));
+    },
 
     closePopup: function() {
         this.map.closePopup();
@@ -535,8 +540,8 @@ KG.core_leaflet = SC.Object.create({
         if (!geo) {
             return NO;
         }
-		var coords = geo.coords;
-		var geo_type = geo.geo_type;
+        var coords = geo.coords;
+        var geo_type = geo.geo_type;
         var options = {
             color: '#0033ff',
             weight: 5,
@@ -596,7 +601,9 @@ KG.core_leaflet = SC.Object.create({
         return layer;
     },
 
-    _temp: null, _temp2: null, printBoundsA: function() {
+    _temp: null,
+    _temp2: null,
+    printBoundsA: function() {
         if (!SC.none(this._temp)) {
             this.map.removeLayer(this._temp);
         }
@@ -646,126 +653,129 @@ KG.core_leaflet = SC.Object.create({
         this._temp = new L.Polygon(pts);
         this.map.addLayer(this._temp);
         return bounds;
-    }
+    },
 
+    removeShadow: function(marker) {
+        if (marker._native_marker && marker._native_marker._shadow) {
+            marker._native_marker._map._panes.shadowPane.removeChild(marker._native_marker._shadow);
+			marker._native_marker._shadow = undefined;
+        }
+    }
 });
 
 //***********************************
 // From a pull request not yet integrated
 // https://github.com/CloudMade/Leaflet/pull/291
 // to remove when included in Leaflet
-
 L.BingLayer = L.TileLayer.extend({
-	options: {
-		subdomains: [0, 1, 2, 3],
-		attribution: 'Bing',
-	},
+    options: {
+        subdomains: [0, 1, 2, 3],
+        attribution: 'Bing',
+    },
 
-	initialize: function(key, options) {
-		L.Util.setOptions(this, options);
+    initialize: function(key, options) {
+        L.Util.setOptions(this, options);
 
-		this._key = key;
-		this._url = null;
-		this.meta = {};
-		this._update_tile = this._update;
-		this._update = function() {
-			if (this._url == null) return;
-			this._update_attribution();
-			this._update_tile();
-		};
-		this.loadMetadata();
-	},
+        this._key = key;
+        this._url = null;
+        this.meta = {};
+        this._update_tile = this._update;
+        this._update = function() {
+            if (this._url == null) return;
+            this._update_attribution();
+            this._update_tile();
+        };
+        this.loadMetadata();
+    },
 
-	tile2quad: function(x, y, z) {
-		var quad = '';
-		for (var i = z; i > 0; i--) {
-			var digit = 0;
-			var mask = 1 << (i - 1);
-			if ((x & mask) != 0) digit += 1;
-			if ((y & mask) != 0) digit += 2;
-			quad = quad + digit;
-		}
-		return quad;
-	},
+    tile2quad: function(x, y, z) {
+        var quad = '';
+        for (var i = z; i > 0; i--) {
+            var digit = 0;
+            var mask = 1 << (i - 1);
+            if ((x & mask) != 0) digit += 1;
+            if ((y & mask) != 0) digit += 2;
+            quad = quad + digit;
+        }
+        return quad;
+    },
 
-	getTileUrl: function(p, z) {
-		var subdomains = this.options.subdomains,
-			s = this.options.subdomains[(p.x + p.y) % subdomains.length];
-		return this._url.replace('{subdomain}', s)
-				.replace('{quadkey}', this.tile2quad(p.x, p.y, z))
-				.replace('{culture}', '');
-	},
+    getTileUrl: function(p, z) {
+        var subdomains = this.options.subdomains,
+        s = this.options.subdomains[(p.x + p.y) % subdomains.length];
+        return this._url.replace('{subdomain}', s).replace('{quadkey}', this.tile2quad(p.x, p.y, z)).replace('{culture}', '');
+    },
 
-	loadMetadata: function() {
-		var _this = this;
-		var cbid = '_bing_metadata';
-		window[cbid] = function (meta) {
-			_this.meta = meta;
-			window[cbid] = undefined;
-			var e = document.getElementById(cbid);
-			e.parentNode.removeChild(e);
-			if (meta.errorDetails) {
-				alert("Got metadata" + meta.errorDetails);
-				return;
-			}
-			_this.initMetadata();
-		};
-		//AerialWithLabels,Aerial or Road
-		var url = "http://dev.virtualearth.net/REST/v1/Imagery/Metadata/Road?include=ImageryProviders&jsonp=" + cbid + "&key=" + this._key;
-		var script = document.createElement("script");
-		script.type = "text/javascript";
-		script.src = url;
-		script.id = cbid;
-		document.getElementsByTagName("head")[0].appendChild(script);
-	},
+    loadMetadata: function() {
+        var _this = this;
+        var cbid = '_bing_metadata';
+        window[cbid] = function(meta) {
+            _this.meta = meta;
+            window[cbid] = undefined;
+            var e = document.getElementById(cbid);
+            e.parentNode.removeChild(e);
+            if (meta.errorDetails) {
+                alert("Got metadata" + meta.errorDetails);
+                return;
+            }
+            _this.initMetadata();
+        };
+        //AerialWithLabels,Aerial or Road
+        var url = "http://dev.virtualearth.net/REST/v1/Imagery/Metadata/Road?include=ImageryProviders&jsonp=" + cbid + "&key=" + this._key;
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = url;
+        script.id = cbid;
+        document.getElementsByTagName("head")[0].appendChild(script);
+    },
 
-	initMetadata: function() {
-		var r = this.meta.resourceSets[0].resources[0];
-		this.options.subdomains = r.imageUrlSubdomains;
-		this._url = r.imageUrl;
-		this._providers = [];
-		for (var i = 0; i < r.imageryProviders.length; i++) {
-			var p = r.imageryProviders[i];
-			for (var j = 0; j < p.coverageAreas.length; j++) {
-				var c = p.coverageAreas[j];
-				var coverage = {zoomMin: c.zoomMin, zoomMax: c.zoomMax, active: false};
-				var bounds = new L.LatLngBounds(
-						new L.LatLng(c.bbox[0]+0.01, c.bbox[1]+0.01),
-						new L.LatLng(c.bbox[2]-0.01, c.bbox[3]-0.01)
-				);
-				coverage.bounds = bounds;
-				coverage.attrib = p.attribution;
-				this._providers.push(coverage);
-			}
-		}
-		this._update();
-	},
+    initMetadata: function() {
+        var r = this.meta.resourceSets[0].resources[0];
+        this.options.subdomains = r.imageUrlSubdomains;
+        this._url = r.imageUrl;
+        this._providers = [];
+        for (var i = 0; i < r.imageryProviders.length; i++) {
+            var p = r.imageryProviders[i];
+            for (var j = 0; j < p.coverageAreas.length; j++) {
+                var c = p.coverageAreas[j];
+                var coverage = {
+                    zoomMin: c.zoomMin,
+                    zoomMax: c.zoomMax,
+                    active: false
+                };
+                var bounds = new L.LatLngBounds(
+                new L.LatLng(c.bbox[0] + 0.01, c.bbox[1] + 0.01), new L.LatLng(c.bbox[2] - 0.01, c.bbox[3] - 0.01));
+                coverage.bounds = bounds;
+                coverage.attrib = p.attribution;
+                this._providers.push(coverage);
+            }
+        }
+        this._update();
+    },
 
-	_update_attribution: function() {
-		var bounds = this._map.getBounds();
-		var zoom = this._map.getZoom();
-		for (var i = 0; i < this._providers.length; i++) {
-			var p = this._providers[i];
-			if ((zoom <= p.zoomMax && zoom >= p.zoomMin) &&
-				this._intersects(bounds, p.bounds)) {
-				if (!p.active)
-					this._map.attributionControl.addAttribution(p.attrib);
-				p.active = true;
-			} else {
-				if (p.active)
-					this._map.attributionControl.removeAttribution(p.attrib);
-				p.active = false;
-			}
-		}
-	},
+    _update_attribution: function() {
+        var bounds = this._map.getBounds();
+        var zoom = this._map.getZoom();
+        for (var i = 0; i < this._providers.length; i++) {
+            var p = this._providers[i];
+            if ((zoom <= p.zoomMax && zoom >= p.zoomMin) && this._intersects(bounds, p.bounds)) {
+                if (!p.active) this._map.attributionControl.addAttribution(p.attrib);
+                p.active = true;
+            } else {
+                if (p.active) this._map.attributionControl.removeAttribution(p.attrib);
+                p.active = false;
+            }
+        }
+    },
 
-	_intersects: function(obj1, obj2) /*-> Boolean*/ {
-		var sw = obj1.getSouthWest(),
-			ne = obj1.getNorthEast(),
-			sw2 = obj2.getSouthWest(),
-			ne2 = obj2.getNorthEast();
+    _intersects: function(obj1, obj2)
+    /*-> Boolean*/
+    {
+        var sw = obj1.getSouthWest(),
+        ne = obj1.getNorthEast(),
+        sw2 = obj2.getSouthWest(),
+        ne2 = obj2.getNorthEast();
 
-		return (sw2.lat <= ne.lat) && (sw2.lng <= ne.lng) &&
-				(sw.lat <= ne2.lat) && (sw.lng <= ne2.lng);
-	}
+        return (sw2.lat <= ne.lat) && (sw2.lng <= ne.lng) && (sw.lat <= ne2.lat) && (sw.lng <= ne2.lng);
+    }
 });

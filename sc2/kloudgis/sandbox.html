@@ -237,8 +237,8 @@
 			</span>			
 			<span id="create-note" class="kg-controls clickable">
 				<script type="text/x-handlebars">
-					{{#view  KG.Button tagName="div" titleBinding="KG.core_note.createNoteLabel" classBinding="isActive" sc_action="createNoteAction"}}
-						<img {{bindAttr src="KG.core_note.createNoteImg"}}/>
+					{{#view  KG.Button tagName="div" titleBinding="KG.activeNoteController.createNoteLabel" classBinding="isActive" sc_action="createNoteAction"}}
+						<img src="resources/images/note.png"/>
 					{{/view}}
 				</script>
 			</span>
