@@ -72,3 +72,4 @@ require("./controllers/add_bookmark");
 require("./views/bookmark_button");
 require("./views/edit_bookmark_button");
 require("./views/bookmark_item");
+require("./views/bookmark_delete_button");
