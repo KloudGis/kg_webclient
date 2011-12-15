@@ -10,6 +10,24 @@ KG = SC.Application.create({
 	serverHost: '/'
 });
 
+//loc helper
+Handlebars.registerHelper('loc', function(property, options) {
+  	var value = property.loc();
+	if(options.hash.id){
+		var tag = options.hash.tagName || 'span';
+		return new Handlebars.SafeString('<'+tag+' id="'+options.hash.id+'">'+value+'</'+tag+'>'); 
+	}
+	return value;
+});
+//highlight helper
+Handlebars.registerHelper('highlight', function(property) {
+  var value = SC.getPath(this, property);
+  return new Handlebars.SafeString('<span class="highlight">'+value+'</span>');
+});
+
+
+
+
 //temp fix on jQuery1.6.2 (to remove with 1.7)
 (function(){
     // remove layerX and layerY

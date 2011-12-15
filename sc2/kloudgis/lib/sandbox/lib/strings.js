@@ -108,11 +108,4 @@ if(KG.lang === 'fr'){
 SC.run.schedule('render',null, function(){
 	console.log('localize page');
 	$('#back-home a').text("_backHome".loc());
-	$('#create-note a').text("_createNote".loc());
-	$('#notification-label').text("_notificationTitle".loc());
-	$('#notification-clear-button').text("_notificationClear".loc());
-	$('#notification-send-button').text("_notificationSendText".loc());	
-	$('#bookmark-label').text("_bookmarkTitle".loc());
-	$('#bookmark-add-button').text("_bookmarkAdd".loc());
-	$('#bookmark-edit-button').text("_bookmarkEdit".loc());
 });

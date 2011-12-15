@@ -128,9 +128,9 @@
 
 .new-note-marker{
 	top:-1000px;
-	transition:top 0.9s ease-in;
-	-webkit-transition:top 0.9s ease-in;
-	-moz-transition:top 0.9s ease-in;
+	transition:top 0.9s ease-out;
+	-webkit-transition:top 0.9s ease-out;
+	-moz-transition:top 0.9s ease-out;
 }
 
 .new-note-marker.new-note-marker-ready{

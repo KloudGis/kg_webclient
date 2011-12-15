@@ -256,11 +256,16 @@
 					{{/view}}
 					{{#view id="notification-popup" isVisibleBinding="KG.notificationsController.activePopup"}}
 						{{#view id="notification-label"}}
+							{{loc _notificationTitle}}
 						{{/view}}
 						<div>
-						{{view KG.Button id="notification-send-button" tagName="span" class="white-button unselectable" classBinding="KG.notificationsController.hasNotification" sc_action="sendTextNotificationAction"}}
-						{{view KG.Button id="notification-clear-button" tagName="span" class="red-button unselectable" 
-						 isVisibleBinding="KG.notificationsController.hasNotification" sc_action="clearNotificationAction"}}						
+						{{#view KG.Button id="notification-send-button" tagName="span" class="white-button unselectable" classBinding="KG.notificationsController.hasNotification" sc_action="sendTextNotificationAction"}}
+							{{loc _notificationSendText}}
+						{{/view}}
+						{{#view KG.Button id="notification-clear-button" tagName="span" class="red-button unselectable" 
+						 isVisibleBinding="KG.notificationsController.hasNotification" sc_action="clearNotificationAction"}}
+							{{loc _notificationClear}}
+						{{/view}}						
 						</div>
 						{{#collection contentBinding="KG.notificationsController.content"}}					
 							{{#view KG.NotificationView class="notification-item"}}
@@ -268,6 +273,7 @@
 									<a {{bindAttr href="parentView.authorMailTo"}}> {{parentView.authorValue}}</a>{{parentView.titleValue}}{{parentView.dateValue}}
 								{{/view}}
 								{{#view class="notification-item-message"}}
+									<!-- triple brakets to unescape HTML -->
 									{{{parentView.messageValue}}}
 								{{/view}}
 							{{/view}}
@@ -284,9 +290,13 @@
 					{{/view}}
 					{{#view id="bookmark-popup" isVisibleBinding="KG.bookmarksController.activePopup"}}						
 						<div id="bookmark-top-bar">
-							{{view id="bookmark-label"}}
-							{{view KG.Button id="bookmark-add-button" tagName="span" class="white-button unselectable" sc_action="addBookmarkAction"}}
-							{{view KG.EditBookmarkButtonView id="bookmark-edit-button" tagName="span" class="white-button unselectable" sc_action="editBookmarkAction"}}											
+							{{loc _bookmarkTitle id="bookmark-label" tagName="div"}}
+							{{#view KG.Button id="bookmark-add-button" tagName="span" class="white-button unselectable" sc_action="addBookmarkAction"}}
+								{{loc _bookmarkAdd}}
+							{{/view}}
+							{{#view KG.EditBookmarkButtonView id="bookmark-edit-button" tagName="span" class="white-button unselectable" sc_action="editBookmarkAction"}}
+								{{loc _bookmarkEdit}}
+							{{/view}}											
 						</div>
 						{{#collection id="bookmark-list" contentBinding="KG.bookmarksController.content" tagName="table" itemViewClass="KG.BookmarkItemView" classBinding="KG.bookmarksController.editMode"}}	
 								{{#view KG.Button class="bookmark-item-label" tagName="td" sc_action="selectBookmarkAction"}}
