@@ -79,7 +79,7 @@
 	left:50%;
 	margin-left:3cm;
 	bottom:1px;
-	margin-bottom:0;
+	margin-bottom:2px;
 }
 
 #create-note button{
@@ -121,5 +121,19 @@
 	display: block;
 	padding-top:2px;
 	width:100%;
+}
+
+
+/* map anim */
+
+.new-note-marker{
+	top:-1000px;
+	transition:top 0.9s ease-in;
+	-webkit-transition:top 0.9s ease-in;
+	-moz-transition:top 0.9s ease-in;
+}
+
+.new-note-marker.new-note-marker-ready{
+	top:0px;
 }
 

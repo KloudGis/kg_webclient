@@ -17,7 +17,13 @@ KG.core_leaflet = SC.Object.create({
 
     //	layerControl: new L.Control.Layers(),
     addToDocument: function(lon, lat, zoom) {
-
+		
+		this.newNoteIcon.createIcon = function () {
+			var img = this._createIcon('icon');
+			img.className = img.className + " " + "new-note-marker";
+			return img;
+		};
+		
         //patch to make the popup hide on Safari Mac.
         if ($.browser.safari && navigator.platform.indexOf('Mac') == 0) {
             L.Popup.prototype._close = function() {
@@ -395,7 +401,6 @@ KG.core_leaflet = SC.Object.create({
         })
         lmarker.bindPopup(popupContent);
         this.map.addLayer(lmarker);
-        lmarker.openPopup();
         var marker = SC.Object.create({
             _native_marker: lmarker,
             isNewNote: YES,
@@ -412,6 +417,13 @@ KG.core_leaflet = SC.Object.create({
                 return this._native_marker._latlng.lat;
             }.property()
         });
+		//animate marker
+		setTimeout(function(){$('.new-note-marker').addClass('new-note-marker-ready');},50);		
+		//wait for the anim to open the popup
+		setTimeout(function(){
+			lmarker.openPopup();
+		}, 1000);
+		
         return marker;
     },
 
