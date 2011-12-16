@@ -216,14 +216,18 @@
 	<div id="box">
 		<div id="left-side-panel">
 			<div class="inspector-panel">
-				<script type="text/x-handlebars">
-				{{#view KG.Button class="x-button inspector-close-button" classBinding="isActive" sc_action="closeInspectorAction" titleBinding="KG.inspectorController.closeLabel"}}
+				<script type="text/x-handlebars">				
+				{{#view class="inspector-title" tagName="header"}}
+					{{#view KG.Button tagName="div" class="ios-button inspector-cancel" classBinding="isActive" sc_action="cancelInspectorAction" titleBinding="KG.inspectorController.closeLabel"}}
+						{{loc _cancel}}
+					{{/view}}
+					<h1 class="label-ellipsis">{{KG.inspectorController.title}}</h1>
+					{{#view KG.Button tagName="div" class="ios-button inspector-save" classBinding="isActive" sc_action="closeInspectorAction" titleBinding="KG.inspectorController.saveLabel"}}
+						{{loc _save}}
+					{{/view}}			
 				{{/view}}
-				{{#view class="inspector-title"}}
-					{{KG.inspectorController.title}}
-				{{/view}}
-		    	{{#collection contentBinding="KG.inspectorController" tagName="ul" class="inspector-attrs-list no-style-list"}}
-					{{#view KG.InspectorAttributeView class="inspector-list-item"}}
+		    	{{#collection contentBinding="KG.inspectorController" class="inspector-attrs-list"}}
+					{{#view KG.InspectorAttributeView class="inspector-list-item" classBinding="itemView.content.css_class"}}
 					{{/view}}
 				{{/collection}}																		
 			</script>	

@@ -125,6 +125,11 @@ SC.mixin(KG, {
 
                         closeInspectorAction: function() {
                             this.gotoState('inspectorHiddenState');
+                        },
+
+						cancelInspectorAction: function() {
+							//todo: undo changes
+                            this.gotoState('inspectorHiddenState');
                         }
                     })
                 }),

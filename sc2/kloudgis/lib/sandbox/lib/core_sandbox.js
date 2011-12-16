@@ -171,12 +171,12 @@ KG.core_sandbox = SC.Object.create({
 
 $(document).ready(function() {
     KG.statechart.initStatechart();
-    if ($.browser.isIphone) {
+    /*if ($.browser.isIphone) {
         //tweaks to hide the address bar
         $('#box').addClass('mobile');
         setTimeout(function() {
             window.scrollTo(0, 1);
         },
         1000);
-    }
+    }*/
 });

@@ -709,8 +709,8 @@ L.LatLngBounds = L.Class.extend({
 	// extend the bounds to contain the given point
 	extend: function (/*LatLng*/ latlng) {
 		if (!this._southWest && !this._northEast) {
-			this._southWest = new L.LatLng(latlng.lat, latlng.lng);
-			this._northEast = new L.LatLng(latlng.lat, latlng.lng);
+			this._southWest = new L.LatLng(latlng.lat, latlng.lng, true);
+			this._northEast = new L.LatLng(latlng.lat, latlng.lng, true);
 		} else {
 			this._southWest.lat = Math.min(latlng.lat, this._southWest.lat);
 			this._southWest.lng = Math.min(latlng.lng, this._southWest.lng);
@@ -734,11 +734,11 @@ L.LatLngBounds = L.Class.extend({
 	},
 
 	getNorthWest: function () {
-		return new L.LatLng(this._northEast.lat, this._southWest.lng);
+		return new L.LatLng(this._northEast.lat, this._southWest.lng, true);
 	},
 
 	getSouthEast: function () {
-		return new L.LatLng(this._southWest.lat, this._northEast.lng);
+		return new L.LatLng(this._southWest.lat, this._northEast.lng, true);
 	},
 
 	contains: function (/*LatLngBounds or LatLng*/ obj) /*-> Boolean*/ {
@@ -1152,8 +1152,8 @@ L.Map = L.Class.extend({
 
 	getBounds: function () {
 		var bounds = this.getPixelBounds(),
-			sw = this.unproject(new L.Point(bounds.min.x, bounds.max.y)),
-			ne = this.unproject(new L.Point(bounds.max.x, bounds.min.y));
+			sw = this.unproject(new L.Point(bounds.min.x, bounds.max.y), this._zoom, true),
+			ne = this.unproject(new L.Point(bounds.max.x, bounds.min.y), this._zoom, true);
 		return new L.LatLngBounds(sw, ne);
 	},
 
@@ -1200,7 +1200,7 @@ L.Map = L.Class.extend({
 			}
 		} while (zoomNotFound && (zoom <= maxZoom));
 
-		if (zoomNotFound) {
+		if (zoomNotFound && inside) {
 			return null;
 		}
 
@@ -2085,7 +2085,8 @@ L.Marker = L.Class.extend({
 		icon: new L.Icon(),
 		title: '',
 		clickable: true,
-		draggable: false
+		draggable: false,
+		zIndexOffset: 0
 	},
 
 	initialize: function (latlng, options) {
@@ -2179,8 +2180,7 @@ L.Marker = L.Class.extend({
 			L.DomUtil.setPosition(this._shadow, pos);
 		}
 
-		this._icon.style.zIndex = pos.y;
-		// TODO zIndex offset
+		this._icon.style.zIndex = pos.y + this.options.zIndexOffset;
 	},
 
 	_initInteraction: function () {

@@ -1,5 +1,7 @@
 var fr = { 
 	"_me": "Moi",
+	"_save": "Sauvegarde",
+	"_cancel": "Annuler",
 	"_Map": "Carte",
 	"_Note": "Note",
 	"_Notes": "%@ Notes",
@@ -50,6 +52,8 @@ var fr = {
 
 var en = {
 	"_me": "Me",
+	"_save": "Save",
+	"_cancel": "Cancel",
 	"_Map": "Map",
 	"_Note": "Note",
 	"_Notes": "%@ Notes",

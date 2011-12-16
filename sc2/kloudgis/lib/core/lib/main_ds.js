@@ -21,7 +21,7 @@ KG.SANDBOX_QUERY = SC.Query.local(KG.Sandbox, {orderBy: 'date_create DESC'});
 KG.LAYER_QUERY = SC.Query.local(KG.Layer);
 KG.BOOKMARK_QUERY = SC.Query.local(KG.Bookmark, {orderBy: 'label'});
 KG.FEATURETYPE_QUERY = SC.Query.local(KG.Featuretype, {orderBy: 'label'});
-KG.ATTRTYPE_QUERY = SC.Query.local(KG.Attrtype, {orderBy: 'label'});
+KG.ATTRTYPE_QUERY = SC.Query.local(KG.Attrtype);
 KG.SEARCH_QUERY = SC.Query.local(KG.SearchCategory, {
     conditions: 'count > 0 OR count = -1',
     orderBy: 'categoryLabel'

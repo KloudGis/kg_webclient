@@ -17,15 +17,16 @@ KG.core_leaflet = SC.Object.create({
 
     //	layerControl: new L.Control.Layers(),
     addToDocument: function(lon, lat, zoom) {
-		
-		this.newNoteIcon.createIcon = function () {
-			var img = this._createIcon('icon');
-			img.className = img.className + " " + "new-note-marker";
-			return img;
-		};
-		
+
+		//add a custom class name to the new note icon to perform an animation.
+        this.newNoteIcon.createIcon = function() {
+            var img = this._createIcon('icon');
+            img.className = img.className + " " + "new-note-marker";
+            return img;
+        };
+
         //patch to make the popup hide on Safari Mac.
-        if ($.browser.safari && navigator.platform.indexOf('Mac') == 0) {
+      /*  if ($.browser.safari && navigator.platform.indexOf('Mac') == 0) {
             L.Popup.prototype._close = function() {
                 if (this._opened) {
                     this._map.removeLayer(this);
@@ -37,7 +38,7 @@ KG.core_leaflet = SC.Object.create({
                     }
                 }
             };
-        }
+        }*/
 
         var baseLayer;
         var key = 'Anvn3DMhTFsggcirvNz1TNQrxCzksEg-b47gtD7AO1iOzZicEiF2mFZoleYMkX8z';
@@ -285,28 +286,16 @@ KG.core_leaflet = SC.Object.create({
     },
 
     _getBounds: function(fat) {
-        var bounds = this.getBoundsA();
-        var lcenter = this.map.getCenter();
-        var sw, ne;
-        sw = bounds[0].sw;
-        ne = bounds[0].ne;
-        if (bounds[1]) {
-            var center = KG.LonLat.create({
-                lon: lcenter.lng,
-                lat: lcenter.lat
-            });
-            if (bounds[1].contains(center)) {
-                sw = bounds[1].sw;
-                ne = bounds[1].ne;
-            }
-        }
-
-        sw.lat = Math.max(sw.lat - fat, -90);
-        sw.lon = Math.max(sw.lon - fat, -179.9999);
-        ne.lat = Math.min(ne.lat + fat, 90);
-        ne.lon = Math.min(ne.lon + fat, 179.9999);
-
-        var bounds = KG.Bounds.create({
+        var lbounds = this.map.getBounds();
+        var lsw = lbounds._southWest;
+        var lne = lbounds._northEast;
+        var sw = {};
+        var ne = {};
+        sw.lat = Math.max(lsw.lat - fat, -90);
+        sw.lon = Math.max(lsw.lng - fat, -179.9999);
+        ne.lat = Math.min(lne.lat + fat, 90);
+        ne.lon = Math.min(lne.lng + fat, 179.9999);
+        return KG.Bounds.create({
             sw: KG.LonLat.create({
                 lon: sw.lon,
                 lat: sw.lat
@@ -316,7 +305,6 @@ KG.core_leaflet = SC.Object.create({
                 lat: ne.lat
             })
         });
-        return bounds;
     },
 
     setCenter: function(center, zoom) {
@@ -417,13 +405,17 @@ KG.core_leaflet = SC.Object.create({
                 return this._native_marker._latlng.lat;
             }.property()
         });
-		//animate marker
-		setTimeout(function(){$('.new-note-marker').addClass('new-note-marker-ready');},50);		
-		//wait for the anim to open the popup
-		setTimeout(function(){
-			lmarker.openPopup();
-		}, 1000);
-		
+        //animate marker
+        setTimeout(function() {
+            $('.new-note-marker').addClass('new-note-marker-ready');
+        },
+        50);
+        //wait for the anim to open the popup
+        setTimeout(function() {
+            lmarker.openPopup();
+        },
+        1000);
+
         return marker;
     },
 
@@ -462,7 +454,7 @@ KG.core_leaflet = SC.Object.create({
                 return this._native_marker._latlng.lat;
             }.property()
         });
-		lmarker.on('dragend',
+        lmarker.on('dragend',
         function() {
             SC.run.begin();
             KG.statechart.sendAction('markerDragEnded', lmarker._latlng.lng, lmarker._latlng.lat);
@@ -670,7 +662,7 @@ KG.core_leaflet = SC.Object.create({
     removeShadow: function(marker) {
         if (marker._native_marker && marker._native_marker._shadow) {
             marker._native_marker._map._panes.shadowPane.removeChild(marker._native_marker._shadow);
-			marker._native_marker._shadow = undefined;
+            marker._native_marker._shadow = undefined;
         }
     }
 });

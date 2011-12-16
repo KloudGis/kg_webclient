@@ -25,6 +25,10 @@ KG.Attribute = SC.Object.extend({
 			feature.set(ref, value);
 		}
 		return feature.get(ref);
+	}.property(),
+	
+	css_class: function(){
+		return this.getPath('attrtype.css_class') || 'one-column';
 	}.property()
 
 	
