@@ -185,6 +185,8 @@ KG.Store = SC.DataSource.extend({
                 url = KG.get('serverHost') + 'api_data/protected/comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             } else if (rtype === KG.Bookmark) {
                 url = KG.get('serverHost') + 'api_data/protected/bookmarks/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+            } else if (rtype === KG.Feature) {
+                url = KG.get('serverHost') + 'api_data/protected/features/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             }
         }
         if (url) {

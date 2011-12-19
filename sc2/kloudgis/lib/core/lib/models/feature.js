@@ -92,16 +92,26 @@ KG.Feature = KG.Record.extend({
         }
     }.property('ft_id').cacheable(),
 
+	_observerSet : NO,
+
     title: function() {
         var featuretype = this.get('featuretype');
         if (featuretype) {
             var attr = featuretype.get('title_attribute');
             if (attr) {
+				if(!this._observerSet){
+					this._observerSet = true;
+					var self = this;
+					//add an observer to the property use for title.  When this property change, notify that title changed too.
+					this.addObserver(attr, function(){self.notifyPropertyChange('title');});
+				}
                 return this.get(attr);
             }
         }
         return "?";
     }.property('featuretype'),
+
+
 
 	//TODO: Use the featuretype for these
     isSelectable: YES,

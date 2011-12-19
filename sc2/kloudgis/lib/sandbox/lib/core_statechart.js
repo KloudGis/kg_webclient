@@ -114,7 +114,8 @@ SC.mixin(KG, {
                         exitState: function() {
                             var panel = $('#left-side-panel');
                             panel.removeClass('active');
-                            KG.core_inspector.cleanSelectFeature();
+							KG.core_inspector.commitModifications();
+                            KG.core_inspector.removeHighlight();
                         },
 
                         selectFeatureInspectorAction: function(feature) {
@@ -128,7 +129,7 @@ SC.mixin(KG, {
                         },
 
 						cancelInspectorAction: function() {
-							//todo: undo changes
+							KG.core_inspector.rollbackModifications();
                             this.gotoState('inspectorHiddenState');
                         }
                     })

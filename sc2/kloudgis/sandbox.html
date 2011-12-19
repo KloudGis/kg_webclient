@@ -181,7 +181,24 @@
 			{{/view}}
 		</div>
 	</script>
-	
+	<script type="text/x-handlebars" data-template-name="num-renderer">
+		<span class="inspector-attr-name">
+			{{itemView.content.label}}
+		</span>	
+		<div class="inspector-attr-value">
+			{{#view KG.NumericTextField valueBinding="itemView.content.value" type="number" minBinding="itemView.content.min" maxBinding="itemView.content.max" stepBinding="itemView.content.step"}}
+			{{/view}}
+		</div>
+	</script>
+	<script type="text/x-handlebars" data-template-name="num-range-renderer">
+		<span class="inspector-attr-name">
+			{{itemView.content.label}}
+		</span>	
+		<div class="inspector-attr-value">
+			{{#view KG.NumericTextField valueBinding="itemView.content.value" type="range" minBinding="itemView.content.min" maxBinding="itemView.content.max" stepBinding="itemView.content.step"}}
+			{{/view}}
+		</div>
+	</script>
 	<!-- send notification panel -->
 	<script type="text/x-handlebars" data-template-name="send-text-notification">
 		<div id="send-notification-panel">
@@ -218,12 +235,12 @@
 			<div class="inspector-panel">
 				<script type="text/x-handlebars">				
 				{{#view class="inspector-title" tagName="header"}}
-					{{#view KG.Button tagName="div" class="ios-button inspector-cancel" classBinding="isActive" sc_action="cancelInspectorAction" titleBinding="KG.inspectorController.closeLabel"}}
+					{{#view KG.Button tagName="div" class="ios-button inspector-cancel" isVisibleBinding="KG.inspectorController.isDirty" classBinding="isActive" sc_action="cancelInspectorAction" titleBinding="KG.inspectorController.cancelTitle"}}
 						{{loc _cancel}}
 					{{/view}}
-					<h1 class="label-ellipsis">{{KG.inspectorController.title}}</h1>
-					{{#view KG.Button tagName="div" class="ios-button inspector-save" classBinding="isActive" sc_action="closeInspectorAction" titleBinding="KG.inspectorController.saveLabel"}}
-						{{loc _save}}
+					<h1 class="label-ellipsis" {{bindAttr title="KG.inspectorController.title"}}>{{KG.inspectorController.title}}</h1>
+					{{#view KG.Button tagName="div" class="ios-button inspector-save" classBinding="isActive" sc_action="closeInspectorAction" titleBinding="KG.inspectorController.saveTitle"}}
+						{{KG.inspectorController.saveLabel}}
 					{{/view}}			
 				{{/view}}
 		    	{{#collection contentBinding="KG.inspectorController" class="inspector-attrs-list"}}
