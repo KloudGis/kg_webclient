@@ -252,12 +252,17 @@
 			<!-- Notifications icon in the top area -->
 			<script type="text/x-handlebars">
 				{{#view id="notification-panel"}}
-					{{#view KG.NotificationButtonView id="notification-button" class="kg-controls clickable" tagName="span" sc_action="toggleNotificationPopupAction" classBinding="KG.notificationsController.activePopup"}}
+					{{#view KG.NotificationButtonView id="notification-button" class="kg-controls clickable unselectable" tagName="span" sc_action="toggleNotificationPopupAction" classBinding="KG.notificationsController.activePopup"}}
 						{{#view class="capsule-label" isVisibleBinding="KG.notificationsController.hasNotification"}}
 							{{parentView.notificationCount}}
 						{{/view}}
 						<img {{bindAttr src="notificationImg"}}/>
-					{{/view}}
+					{{/view}}			
+				{{/view}}
+			</script>
+			
+			<div id="super-notification-popup">
+					<script type="text/x-handlebars">
 					{{#view id="notification-popup" isVisibleBinding="KG.notificationsController.activePopup"}}
 						{{#view id="notification-label"}}
 							{{loc _notificationTitle}}
@@ -283,15 +288,19 @@
 							{{/view}}
 							{{/collection}}
 					{{/view}}
-				{{/view}}
-			</script>
+					</script>
+			</div>
 			
 			<!-- Bookmark icon in the top area -->
 			<script type="text/x-handlebars">
 				{{#view id="bookmark-panel"}}
-					{{#view KG.BookmarkButtonView id="bookmark-button" class="kg-controls clickable" tagName="span" sc_action="toggleBookmarkPopupAction" classBinding="KG.bookmarksController.activePopup"}}
+					{{#view KG.BookmarkButtonView id="bookmark-button" class="kg-controls clickable unselectable" tagName="span" sc_action="toggleBookmarkPopupAction" classBinding="KG.bookmarksController.activePopup"}}
 						<img {{bindAttr src="bookmarkImg"}}/>
-					{{/view}}
+					{{/view}}				
+				{{/view}}
+			</script>			
+			<div id="super-bookmark-popup">
+				<script type="text/x-handlebars">
 					{{#view id="bookmark-popup" isVisibleBinding="KG.bookmarksController.activePopup"}}						
 						<div id="bookmark-top-bar">
 							{{loc _bookmarkTitle id="bookmark-label" tagName="div"}}
@@ -309,7 +318,7 @@
 								{{#view KG.Button class="bookmark-item-author" tagName="td" sc_action="selectBookmarkAction"}}
 									{{itemView.content.user_descriptor}}
 								{{/view}}
-								{{#view KG.Button class="bookmark-item-date" tagName="td" sc_action="selectBookmarkAction"}}
+								{{#view class="bookmark-item-date" tagName="td"}}
 									{{itemView.content.formattedDate}}
 								{{/view}}
 								{{#view tagName="td" isVisibleBinding="KG.bookmarksController.editMode"}}
@@ -319,8 +328,8 @@
 								{{/view}}
 						{{/collection}}
 					{{/view}}
-				{{/view}}
-			</script>
+				</script>
+			</div>
 			
 			<!-- search control in the bottom area -->
 			<script type="text/x-handlebars">			
