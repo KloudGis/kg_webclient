@@ -293,7 +293,7 @@
 			
 			<!-- Bookmark icon in the top area -->
 			<script type="text/x-handlebars">
-				{{#view id="bookmark-panel"}}
+				{{#view id="bookmark-panel" class="unselectable"}}
 					{{#view KG.BookmarkButtonView id="bookmark-button" class="kg-controls clickable unselectable" tagName="span" sc_action="toggleBookmarkPopupAction" classBinding="KG.bookmarksController.activePopup"}}
 						<img {{bindAttr src="bookmarkImg"}}/>
 					{{/view}}				
@@ -318,7 +318,7 @@
 								{{#view KG.Button class="bookmark-item-author" tagName="td" sc_action="selectBookmarkAction"}}
 									{{itemView.content.user_descriptor}}
 								{{/view}}
-								{{#view class="bookmark-item-date" tagName="td"}}
+								{{#view KG.BubbleTouchView class="bookmark-item-date" tagName="td"}}
 									{{itemView.content.formattedDate}}
 								{{/view}}
 								{{#view tagName="td" isVisibleBinding="KG.bookmarksController.editMode"}}

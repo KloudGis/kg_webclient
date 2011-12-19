@@ -69,6 +69,7 @@ require("./views/text_notification_area");
 require("./core_bookmark");
 require("./controllers/bookmarks");
 require("./controllers/add_bookmark");
+require("kloudgis/app/lib/views/bubble_touch");
 require("./views/bookmark_button");
 require("./views/edit_bookmark_button");
 require("./views/bookmark_item");
