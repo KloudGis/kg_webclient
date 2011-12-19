@@ -92,28 +92,29 @@ KG.Feature = KG.Record.extend({
         }
     }.property('ft_id').cacheable(),
 
-	_observerSet : NO,
+    _observerSet: NO,
 
     title: function() {
         var featuretype = this.get('featuretype');
         if (featuretype) {
             var attr = featuretype.get('title_attribute');
             if (attr) {
-				if(!this._observerSet){
-					this._observerSet = true;
-					var self = this;
-					//add an observer to the property use for title.  When this property change, notify that title changed too.
-					this.addObserver(attr, function(){self.notifyPropertyChange('title');});
-				}
+                if (!this._observerSet) {
+                    this._observerSet = true;
+                    var self = this;
+                    //add an observer to the property use for title.  When this property change, notify that title changed too.
+                    this.addObserver(attr,
+                    function() {
+                        self.notifyPropertyChange('title');
+                    });
+                }
                 return this.get(attr);
             }
         }
         return "?";
     }.property('featuretype'),
 
-
-
-	//TODO: Use the featuretype for these
+    //TODO: Use the featuretype for these
     isSelectable: YES,
     isInspectorSelectable: YES,
 
@@ -168,13 +169,15 @@ KG.Feature = KG.Record.extend({
         if (!SC.none(ft)) {
             var attrs = ft.get('attrtypes');
             if (!SC.none(attrs)) {
-				var self = this;
+                var self = this;
                 attrs.forEach(function(attrtype) {
-                    var wrapper = KG.Attribute.create({
-                        feature: self,
-                        attrtype: attrtype
-                    });
-                    ret.push(wrapper);
+                    if (attrtype.get('type') !== 'geo') {
+                        var wrapper = KG.Attribute.create({
+                            feature: self,
+                            attrtype: attrtype
+                        });
+                        ret.push(wrapper);
+                    }
                 });
             }
         }
