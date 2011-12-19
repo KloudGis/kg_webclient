@@ -39,7 +39,7 @@
 }
 
 .more-features-zone{
-	margin-top:5px;
+	margin-top:0px;
 }
 
 .popup-info-master-row-table{
@@ -57,8 +57,9 @@
 .popup-info-item{
 	min-width: 80px;
 	border-radius: 16px;
-	border: none;
-	margin: 0px 5px;	
+	border: 1px solid rgba(0,0,0,0.5);
+	cursor: pointer;
+	margin: 2px 5px;	
 }
 
 .popup-info-item span{	
