@@ -33,6 +33,7 @@ require("./search_plugins/core_yahoo");
 require("./core_inspector");
 require("./controllers/inspector");
 require("./views/inspector_attribute");
+require("./views/switch");
 
 //info
 require("./controllers/info");

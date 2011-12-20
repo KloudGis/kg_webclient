@@ -147,7 +147,7 @@
 	margin:10px;
 }
 
-.search-result-list li{
+.search-result-list > div{
 	margin-top:2px;
 	padding:0 0.5em 0 0.5em;
 	border-radius: 10px;
@@ -155,7 +155,7 @@
 	cursor: pointer;
 }
 
-.search-result-list li:hover{
+.search-result-list > div:hover{
 	background: rgba(0,0,0,0.5);
 }
 

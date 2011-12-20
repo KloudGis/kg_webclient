@@ -27,7 +27,7 @@ KG.Attribute = SC.Object.extend({
     value: function(key, value) {
         var ref = this.getPath('attrtype.attr_ref');
         var feature = this.get('feature');
-        if (value) {
+        if (value !== undefined) {
             feature.set(ref, value);
         }
         return feature.get(ref);

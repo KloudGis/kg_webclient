@@ -1,6 +1,7 @@
 /* Notifications */
 
 #notification-panel{
+	z-index:21;
 	position: absolute;
 	left:50%;
 	top:0px;

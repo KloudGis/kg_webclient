@@ -14,6 +14,7 @@
 	<link rel="stylesheet" href="css/note.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="css/feature_info.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="css/inspector.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="css/switch.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="css/search.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="css/notification.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="css/bookmark.css" type="text/css" media="screen"/>
@@ -203,12 +204,9 @@
 		<span class="inspector-attr-name">
 			{{itemView.content.label}}
 		</span>	
-		<div class="inspector-attr-value">
-			{{#view KG.SwitchView classBinding="on"}}
+			{{#view KG.SwitchView classBinding="on" class="inspector-attr-value"}}
 					<span class="thumb"></span>
-					<input type="checkbox" {{bindAttr checked="on"}}>
 			{{/view}}
-		</div>
 	</script>
 	
 	<!-- send notification panel -->
@@ -412,7 +410,7 @@
 			</div>
 		{{/view}}
 		{{#view class="search-list-area" classBinding="KG.searchResultsController.hasResults"}}
-			{{#collection contentBinding="KG.searchResultsController" tagName="ul" class="search-result-list no-style-list"}}
+			{{#collection contentBinding="KG.searchResultsController" class="search-result-list"}}
 				{{#view KG.Button class="search-list-item" tagName="div"}}
 					<table class="search-result-table">
 					<tr>

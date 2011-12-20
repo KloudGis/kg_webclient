@@ -1,4 +1,5 @@
 #bookmark-panel{
+	z-index:21;
 	position: absolute;
 	left:50%;
 	top:0px;
@@ -79,7 +80,6 @@
 	padding-bottom:5px;
 	padding-right:3px;
 	vertical-align:middle;
-	cursor: pointer;
 	border:1px solid #E6E6E6;
 }
 
@@ -88,12 +88,14 @@
 	text-align:center;
 	border-right:none;
 	min-width: 80px;
+	cursor: pointer;
 }
 
 #bookmark-list tr td:nth-child(2){
 	font-size:11px;
 	border-right:none;
 	border-left:none;
+	cursor: pointer;
 }
 
 #bookmark-list tr td:nth-child(3){

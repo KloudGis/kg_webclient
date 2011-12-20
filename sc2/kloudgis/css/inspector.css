@@ -22,6 +22,7 @@
 }
 
 .inspector-title{	
+	z-index: 11;
 	position: fixed;
 	height: 35px;
 	background-image: -moz-linear-gradient(top, #b0bccd, #889bb3 50%, #8195af 50%, #6d84a2);
@@ -84,6 +85,7 @@
 
 .inspector-attrs-list > div{
 	display: inline-block;
+	vertical-align: bottom;
 }
 
 .inspector-list-item{
@@ -91,17 +93,20 @@
 	color: black;
 }
 
-
 .inspector-list-item.one-column{
-	width:124px;
+	width:120px;
 }
 
-.inspector-list-item.two-column{
-	width:268px;
+.inspector-list-item.two-columns{
+	width:260px;
 }
 
 .inspector-list-item.small-left-offset > div{
 	padding-left:20px;
+}
+
+.inspector-list-item.large-left-offset > div{
+	padding-left:50px;
 }
 
 .inspector-attr-name{
