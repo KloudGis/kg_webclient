@@ -10,10 +10,12 @@ KG.Attribute = SC.Object.extend({
         return this.getPath('attrtype.label');
     }.property().cacheable(),
 
-    renderer: function() {
+    templateName: function() {
         var type = this.getPath('attrtype.type');
         if (type === 'text') {
             return 'text-renderer';
+        }else if (type === 'bool') {
+            return 'bool-renderer';
         } else if (type === 'num') {
             return 'num-renderer';
         } else if (type === 'num-range') {

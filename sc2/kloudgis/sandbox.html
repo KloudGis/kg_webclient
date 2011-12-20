@@ -199,6 +199,18 @@
 			{{/view}}
 		</div>
 	</script>
+	<script type="text/x-handlebars" data-template-name="bool-renderer">
+		<span class="inspector-attr-name">
+			{{itemView.content.label}}
+		</span>	
+		<div class="inspector-attr-value">
+			{{#view KG.SwitchView classBinding="on"}}
+					<span class="thumb"></span>
+					<input type="checkbox" {{bindAttr checked="on"}}>
+			{{/view}}
+		</div>
+	</script>
+	
 	<!-- send notification panel -->
 	<script type="text/x-handlebars" data-template-name="send-text-notification">
 		<div id="send-notification-panel">

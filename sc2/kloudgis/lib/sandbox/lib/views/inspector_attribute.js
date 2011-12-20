@@ -19,7 +19,7 @@ KG.InspectorAttributeView = SC.View.extend({
 		if(!SC.none(this._renderer)){
 			this._renderer.destroy();
 		}
-		var renderer = this.getPath('itemView.content.renderer');
+		var renderer = this.getPath('itemView.content.templateName');
 		if(renderer && SC.TEMPLATES[renderer]){
 			ren = SC.View.create({templateName: renderer, parentView: this});
 		}else{
