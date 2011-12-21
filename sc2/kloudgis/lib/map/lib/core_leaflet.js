@@ -174,7 +174,7 @@ KG.core_leaflet = SC.Object.create({
     onMouseMove: function(e) {
         //	console.log('on MouseMove');
         SC.run.begin();
-        KG.core_sandbox.set('mousePosition', KG.LonLat.create({
+        KG.statechart.sendAction('mousePositionChanged', KG.LonLat.create({
             lon: e.latlng.lng,
             lat: e.latlng.lat
         }));
@@ -481,6 +481,19 @@ KG.core_leaflet = SC.Object.create({
         this.map.addLayer(wms);
         //	this.layerControl.addOverlay(wms, layer.get('label'));
     },
+
+//increment counter to include in the wms url to force refresh (not from cache)
+	_counter: 1,
+
+	refreshWMSLayer: function(layer){
+		if(layer._native_layer){
+			//fixe: Only remove the dirty tiles
+			layer._native_layer._removeOtherTiles({min:{x:0,y:0}, max:{x:0, y:0}});
+			
+			layer._native_layer.wmsParams.counter = this._counter++;
+			layer._native_layer._update();
+		}
+	},
 
     mapSizeDidChange: function(center) {
         this.map.invalidateSize();

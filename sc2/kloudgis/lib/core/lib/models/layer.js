@@ -14,5 +14,5 @@ KG.Layer = KG.Record.extend(
     name: SC.Record.attr(String),
     url: SC.Record.attr(String),
     visibility: SC.Record.attr(Boolean),
-    buffer: SC.Record.attr(Number),
+    buffer: SC.Record.attr(Number)
 });

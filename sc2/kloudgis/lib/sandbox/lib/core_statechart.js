@@ -472,6 +472,10 @@ SC.mixin(KG, {
                             }
                         },
 
+						mousePositionChanged: function(lonLat) {
+                        	KG.core_sandbox.set('mousePosition', lonLat);
+                        },
+
                         featureInfoReady: function() {
                             this.gotoState("popupFeatureInfoState");
                         },

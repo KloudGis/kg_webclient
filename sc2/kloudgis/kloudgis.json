@@ -43,6 +43,12 @@
         "lib/sandbox/lib"
       ]
     },
+	"map_lib.js": {
+		"spade:format": "function",
+      "directories": [
+        "lib/map/lib"
+      ]
+    },
 	"signup_lib.js": {
 		"spade:format": "function",
       "directories": [

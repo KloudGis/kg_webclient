@@ -12,9 +12,9 @@ require("kloudgis/core/lib/core_date");
 require("./strings");
 require("./core_statechart");
 require("./core_sandbox");
-require("./core_leaflet");
-
-require("./core_highlight");
+//map
+require("kloudgis/map/lib/core_leaflet");
+require("kloudgis/map/lib/core_highlight");
 
 //search
 require("kloudgis/core/lib/models/search_category");
