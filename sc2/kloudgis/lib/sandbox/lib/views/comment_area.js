@@ -4,10 +4,13 @@
 KG.CommentAreaView = KG.TextArea.extend({
 
     insertNewline: function(event) {
-        KG.statechart.sendAction('addCommentAction');
+        KG.statechart.sendAction(this.get('nl_sc_action'));
         var self = this;
         setTimeout(function() {
-			self.$().data('AutoResizer').check()
+			var resizer = self.$().data('AutoResizer');
+			if(resizer){
+				resizer.check();
+			}
         },
         205);
     },

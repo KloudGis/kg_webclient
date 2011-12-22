@@ -25,9 +25,6 @@ Handlebars.registerHelper('highlight', function(property) {
   return new Handlebars.SafeString('<span class="highlight">'+value+'</span>');
 });
 
-
-
-
 //temp fix on jQuery1.6.2 (to remove with 1.7)
 (function(){
     // remove layerX and layerY

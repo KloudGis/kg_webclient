@@ -141,8 +141,10 @@ KG.Store = SC.DataSource.extend({
         if (!SC.none(id)) {
             if (rtype === KG.Note) {
                 url = KG.get('serverHost') + 'api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
-            } else if (rtype === KG.Comment) {
-                url = KG.get('serverHost') + 'api_data/protected/comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+            } else if (rtype === KG.NoteComment) {
+                url = KG.get('serverHost') + 'api_data/protected/note_comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+            } else if (rtype === KG.FeatureComment) {
+                url = KG.get('serverHost') + 'api_data/protected/feature_comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             } else if (rtype === KG.Featuretype) {
                 url = KG.get('serverHost') + 'api_data/protected/featuretypes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             } else if (rtype === KG.Attrtype) {
@@ -162,8 +164,10 @@ KG.Store = SC.DataSource.extend({
         var rtype = store.recordTypeFor(storeKey);
         if (rtype === KG.Note) {
             url = KG.get('serverHost') + 'api_data/protected/notes?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
-        } else if (rtype === KG.Comment) {
-            url = KG.get('serverHost') + 'api_data/protected/comments?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
+        } else if (rtype === KG.NoteComment) {
+            url = KG.get('serverHost') + 'api_data/protected/note_comments?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
+        } else if (rtype === KG.FeatureComment) {
+            url = KG.get('serverHost') + 'api_data/protected/feature_comments?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
         } else if (rtype === KG.Bookmark) {
             url = KG.get('serverHost') + 'api_data/protected/bookmarks?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
         }
@@ -181,8 +185,10 @@ KG.Store = SC.DataSource.extend({
         if (!SC.none(id)) {
             if (rtype === KG.Note) {
                 url = KG.get('serverHost') + 'api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
-            } else if (rtype === KG.Comment) {
-                url = KG.get('serverHost') + 'api_data/protected/comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+            } else if (rtype === KG.NoteComment) {
+                url = KG.get('serverHost') + 'api_data/protected/note_comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+            } else if (rtype === KG.FeatureComment) {
+                url = KG.get('serverHost') + 'api_data/protected/feature_comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             } else if (rtype === KG.Bookmark) {
                 url = KG.get('serverHost') + 'api_data/protected/bookmarks/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             } else if (rtype === KG.Feature) {
@@ -203,8 +209,10 @@ KG.Store = SC.DataSource.extend({
         if (!SC.none(id)) {
             if (rtype === KG.Note) {
                 url = KG.get('serverHost') + 'api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
-            } else if (rtype === KG.Comment) {
-                url = KG.get('serverHost') + 'api_data/protected/comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+            } else if (rtype === KG.NoteComment) {
+                url = KG.get('serverHost') + 'api_data/protected/note_comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+            } else if (rtype === KG.FeatureComment) {
+                url = KG.get('serverHost') + 'api_data/protected/feature_comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             } else if (rtype === KG.Bookmark) {
                 url = KG.get('serverHost') + 'api_data/protected/bookmarks/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             }

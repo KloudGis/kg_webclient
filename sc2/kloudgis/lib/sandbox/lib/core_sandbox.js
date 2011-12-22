@@ -166,7 +166,11 @@ KG.core_sandbox = SC.Object.create({
         if (autoR) {
             autoR.destroy();
         }
-    }
+    },
+
+	hasWriteAccess: function(){
+		return this.get('membership').access_type === 'owner' || this.get('membership').access_type === 'regular';
+	}
 });
 
 $(document).ready(function() {

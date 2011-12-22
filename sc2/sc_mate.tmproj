@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>currentDocument</key>
+	<string>kloudgis/sandbox.html</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -19,6 +21,20 @@
 	<integer>512</integer>
 	<key>metaData</key>
 	<dict>
+		<key>jeanfelixg.conf</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>kloudgis/assets/home_lib.js</key>
 		<dict>
 			<key>caret</key>
@@ -32,6 +48,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>kloudgis/assets/map_lib.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>620</integer>
 		</dict>
 		<key>kloudgis/css/sandbox.css</key>
 		<dict>
@@ -66,30 +96,58 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>9</integer>
+				<integer>25</integer>
 				<key>line</key>
-				<integer>1803</integer>
+				<integer>1699</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>1777</integer>
+			<integer>1673</integer>
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>1</integer>
+				<integer>8</integer>
 				<key>line</key>
-				<integer>1803</integer>
+				<integer>1699</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
 				<key>column</key>
-				<integer>9</integer>
+				<integer>25</integer>
 				<key>line</key>
-				<integer>1803</integer>
+				<integer>1699</integer>
 			</dict>
+		</dict>
+		<key>kloudgis/ext/leaflet/leaflet.css</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>20</integer>
+				<key>line</key>
+				<integer>4</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>kloudgis/kloudgis.json</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>16</integer>
+				<key>line</key>
+				<integer>48</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>3</integer>
 		</dict>
 		<key>kloudgis/kloudgis.manifest</key>
 		<dict>
@@ -193,6 +251,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>kloudgis/lib/core/lib/models/layer.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>34</integer>
+				<key>line</key>
+				<integer>16</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>kloudgis/lib/home/lib/views/open_sandbox_link.js</key>
 		<dict>
 			<key>caret</key>
@@ -265,19 +337,33 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>kloudgis/lib/sandbox/lib/controllers/active_comments.js</key>
+		<key>kloudgis/lib/map/lib/core_highlight.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>30</integer>
+				<integer>53</integer>
 				<key>line</key>
-				<integer>16</integer>
+				<integer>33</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>kloudgis/lib/map/lib/core_leaflet.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>3</integer>
+				<key>line</key>
+				<integer>491</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>452</integer>
 		</dict>
 		<key>kloudgis/lib/sandbox/lib/controllers/active_note.js</key>
 		<dict>
@@ -337,6 +423,48 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>kloudgis/lib/sandbox/lib/controllers/feature_comments.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>41</integer>
+				<key>line</key>
+				<integer>1</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>kloudgis/lib/sandbox/lib/controllers/feature_delete_comment.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>10</integer>
+				<key>line</key>
+				<integer>3</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>kloudgis/lib/sandbox/lib/controllers/feature_new_comment.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>10</integer>
+				<key>line</key>
+				<integer>3</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>kloudgis/lib/sandbox/lib/controllers/info.js</key>
 		<dict>
 			<key>caret</key>
@@ -365,7 +493,65 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>kloudgis/lib/sandbox/lib/controllers/new_comment.js</key>
+		<key>kloudgis/lib/sandbox/lib/controllers/layers.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>kloudgis/lib/sandbox/lib/controllers/note_comments.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>3</integer>
+				<key>line</key>
+				<integer>38</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+		</dict>
+		<key>kloudgis/lib/sandbox/lib/controllers/note_delete_comment.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>kloudgis/lib/sandbox/lib/controllers/note_new_comment.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
@@ -421,28 +607,14 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>kloudgis/lib/sandbox/lib/core_leaflet.js</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>30</integer>
-				<key>line</key>
-				<integer>402</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>684</integer>
-		</dict>
 		<key>kloudgis/lib/sandbox/lib/core_note.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>45</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>184</integer>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -468,14 +640,28 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>37</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>656</integer>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>55</integer>
+			<integer>441</integer>
+		</dict>
+		<key>kloudgis/lib/sandbox/lib/main.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>30</integer>
+				<key>line</key>
+				<integer>38</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>16</integer>
 		</dict>
 		<key>kloudgis/lib/sandbox/lib/strings.js</key>
 		<dict>
@@ -521,35 +707,33 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>kloudgis/lib/sandbox/lib/views/comment_area.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>kloudgis/lib/sandbox/lib/views/delete_comment.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>70</integer>
+				<integer>46</integer>
 				<key>line</key>
 				<integer>14</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>1</integer>
-				<key>line</key>
-				<integer>5</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>70</integer>
-				<key>line</key>
-				<integer>14</integer>
-			</dict>
 		</dict>
 		<key>kloudgis/lib/sandbox/lib/views/feature_info_popup_item.js</key>
 		<dict>
@@ -593,6 +777,36 @@
 			<key>firstVisibleLine</key>
 			<integer>89</integer>
 		</dict>
+		<key>kloudgis/sandbox.html</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>10</integer>
+				<key>line</key>
+				<integer>174</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>134</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>164</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>10</integer>
+				<key>line</key>
+				<integer>174</integer>
+			</dict>
+		</dict>
 		<key>kloudgis/signup.html</key>
 		<dict>
 			<key>caret</key>
@@ -608,9 +822,34 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
+	<key>openDocuments</key>
+	<array>
+		<string>jeanfelixg.conf</string>
+		<string>kloudgis/sandbox.html</string>
+		<string>kloudgis/lib/sandbox/lib/views/comment_area.js</string>
+		<string>kloudgis/lib/sandbox/lib/views/delete_comment.js</string>
+		<string>kloudgis/assets/map_lib.js</string>
+		<string>kloudgis/ext/leaflet/leaflet-src.js</string>
+		<string>kloudgis/lib/sandbox/lib/controllers/note_comments.js</string>
+		<string>kloudgis/lib/sandbox/lib/core_note.js</string>
+		<string>kloudgis/lib/sandbox/lib/controllers/note_delete_comment.js</string>
+		<string>kloudgis/lib/sandbox/lib/controllers/layers.js</string>
+		<string>kloudgis/lib/sandbox/lib/controllers/note_new_comment.js</string>
+		<string>kloudgis/lib/sandbox/lib/controllers/feature_comments.js</string>
+		<string>kloudgis/lib/sandbox/lib/controllers/feature_delete_comment.js</string>
+		<string>kloudgis/lib/sandbox/lib/controllers/feature_new_comment.js</string>
+		<string>kloudgis/lib/core/lib/models/layer.js</string>
+		<string>kloudgis/lib/map/lib/core_leaflet.js</string>
+		<string>kloudgis/ext/leaflet/leaflet.css</string>
+		<string>kloudgis/lib/map/lib/core_highlight.js</string>
+		<string>kloudgis/lib/sandbox/lib/main.js</string>
+		<string>kloudgis/kloudgis.json</string>
+		<string>kloudgis/signup.html</string>
+		<string>kloudgis/lib/sandbox/lib/core_statechart.js</string>
+	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{515, 60}, {1155, 968}}</string>
+	<string>{{874, 346}, {1155, 968}}</string>
 </dict>
 </plist>

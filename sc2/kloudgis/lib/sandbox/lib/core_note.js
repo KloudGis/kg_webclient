@@ -384,13 +384,12 @@ KG.core_note = SC.Object.create({
 	* Fetch the comments for the active note.
 	**/
     fetchComments: function(refresh) {
-        console.log('refresh comments');
         var nested_note = KG.activeNoteController.get('content');
         if (!SC.none(nested_note)) {
             var note = KG.store.find(nested_note);
             var onReady = function() {
                 if (!refresh) {
-                    KG.activeCommentsController.set('isLoading', YES);
+                    KG.noteCommentsController.set('isLoading', YES);
                 }
                 var comments = note.get('comments');
                 var params = {
@@ -406,9 +405,8 @@ KG.core_note = SC.Object.create({
                     });
                 } else {
                     console.log('NO comments');
-                    KG.activeCommentsController.set('isLoading', NO);
-                    KG.activeCommentsController.set('content', []);
-                    KG.statechart.sendAction('commentsReadyEvent');
+                    KG.noteCommentsController.set('isLoading', NO);
+                    KG.statechart.sendAction('noteCommentsReadyEvent');
                 }
             };
             if (refresh) {
@@ -426,9 +424,8 @@ KG.core_note = SC.Object.create({
         params.count++;
         params.records.pushObject(comment);
         if (params.count === params.length) {
-            KG.statechart.sendAction('commentsReadyEvent');
-            KG.activeCommentsController.set('content', KG.activeCommentsController.sortByDate(params.records));
-            KG.activeCommentsController.set('isLoading', NO);
+            KG.statechart.sendAction('noteCommentsReadyEvent');
+            KG.noteCommentsController.set('isLoading', NO);
         }
     },
 
@@ -438,7 +435,7 @@ KG.core_note = SC.Object.create({
     addCommentToActiveNote: function(comment) {
         var nested_note = KG.activeNoteController.get('content');
         if (nested_note) {
-            var rec_comment = KG.store.createRecord(KG.Comment, {
+            var rec_comment = KG.store.createRecord(KG.NoteComment, {
                 comment: comment,
                 note: nested_note.get('id')
             });
@@ -447,8 +444,7 @@ KG.core_note = SC.Object.create({
             rec_comment.onReady(null,
             function() {
                 nested_note.get('comments').get('editableStoreIds').pushObject(rec_comment.get('id'));
-                KG.activeCommentsController.get('content').pushObject(rec_comment);
-                KG.statechart.sendAction('commentsReadyEvent');
+                KG.statechart.sendAction('noteCommentsReadyEvent');
             });
         }
     },
@@ -460,7 +456,6 @@ KG.core_note = SC.Object.create({
         var nested_note = KG.activeNoteController.get('content');
         nested_note.get('comments').get('editableStoreIds').removeObject(comment.get('id'));
         comment.destroy();
-        KG.activeCommentsController.get('content').removeObject(comment);
         //commit only on record
         KG.store.commitRecords(null, null, [comment.get('storeKey')]);
     },

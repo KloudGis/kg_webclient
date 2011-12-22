@@ -12,6 +12,7 @@ require("kloudgis/core/lib/core_date");
 require("./strings");
 require("./core_statechart");
 require("./core_sandbox");
+require("./controllers/comments");
 //map
 require("kloudgis/map/lib/core_leaflet");
 require("kloudgis/map/lib/core_highlight");
@@ -34,6 +35,10 @@ require("./core_inspector");
 require("./controllers/inspector");
 require("./views/inspector_attribute");
 require("./views/switch");
+require("./views/delete_feature_comment");
+require("./controllers/feature_comments");
+require("./controllers/feature_new_comment");
+require("./controllers/feature_delete_comment");
 
 //info
 require("./controllers/info");
@@ -45,14 +50,15 @@ require("./views/expand_button");
 require("./controllers/note_markers");
 require("./controllers/notes_popup");
 require("./controllers/active_note");
-require("./controllers/active_comments");
-require("./controllers/new_comment");
-require("./controllers/delete_comment");
+require("./controllers/note_comments");
+require("./controllers/note_new_comment");
+require("./controllers/note_delete_comment");
 require("./core_note");
 require("./views/note_popup_item");
 require("./views/comment_area");
 require("./views/author");
-require("./views/delete_comment");
+require("./views/delete_note_comment");
+
 
 //layers
 require("./controllers/layers");

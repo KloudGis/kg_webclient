@@ -1,7 +1,3 @@
-require('./record');
-require('./lon_lat');
-require('./featuretype');
-require('./attribute');
 /**
 * The Feature class with the feature id (fid), featuretype (ft), attributes (attrs), ...
 **/
@@ -19,6 +15,11 @@ KG.Feature = KG.Record.extend({
     }),
     reverse_joins: SC.Record.toMany('KG.Feature', {
         inverse: 'joins',
+        isMaster: NO
+    }),
+
+	comments: SC.Record.toMany('KG.FeatureComment', {
+        inverse: 'feature',
         isMaster: NO
     }),
     //object (contains coords, centroid, geo_type, ...)

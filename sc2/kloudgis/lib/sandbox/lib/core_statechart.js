@@ -109,13 +109,15 @@ SC.mixin(KG, {
                         enterState: function() {
                             var panel = $('#left-side-panel');
                             panel.addClass('active');
+                            KG.featureCommentsController.set('commentsPanelVisible', YES);
                         },
 
                         exitState: function() {
                             var panel = $('#left-side-panel');
                             panel.removeClass('active');
-							KG.core_inspector.commitModifications();
+                            KG.core_inspector.commitModifications();
                             KG.core_inspector.removeHighlight();
+                            KG.featureCommentsController.set('commentsPanelVisible', NO);
                         },
 
                         selectFeatureInspectorAction: function(feature) {
@@ -128,9 +130,67 @@ SC.mixin(KG, {
                             this.gotoState('inspectorHiddenState');
                         },
 
-						cancelInspectorAction: function() {
-							KG.core_inspector.rollbackModifications();
+                        cancelInspectorAction: function() {
+                            KG.core_inspector.rollbackModifications();
                             this.gotoState('inspectorHiddenState');
+                        },
+
+                        showFeatureCommentsAction: function() {
+                            if (KG.featureCommentsController.get('showing')) {
+                                //hide comment section
+                                KG.featureCommentsController.set('showing', NO);
+                            } else {
+                                //show comment section
+                                if (KG.featureCommentsController.get('length') === 0) {
+                                    KG.core_inspector.fetchComments();
+                                }
+                                KG.featureCommentsController.set('showing', YES);
+                                setTimeout(function() {
+                                    KG.core_sandbox.autosize('#feature-new-comment-area');
+                                    var area = $("#feature-new-comment-area");
+                                    if (KG.featureCommentsController.getPath('content.length') === 0) {
+                                        area.focus();
+                                    }
+                                },
+                                1);
+                            }
+                        },
+
+                        addFeatureCommentAction: function() {
+                            var comment = KG.featureNewCommentController.get('content');
+                            if (!SC.none(comment)) {
+                                comment = comment.replace("\n", '');
+                                if (comment.length > 0) {
+                                    KG.core_inspector.addComment(comment);
+                                }
+                            }
+                            KG.featureNewCommentController.set('content', '');
+                        },
+
+                        featureCommentsReadyEvent: function() {
+                            setTimeout(function() {
+                                console.log('scroll to bottom');
+                                var container = $('#feature-comments-container');
+                                if (container[0]) {
+                                    container.scrollTop(container[0].scrollHeight);
+                                }
+                            },
+                            1);
+                        },
+
+                        toggleDeleteFeatureCommentButtonAction: function(comment) {
+                            if (KG.featureDeleteCommentController.get('content') === comment) {
+                                KG.featureDeleteCommentController.set('content', null);
+                            } else {
+                                KG.featureDeleteCommentController.set('content', comment);
+                            }
+                        },
+
+                        deleteFeatureCommentButtonAction: function(comment) {
+                            if (KG.featureDeleteCommentController.get('content') == comment) {
+                                KG.core_inspector.deleteComment(comment);
+                                KG.featureDeleteCommentController.set('content', null);
+                            }
                         }
                     })
                 }),
@@ -155,8 +215,8 @@ SC.mixin(KG, {
                     // No popup visible
                     //******************************
                     noPopupState: SC.State.extend({
-						//nothing to do so far
-					}),
+                        //nothing to do so far
+                    }),
 
                     //******************************
                     // Notification Popup
@@ -242,7 +302,7 @@ SC.mixin(KG, {
                                 }
                                 var notification = KG.Message.create({
                                     type: 'text',
-									user_descriptor: KG.core_sandbox.get('membership').user_descriptor,
+                                    user_descriptor: KG.core_sandbox.get('membership').user_descriptor,
                                     author: KG.core_auth.get('activeUser').user,
                                     content: {
                                         text: message
@@ -290,7 +350,7 @@ SC.mixin(KG, {
 
                         enterState: function() {
                             KG.bookmarksController.set('activePopup', YES);
-							KG.core_bookmark.refreshBookmarks();
+                            KG.core_bookmark.refreshBookmarks();
                         },
 
                         exitState: function() {
@@ -301,83 +361,83 @@ SC.mixin(KG, {
                             this.gotoState('noPopupState');
                         },
 
-						refreshBookmarkAction: function(){
-							KG.core_bookmark.refreshBookmarks();
-						},
+                        refreshBookmarkAction: function() {
+                            KG.core_bookmark.refreshBookmarks();
+                        },
 
                         normalModeState: SC.State.extend({
-	
+
                             selectBookmarkAction: function(bookmark) {
-								KG.core_bookmark.gotoBookmark(bookmark);
-								this.gotoState('noPopupState');
-							},
+                                KG.core_bookmark.gotoBookmark(bookmark);
+                                this.gotoState('noPopupState');
+                            },
 
                             editBookmarkAction: function() {
-								this.gotoState('editModeState');
-							},
-							
-							addBookmarkAction: function(){
-								this.gotoState('addModeState');
-							}
+                                this.gotoState('editModeState');
+                            },
+
+                            addBookmarkAction: function() {
+                                this.gotoState('addModeState');
+                            }
                         }),
 
                         editModeState: SC.State.extend({
-							
-							enterState:function(){
-								KG.bookmarksController.set('editMode', YES);
-							},
-							
-							exitState: function(){
-								KG.bookmarksController.set('editMode', NO);
-							},
-							
-							deleteBookmarkAction: function(bookmark){
-								KG.core_bookmark.deleteBookmark(bookmark);
-							},
+
+                            enterState: function() {
+                                KG.bookmarksController.set('editMode', YES);
+                            },
+
+                            exitState: function() {
+                                KG.bookmarksController.set('editMode', NO);
+                            },
+
+                            deleteBookmarkAction: function(bookmark) {
+                                KG.core_bookmark.deleteBookmark(bookmark);
+                            },
 
                             editBookmarkAction: function() {
-								this.gotoState('normalModeState');
-							},
-							
-							addBookmarkAction: function(){
-								this.gotoState('addModeState');
-							}
+                                this.gotoState('normalModeState');
+                            },
+
+                            addBookmarkAction: function() {
+                                this.gotoState('addModeState');
+                            }
                         }),
 
-						addModeState: SC.State.extend({
-							view: null,
-							
-							enterState:function(){
-	                            this.view = SC.View.create({
-	                                templateName: 'add-bookmark'
-	                            });
-	                            this.view.append();
-								setTimeout(function() {
-	                                $('#add-bookmark-panel input').focus();
-	                            },
-	                            300);
-							},
-							
-							exitState: function(){
-								this.view.destroy();
-								KG.addBookmarkController.set('content', '');
-							},
-							
-							addBookmarkAction: function(){
-								var label = KG.addBookmarkController.get('content');
-								var center = KG.core_leaflet.getCenter();
-								var zoom = KG.core_leaflet.getZoom();
-								KG.core_bookmark.addBookmark(label, center, zoom);								
-								this.gotoState('normalModeState');
-							},
-							
-							closeAddBookmarkAction: function(){
-								this.gotoState('noPopupState');
-							},
-							
-							editBookmarkAction: function() {
-								this.gotoState('editModeState');
-							},
+                        addModeState: SC.State.extend({
+                            view: null,
+
+                            enterState: function() {
+                                this.view = SC.View.create({
+                                    templateName: 'add-bookmark'
+                                });
+                                this.view.append();
+                                setTimeout(function() {
+                                    $('#add-bookmark-panel input').focus();
+                                },
+                                300);
+                            },
+
+                            exitState: function() {
+                                this.view.destroy();
+                                KG.addBookmarkController.set('content', '');
+                            },
+
+                            addBookmarkAction: function() {
+                                var label = KG.addBookmarkController.get('content');
+                                var center = KG.core_leaflet.getCenter();
+                                var zoom = KG.core_leaflet.getZoom();
+                                KG.core_bookmark.addBookmark(label, center, zoom);
+                                this.gotoState('normalModeState');
+                            },
+
+                            closeAddBookmarkAction: function() {
+                                this.gotoState('noPopupState');
+                            },
+
+                            editBookmarkAction: function() {
+                                this.gotoState('editModeState');
+                            },
                         })
                     })
                 }),
@@ -472,8 +532,8 @@ SC.mixin(KG, {
                             }
                         },
 
-						mousePositionChanged: function(lonLat) {
-                        	KG.core_sandbox.set('mousePosition', lonLat);
+                        mousePositionChanged: function(lonLat) {
+                            KG.core_sandbox.set('mousePosition', lonLat);
                         },
 
                         featureInfoReady: function() {
@@ -621,10 +681,10 @@ SC.mixin(KG, {
                         exitState: function() {
                             KG.core_leaflet.closePopup();
                             KG.core_note.clearCreateNote();
-							var marker = KG.activeNoteController.get('marker');
-							if(marker){
-								KG.core_leaflet.disableDraggableMarker(marker);
-							}
+                            var marker = KG.activeNoteController.get('marker');
+                            if (marker) {
+                                KG.core_leaflet.disableDraggableMarker(marker);
+                            }
                         },
 
                         mapMovedAction: function() {
@@ -698,7 +758,7 @@ SC.mixin(KG, {
 
                             exitState: function() {
                                 console.log('exit createNoteState');
-                                KG.core_note.rollbackModifications();								
+                                KG.core_note.rollbackModifications();
                                 KG.activeNoteController.set('content', null);
                                 KG.core_note.clearCreateNote();
                                 KG.core_sandbox.destroyAutosize('#note-description-area');
@@ -715,9 +775,9 @@ SC.mixin(KG, {
                                 this.gotoState('navigationState');
                             },
 
-							notePositionSetAction: function(lon,lat){
-								KG.core_note.updatePosition(lon, lat);
-							}
+                            notePositionSetAction: function(lon, lat) {
+                                KG.core_note.updatePosition(lon, lat);
+                            }
 
                         }),
 
@@ -735,7 +795,7 @@ SC.mixin(KG, {
                                 console.log('exit multiple notes');
                                 KG.notesPopupController.set('marker', null);
                                 KG.notesPopupController.set('content', []);
-								KG.core_note.cleanUpMultipleNotesElements();
+                                KG.core_note.cleanUpMultipleNotesElements();
                             },
 
                             noteSelectedAction: function(note, params) {
@@ -749,72 +809,68 @@ SC.mixin(KG, {
                         // Detail view on the active Note
                         //******************************
                         editNoteState: SC.State.extend({
-							
-							dirtyMarker: NO,
+
+                            dirtyMarker: NO,
 
                             enterState: function() {
                                 console.log('enter editNoteState');
                                 KG.core_note.beginModifications();
-                                KG.newCommentController.set('content', '');
-                                KG.activeCommentsController.set('showComments', YES);
-                                KG.activeCommentsController.set('showing', NO);
-                                KG.activeCommentsController.set('isLoading', NO);
-                                KG.core_sandbox.autosize('#note-description-area');					
+                                KG.noteNewCommentController.set('content', '');
+                                KG.noteCommentsController.set('showing', NO);
+                                KG.noteCommentsController.set('commentsPanelVisible', YES);
+                                KG.noteCommentsController.set('isLoading', NO);
+                                KG.core_sandbox.autosize('#note-description-area');
                             },
 
                             exitState: function() {
                                 console.log('exit editNoteState');
                                 KG.core_note.postEdition();
                                 KG.activeNoteController.set('content', null);
-                                KG.activeCommentsController.set('content', null);
-                                KG.activeCommentsController.set('showComments', NO);
-                                KG.activeCommentsController.set('showing', NO);
-                                KG.deleteCommentController.set('content', null);
+                                KG.noteCommentsController.set('showing', NO);
+                                KG.noteCommentsController.set('commentsPanelVisible', NO);
+                                KG.noteDeleteCommentController.set('content', null);
                                 KG.core_sandbox.destroyAutosize('#note-description-area');
-								if(this.dirtyMarker){
-									KG.core_note.refreshMarkers(YES);
-									this.dirtyMarker = NO;
-								}
-                            },
-
-                            showCommentsAction: function() {
-                                console.log('show comments');
-                                //show comment section
-                                if (KG.activeCommentsController.get('length') === 0) {
-                                    KG.core_note.fetchComments();
+                                if (this.dirtyMarker) {
+                                    KG.core_note.refreshMarkers(YES);
+                                    this.dirtyMarker = NO;
                                 }
-                                KG.activeCommentsController.set('showing', YES);
-                                setTimeout(function() {
-                                    KG.core_sandbox.autosize('#note-new-comment-area');
-                                    var area = $("#note-new-comment-area");
-                                    if (KG.activeCommentsController.getPath('content.length') === 0) {
-                                        area.focus();
+                            },
+
+                            showNoteCommentsAction: function() {
+                                if (KG.noteCommentsController.get('showing')) {
+                                    //hide comment section
+                                    KG.noteCommentsController.set('showing', NO);
+                                } else {
+                                    //show comment section
+                                    if (KG.noteCommentsController.get('length') === 0) {
+                                        KG.core_note.fetchComments();
                                     }
-                                },
-                                1);
-
+                                    KG.noteCommentsController.set('showing', YES);
+                                    setTimeout(function() {
+                                        KG.core_sandbox.autosize('#note-new-comment-area');
+                                        var area = $("#note-new-comment-area");
+                                        if (KG.noteCommentsController.getPath('content.length') === 0) {
+                                            area.focus();
+                                        }
+                                    },
+                                    1);
+                                }
                             },
 
-                            hideCommentsAction: function() {
-                                //hide comment section
-                                KG.activeCommentsController.set('showing', NO);
-                            },
-
-                            addCommentAction: function() {
-                                var comment = KG.newCommentController.get('content');
+                            addNoteCommentAction: function() {
+                                var comment = KG.noteNewCommentController.get('content');
                                 if (!SC.none(comment)) {
                                     comment = comment.replace("\n", '');
                                     if (comment.length > 0) {
                                         KG.core_note.addCommentToActiveNote(comment);
                                     }
                                 }
-                                KG.newCommentController.set('content', '');
+                                KG.noteNewCommentController.set('content', '');
                             },
 
-                            commentsReadyEvent: function() {
+                            noteCommentsReadyEvent: function() {
                                 setTimeout(function() {
-                                    console.log('scroll to bottom');
-                                    var container = $('.note-comments-container');
+                                    var container = $('#note-comments-container');
                                     if (container[0]) {
                                         container.scrollTop(container[0].scrollHeight);
                                     }
@@ -822,18 +878,18 @@ SC.mixin(KG, {
                                 1);
                             },
 
-                            toggleDeleteCommentButtonAction: function(comment) {
-                                if (KG.deleteCommentController.get('content') === comment) {
-                                    KG.deleteCommentController.set('content', null);
+                            toggleDeleteNoteCommentButtonAction: function(comment) {
+                                if (KG.noteDeleteCommentController.get('content') === comment) {
+                                    KG.noteDeleteCommentController.set('content', null);
                                 } else {
-                                    KG.deleteCommentController.set('content', comment);
+                                    KG.noteDeleteCommentController.set('content', comment);
                                 }
                             },
 
-                            deleteCommentButtonAction: function(comment) {
-                                if (KG.deleteCommentController.get('content') == comment) {
+                            deleteNoteCommentButtonAction: function(comment) {
+                                if (KG.noteDeleteCommentController.get('content') == comment) {
                                     KG.core_note.deleteComment(comment);
-                                    KG.deleteCommentController.set('content', null);
+                                    KG.noteDeleteCommentController.set('content', null);
                                 }
                             },
 
@@ -853,11 +909,11 @@ SC.mixin(KG, {
                                 KG.core_note.zoomActiveNote();
                                 this.gotoState('navigationState');
                             },
-							
-							markerDragEnded: function(lon, lat){
-								this.dirtyMarker = YES;
-								KG.core_note.updatePosition(lon, lat);
-							}
+
+                            markerDragEnded: function(lon, lat) {
+                                this.dirtyMarker = YES;
+                                KG.core_note.updatePosition(lon, lat);
+                            }
                         })
                     })
                 })

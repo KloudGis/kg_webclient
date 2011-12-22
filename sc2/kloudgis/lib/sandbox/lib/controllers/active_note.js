@@ -6,6 +6,10 @@ KG.activeNoteController = SC.Object.create({
 
     marker: null,
 
+	comments: function(){
+		return this.getPath('content.comments');
+	}.property('content.comments'),
+
  /* label and image for the create note control*/
     createNoteLabel: "_createNote".loc(),
 
@@ -72,28 +76,6 @@ KG.activeNoteController = SC.Object.create({
             return YES;
         }
         return NO;
-    }.property('content.status', 'content.author', 'KG.core_sandbox.isSandboxOwner'),
-
-    commentsLabel: function() {
-        var len = this.getPath('content.comments.length');
-        if (len === 0) {
-            return "_0comment".loc();
-        } else if (len === 1) {
-            return "_1comment".loc();
-        } else {
-            return "_comments".loc(len);
-        }
-    }.property('content.comments.length'),
-
-    hideCommentsLabel: function() {
-        var len = this.getPath('content.comments.length');
-        if (len === 0) {
-            return "_0hideComment".loc();
-        } else if (len === 1) {
-            return "_1hideComment".loc();
-        } else {
-            return "_hideComments".loc(len);
-        }
-    }.property('content.comments.length'),
+    }.property('content.status', 'content.author', 'KG.core_sandbox.isSandboxOwner')
 
 });

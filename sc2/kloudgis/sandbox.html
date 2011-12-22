@@ -11,6 +11,7 @@
 	
 	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="css/sandbox.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="css/comment.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="css/note.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="css/feature_info.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="css/inspector.css" type="text/css" media="screen"/>
@@ -43,6 +44,83 @@
 			{{/view}}
 		{{/collection}}
 	</script>
+				<!-- Comment panel for NOTE -->
+	<script type="text/x-handlebars" data-template-name="note-comments">
+			{{#view KG.Button tagName="span" isVisibleBinding="KG.noteCommentsController.showButtonVisible" classBinding="isActive" sc_action="showNoteCommentsAction"}}
+				<a href="javascript:void(0)">
+					{{KG.noteCommentsController.commentsLabel}}
+					</a>
+			{{/view}}
+			{{#view id="note-comments-container" classBinding="KG.noteCommentsController.showing"}}
+				{{#collection contentBinding="KG.noteCommentsController.content" class="comment-list"}}
+					{{#view KG.Button tagName="div" sc_action="toggleDeleteNoteCommentButtonAction"}}
+						<table style="width:100%">
+						<tr>
+							<td>
+								{{#view KG.AuthorView class="comment-author"}}
+									{{authorLabel}}																			
+								{{/view}}
+								{{#view class="comment-content"}}
+									{{itemView.content.comment}}
+								{{/view}}
+								{{#view class="comment-date"}}
+									{{itemView.content.formattedDate}}
+								{{/view}}
+							</td>
+							<td style="text-align:right;vertical-align:middle">
+								{{#view KG.DeleteNoteCommentView class="comment-delete red-button" sc_action="deleteNoteCommentButtonAction"}}
+									{{label}}
+								{{/view}}
+							</td>
+						</tr>
+						</table>
+					{{/view}}
+				{{/collection}}			
+			{{/view}}
+			{{view KG.CommentAreaView id="note-new-comment-area" isVisibleBinding="KG.noteCommentsController.showing" valueBinding="KG.noteNewCommentController.content" placeholder_not_loc="_commentPlaceholder" nl_sc_action="addNoteCommentAction"}}
+			{{#view KG.LoadingImageView id="note-comment-loading" isVisibleBinding="KG.noteCommentsController.isLoading"}}
+				<img {{bindAttr src="loadingImage"}} alt="Loading"/>
+	  		{{/view}}
+	</script>
+			<!-- Comment panel for the INSPECTOR -->
+	<script type="text/x-handlebars" data-template-name="feature-comments">
+			{{#view KG.Button tagName="span"  classBinding="isActive" isVisibleBinding="KG.featureCommentsController.showButtonVisible" sc_action="showFeatureCommentsAction"}}
+				<a href="javascript:void(0)">
+					{{KG.featureCommentsController.commentsLabel}}
+				</a>
+			{{/view}}
+			{{#view id="feature-comments-container" classBinding="KG.featureCommentsController.showing"}}
+				{{#collection contentBinding="KG.featureCommentsController.content" class="comment-list"}}
+					{{#view KG.Button tagName="div" sc_action="toggleDeleteFeatureCommentButtonAction"}}
+						<table style="width:100%">
+						<tr>
+							<td>
+								{{#view KG.AuthorView class="comment-author"}}
+									{{authorLabel}}																			
+								{{/view}}
+								{{#view class="comment-content"}}
+									{{itemView.content.comment}}
+								{{/view}}
+								{{#view class="comment-date"}}
+									{{itemView.content.formattedDate}}
+								{{/view}}
+							</td>
+							<td style="text-align:right;vertical-align:middle">
+								{{#view KG.DeleteFeatureCommentView class="comment-delete red-button" sc_action="deleteFeatureCommentButtonAction"}}
+									{{label}}
+								{{/view}}
+							</td>
+						</tr>
+						</table>
+					{{/view}}
+				{{/collection}}			
+			{{/view}}
+			{{view KG.CommentAreaView id="feature-new-comment-area" isVisibleBinding="KG.featureCommentsController.showing" nl_sc_action="addFeatureCommentAction" valueBinding="KG.featureNewCommentController.content" placeholder_not_loc="_commentPlaceholder"}}
+			{{#view KG.LoadingImageView id="feature-comment-loading" isVisibleBinding="KG.featureCommentsController.isLoading"}}
+				<img {{bindAttr src="loadingImage"}} alt="Loading"/>
+	  		{{/view}}
+	</script>
+	
 		<!-- popup for EDIT a NOTE -->
 	<script type="text/x-handlebars" data-template-name="active-note-popup">
 		{{#view class="active-note-popup"}}	
@@ -69,49 +147,10 @@
 					{{KG.activeNoteController.content.authorFormatted}}
 				{{/view}}
 			{{/view}}
-			{{#view KG.Button class="comment-button" isVisibleBinding="KG.activeCommentsController.hideButtonVisible" classBinding="isActive" sc_action="showCommentsAction"}}
-				<a href="javascript:void(0)">
-					{{KG.activeNoteController.commentsLabel}}
-				</a>
-			{{/view}}
-			{{#view KG.Button class="comment-button" isVisibleBinding="KG.activeCommentsController.showButtonVisible" classBinding="isActive" sc_action="hideCommentsAction"}}
-				<a href="javascript:void(0)">
-					{{KG.activeNoteController.hideCommentsLabel}}
-				</a>
-			{{/view}}
-			{{#view class="note-comments-container" classBinding="KG.activeCommentsController.showing"}}
-				{{#collection contentBinding="KG.activeCommentsController.content" tagName="ul" class="popup-comment-list no-style-list"}}
-					{{#view KG.Button tagName="div" sc_action="toggleDeleteCommentButtonAction"}}
-						<table style="width:100%">
-						<tr>
-						<td>
-						{{#view KG.AuthorView class="note-comment-author"}}
-							{{authorLabel}}																			
-						{{/view}}
-						{{#view class="note-comment-content"}}
-							{{itemView.content.comment}}
-						{{/view}}
-						{{#view class="note-comment-date"}}
-							{{itemView.content.formattedDate}}
-						{{/view}}
-						</td>
-						<td style="text-align:right;vertical-align:middle">
-						{{#view KG.DeleteCommentView class="note-comment-delete red-button" sc_action="deleteCommentButtonAction"}}
-							{{label}}
-						{{/view}}
-						</td>
-						</tr>
-						</table>
-					{{/view}}
-				{{/collection}}			
-			{{/view}}
-			{{#view KG.CommentAreaView id="note-new-comment-area" isVisibleBinding="KG.activeCommentsController.showing" valueBinding="KG.newCommentController.content" placeholder_not_loc="_commentPlaceholder"}}
-			{{/view}}
-			{{#view KG.LoadingImageView id="note-comment-loading" isVisibleBinding="KG.activeCommentsController.isLoading"}}
-				<img {{bindAttr src="loadingImage"}} alt="Loading"/>
-		  	{{/view}}
+			{{view templateName="note-comments"}}
 		{{/view}}
 	</script>
+	
 		<!-- popup for Feature Info -->
 	<script type="text/x-handlebars" data-template-name="info-popup">
 		{{#collection contentBinding="KG.infoController"  isVisibleBinding="KG.infoController.listVisible" class="popup-info-list"}}
@@ -256,7 +295,8 @@
 		    	{{#collection contentBinding="KG.inspectorController" class="inspector-attrs-list"}}
 					{{#view KG.InspectorAttributeView class="inspector-list-item" classBinding="itemView.content.css_class"}}
 					{{/view}}
-				{{/collection}}																		
+				{{/collection}}	
+				{{view templateName="feature-comments" class="super-feature-comments"}}																	
 			</script>	
 			</div>
 		</div>

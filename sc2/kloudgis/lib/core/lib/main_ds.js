@@ -1,16 +1,20 @@
 require("sproutcore-datastore");
 require("./data_sources/store");
 require("./models/record");
+require("./models/comment");
+require("./models/lon_lat");
 require("./models/note");
 require("./models/note_marker");
-require("./models/comment");
+require("./models/note_comment");
 require("./models/feature");
+require("./models/feature_comment");
 require("./models/featuretype");
 require("./models/attrtype");
 require("./models/layer");
 require("./models/search_category");
 require("./models/sandbox");
 require("./models/bookmark");
+require("./models/attribute");
 
 KG.store = SC.Store.create({
     commitRecordsAutomatically: NO

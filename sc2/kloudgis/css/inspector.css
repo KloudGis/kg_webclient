@@ -123,3 +123,31 @@
 .inspector-attr-value input{
 	width:100%;
 }
+
+/*** Feature Comments specific ****/
+
+.super-feature-comments{
+	padding:10px;
+}
+#feature-comments-container{
+	display: none;
+}
+
+#feature-comments-container.showing{
+	display: block;
+}
+
+
+#feature-new-comment-area{
+	display: block;
+	width:100%;
+	min-height:28px;
+	margin-top:3px;
+}
+ 
+#feature-comment-loading{
+	margin-top:3px;
+	width: 100%;
+	text-align: center;
+}
+

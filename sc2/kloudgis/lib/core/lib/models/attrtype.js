@@ -1,4 +1,3 @@
-require('./record');
 /**
 *  Similar to space AttrType
 **/

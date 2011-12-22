@@ -1,0 +1,42 @@
+.comment-list{
+	background: rgb(237,239,244);
+}
+
+.comment-list > div:hover{
+	background: rgb(207,209,214);
+}
+
+.comment-list  > div{
+	margin-top:3px;
+	border-bottom: solid 1px white;
+}
+
+.comment-list > div:last-child{
+	border-bottom: none;
+}
+
+.comment-author{
+	font-size:12px;
+	margin-right:5px;
+	font-weight: bold;
+	display:inline;
+}
+
+.comment-content{
+	display:inline;
+	font-size:12px;
+}
+
+.comment-date{
+	font-size:10px;
+	color:gray;
+	font-weight: 400;
+}
+
+.comment-item-table{
+	width:100%;
+}
+
+.comment-delete{
+	font-size: 12px;
+}
