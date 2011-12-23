@@ -118,6 +118,7 @@ SC.mixin(KG, {
                             KG.core_inspector.commitModifications();
                             KG.core_inspector.removeHighlight();
                             KG.featureCommentsController.set('commentsPanelVisible', NO);
+							KG.featureCommentsController.set('showing', NO);
                         },
 
                         selectFeatureInspectorAction: function(feature) {

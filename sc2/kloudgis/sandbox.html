@@ -77,8 +77,8 @@
 					{{/view}}
 				{{/collection}}			
 			{{/view}}
-			{{view KG.CommentAreaView id="note-new-comment-area" isVisibleBinding="KG.noteCommentsController.showing" valueBinding="KG.noteNewCommentController.content" placeholder_not_loc="_commentPlaceholder" nl_sc_action="addNoteCommentAction"}}
-			{{#view KG.LoadingImageView id="note-comment-loading" isVisibleBinding="KG.noteCommentsController.isLoading"}}
+			{{view KG.CommentAreaView id="note-new-comment-area" class="new-comment-area" isVisibleBinding="KG.noteCommentsController.showing" valueBinding="KG.noteNewCommentController.content" placeholder_not_loc="_commentPlaceholder" nl_sc_action="addNoteCommentAction"}}
+			{{#view KG.LoadingImageView id="note-comment-loading" class="comment-loading" isVisibleBinding="KG.noteCommentsController.isLoading"}}
 				<img {{bindAttr src="loadingImage"}} alt="Loading"/>
 	  		{{/view}}
 	</script>
@@ -115,8 +115,8 @@
 					{{/view}}
 				{{/collection}}			
 			{{/view}}
-			{{view KG.CommentAreaView id="feature-new-comment-area" isVisibleBinding="KG.featureCommentsController.showing" nl_sc_action="addFeatureCommentAction" valueBinding="KG.featureNewCommentController.content" placeholder_not_loc="_commentPlaceholder"}}
-			{{#view KG.LoadingImageView id="feature-comment-loading" isVisibleBinding="KG.featureCommentsController.isLoading"}}
+			{{view KG.CommentAreaView id="feature-new-comment-area" class="new-comment-area" isVisibleBinding="KG.featureCommentsController.showing" nl_sc_action="addFeatureCommentAction" valueBinding="KG.featureNewCommentController.content" placeholder_not_loc="_commentPlaceholder"}}
+			{{#view KG.LoadingImageView id="feature-comment-loading" class="comment-loading" isVisibleBinding="KG.featureCommentsController.isLoading"}}
 				<img {{bindAttr src="loadingImage"}} alt="Loading"/>
 	  		{{/view}}
 	</script>

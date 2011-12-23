@@ -91,31 +91,18 @@
 /*** Note Comments specific ****/
 #note-comments-container{
 	padding-top: 5px;
-	max-height:0;
-	display: none;
+	margin-bottom:5px;
 	overflow-y: auto;
-	transition:max-height 0.3s ease-out;
-	-webkit-transition:max-height 0.3s ease-out;
-	-moz-transition:max-height 0.3s ease-out;
+	opacity:0;
+	transition:opacity 0.5s linear, max-height 0.5s linear;
+	-webkit-transition:opacity 0.5s linear, max-height 0.5s linear;
+	-moz-transition:opacity 0.5s linear, max-height 0.5s linear;
 }
 
 #note-comments-container.showing{
-	display: block;
 	max-height:3cm;
+	opacity:1;
 }
 
-
-#note-new-comment-area{
-	display: block;
-	width:100%;
-	min-height:28px;
-	margin-top:3px;
-}
- 
-#note-comment-loading{
-	margin-top:3px;
-	width: 100%;
-	text-align: center;
-}
 
 

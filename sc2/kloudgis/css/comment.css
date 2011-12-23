@@ -7,7 +7,7 @@
 }
 
 .comment-list  > div{
-	margin-top:3px;
+	padding-top:3px;
 	border-bottom: solid 1px white;
 }
 
@@ -39,4 +39,18 @@
 
 .comment-delete{
 	font-size: 12px;
+}
+
+.new-comment-area{
+	display: block;
+	width:100%;
+	min-height:28px;
+	margin-top:3px;
+	padding-top:3px;
+}
+ 
+.comment-loading{
+	margin-top:3px;
+	width: 100%;
+	text-align: center;
 }

@@ -130,24 +130,16 @@
 	padding:10px;
 }
 #feature-comments-container{
-	display: none;
+	margin-top:5px;
+	visibility:hidden;
+	opacity:0;
+	transition:visibility 0s linear,opacity 0.5s linear;
+	-webkit-transition:visibility 0s linear,opacity 0.5s linear;
+	-moz-transition:visibility 0s linear,opacity 0.5s linear;
 }
 
 #feature-comments-container.showing{
-	display: block;
-}
-
-
-#feature-new-comment-area{
-	display: block;
-	width:100%;
-	min-height:28px;
-	margin-top:3px;
-}
- 
-#feature-comment-loading{
-	margin-top:3px;
-	width: 100%;
-	text-align: center;
+	visibility:visible;
+	opacity:1;
 }
 

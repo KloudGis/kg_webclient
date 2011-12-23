@@ -2,7 +2,8 @@
 * Wrap the active note.
 **/
 KG.activeNoteController = SC.Object.create({
-    content: null,
+    //note
+	content: null,
 
     marker: null,
 
