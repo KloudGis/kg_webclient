@@ -45,7 +45,7 @@ KG.core_yahoo = SC.Object.create({
 
                         records.pushObject(SC.Object.create({
                             title: vals.join(","),
-                            coords: [geo],
+                            geo: {coords: [geo], centroid:{x: geo.x, y: geo.y}, geo_type: 'Point'},
                             center: lonLat,
                             hasCreateNote: YES
                         }));

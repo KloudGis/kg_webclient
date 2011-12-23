@@ -119,7 +119,7 @@ KG.core_note = SC.Object.create({
                     },
                     description: feature.get('title')
                 });
-                this._new_note_marker = KG.core_leaflet.addNewNoteMarker("", feature.get('center'));
+                this._new_note_marker = KG.core_leaflet.addNewNoteMarker(null, feature.get('center'));
             }
         } else {
             if (this._new_note_marker.get('lon') && this._new_note_marker.get('lat')) {

@@ -18,7 +18,7 @@ KG.core_leaflet = SC.Object.create({
     //	layerControl: new L.Control.Layers(),
     addToDocument: function(lon, lat, zoom) {
 
-		//add a custom class name to the new note icon to perform an animation.
+        //add a custom class name to the new note icon to perform an animation.
         this.newNoteIcon.createIcon = function() {
             var img = this._createIcon('icon');
             img.className = img.className + " " + "new-note-marker";
@@ -26,7 +26,7 @@ KG.core_leaflet = SC.Object.create({
         };
 
         //patch to make the popup hide on Safari Mac.
-      /*  if ($.browser.safari && navigator.platform.indexOf('Mac') == 0) {
+        /*  if ($.browser.safari && navigator.platform.indexOf('Mac') == 0) {
             L.Popup.prototype._close = function() {
                 if (this._opened) {
                     this._map.removeLayer(this);
@@ -387,7 +387,9 @@ KG.core_leaflet = SC.Object.create({
             KG.statechart.sendAction('notePositionSetAction', lmarker._latlng.lng, lmarker._latlng.lat);
             SC.run.end();
         })
-        lmarker.bindPopup(popupContent);
+        if (!SC.none(popupContent)) {
+            lmarker.bindPopup(popupContent);
+        }
         this.map.addLayer(lmarker);
         var marker = SC.Object.create({
             _native_marker: lmarker,
@@ -410,12 +412,14 @@ KG.core_leaflet = SC.Object.create({
             $('.new-note-marker').addClass('new-note-marker-ready');
         },
         50);
-        //wait for the anim to open the popup
-        setTimeout(function() {
-            lmarker.openPopup();
-        },
-        1000);
 
+        if (!SC.none(popupContent)) {
+            //wait for the anim to open the popup
+            setTimeout(function() {
+                lmarker.openPopup();
+            },
+            1000);
+        }
         return marker;
     },
 
@@ -482,18 +486,27 @@ KG.core_leaflet = SC.Object.create({
         //	this.layerControl.addOverlay(wms, layer.get('label'));
     },
 
-//increment counter to include in the wms url to force refresh (not from cache)
-	_counter: 1,
+    //increment counter to include in the wms url to force refresh (not from cache)
+    _counter: 1,
 
-	refreshWMSLayer: function(layer){
-		if(layer._native_layer){
-			//fixe: Only remove the dirty tiles
-			layer._native_layer._removeOtherTiles({min:{x:0,y:0}, max:{x:0, y:0}});
-			
-			layer._native_layer.wmsParams.counter = this._counter++;
-			layer._native_layer._update();
-		}
-	},
+    refreshWMSLayer: function(layer) {
+        if (layer._native_layer) {
+            //fixe: Only remove the dirty tiles
+            layer._native_layer._removeOtherTiles({
+                min: {
+                    x: 0,
+                    y: 0
+                },
+                max: {
+                    x: 0,
+                    y: 0
+                }
+            });
+
+            layer._native_layer.wmsParams.counter = this._counter++;
+            layer._native_layer._update();
+        }
+    },
 
     mapSizeDidChange: function(center) {
         this.map.invalidateSize();

@@ -34,7 +34,7 @@ KG.core_google = SC.Object.create({
                         });
                         records.pushObject(SC.Object.create({
                             title: results[i].formatted_address,
-                            coords: [geo],
+                            geo: {coords: [geo], centroid:{x: geo.x, y: geo.y}, geo_type: 'Point'},
                             center: lonLat,
                             hasCreateNote: YES
                         }));

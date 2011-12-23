@@ -33,7 +33,7 @@ KG.core_geonames = SC.Object.create({
                         });
                         records.pushObject(SC.Object.create({
                             title: "%@, %@".fmt(results[i].toponymName, results[i].countryName),
-                            coords: [geo],
+                            geo: {coords: [geo], centroid:{x: geo.x, y: geo.y}, geo_type: 'Point'},
                             center: lonLat,
                             hasCreateNote: YES
                         }));
