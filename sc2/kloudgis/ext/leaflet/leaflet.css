@@ -197,7 +197,7 @@ a.leaflet-active {
 	margin: 0;
 	padding: 0 5px;
 	
-	font: 11px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
+	font: 10px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
 	color: #333;
 	
 	background-color: rgba(255, 255, 255, 0.7);
@@ -207,6 +207,11 @@ a.leaflet-active {
 	box-shadow: 0 0 7px #ccc;
 	}
 
+@media screen and (max-width: 480px) {
+	.leaflet-container .leaflet-control-attribution {
+		font: 8px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
+	}
+}
 
 /* Fade animations */
 
