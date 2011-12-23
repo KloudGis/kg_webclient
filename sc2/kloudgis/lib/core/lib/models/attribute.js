@@ -14,12 +14,14 @@ KG.Attribute = SC.Object.extend({
         var type = this.getPath('attrtype.type');
         if (type === 'text') {
             return 'text-renderer';
-        }else if (type === 'bool') {
+        } else if (type === 'bool') {
             return 'bool-renderer';
         } else if (type === 'num') {
             return 'num-renderer';
         } else if (type === 'num-range') {
             return 'num-range-renderer';
+        } else if (type === 'img') {
+            return 'img-renderer';
         }
         return 'read-only-renderer';
     }.property(),
@@ -32,6 +34,17 @@ KG.Attribute = SC.Object.extend({
         }
         return feature.get(ref);
     }.property(),
+
+    imgBase64Value: function() {
+
+        var val = this.get('value');
+        if (SC.none(val)) {
+            return '';
+        } else {
+            var startURL = "data:image/png;base64,";
+            return startURL + val;
+        }
+    }.property('value'),
 
     css_class: function() {
         return this.getPath('attrtype.css_class') || 'one-column';

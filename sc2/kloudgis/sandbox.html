@@ -200,7 +200,10 @@
 		</table>	
 	</script>
 	
-		<!-- Inspector renderers -->
+		<!--*****************
+		 	Inspector renderers 
+			*****************-->
+	<!-- Ready-Only ==> LABEL-->
 	<script type="text/x-handlebars" data-template-name="read-only-renderer">
 		<span class="inspector-attr-name">
 			{{itemView.content.label}}
@@ -212,6 +215,7 @@
 			</span>
 		</div>
 	</script>
+	<!-- TEXT ==> Input-->
 	<script type="text/x-handlebars" data-template-name="text-renderer">
 		<span class="inspector-attr-name">
 			{{itemView.content.label}}
@@ -221,6 +225,7 @@
 			{{/view}}
 		</div>
 	</script>
+	<!-- NUM ==> Spinner-->
 	<script type="text/x-handlebars" data-template-name="num-renderer">
 		<span class="inspector-attr-name">
 			{{itemView.content.label}}
@@ -230,6 +235,7 @@
 			{{/view}}
 		</div>
 	</script>
+	<!-- NUM RANGE ==> Splider-->
 	<script type="text/x-handlebars" data-template-name="num-range-renderer">
 		<span class="inspector-attr-name">
 			{{itemView.content.label}}
@@ -239,6 +245,7 @@
 			{{/view}}
 		</div>
 	</script>
+	<!-- BOOL ==> Switch-->
 	<script type="text/x-handlebars" data-template-name="bool-renderer">
 		<span class="inspector-attr-name">
 			{{itemView.content.label}}
@@ -246,6 +253,16 @@
 			{{#view KG.SwitchView classBinding="on" class="inspector-attr-value"}}
 					<span class="thumb"></span>
 			{{/view}}
+	</script>
+	<!-- Image ==> IMG-->
+	<script type="text/x-handlebars" data-template-name="img-renderer">
+		<span class="inspector-attr-name">
+			{{itemView.content.label}}
+		</span>	
+
+		<div class="inspector-attr-value">
+			<img {{bindAttr src="itemView.content.imgBase64Value"}}/>
+		</div>
 	</script>
 	
 	<!-- send notification panel -->

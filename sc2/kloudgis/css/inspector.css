@@ -98,16 +98,19 @@
 }
 
 .inspector-list-item{
-	padding:10px;
 	color: black;
 }
 
+.inspector-list-item > div{
+	margin:15px 0px 0 10px;
+}
+
 .inspector-list-item.one-column{
-	width:170px;
+	width:192px;
 }
 
 .inspector-list-item.two-columns{
-	width:360px;
+	width:384px;
 }
 
 .inspector-list-item.small-left-offset > div{
@@ -131,6 +134,10 @@
 
 .inspector-attr-value input{
 	width:100%;
+}
+
+.inspector-attr-value img{
+	max-width:100%;
 }
 
 /**  Mobile CSS Override **/
