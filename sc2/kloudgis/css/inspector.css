@@ -17,9 +17,9 @@
 	max-height:100%;
 	overflow-x: hidden;
 	overflow-y: scroll;
-	transition:left 0.6s;
-	-webkit-transition: -webkit-transform 0.6s;
-	-moz-transition:left 0.6s;
+	transition:left 0.5s;
+	-webkit-transition: -webkit-transform 0.5s;
+	-moz-transition:left 0.5s;
 }
 
 .inspector-title{	
@@ -48,6 +48,7 @@
 	left:0;
 }
 
+/* Use transform3d if available (its smooter)*/
 @media screen and (-webkit-transform-3d) {
 	#left-side-panel.active{
 		-webkit-transform: translate3d(500px,0,0);
@@ -117,6 +118,29 @@
 	padding-left:50px;
 }
 
+.inspector-attr-name{
+	font-size: 16px;
+	font-weight: bold;
+	text-align: left;
+}
+
+.inspector-attr-value{
+	font-size: 16px;
+	text-align: left;
+}
+
+.inspector-attr-value input{
+	width:100%;
+}
+
+/**  Mobile CSS Override **/
+
+@media screen and (max-width: 480px) {
+	#left-side-panel, .inspector-panel{
+		border-bottom-right-radius: 0;
+	}
+}
+
 
 @media screen and (max-width: 320px) {
 	#left-side-panel, .inspector-title{
@@ -146,30 +170,15 @@
 	}
 }
 
-.inspector-attr-name{
-	font-size: 16px;
-	font-weight: bold;
-	text-align: left;
-}
-
-.inspector-attr-value{
-	font-size: 16px;
-	text-align: left;
-}
-
-.inspector-attr-value input{
-	width:100%;
-}
 
 /*** Feature Comments specific ****/
 
 .super-feature-comments{
 	padding:10px;
+	margin:20px 20px 0 20px;
 }
 #feature-comments-container{
 	margin-top:5px;
-	margin-left:10px;
-	margin-right:10px;
 	visibility:hidden;
 	opacity:0;
 	transition:visibility 0s linear,opacity 0.5s linear;
