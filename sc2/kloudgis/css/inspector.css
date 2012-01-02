@@ -132,7 +132,8 @@
 	text-align: left;
 }
 
-.inspector-attr-value input{
+
+.inspector-attr-value input, .inspector-attr-value select{
 	width:100%;
 }
 

@@ -12,18 +12,7 @@ KG.Attribute = SC.Object.extend({
 
     templateName: function() {
         var type = this.getPath('attrtype.type');
-        if (type === 'text') {
-            return 'text-renderer';
-        } else if (type === 'bool') {
-            return 'bool-renderer';
-        } else if (type === 'num') {
-            return 'num-renderer';
-        } else if (type === 'num-range') {
-            return 'num-range-renderer';
-        } else if (type === 'img') {
-            return 'img-renderer';
-        }
-        return 'read-only-renderer';
+        return type + '-renderer';
     }.property(),
 
     value: function(key, value) {
@@ -60,6 +49,10 @@ KG.Attribute = SC.Object.extend({
 
     step: function() {
         return this.getPath('attrtype.step') || 1;
+    }.property(),
+
+    enumValues: function() {
+        return this.getPath('attrtype.enum_values');
     }.property()
 
 });
