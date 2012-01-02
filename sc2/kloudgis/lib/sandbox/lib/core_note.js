@@ -40,7 +40,9 @@ KG.core_note = SC.Object.create({
     commitModifications: function(callback) {
         var note = KG.activeNoteController.get('content');
         if (note) {
-            note = KG.store.find(note);
+			if (note.get('status') !== SC.Record.READY_NEW) {
+            	note = KG.store.find(note);
+			}
             this._store.commitChanges().destroy();
             this._store = null;
             KG.store.commitRecords();

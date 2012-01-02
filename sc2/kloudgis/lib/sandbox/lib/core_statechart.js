@@ -770,7 +770,7 @@ SC.mixin(KG, {
 
                             confirmNoteAction: function() {
                                 var note = KG.activeNoteController.get('content');
-                                KG.core_note.commitModifications();
+                                KG.core_note.commitModifications(function(){KG.core_note.refreshMarkers(YES);});
                                 KG.core_note.confirmCreateNote();
                                 this.gotoState('navigationState');
                             },
