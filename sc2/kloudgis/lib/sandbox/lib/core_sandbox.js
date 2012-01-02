@@ -84,7 +84,7 @@ KG.core_sandbox = SC.Object.create({
                 var lat = data.lat;
                 var lon = data.lon;
                 var zoom = data.zoom;
-				var hash = this.extractHashValues();
+                var hash = this.extractHashValues();
                 if (!hash['lon']) {
                     if (lat && lon) {
                         KG.core_leaflet.setCenter(KG.LonLat.create({
@@ -116,11 +116,11 @@ KG.core_sandbox = SC.Object.create({
                 }
             }
         }
-		return {};
+        return {};
     },
 
     addMap: function() {
-		var hash = this.extractHashValues();
+        var hash = this.extractHashValues();
         KG.core_leaflet.addToDocument(hash.lon, hash.lat, hash.zoom);
     },
 
@@ -146,16 +146,19 @@ KG.core_sandbox = SC.Object.create({
         }
     }.property('mousePosition'),
 
-    autosize: function(element) {
+    autosize: function(element, options) {
+		if(!options){
+			options = {extraSpace:20};
+		}
         var el = $(element);
         if (el[0]) {
-            el.autoResize({
-                extraSpace: 20
-            });
+            el.autoResize(options);
         } else {
-            var self = this;
             setTimeout(function() {
-                self.autosize(element)
+                var el = $(element);
+                if (el[0]) {
+                    el.autoResize(options);
+                }
             },
             300);
         }
@@ -168,9 +171,9 @@ KG.core_sandbox = SC.Object.create({
         }
     },
 
-	hasWriteAccess: function(){
-		return this.get('membership').access_type === 'owner' || this.get('membership').access_type === 'regular';
-	}
+    hasWriteAccess: function() {
+        return this.get('membership').access_type === 'owner' || this.get('membership').access_type === 'regular';
+    }
 });
 
 $(document).ready(function() {

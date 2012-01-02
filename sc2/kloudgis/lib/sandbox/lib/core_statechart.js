@@ -151,10 +151,9 @@ SC.mixin(KG, {
                                 }
                                 KG.featureCommentsController.set('showing', YES);
                                 setTimeout(function() {
-                                    KG.core_sandbox.autosize('#feature-new-comment-area');
-                                    var area = $("#feature-new-comment-area");
+                                    KG.core_sandbox.autosize('#feature-new-comment-area',{minHeight: 0, extraSpace:45});
                                     if (KG.featureCommentsController.getPath('content.length') === 0) {
-                                        area.focus();
+										var area = $("#feature-new-comment-area").focus();
                                     }
                                 },
                                 1);
@@ -852,7 +851,7 @@ SC.mixin(KG, {
                                     }
                                     KG.noteCommentsController.set('showing', YES);
                                     setTimeout(function() {
-                                        KG.core_sandbox.autosize('#note-new-comment-area');
+                                        KG.core_sandbox.autosize('#note-new-comment-area', {minHeight: 0, extraSpace:20});
                                         var area = $("#note-new-comment-area");
                                         if (KG.noteCommentsController.getPath('content.length') === 0) {
                                             area.focus();
@@ -900,7 +899,8 @@ SC.mixin(KG, {
 
                             confirmNoteAction: function() {
                                 var note = KG.activeNoteController.get('content');
-                                KG.core_note.commitModifications();
+                                KG.core_note.commitModifications(function(){KG.core_note.refreshMarkers(YES);});
+								this.dirtyMarker = NO;
                                 this.gotoState('navigationState');
                             },
 

@@ -37,10 +37,21 @@ KG.core_note = SC.Object.create({
     /**
 	* Commit the nested store into the main store and commits all the changes to the server
 	**/
-    commitModifications: function() {
-        this._store.commitChanges().destroy();
-        this._store = null;
-        KG.store.commitRecords();
+    commitModifications: function(callback) {
+        var note = KG.activeNoteController.get('content');
+        if (note) {
+            note = KG.store.find(note);
+            this._store.commitChanges().destroy();
+            this._store = null;
+            KG.store.commitRecords();
+            if (callback) {
+				//set a timeout because the status is already READY otherwise (BUSY_COMMINTING not yet set)
+                setTimeout(function() {
+                    note.onReady(null, callback);
+                },
+                1);
+            }
+        }
     },
 
     /**
@@ -272,7 +283,7 @@ KG.core_note = SC.Object.create({
 	* flush and recalculate the note clusters
 	**/
     refreshMarkers: function(force) {
-	console.log('Refresh markers, Force:' + force);
+        console.log('Refresh markers, Force:' + force);
         var bounds = KG.core_leaflet.getBounds();
         var zoom = KG.core_leaflet.getZoom();
         if (force || SC.none(this._zoom) || this._zoom != zoom || SC.none(this._bounds) || !this._bounds.contains(bounds)) {
@@ -307,14 +318,14 @@ KG.core_note = SC.Object.create({
 
         params.olds.forEach(function(old) {
             if (markers.indexOf(old) !== -1) {
-				//remove the shadow but keep the markers because it is still visible - will be removed on insert of the new one
-                KG.core_leaflet.removeShadow(old);             
-            }else{
-				//completly remove the marker - no good anymore
-				KG.core_leaflet.removeMarker(old);
+                //remove the shadow but keep the markers because it is still visible - will be removed on insert of the new one
+                KG.core_leaflet.removeShadow(old);
+            } else {
+                //completly remove the marker - no good anymore
+                KG.core_leaflet.removeMarker(old);
                 var rtype = old.get('store').recordTypeFor(old.get('storeKey'));
                 KG.store.unloadRecord(rtype, old.get('id'));
-			}
+            }
         });
         var i;
         var len = markers.get('length');
