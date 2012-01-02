@@ -80,10 +80,10 @@
 						to(#273f6d));
 	background-image: -moz-linear-gradient(top, #7d88a5 0%, #58698c 25%, #3a4e78 50%, #253c6a 51%,#273f6d 75%, #273f6d 100%);
 	-webkit-tap-highlight-color: transparent;
-};
+}
 
 .no-style-list{
-	list-style: none;
+	list-style-type: none;
 	-webkit-margin-before: 0px;
 	-webkit-margin-after: 0px;
 	margin:none;
