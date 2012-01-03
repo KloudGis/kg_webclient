@@ -1,0 +1,14 @@
+<div id="send-notification-panel">
+	{{KG.sendNotificationController.notificationLabel}}
+	{{view KG.Button class="x-button notification-close-button" classBinding="isActive" sc_action="closeSendNotificationAction" titleBinding="KG.sendNotificationController.closeLabel"}}
+	{{view KG.TextNotificationAreaView valueBinding="KG.sendNotificationController.content"}}
+	{{KG.sendNotificationController.feedbackMessage}}
+	{{#view KG.Button class="white-button send-notification-button" classBinding="isActive" sc_action="sendNotificationButtonAction"}}
+		{{KG.sendNotificationController.sendLabel}}
+	{{/view}}
+	{{view SC.Checkbox valueBinding="KG.sendNotificationController.sendOnEnterValue"}}
+	<img src="resources/images/return.png" {{bindAttr title="KG.sendNotificationController.sendOnEnterTooltip"}}/>
+	{{#view KG.LoadingImageView isVisibleBinding="KG.sendNotificationController.hasNotificationPending"}}
+		<img {{bindAttr src="loadingImage"}} alt="Loading"/>
+  	{{/view}}		
+</div>

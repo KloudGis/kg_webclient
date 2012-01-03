@@ -13,6 +13,9 @@ require("./strings");
 require("./core_statechart");
 require("./core_sandbox");
 require("./controllers/comments");
+//templates
+require("./templates");
+
 //map
 require("kloudgis/map/lib/core_leaflet");
 require("kloudgis/map/lib/core_highlight");

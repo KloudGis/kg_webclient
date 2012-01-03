@@ -1,0 +1,26 @@
+{{#view class="active-note-popup"}}	
+	{{#view KG.Button class="note-zoom-button" isVisibleBinding="KG.activeNoteController.isOldRecord" tagName="div" sc_action="zoomNoteAction"}}
+		<a href="javascript:void(0)">zoom</a>
+	{{/view}}	
+	{{#view class="note-date-label"}}
+		{{KG.activeNoteController.content.formattedDate}}
+	{{/view}}			
+	<span>{{KG.activeNoteController.titleLabel}}</span>
+	{{#view KG.TextField valueBinding="KG.activeNoteController.titleValue" disabledBinding="KG.activeNoteController.isDisabled" type="text" placeholder_not_loc="_noteTitlePlaceholder" }}
+	{{/view}}
+	<span>{{KG.activeNoteController.descriptionLabel}}</span>
+	{{#view KG.TextArea id="note-description-area" disabledBinding="KG.activeNoteController.isDisabled" valueBinding="KG.activeNoteController*content.description"}}
+	{{/view}}
+	{{#view class="active-note-popup-bottom"}}
+		{{#view KG.Button isVisibleBinding="KG.activeNoteController.isUpdateVisible" class="white-button" classBinding="isActive" sc_action="confirmNoteAction"}}
+			{{KG.activeNoteController.confirmLabel}}
+		{{/view}}		
+		{{#view KG.Button isVisibleBinding="KG.activeNoteController.isDeleteVisible" class="red-button" classBinding="isActive" sc_action="deleteNoteAction"}}
+			{{KG.activeNoteController.deleteLabel}}
+		{{/view}}
+		{{#view class="note-author-label"}}
+			{{KG.activeNoteController.content.authorFormatted}}
+		{{/view}}
+	{{/view}}
+	{{view templateName="note-comments"}}
+{{/view}}

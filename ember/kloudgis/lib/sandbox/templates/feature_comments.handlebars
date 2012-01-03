@@ -1,0 +1,35 @@
+{{#view KG.Button tagName="span"  classBinding="isActive" isVisibleBinding="KG.featureCommentsController.showButtonVisible" sc_action="showFeatureCommentsAction"}}
+	<a href="javascript:void(0)">
+		{{KG.featureCommentsController.commentsLabel}}
+	</a>
+{{/view}}
+{{#view id="feature-comments-container" classBinding="KG.featureCommentsController.showing"}}
+	{{#collection contentBinding="KG.featureCommentsController.content" class="comment-list"}}
+		{{#view KG.Button tagName="div" sc_action="toggleDeleteFeatureCommentButtonAction"}}
+			<table style="width:100%">
+			<tr>
+				<td>
+					{{#view KG.AuthorView class="comment-author"}}
+						{{authorLabel}}																			
+					{{/view}}
+					{{#view class="comment-content"}}
+						{{itemView.content.comment}}
+					{{/view}}
+					{{#view class="comment-date"}}
+						{{itemView.content.formattedDate}}
+					{{/view}}
+				</td>
+				<td style="text-align:right;vertical-align:middle">
+					{{#view KG.DeleteFeatureCommentView class="comment-delete red-button" sc_action="deleteFeatureCommentButtonAction"}}
+						{{label}}
+					{{/view}}
+				</td>
+			</tr>
+			</table>
+		{{/view}}
+	{{/collection}}			
+{{/view}}
+{{view KG.CommentAreaView id="feature-new-comment-area" class="new-comment-area" isVisibleBinding="KG.featureCommentsController.showing" nl_sc_action="addFeatureCommentAction" valueBinding="KG.featureNewCommentController.content" placeholder_not_loc="_commentPlaceholder"}}
+{{#view KG.LoadingImageView id="feature-comment-loading" class="comment-loading" isVisibleBinding="KG.featureCommentsController.isLoading"}}
+	<img {{bindAttr src="loadingImage"}} alt="Loading"/>
+{{/view}}

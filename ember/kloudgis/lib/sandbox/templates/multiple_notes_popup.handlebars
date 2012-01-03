@@ -1,0 +1,19 @@
+{{#view class="multiple-notes-title"}}
+	{{KG.notesPopupController.popupTitle}}
+{{/view}}
+{{#collection contentBinding="KG.notesPopupController" tagName="ul" class="multiple-notes-list no-style-list"}}			
+	{{#view KG.NotePopupItemView class="multiple-notes-item"}}
+		<table class="multiple-notes-table">
+		<td>
+		{{#view class="multiple-notes-item-title"}}
+			{{itemView.content.title}}
+		{{/view}}
+		</td>
+		<td>
+		{{#view class="note-author-label"}}
+			{{itemView.content.authorFormatted}}
+		{{/view}}
+		</td>
+		</table>
+	{{/view}}
+{{/collection}}

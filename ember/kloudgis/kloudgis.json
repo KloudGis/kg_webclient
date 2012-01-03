@@ -13,6 +13,12 @@
         "lib/core/lib"
       ]
     },
+	"templates_lib.js": {
+		"spade:format": "function",
+      "directories": [
+        "templates"
+      ]
+    },
 	"app_lib.js": {
 		"spade:format": "function",
       "directories": [
@@ -40,7 +46,7 @@
 	"sandbox_lib.js": {
 		"spade:format": "function",
       "directories": [
-        "lib/sandbox/lib"
+        "lib/sandbox/lib","lib/sandbox/templates"
       ]
     },
 	"map_lib.js": {

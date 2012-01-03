@@ -1,0 +1,8 @@
+<div id="add-bookmark-panel">
+	{{KG.addBookmarkController.addBookmarkLabel}}
+	{{view KG.Button class="x-button bookmark-close-button" classBinding="isActive" sc_action="closeAddBookmarkAction" titleBinding="KG.addBookmarkController.closeTitle"}}
+	{{view KG.TextField valueBinding="KG.addBookmarkController.content" nl_sc_action="addBookmarkAction"}}
+	{{#view KG.Button class="white-button add-bookmark-button" classBinding="isActive" sc_action="addBookmarkAction"}}
+		{{KG.addBookmarkController.addLabel}}
+	{{/view}}		
+</div>

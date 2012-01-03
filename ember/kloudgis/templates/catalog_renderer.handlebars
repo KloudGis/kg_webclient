@@ -1,0 +1,12 @@
+<span class="inspector-attr-name">
+	{{itemView.content.label}}
+</span>	
+<div class="inspector-attr-value">
+	{{#view KG.SelectView contentBinding="itemView.content.enumValues" valueBinding="itemView.content.value"}}
+		<select>
+			{{#each content}}
+				<option {{bindAttr value="key"}} >{{label}}</option>
+				{{/each}}
+		</select>
+	{{/view}}
+</div>

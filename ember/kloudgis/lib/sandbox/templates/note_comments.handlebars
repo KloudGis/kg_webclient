@@ -1,0 +1,35 @@
+{{#view KG.Button tagName="span" isVisibleBinding="KG.noteCommentsController.showButtonVisible" classBinding="isActive" sc_action="showNoteCommentsAction"}}
+	<a href="javascript:void(0)">
+		{{KG.noteCommentsController.commentsLabel}}
+		</a>
+{{/view}}
+{{#view id="note-comments-container" classBinding="KG.noteCommentsController.showing"}}
+	{{#collection contentBinding="KG.noteCommentsController.content" class="comment-list"}}
+		{{#view KG.Button tagName="div" sc_action="toggleDeleteNoteCommentButtonAction"}}
+			<table style="width:100%">
+			<tr>
+				<td>
+					{{#view KG.AuthorView class="comment-author"}}
+						{{authorLabel}}																			
+					{{/view}}
+					{{#view class="comment-content"}}
+						{{itemView.content.comment}}
+					{{/view}}
+					{{#view class="comment-date"}}
+						{{itemView.content.formattedDate}}
+					{{/view}}
+				</td>
+				<td style="text-align:right;vertical-align:middle">
+					{{#view KG.DeleteNoteCommentView class="comment-delete red-button" sc_action="deleteNoteCommentButtonAction"}}
+						{{label}}
+					{{/view}}
+				</td>
+			</tr>
+			</table>
+		{{/view}}
+	{{/collection}}			
+{{/view}}
+{{view KG.CommentAreaView id="note-new-comment-area" class="new-comment-area" isVisibleBinding="KG.noteCommentsController.showing" valueBinding="KG.noteNewCommentController.content" placeholder_not_loc="_commentPlaceholder" nl_sc_action="addNoteCommentAction"}}
+{{#view KG.LoadingImageView id="note-comment-loading" class="comment-loading" isVisibleBinding="KG.noteCommentsController.isLoading"}}
+	<img {{bindAttr src="loadingImage"}} alt="Loading"/>
+{{/view}}

@@ -240,7 +240,7 @@ KG.core_note = SC.Object.create({
         KG.notesPopupController.set('content', notes);
         var div = document.createElement('div');
         this._view_multiple_notes = SC.View.create({
-            templateName: 'notes-marker-popup',
+            templateName: 'multiple-notes-popup',
         });
         this._view_multiple_notes.appendTo(div);
         setTimeout(function() {
