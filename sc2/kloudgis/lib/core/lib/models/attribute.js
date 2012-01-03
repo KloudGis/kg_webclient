@@ -44,7 +44,7 @@ KG.Attribute = SC.Object.extend({
     }.property(),
 
     max: function() {
-        return this.getPath('attrtype.max') || 1;
+        return this.getPath('attrtype.max') || 2000000000;
     }.property(),
 
     step: function() {
@@ -52,7 +52,24 @@ KG.Attribute = SC.Object.extend({
     }.property(),
 
     enumValues: function() {
-        return this.getPath('attrtype.enum_values');
-    }.property()
+		var possibleVals = this.getPath('attrtype.enum_values');
+        var enumVals = [];
+        var value = this.get('value');
+        var i, len = possibleVals.length;
+        var found = NO;
+        for (i = 0; i < len; i++) {
+            if (possibleVals[i].key === value) {
+                found = YES;
+            }
+            enumVals.push(possibleVals[i]);
+        }
+        if (!found) {
+            enumVals.insertAt(0, SC.Object.create({
+                key: value,
+                label: '?'
+            }));
+        }
+        return enumVals;
+    }.property('attr_type').cacheable()
 
 });

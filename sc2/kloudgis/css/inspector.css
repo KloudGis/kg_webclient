@@ -137,6 +137,10 @@
 	width:100%;
 }
 
+.inspector-attr-value select{
+	margin-top:3px;
+}
+
 .inspector-attr-value img{
 	max-width:100%;
 }
