@@ -51,14 +51,7 @@ KG.core_info = SC.Object.create({
             console.log('No valid layer to do a F_INFO');
             KG.infoController.set('content', []);
         }
-        if (SC.none(this._div_info)) {
-            this._div_info = document.createElement('div');         
-        }
 		this.clearViewInfo();
-		this._view_info = SC.View.create({
-            templateName: 'info-popup',
-        });
-        this._view_info.appendTo(this._div_info);
     },
 
     infoReady: function(records) {
@@ -78,8 +71,16 @@ KG.core_info = SC.Object.create({
         if (records.get('length') > 0) {
 			var center = records.getPath('firstObject.center');
             if (center) {
+				this.clearViewInfo();
+				if (SC.none(this._div_info)) {
+		            this._div_info = document.createElement('div');         
+		        }
                 var div = this._div_info;
-                KG.core_leaflet.showPopupInfo(center, div);
+				this._view_info = SC.View.create({
+		            templateName: 'info-popup',
+		        });
+		        this._view_info.appendTo(div);
+				setTimeout(function(){KG.core_leaflet.showPopupInfo(center, div);},1);               
             }
         }
 
@@ -92,9 +93,7 @@ KG.core_info = SC.Object.create({
 
     expandPopupDidChange: function() {
         setTimeout(function() {
-            SC.run.begin();
             KG.core_leaflet.updatePopupInfo();
-            SC.run.end();
         },
         1);
     }.observes('KG.infoController.listVisible'),
