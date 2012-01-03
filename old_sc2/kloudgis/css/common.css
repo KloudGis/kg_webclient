@@ -1,0 +1,107 @@
+.label-ellipsis{
+	white-space: nowrap;
+	overflow: hidden;
+  	text-overflow: ellipsis;
+  	-o-text-overflow: ellipsis;
+  	-ms-text-overflow: ellipsis;
+}
+
+.unselectable {
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   user-select: none;
+}
+
+.black-button{
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	font-size: 1.3em;
+	font-weight: bold;
+	color: white;
+	background-image: -webkit-gradient( linear, left top, left bottom, from(#5C5C5B), to(#1E1B16), color-stop(0.3, #1E1B16) );
+}
+
+.red-button, .white-button{
+	color: #fff;
+	font-size: 12px;
+	text-shadow: -1px 0 #999, 0 1px #999, 1px 0 #999, 0 -1px #999;
+	font-weight:800;
+	padding: 4px 10px 4px 10px;
+	border-radius: 6px;
+	box-shadow: 4px 3px 4px #999; 
+	-webkit-box-shadow: 4px 3px 4px #999; 
+	border: none;
+	cursor: pointer;
+}
+
+.red-button.is-active, .white-button.is-active{
+	background-image: -moz-linear-gradient(top, rgba(135,148,203,0.85) 0%, rgba(34,56,159,0.75) 50%, rgba(0,27,145,0.75) 51%, rgba(2,59,152,0.65) 100%);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(135,148,203,0.85)), color-stop(0.5, rgba(34,56,159,0.75)), color-stop(0.5, rgba(0,27,145,0.75)), to(rgba(2,59,152,0.65))); 
+	background-image: -o-linear-gradient(top, rgba(135,148,203,0.85) 0%, rgba(34,56,159,0.75) 50%, rgba(0,27,145,0.75) 51%, rgba(2,59,152,0.65) 100%);
+}
+
+.red-button{
+	background-image: -moz-linear-gradient(top, rgba(255,59,59,0.70) 0%, rgba(233,72,72,0.80) 50%, rgba(184,0,0,0.70) 51%, rgba(255,0,0,0.80) 100%);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255,59,59,0.70)), color-stop(0.5, rgba(233,72,72,0.80)), color-stop(0.5, rgba(184,0,0,0.70)), to(rgba(255,0,0,0.80))); 	
+	background-image: -o-linear-gradient(top, rgba(255,59,59,0.70)  0%, rgba(233,72,72,0.80) 50%,  rgba(184,0,0,0.70) 51%, rgba(255,0,0,0.80) 100%);
+}
+
+.white-button{
+	background-image: -moz-linear-gradient(top, rgba(234,234,234,0.90) 0%, rgba(195,195,195,0.70) 50%, rgba(166,166,166,0.70) 51%, rgba(167,167,167,0.80) 100%);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(234,234,234,0.90)), color-stop(0.5, rgba(195,195,195,0.70)), color-stop(0.5, rgba(166,166,166,0.70)), to(rgba(167,167,167,0.80))); 
+	background-image: -o-linear-gradient(top, rgba(234,234,234,0.90)  0%, rgba(195,195,195,0.70) 50%,  rgba(166,166,166,0.70) 51%, rgba(167,167,167,0.80) 100%);
+}
+
+.ios-button{
+	border: solid 1px #424650;
+	display: inline-block;
+	cursor: pointer;
+	padding: 4px 10px;
+	border-radius: 6px;
+	-webkit-border-radius: 6px;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#889ab4), color-stop(0.5, #6380a9), color-stop(0.5, #486a98), to(#496b9a));
+	background-image: -moz-linear-gradient(top, #889ab4 0%, #6380a9 50%, #486a98 51%, #496b9a 100%);
+	color: white;
+	font: normal 12px/14px Helvetica, Sans-serif;
+	-webkit-tap-highlight-color: transparent;
+	-webkit-user-select: none;
+	border: solid 1px #54617D;
+	border-color: #484E59 #54617D #4C5C7A #54617D;
+}
+
+.ios-button.is-active, .ios-button:hover {
+	background-image: -webkit-gradient(linear, left top, left bottom, 
+						from(#7d88a5), 
+						color-stop(0.25, #58698c),
+						color-stop(0.5, #3a4e78), 
+						color-stop(0.5, #253c6a), 
+						color-stop(0.75, #273f6d),
+						to(#273f6d));
+	background-image: -moz-linear-gradient(top, #7d88a5 0%, #58698c 25%, #3a4e78 50%, #253c6a 51%,#273f6d 75%, #273f6d 100%);
+	-webkit-tap-highlight-color: transparent;
+}
+
+.no-style-list{
+	list-style-type: none;
+	-webkit-margin-before: 0px;
+	-webkit-margin-after: 0px;
+	margin:none;
+}
+
+.x-button{
+	width: 30px;
+	height:30px;
+	border:none;
+	background: url(../resources/images/closebox.png);
+	cursor: pointer;
+}
+
+.capsule-label{
+	background-image: -moz-linear-gradient(top, rgba(119,172,224,0.90) 0%, rgba(84,136,208,0.90) 100%);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(119,172,224)), to(rgb(74,121,201))); 
+	background-image: -o-linear-gradient(top, rgba(119,172,224,0.90) 0%, rgba(84,136,208,0.90) 100%);
+	border-radius:1em;
+	color: white;
+	padding:0.2em 0.4em 0.10em 0.4em;
+}

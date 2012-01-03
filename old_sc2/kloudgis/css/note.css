@@ -1,0 +1,108 @@
+/*NOTES*/
+/* multiple notes list */
+
+.multiple-notes-title{
+	text-align: center;
+	font-size:14px;
+	font-weight: bold;
+	white-space: nowrap;
+}
+
+.multiple-notes-table{
+	width: 4cm;
+    padding:0px;
+	border: none;
+	border-spacing: 0px;
+}
+
+.multiple-notes-item{
+	padding: 0.5em;
+}
+
+.multiple-notes-item:hover{
+	background: rgba(0,0,255,0.5);
+	color: white;
+}
+
+.multiple-notes-item:hover table{
+	color: white;
+}
+
+.multiple-notes-item:hover table .note-author-label{
+	color: white;
+}
+
+.multiple-notes-table td{
+	vertical-align:bottom;	
+}
+
+.multiple-notes-item-title{
+	font-size:12px;
+}
+
+/* note active */
+.note-author-label{
+	margin-top:3px;
+	font-size:10px;
+	display: block;	
+	text-align: right;
+	white-space: nowrap;
+	color: gray;
+}
+
+.active-note-popup .note-date-label{
+	font-size:10px;
+	font-style: italic;
+	float: right;
+	color:gray;	
+}
+
+.note-zoom-button{
+	text-align: center;
+}
+
+.active-note-popup > span{
+	display: block;
+	font-weight: bold;
+}
+
+.active-note-popup input{
+	width: 100%;
+}
+
+#note-description-area{	
+	height: 48px;
+	display: block;
+	width:100%;
+}
+
+
+.active-note-popup-bottom{
+	width: 220px;
+	text-align: center;
+	margin-top:5px;
+	margin-bottom:5px;
+}
+
+.active-note-popup .red-button{
+	margin-left:10px;
+}
+
+/*** Note Comments specific ****/
+#note-comments-container{
+	padding-top: 5px;
+	margin-bottom:5px;
+	overflow-y: auto;
+	opacity:0;
+	transition:opacity 0.5s linear, max-height 0.5s linear;
+	-webkit-transition:opacity 0.5s linear, max-height 0.5s linear;
+	-moz-transition:opacity 0.5s linear, max-height 0.5s linear;
+}
+
+#note-comments-container.showing{
+	max-height:3cm;
+	opacity:1;
+}
+
+
+

@@ -1,0 +1,96 @@
+body{
+	width: 300px;
+	margin: 0px auto;
+}
+
+#kloud-logo{
+	display: block;
+	margin:5px auto;
+	border:none;
+}
+
+#kloud-welcome{
+	display: block;
+	text-align: left;
+	font-size: 24px;
+	line-height: 28px;
+	font-weight: bold;
+	color: #333;
+	text-shadow: rgba(255, 255, 255, .9) 0px 1px 0px;
+	margin-bottom:20px;
+}
+
+.signup-pane input {
+  	padding:5px;
+	width:300px;
+	border-radius: 3px;
+	border: 1px solid #CCC;
+}
+
+.signup-field.has-error input{
+	border: 1px solid rgb(255,155,155);
+	background: none;
+}
+
+.signup-field span{
+	margin-left:10px;
+	color: rgb(255,155,155);
+}
+
+#global-error{
+	margin:10px;
+}
+
+#global-error span{
+	color: rgb(255,155,155);
+	font-size: 16px;
+}
+
+.signup-pane td {
+  padding:1px;
+}
+
+.signup-pane .section td {
+  padding-top:10px;
+}
+
+.signup-pane label {
+  font-size:12px;
+}
+
+.signup-pane .loading-image {
+  float: right;
+  margin-top:-21px;
+  margin-right:3px;
+}
+
+.signup-field.focus label{
+	font-weight:600;
+}
+
+#create-button{
+	float: right;
+	width:100px;
+	margin-top: 10px;
+	border: none;
+	padding: 5px 10px;
+	text-align:center;
+	font-size: 14px;
+	font-weight: bold;
+	color: white;
+	text-shadow: 0 1px 1px #333;
+	box-shadow: rgba(0, 0, 0, 0.4) 2px 2px 8px; 
+	-webkit-box-shadow: rgba(0, 0, 0, 0.4) 2px 2px 8px; 
+	white-space: nowrap;
+	background: -webkit-gradient(linear,left bottom, left top, color-stop(0.22, rgb(255,144,9)), color-stop(0.81, rgb(255,170,68)));
+	background: -moz-linear-gradient(center bottom, rgb(255,144,9) 22%, rgb(255,170,68) 81%);
+	background: -o-linear-gradient(bottom, rgb(255,144,9) 22%, rgb(255,170,68) 81%);
+}
+
+#create-button:hover{
+	background:#FF9009;
+}
+
+#create-button.is-active{
+	background:#EF8001;
+}

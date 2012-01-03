@@ -1,0 +1,56 @@
+.comment-list{
+	background: rgb(237,239,244);
+}
+
+.comment-list > div:hover{
+	background: rgb(207,209,214);
+}
+
+.comment-list  > div{
+	padding-top:3px;
+	border-bottom: solid 1px white;
+	overflow:hidden;
+}
+
+.comment-list > div:last-child{
+	border-bottom: none;
+}
+/* to let the delete button show when the text has very long words*/
+.comment-list td{
+	max-width:100px;
+}
+
+.comment-author{
+	font-size:12px;
+	margin-right:5px;
+	font-weight: bold;
+	display:inline;
+}
+
+.comment-content{
+	display:inline;
+	font-size:12px;
+}
+
+.comment-date{
+	font-size:10px;
+	color:gray;
+	font-weight: 400;
+}
+
+.comment-delete{
+	font-size: 12px;
+}
+
+.new-comment-area{
+	display: block;
+	width:100%;
+	margin-top:3px;
+	padding-top:3px;
+}
+ 
+.comment-loading{
+	margin-top:3px;
+	width: 100%;
+	text-align: center;
+}

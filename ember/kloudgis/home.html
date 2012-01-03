@@ -1,0 +1,63 @@
+<html>
+  <head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="description" content="">
+	<meta name="author" content="Kloudgis.org">
+	<meta name="viewport" content="width=600">
+	<link rel="shortcut icon" href="favicon.ico">
+	<link rel="apple-touch-icon" href="apple-touch-icon.png">
+	
+	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen"  />
+	<link rel="stylesheet" href="css/home.css" type="text/css" media="screen"  />
+    <title></title>
+  </head>
+  <body>
+	<iframe id="if-spinner" src="spinner.html"></iframe>
+	<script type="text/x-handlebars">	
+		{{#view SC.Button  id="logout-button" target="KG.core_home" action="logout"}}
+			Logout
+		{{/view}}
+	 </script>
+	<script type="text/x-handlebars">	
+		{{#view  id="welcome-usr-label"}}
+			{{KG.core_home.connectedUserLabel}}
+		{{/view}}
+	 </script>
+	<a href="index.html">
+			<img id="kloud-logo" src="resources/images/kloudgis_black_256.png" alt="Kloudgis"/>
+	</a>
+	<span id="query-message"></span>
+	<script type="text/x-handlebars">		
+		{{#view KG.TitleView id="sandboxes-title"}}
+			{{titleString}}
+		{{/view}}
+	</script>
+	<script type="text/x-handlebars">	
+		{{#collection contentBinding="KG.sandboxesController" tagName="ul" class="sandbox-list"}}
+			{{#view KG.SandboxView class="sandbox-list-item"}}
+				{{#view KG.OpenSandboxLinkView tagName="a" class="open-sandbox-link" classBinding="isActive"}}
+					{{title}}
+				{{/view}}
+				<span>{{itemView.content.formattedDate}}</span>
+			{{/view}}
+		{{/collection}}
+	 </script>	
+  </body>
+
+<!-- load all of the dependencies --> 
+   <script type="text/javascript" src="assets/bpm_libs.js" ></script> 
+   <script type="text/javascript" src="assets/app_lib.js" ></script>
+   <script type="text/javascript" src="assets/core_lib.js" ></script> 
+   <script type="text/javascript" src="assets/auth_lib.js" ></script> 
+   <script type="text/javascript" src="assets/home_lib.js" ></script>
+<!-- load my app external lib -->   
+   <script type="text/javascript"> 
+	      spade.ready(function() { 
+			//bootstrap
+	        spade.require('kloudgis/home/lib/main');		
+	      }); 
+		 
+   </script>
+	
+</html>

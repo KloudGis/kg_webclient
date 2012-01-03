@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<!--<html manifest="kloudgis.manifest">-->
+  <head>
+	 	<meta charset="UTF-8">
+	  	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	  	<meta name="description" content="">
+	  	<meta name="author" content="Kloudgis.org">
+	  	<meta name="viewport" content="width=600">
+	  	<link rel="shortcut icon" href="favicon.ico">
+	  	<link rel="apple-touch-icon" href="apple-touch-icon.png">
+	
+		<link rel="stylesheet" href="css/style.css" type="text/css" media="screen"/>
+		<link rel="stylesheet" href="css/login.css" type="text/css" media="screen"/>
+    	<title></title>
+  </head>
+  <body>
+	<iframe id="if-spinner" src="spinner.html"></iframe>
+     <script type="text/x-handlebars">	
+		{{#view id="main-view" isVisibleBinding="KG.core_login.showLogin"}}	
+			<a>
+				<img id="kloud-logo" src="resources/images/kloudgis_black_256.png" alt="Kloudgis"/>
+			</a>		
+			<a id="kloud-brand">Kloudgis</a>
+		<div class="login-pane">
+			<table>
+			<tr>
+			<td>
+				<label id="email-label" for="user-field"></label>
+			</td>
+			<td>
+				{{#view KG.TextField id="user-field" valueBinding="KG.credential.user" type="email" placeholder_not_loc="_UsernameHint" spellcheck="false" autocorrect="off" autocapitalize="off" autocomplete="on" nl_sc_action="loginAction" autofocus="true"}}
+				{{/view}}	
+				</td>
+			<tr>
+			<td>
+				<label id="pwd-label" for="pwd-field"></label>
+				</td>
+				<td>
+				{{#view KG.TextField id="pwd-field" valueBinding="KG.credential.pwd" type="password" placeholder_not_loc="_PasswordHint" spellcheck="false" autocorrect="off" autocapitalize="off" autocomplete="on" nl_sc_action="loginAction"}}
+				{{/view}}
+				</td>
+			</div>
+			<tr id="login-button-row">
+			<td>
+			</td>
+			<td>	
+				{{#view KG.Button classBinding="isActive" sc_action="loginAction" id="login-button"}}						
+				{{/view}}
+			</td>
+			</table>
+			{{view SC.Checkbox id="remember-me" titleBinding="KG.core_login.rememberMeLabel"
+			        valueBinding="KG.core_login.rememberMe"}}
+			{{#view id="error-message" messageBinding="KG.core_login.errorMessage"}}
+				{{message}} 
+			{{/view}}
+		</div>	
+		<div id="signup-box">
+			<span id="signup-title">Not yet member ?</span>
+			{{#view KG.Button classBinding="isActive" sc_action="signupAction" id="signup-button"}}			
+			{{/view}}
+		</div>
+		{{/view}}	
+		{{#view KG.LoadingImageView id="kloud-loading" isVisibleBinding="KG.core_login.isBusy"}}
+			<img {{bindAttr src="loadingImage"}} alt="Loading"/>
+	  	{{/view}}	
+    </script>
+  </body>
+
+<!-- load all of the dependencies --> 
+   <script type="text/javascript" src="assets/bpm_libs.js" ></script>
+   <script type="text/javascript" src="assets/app_lib.js" ></script> 
+   <script type="text/javascript" src="assets/auth_lib.js" ></script> 
+   <script type="text/javascript" src="assets/login_lib.js" ></script> 
+<!-- load my app external lib -->   
+   <script type="text/javascript" src="ext/sha256.js" ></script> 
+   <script type="text/javascript"> 
+	      spade.ready(function() { 
+	        spade.require('kloudgis/login/lib/main');			
+	      }); 
+	</script>
+</html>

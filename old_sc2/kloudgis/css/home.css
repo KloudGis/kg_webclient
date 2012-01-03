@@ -1,0 +1,90 @@
+body{
+	width: 450px;
+	margin: 0px auto;
+}
+
+#if-spinner{
+	position: absolute;	
+	width:450px;
+	height:60px;
+	top:45%;	
+}
+
+#kloud-logo{
+	display: block;
+	height:256px;
+	margin:0px auto;
+	border:none;
+}
+
+
+#sandboxes-title{
+	margin-left: 10px;
+	display: block;
+	text-align: left;
+	font-size: 24px;
+	line-height: 28px;
+	font-weight: bold;
+	color: #333;
+	text-shadow: rgba(255, 255, 255, .9) 0px 1px 0px;
+}
+
+.sandbox-list{
+	list-style: none;
+	margin-left: 0px;
+	background-color: #FFFEEB;
+}
+
+.sandbox-list li{
+	border-bottom:1px solid #E6E6E6;
+}
+.sandbox-list-item{
+	padding: 0.2cm;
+}
+
+.sandbox-list-item > span{
+	display: block;
+	width:100%;
+	text-align:right;
+	color:gray;
+	font-size:10px;
+}
+
+.open-sandbox-link {
+	display: block;
+	width: 100%;
+	color: #4183C4;
+	font-size: 0.5cm;
+	background: url('../resources/images/arrow-40.png') 97% 50% no-repeat;
+	transition:font-size 0.1s ease-in;
+	-webkit-transition:font-size 0.1s ease-in;
+	-moz-transition:font-size 0.1s ease-in;
+}
+
+.open-sandbox-link:hover {
+	background: url('../resources/images/arrow-90.png') 97% 50% no-repeat;
+	font-size:0.55cm;
+}
+
+
+#welcome-usr-label{
+	margin-top:5px;
+	width:100%;
+	text-align: center;
+	font-size: 14px;
+}
+
+#query-message{
+	color:red;
+	font-size: 16px;
+	margin:10px;
+	visibility:hidden;
+}
+
+
+#logout-button{
+	position: absolute;
+	right:10px;
+	top:5px;
+}
+

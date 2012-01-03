@@ -1,0 +1,58 @@
+{
+  "sproutcore": {
+    "version": "2.0.beta.3.1",
+    "path": "/Users/jeanfelixg/.bpm/gems/sproutcore-2.0.beta.3.1"
+  },
+  "sproutcore-statechart": {
+    "version": "2.0.beta.4",
+    "path": "/Users/jeanfelixg/.bpm/gems/sproutcore-statechart-2.0.beta.4"
+  },
+  "sproutcore-datastore": {
+    "version": "2.0.beta.3",
+    "path": "/Users/jeanfelixg/.bpm/gems/sproutcore-datastore-2.0.beta.3"
+  },
+  "spade": {
+    "version": "1.0.2",
+    "path": "/Users/jeanfelixg/.bpm/gems/spade-1.0.2"
+  },
+  "sproutcore-runtime": {
+    "version": "2.0.beta.3",
+    "path": "/Users/jeanfelixg/.bpm/gems/sproutcore-runtime-2.0.beta.3"
+  },
+  "sproutcore-views": {
+    "version": "2.0.beta.3",
+    "path": "/Users/jeanfelixg/.bpm/gems/sproutcore-views-2.0.beta.3"
+  },
+  "sproutcore-handlebars": {
+    "version": "2.0.beta.3",
+    "path": "/Users/jeanfelixg/.bpm/gems/sproutcore-handlebars-2.0.beta.3"
+  },
+  "sproutcore-handlebars-format": {
+    "version": "2.0.beta.3.1",
+    "path": "/Users/jeanfelixg/.bpm/gems/sproutcore-handlebars-format-2.0.beta.3.1"
+  },
+  "sproutcore-utils": {
+    "version": "2.0.beta.3",
+    "path": "/Users/jeanfelixg/.bpm/gems/sproutcore-utils-2.0.beta.3"
+  },
+  "sproutcore-datetime": {
+    "version": "2.0.beta.3",
+    "path": "/Users/jeanfelixg/.bpm/gems/sproutcore-datetime-2.0.beta.3"
+  },
+  "sproutcore-indexset": {
+    "version": "2.0.beta.3",
+    "path": "/Users/jeanfelixg/.bpm/gems/sproutcore-indexset-2.0.beta.3"
+  },
+  "sproutcore-metal": {
+    "version": "2.0.beta.3",
+    "path": "/Users/jeanfelixg/.bpm/gems/sproutcore-metal-2.0.beta.3"
+  },
+  "jquery": {
+    "version": "1.6.2",
+    "path": "/Users/jeanfelixg/.bpm/gems/jquery-1.6.2"
+  },
+  "handlebars": {
+    "version": "1.0.0.beta.3",
+    "path": "/Users/jeanfelixg/.bpm/gems/handlebars-1.0.0.beta.3"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "ember": {
+    "version": "0.9.3",
+    "path": "/Users/jeanfelixg/.bpm/gems/ember-0.9.3"
+  },
+  "ember-statechart": {
+    "version": "0.9",
+    "path": "/Users/jeanfelixg/.bpm/gems/ember-statechart-0.9"
+  },
+  "ember-datastore": {
+    "version": "0.9",
+    "path": "/Users/jeanfelixg/.bpm/gems/ember-datastore-0.9"
+  },
+  "spade": {
+    "version": "1.0.2",
+    "path": "/Users/jeanfelixg/.bpm/gems/spade-1.0.2"
+  },
+  "ember-runtime": {
+    "version": "0.9.3",
+    "path": "/Users/jeanfelixg/.bpm/gems/ember-runtime-0.9.3"
+  },
+  "ember-views": {
+    "version": "0.9.3",
+    "path": "/Users/jeanfelixg/.bpm/gems/ember-views-0.9.3"
+  },
+  "ember-states": {
+    "version": "0.9.3",
+    "path": "/Users/jeanfelixg/.bpm/gems/ember-states-0.9.3"
+  },
+  "ember-handlebars": {
+    "version": "0.9.3",
+    "path": "/Users/jeanfelixg/.bpm/gems/ember-handlebars-0.9.3"
+  },
+  "ember-handlebars-format": {
+    "version": "0.9.3",
+    "path": "/Users/jeanfelixg/.bpm/gems/ember-handlebars-format-0.9.3"
+  },
+  "ember-utils": {
+    "version": "0.9",
+    "path": "/Users/jeanfelixg/.bpm/gems/ember-utils-0.9"
+  },
+  "ember-datetime": {
+    "version": "0.9.3",
+    "path": "/Users/jeanfelixg/.bpm/gems/ember-datetime-0.9.3"
+  },
+  "ember-indexset": {
+    "version": "0.9",
+    "path": "/Users/jeanfelixg/.bpm/gems/ember-indexset-0.9"
+  },
+  "ember-metal": {
+    "version": "0.9.3",
+    "path": "/Users/jeanfelixg/.bpm/gems/ember-metal-0.9.3"
+  },
+  "jquery": {
+    "version": "1.6.2",
+    "path": "/Users/jeanfelixg/.bpm/gems/jquery-1.6.2"
+  },
+  "handlebars": {
+    "version": "1.0.0.beta.3",
+    "path": "/gitroot/kg_webclient/sc2/kloudgis/vendor/handlebars-1.0.0.beta.3"
+  },
+  "metamorph": {
+    "version": "1.0.0",
+    "path": "/Users/jeanfelixg/.bpm/gems/metamorph-1.0.0"
+  }
+}
