@@ -39,6 +39,7 @@ require("./controllers/inspector");
 require("./views/inspector_attribute");
 require("kloudgis/app/lib/views/switch");
 require("kloudgis/app/lib/views/select");
+require("kloudgis/app/lib/views/select_input");
 require("./views/delete_feature_comment");
 require("./controllers/feature_comments");
 require("./controllers/feature_new_comment");

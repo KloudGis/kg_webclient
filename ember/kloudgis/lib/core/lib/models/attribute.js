@@ -52,7 +52,7 @@ KG.Attribute = SC.Object.extend({
     }.property(),
 
     enumValues: function() {
-		var possibleVals = this.getPath('attrtype.enum_values');
+        var possibleVals = this.getPath('attrtype.enum_values');
         var enumVals = [];
         var value = this.get('value');
         var i, len = possibleVals.length;
@@ -64,12 +64,26 @@ KG.Attribute = SC.Object.extend({
             enumVals.push(possibleVals[i]);
         }
         if (!found) {
-            enumVals.insertAt(0, SC.Object.create({
+            enumVals.insertAt(0, {
                 key: value,
                 label: '?'
-            }));
+            });
         }
         return enumVals;
-    }.property('attr_type').cacheable()
+    }.property('attr_type').cacheable(),
+
+    enumValuesCustom: function() {
+        var possibleVals = this.getPath('attrtype.enum_values');
+        var enumVals = [];
+        var i, len = possibleVals.length;
+        enumVals.push({
+            key: KG.otherKey,
+            label: "_otherValue".loc()
+        });
+        for (i = 0; i < len; i++) {
+            enumVals.push(possibleVals[i]);
+        }
+        return enumVals;
+    }.property('attr_type').cacheable(),
 
 });

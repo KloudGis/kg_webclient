@@ -51,7 +51,8 @@ var fr = {
 	"_sendOnEnterTooltip" : "Envoyer le message en appuyant sur Retour",
 	"_failedToSendMessage": "Impossible d'envoyer le message.",
 	"_timeoutSendMessage" : "Erreur lors de l'envoi du message.",
-	"_sendMessageSuccessful" : "Message envoyé."
+	"_sendMessageSuccessful" : "Message envoyé.",
+	"_otherValue" : "Autre..."
 };
 
 var en = {
@@ -107,7 +108,8 @@ var en = {
 	"_sendOnEnterTooltip" : "Send the message on Enter",
 	"_failedToSendMessage": "Cannot send the message.",
 	"_timeoutSendMessage" : "Failed to send message.",
-	"_sendMessageSuccessful" : "Message envoyé."	
+	"_sendMessageSuccessful" : "Message envoyé.",
+	"_otherValue" : "Other..."	
 };
 
 if(KG.lang === 'fr'){

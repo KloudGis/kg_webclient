@@ -1,5 +1,6 @@
 //generic templates
 Ember.TEMPLATES['catalog-renderer'] = spade.require('kloudgis/~templates/catalog_renderer');
+Ember.TEMPLATES['catalog-any-renderer'] = spade.require('kloudgis/~templates/catalog_text_renderer');
 Ember.TEMPLATES['text-renderer'] = spade.require('kloudgis/~templates/text_renderer');
 Ember.TEMPLATES['num-renderer'] = spade.require('kloudgis/~templates/num_renderer');
 Ember.TEMPLATES['num-range-renderer'] = spade.require('kloudgis/~templates/num_range_renderer');
