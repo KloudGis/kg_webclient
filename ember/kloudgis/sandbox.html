@@ -25,25 +25,26 @@
   </head>
 <!-- *** BODY *** -->
   <body>	
-	<div id="box">
-		<div id="left-side-panel">
-			<div class="inspector-panel">
-				<script type="text/x-handlebars">				
-				{{#view class="inspector-title" tagName="header"}}
-					{{#view KG.Button tagName="div" class="ios-button inspector-cancel" isVisibleBinding="KG.inspectorController.isDirty" classBinding="isActive" sc_action="cancelInspectorAction" titleBinding="KG.inspectorController.cancelTitle"}}
-						{{loc _cancel}}
-					{{/view}}
-					<h1 class="label-ellipsis" {{bindAttr title="KG.inspectorController.title"}}>{{KG.inspectorController.title}}</h1>
-					{{#view KG.Button tagName="div" class="ios-button inspector-save" classBinding="isActive" sc_action="closeInspectorAction" titleBinding="KG.inspectorController.saveTitle"}}
-						{{KG.inspectorController.saveLabel}}
-					{{/view}}			
+	<div id="box">		
+		<div id="left-side-panel">	
+			<script type="text/x-handlebars">
+			{{#view id="inspector-title" tagName="header"}}
+				{{#view KG.Button tagName="div" class="ios-button inspector-cancel" isVisibleBinding="KG.inspectorController.isDirty" classBinding="isActive" sc_action="cancelInspectorAction" titleBinding="KG.inspectorController.cancelTitle"}}
+					{{loc _cancel}}
 				{{/view}}
-		    	{{#collection contentBinding="KG.inspectorController" class="inspector-attrs-list"}}
-					{{#view KG.InspectorAttributeView class="inspector-list-item" classBinding="itemView.content.css_class"}}
-					{{/view}}
-				{{/collection}}	
-				{{view templateName="feature-comments" class="super-feature-comments"}}																	
-			</script>	
+				<h1 class="label-ellipsis" {{bindAttr title="KG.inspectorController.title"}}>{{KG.inspectorController.title}}</h1>
+				{{#view KG.Button tagName="div" class="ios-button inspector-save" classBinding="isActive" sc_action="closeInspectorAction" titleBinding="KG.inspectorController.saveTitle"}}
+					{{KG.inspectorController.saveLabel}}
+				{{/view}}			
+			{{/view}}
+			</script>		
+			<div id="inspector-panel">
+				<script type="text/x-handlebars">							
+		    		{{#collection contentBinding="KG.inspectorController" class="inspector-attrs-list"}}
+						{{view KG.InspectorAttributeView class="inspector-list-item" classBinding="itemView.content.css_class"}}
+					{{/collection}}	
+					{{view templateName="feature-comments" class="super-feature-comments"}}																	
+				</script>	
 			</div>
 		</div>
 		<div id="super-map">

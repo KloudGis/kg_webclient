@@ -1,28 +1,36 @@
-#left-side-panel{
+
+#inspector-panel{
 	box-shadow: 2px 2px 8px #666;
 	-webkit-box-shadow: 2px 2px 8px #666;
 	border-bottom-right-radius: 12px;	
 }
 
-#left-side-panel, .inspector-title{
+#inspector-panel, #inspector-title{
 	width:400px;
 }
 
-
-#left-side-panel{
+#inspector-panel{
 	top:0;
 	left:-500px;
 	z-index:10;
-	position: absolute;
+	position:absolute;
+	top:0px;
 	max-height:100%;
 	overflow-x: hidden;
 	overflow-y: scroll;
+	background-color: #CBD2D8;
+	background-image: -webkit-gradient(linear, left top, right top, from(#c5ccd4), color-stop(0.75, #c5ccd4), color-stop(0.75, transparent), to(transparent));
+	background-image: -moz-linear-gradient(left, #c5ccd4, #c5ccd4 75%, transparent 75%, transparent);
+	-webkit-background-size: 5px 100%;
+	background-size: 5px 100%;
+	border-bottom-right-radius: 12px;
 	transition:left 0.5s;
 	-webkit-transition: -webkit-transform 0.5s;
 	-moz-transition:left 0.5s;
 }
 
-.inspector-title{	
+#inspector-title{
+	top:-50px;	
 	z-index: 11;
 	position: fixed;
 	height: 35px;
@@ -30,6 +38,9 @@
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#b0bccd), color-stop(0.5, #889bb3), color-stop(0.5, #8195af), to(#6d84a2));
 	border-top: 1px solid #CDD5DF;
 	border-bottom: 1px solid #2D3642;
+	transition:top 0.5s;
+	-webkit-transition: -webkit-transform 0.5s;
+	-moz-transition:top 0.5s;
 }
 
 .inspector-cancel{	
@@ -44,20 +55,23 @@
 	top:6px;
 }
 
-#left-side-panel.active{
+#left-side-panel.active #inspector-panel{
 	left:0;
 }
 
+#left-side-panel.active #inspector-title{
+	top:0px;
+}
 /* Use transform3d if available (its smooter)*/
 @media screen and (-webkit-transform-3d) {
-	#left-side-panel.active{
+	#left-side-panel.active #inspector-panel{
 		-webkit-transform: translate3d(500px,0,0);
 		left:-500px;
 	}
-}
-
-#left-side-panel.active .inspector-title{
-	top:0px;
+	#left-side-panel.active #inspector-title{
+		-webkit-transform: translate3d(0,50px,0);
+		top:-50px;
+	}
 }
 
 .inspector-close-button{
@@ -65,7 +79,7 @@
 	margin-right:-10px;
 }
 
-.inspector-title h1{
+#inspector-title h1{
 	position: absolute;
 	top:7px;
 	left:95px;
@@ -78,18 +92,8 @@
 	text-align: center;
 }
 
-.inspector-panel{
-	width:100%;
-	background-color: #CBD2D8;
-	background-image: -webkit-gradient(linear, left top, right top, from(#c5ccd4), color-stop(0.75, #c5ccd4), color-stop(0.75, transparent), to(transparent));
-	background-image: -moz-linear-gradient(left, #c5ccd4, #c5ccd4 75%, transparent 75%, transparent);
-	-webkit-background-size: 5px 100%;
-	background-size: 5px 100%;
-	border-bottom-right-radius: 12px;	
-}
-
 .inspector-attrs-list{
-	padding-top:35px;
+	margin-top:35px;
 }
 
 .inspector-attrs-list > div{
