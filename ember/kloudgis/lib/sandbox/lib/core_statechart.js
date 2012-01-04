@@ -760,9 +760,9 @@ SC.mixin(KG, {
 
                             exitState: function() {
                                 console.log('exit createNoteState');
+								KG.core_note.clearCreateNote();
                                 KG.core_note.rollbackModifications();
                                 KG.activeNoteController.set('content', null);
-                                KG.core_note.clearCreateNote();
                                 KG.core_sandbox.destroyAutosize('#note-description-area');
                             },
 
@@ -795,9 +795,9 @@ SC.mixin(KG, {
 
                             exitState: function() {
                                 console.log('exit multiple notes');
+                                KG.core_note.cleanUpMultipleNotesElements();
                                 KG.notesPopupController.set('marker', null);
                                 KG.notesPopupController.set('content', []);
-                                KG.core_note.cleanUpMultipleNotesElements();
                             },
 
                             noteSelectedAction: function(note, params) {

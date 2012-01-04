@@ -163,6 +163,7 @@ KG.core_note = SC.Object.create({
             this._new_note_marker = null;
             this.set('featureTemplate', null);
         }
+		this.cleanUpActiveNoteElements();
     },
 
     /**
