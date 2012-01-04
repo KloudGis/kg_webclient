@@ -7,6 +7,16 @@
 	background: rgb(207,209,214);
 }
 
+.comment-list > div:first-child:hover{
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+}
+
+.comment-list > div:last-child:hover{
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
+}
+
 .comment-list  > div{
 	padding-top:3px;
 	border-bottom: solid 1px white;
