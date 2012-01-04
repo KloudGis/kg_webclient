@@ -23,7 +23,7 @@ KG.InspectorAttributeView = SC.View.extend({
 		if(renderer && SC.TEMPLATES[renderer]){
 			ren = SC.View.create({templateName: renderer, parentView: this});
 		}else{
-			ren = SC.View.create({templateName: 'read-only-renderer', parentView: this});
+			ren = SC.View.create({templateName: 'label-renderer', parentView: this});
 		}
 		ren.appendTo(this.get('element'));
 		this._renderer = ren;
