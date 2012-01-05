@@ -1,0 +1,17 @@
+{{#view id="super-inspector" classBinding="KG.inspectorController.active"}}
+	{{#view id="inspector-title" tagName="header"}}
+		{{#view KG.Button tagName="div" class="ios-button ios-tb-left" isVisibleBinding="KG.inspectorController.isDirty" classBinding="isActive" sc_action="cancelInspectorAction" titleBinding="KG.inspectorController.cancelTitle"}}
+			{{loc _cancel}}
+		{{/view}}
+		<h1 class="label-ellipsis" {{bindAttr title="KG.inspectorController.title"}}>{{KG.inspectorController.title}}</h1>
+		{{#view KG.Button tagName="div" class="ios-button ios-tb-right" classBinding="isActive" sc_action="closeInspectorAction" titleBinding="KG.inspectorController.saveTitle"}}
+			{{KG.inspectorController.saveLabel}}
+		{{/view}}			
+	{{/view}}	
+	<div id="inspector-panel">						
+		{{#collection contentBinding="KG.inspectorController" class="inspector-attrs-list"}}
+			{{view KG.InspectorAttributeView class="inspector-list-item" classBinding="itemView.content.css_class"}}
+		{{/collection}}	
+		{{view templateName="feature-comments" class="super-feature-comments"}}																	
+	</div>				
+{{/view}}

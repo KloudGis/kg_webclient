@@ -1,5 +1,5 @@
 //super class for comments controllers (note + feature)
-KG.CommentsController = SC.ArrayProxy.extend({
+KG.CommentsController = Ember.ArrayController.extend({
 
     commentsPanelVisible: NO,
     showing: NO,

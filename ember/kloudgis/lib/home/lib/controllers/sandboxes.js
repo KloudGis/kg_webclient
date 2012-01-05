@@ -1,7 +1,7 @@
 /**
 * List of sandbox
 **/
-KG.sandboxesController = SC.ArrayProxy.create({
+KG.sandboxesController = Ember.ArrayController.create({
 	content: [],
 	recordsReady:  NO
 	

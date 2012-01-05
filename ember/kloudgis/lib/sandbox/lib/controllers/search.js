@@ -1,7 +1,7 @@
 /**
 * List of Search categories upon search request.
 **/
-KG.searchController = SC.ArrayProxy.create({
+KG.searchController = Ember.ArrayController.create({
 	content: [],
 	searchHistorySize: 5,
 	searchValue: null,

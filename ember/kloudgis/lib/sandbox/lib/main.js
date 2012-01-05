@@ -45,6 +45,10 @@ require("./controllers/feature_comments");
 require("./controllers/feature_new_comment");
 require("./controllers/feature_delete_comment");
 
+//palette
+require("./core_palette");
+require("./controllers/palette");
+
 //info
 require("./controllers/info");
 require("./core_info");

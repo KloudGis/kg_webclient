@@ -1,0 +1,125 @@
+#palette-panel{
+	box-shadow: 2px 2px 8px #666;
+	-webkit-box-shadow: 2px 2px 8px #666;
+	border-bottom-right-radius: 12px;	
+}
+
+#palette-panel, #palette-title{
+	width:400px;
+}
+
+#palette-panel{
+	top:0;
+	left:-500px;
+	z-index:10;
+	position:absolute;
+	top:0px;
+	max-height:100%;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	background-color: white;
+	border-bottom-right-radius: 12px;
+	transition:left 0.7s;
+	-webkit-transition: -webkit-transform 0.7s;
+	-moz-transition:left 0.7s;
+}
+
+#palette-title{
+	top:-50px;	
+	z-index: 11;
+	position: fixed;
+	height: 35px;
+	background-image: -moz-linear-gradient(top, #b0bccd, #889bb3 50%, #8195af 50%, #6d84a2);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#b0bccd), color-stop(0.5, #889bb3), color-stop(0.5, #8195af), to(#6d84a2));
+	border-top: 1px solid #CDD5DF;
+	border-bottom: 1px solid #2D3642;
+	transition:top 0.7s;
+	-webkit-transition: -webkit-transform 0.7s;
+	-moz-transition:top 0.7s;
+}
+
+#super-palette.active #palette-panel{
+	left:0;
+}
+
+#super-palette.active #palette-title{
+	top:0px;
+}
+
+/* Use transform3d if available (its smooter)*/
+@media screen and (-webkit-transform-3d) {
+	#super-palette.active #palette-panel{
+		-webkit-transform: translate3d(500px,0,0);
+		left:-500px;
+	}
+	#super-palette.active #palette-title{
+		-webkit-transform: translate3d(0,50px,0);
+		top:-50px;
+	}
+}
+
+
+#palette-title h1{
+	position: absolute;
+	top:7px;
+	left:95px;
+	right:95px;
+	font: bold 14px "Lucida Grande", Helvetica, Arial, Sans-serif;
+	letter-spacing: -1px;
+	text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.5);
+	color: white;
+	margin: 0px;
+	text-align: center;
+}
+
+#palette-panel .palette-list{
+	margin:45px 10px 10px 10px;
+}
+
+
+
+.palette-list > div{
+	position:relative;
+	left:5%;
+	width:90%;
+	margin-top:10px;
+}
+
+/**  Mobile CSS Override **/
+
+@media screen and (max-width: 480px) {
+	#palette-panel{
+		border-bottom-right-radius: 0;
+	}
+}
+
+
+@media screen and (max-width: 320px) {
+	#palette-panel, #palette-title{
+		width:320px;
+	}
+	
+	.inspector-list-item.one-column{
+		width:155px;
+	}
+
+	.inspector-list-item.two-columns{
+		width:310px;
+	}
+	
+}
+
+@media screen and (min-width: 321px) and (max-width: 480px) {
+	#palette-panel, #palette-title{
+		width:480px;
+	}
+	
+}
+
+@media screen and (max-width: 480px) {
+	.palette-list > div{
+		position:relative;
+		left:10%;
+		width:80%;
+	}
+}

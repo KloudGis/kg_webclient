@@ -1,7 +1,7 @@
 /**
 * List of feature attributes to render in the inspector.
 **/
-KG.inspectorController = SC.ArrayProxy.create({
+KG.inspectorController = Ember.ArrayController.create({
 	//attributes
 	content: [],
 	feature: null,
@@ -33,7 +33,7 @@ KG.inspectorController = SC.ArrayProxy.create({
 		if(this.get('isDirty')){
 			return "_saveInspectorLabel".loc();
 		}else{
-			return "_closeInspectorLabel".loc();
+			return "_close".loc();
 		}
 	}.property('isDirty')
 });

@@ -81,32 +81,38 @@ SC.mixin(KG, {
 
                 //******************************
                 // Concurrent state for Inpector
-                // Inspector 
+                // Inspector and the palette
                 //******************************
-                inspectorState: SC.State.extend({
-                    initialSubstate: 'inspectorHiddenState',
+                inspectorPaletteState: SC.State.extend({
+	
+                    initialSubstate: 'allHiddenState',
 
-                    //******************************
-                    // Inspector is Hidden 
-                    //******************************
-                    inspectorHiddenState: SC.State.extend({
-
-                        selectFeatureInspectorAction: function(feature) {
-                            if (feature && feature.get('isSelectable') && feature.get('isInspectorSelectable')) {
-                                this.gotoState('inspectorVisibleState');
-                                KG.core_inspector.selectFeature(feature);
-                            }
+					selectFeatureInspectorAction: function(feature) {
+                        if (feature && feature.get('isSelectable') && feature.get('isInspectorSelectable')) {
+                            this.gotoState('inspectorVisibleState');
+                            KG.core_inspector.selectFeature(feature);
                         }
+                    },
+
+					showPaletteAction: function(){
+						this.gotoState('paletteVisibleState');
+					},
+
+                    //******************************
+                    // Inspector and Palette are Hidden 
+                    //******************************
+                    allHiddenState: SC.State.extend({
+                      
                     }),
 
                     //******************************
                     // Inspector is visible
                     //******************************
                     inspectorVisibleState: SC.State.extend({
-
+						
                         enterState: function() {
-                            KG.inspectorController.set('active', YES);
-                            KG.featureCommentsController.set('commentsPanelVisible', YES);
+							KG.inspectorController.set('active', YES);                      
+							KG.featureCommentsController.set('commentsPanelVisible', YES);
                         },
 
                         exitState: function() {
@@ -129,12 +135,12 @@ SC.mixin(KG, {
                         },
 
                         closeInspectorAction: function() {
-                            this.gotoState('inspectorHiddenState');
+                            this.gotoState('allHiddenState');
                         },
 
                         cancelInspectorAction: function() {
                             KG.core_inspector.rollbackModifications();
-                            this.gotoState('inspectorHiddenState');
+                            this.gotoState('allHiddenState');
                         },
 
                         showFeatureCommentsAction: function() {
@@ -196,7 +202,38 @@ SC.mixin(KG, {
                                 KG.featureDeleteCommentController.set('content', null);
                             }
                         }
-                    })
+                    }),
+
+					//******************************
+                    // Palette is visible
+                    //******************************
+                    paletteVisibleState: SC.State.extend({
+	
+						_timeout: null,
+						
+						enterState: function() {
+							clearTimeout(this._timeout);
+                            KG.paletteController.set('active', YES);
+							KG.paletteController.set('content', KG.store.find(KG.FEATURETYPE_QUERY));
+                        },
+
+                        exitState: function() {
+                            KG.paletteController.set('active', NO);
+							this._timeout = setTimeout(function(){
+								KG.paletteController.get('content').destroy();
+								KG.paletteController.set('content', []);
+							}, 1000);
+							
+                        },
+
+						closePaletteAction: function(){
+							this.gotoState('allHiddenState');
+						},
+
+						showPaletteAction: function(){
+							this.gotoState('allHiddenState');
+						}
+					})
                 }),
 
                 //******************************

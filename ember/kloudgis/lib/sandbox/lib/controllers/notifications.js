@@ -1,7 +1,7 @@
 /**
 * List of KG.Message
 **/
-KG.notificationsController = SC.ArrayProxy.create({
+KG.notificationsController = Ember.ArrayController.create({
 	content: [],
 	
 	activePopup: NO,

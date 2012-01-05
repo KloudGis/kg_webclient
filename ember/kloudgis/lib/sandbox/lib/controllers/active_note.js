@@ -12,7 +12,7 @@ KG.activeNoteController = SC.Object.create({
 	}.property('content.comments'),
 
  /* label and image for the create note control*/
-    createNoteLabel: "_createNote".loc(),
+    createLabel: "_createNote".loc(),
 
     titleLabel: function() {
         return "_noteTitle".loc();

@@ -1,6 +1,6 @@
 /**
 * List of WMS layers
 **/
-KG.layersController = SC.ArrayProxy.create({
+KG.layersController = Ember.ArrayController.create({
 	content: null
 });

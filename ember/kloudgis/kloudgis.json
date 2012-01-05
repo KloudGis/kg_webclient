@@ -4,60 +4,66 @@
   "bpm:build": {
     "bpm_libs.js": {
 	  	"spade:format": "function",
-      "directories": [  
+      "files": [  
       ]
     },
 	"core_lib.js": {
 		"spade:format": "function",
-      "directories": [
+      "files": [
         "lib/core/lib"
       ]
     },
 	"templates_lib.js": {
 		"spade:format": "function",
-      "directories": [
+      "files": [
         "templates"
       ]
     },
 	"app_lib.js": {
 		"spade:format": "function",
-      "directories": [
+      "files": [
         "lib/app/lib"
       ]
     },
 	"auth_lib.js": {
 		"spade:format": "function",
-      "directories": [
+      "files": [
         "lib/auth/lib"
       ]
     },
 	"login_lib.js": {
 		"spade:format": "function",
-      "directories": [
+      "files": [
         "lib/login/lib"
       ]
     },
 	"home_lib.js": {
 		"spade:format": "function",
-      "directories": [
+      "files": [
         "lib/home/lib"
       ]
     },
 	"sandbox_lib.js": {
 		"spade:format": "function",
-      "directories": [
+      "files": [
         "lib/sandbox/lib","lib/sandbox/templates"
       ]
     },
+	"sandbox_styles.css": {
+      "files": [
+	        "lib/sandbox/css"
+	  ],
+				"minifier": "uglify-js"
+    },
 	"map_lib.js": {
 		"spade:format": "function",
-      "directories": [
+      "files": [
         "lib/map/lib"
       ]
     },
 	"signup_lib.js": {
 		"spade:format": "function",
-      "directories": [
+      "files": [
         "lib/signup/lib"
       ]
     }
@@ -66,6 +72,6 @@
     "ember": ">= 0",
 	"ember-statechart": ">= 0",
 	"ember-datastore": ">= 0",
-    "spade": ">= 0-pre"
+    "spade": ">= 0"
   }
 }

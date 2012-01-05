@@ -1,7 +1,7 @@
 /**
 * List of features found while doing a FeatureInfo.
 **/
-KG.infoController = SC.ArrayProxy.create({
+KG.infoController = Ember.ArrayController.create({
 	content: [],
 	
 	//show/hide the other possible features 

@@ -82,6 +82,18 @@
 	-webkit-tap-highlight-color: transparent;
 }
 
+.ios-tb-left{	
+	position: absolute;
+	left:5px;
+	top:6px;
+}
+
+.ios-tb-right{	
+	position: absolute;
+	right:5px;
+	top:6px;
+}
+
 .no-style-list{
 	list-style-type: none;
 	-webkit-margin-before: 0px;

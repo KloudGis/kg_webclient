@@ -6,8 +6,6 @@ KG.Button = SC.Button.extend({
 
     attributeBindings: ['type', 'disabled', 'title'],
 
-    disableTouch: NO,
-
     label_loc: function() {
         return this.get('label').loc();
     }.property('label'),

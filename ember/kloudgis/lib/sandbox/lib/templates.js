@@ -16,3 +16,5 @@ Ember.TEMPLATES['active-note-popup'] = spade.require('kloudgis/sandbox/templates
 Ember.TEMPLATES['feature-comments'] = spade.require('kloudgis/sandbox/templates/feature_comments');
 Ember.TEMPLATES['note-comments'] = spade.require('kloudgis/sandbox/templates/note_comments');
 Ember.TEMPLATES['multiple-notes-popup'] = spade.require('kloudgis/sandbox/templates/multiple_notes_popup');
+Ember.TEMPLATES['inspector'] = spade.require('kloudgis/sandbox/templates/inspector');
+Ember.TEMPLATES['palette'] = spade.require('kloudgis/sandbox/templates/palette');

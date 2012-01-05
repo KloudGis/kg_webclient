@@ -3,57 +3,73 @@
   "bpm": "1.0.0",
   "bpm:build": {
     "bpm_libs.js": {
-      "directories": [  
+      "files": [  
       ],
 		"minifier": "uglify-js"
     },
 	"core_lib.js": {
-      "directories": [
+      "files": [
         "lib/core/lib"
       ],
 		"minifier": "uglify-js"
     },
+	"templates_lib.js": {
+      "files": [
+        "templates"
+      ]
+    },
 	"app_lib.js": {
-      "directories": [
+      "files": [
         "lib/app/lib"
       ],
 		"minifier": "uglify-js"
     },
 	"auth_lib.js": {
-      "directories": [
+      "files": [
         "lib/auth/lib"
       ],
 		"minifier": "uglify-js"
     },
 	"login_lib.js": {
-      "directories": [
+      "files": [
         "lib/login/lib"
       ],
 		"minifier": "uglify-js"
     },
 	"home_lib.js": {
-      "directories": [
+      "files": [
         "lib/home/lib"
       ],
 		"minifier": "uglify-js"
     },
 	"sandbox_lib.js": {
-      "directories": [
-        "lib/sandbox/lib"
+      "files": [
+        "lib/sandbox/lib","lib/sandbox/templates"
+      ],
+		"minifier": "uglify-js"
+    },
+	"sandbox_styles.css": {
+      "files": [
+	        "lib/sandbox/css"
+	  ]
+    },
+	"map_lib.js": {
+      "files": [
+        "lib/map/lib"
       ],
 		"minifier": "uglify-js"
     },
 	"signup_lib.js": {
-      "directories": [
+      "files": [
         "lib/signup/lib"
       ],
 		"minifier": "uglify-js"
     }
   },
   "dependencies": {
-    "sproutcore": ">= 0-pre",
-    "sproutcore-statechart": ">= 0-pre",
-    "sproutcore-datastore": ">= 0-pre",
+    "ember": ">= 0",
+	"ember-statechart": ">= 0",
+	"ember-datastore": ">= 0",
     "spade": ">= 0-pre"
   }
 }

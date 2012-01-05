@@ -4,6 +4,8 @@
 KG.core_inspector = SC.Object.create({
 
     _highlight: null,
+    //inspector view
+    _view: null,
 
     /* chained store to perform modifications*/
     _store: null,
@@ -47,7 +49,7 @@ KG.core_inspector = SC.Object.create({
         }
     },
 
-  	/**
+    /**
 	* Fetch the comments for the active feature.
 	**/
     fetchComments: function(refresh) {
@@ -97,8 +99,8 @@ KG.core_inspector = SC.Object.create({
     /**
 	* Create a new Comment record.
 	**/
-    addComment: function(comment) { 
-		var nested_feature = KG.inspectorController.get('feature');
+    addComment: function(comment) {
+        var nested_feature = KG.inspectorController.get('feature');
         if (nested_feature) {
             var rec_comment = KG.store.createRecord(KG.FeatureComment, {
                 comment: comment,
@@ -111,17 +113,28 @@ KG.core_inspector = SC.Object.create({
                 nested_feature.get('comments').get('editableStoreIds').pushObject(rec_comment.get('id'));
                 KG.statechart.sendAction('featureCommentsReadyEvent');
             });
-        }     
+        }
     },
 
     /**
 	* Delete a commment record and commit it to the server.
 	**/
     deleteComment: function(comment) {
-		var nested_feature = KG.inspectorController.get('feature');
+        var nested_feature = KG.inspectorController.get('feature');
         nested_feature.get('comments').get('editableStoreIds').removeObject(comment.get('id'));
         comment.destroy();
         //commit only on record
         KG.store.commitRecords(null, null, [comment.get('storeKey')]);
     }
+});
+
+//lazzy creation too speed up app launch
+$(document).ready(function() {
+    setTimeout(function() {
+        KG.core_inspector._view = Ember.View.create({
+            templateName: 'inspector'
+        });
+        KG.core_inspector._view.append();
+    },
+    1000);
 });

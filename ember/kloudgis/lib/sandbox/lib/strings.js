@@ -2,6 +2,7 @@ var fr = {
 	"_me": "Moi",
 	"_save": "Sauvegarde",
 	"_cancel": "Annuler",
+	"_close": "Fermer",
 	"_Map": "Carte",
 	"_Note": "Note",
 	"_Notes": "%@ Notes",
@@ -26,7 +27,6 @@ var fr = {
 	"_hideComments": "Cacher les %@ commentaires",
 	"_commentPlaceholder": "Écrire un commentaire...",
 	"_closeInspectorTitle": "Fermer l'inspecteur",
-	"_closeInspectorLabel" : "Fermer",
 	"_cancelInspectorTitle" : "Annuler les changements",
 	"_saveInspectorTitle" : "Sauvegarder les changements",
 	"_saveInspectorLabel" : "Sauvegarde",	
@@ -52,13 +52,15 @@ var fr = {
 	"_failedToSendMessage": "Impossible d'envoyer le message.",
 	"_timeoutSendMessage" : "Erreur lors de l'envoi du message.",
 	"_sendMessageSuccessful" : "Message envoyé.",
-	"_otherValue" : "Autre..."
+	"_otherValue" : "Autre...",
+	"_paletteTitle": "Palette"
 };
 
 var en = {
 	"_me": "Me",
 	"_save": "Save",
 	"_cancel": "Cancel",
+	"_close": "Close",
 	"_Map": "Map",
 	"_Note": "Note",
 	"_Notes": "%@ Notes",
@@ -83,7 +85,6 @@ var en = {
 	"_hideComments": "Hide the %@ comments",
 	"_commentPlaceholder": "Write a comment...",
 	"_closeInspectorTitle": "Close the Inspector",
-	"_closeInspectorLabel" : "Close",
 	"_cancelInspectorTitle" : "Cancel the Changes",
 	"_saveInspectorTitle" : "Save the Changes",
 	"_saveInspectorLabel" : "Save",
@@ -109,7 +110,8 @@ var en = {
 	"_failedToSendMessage": "Cannot send the message.",
 	"_timeoutSendMessage" : "Failed to send message.",
 	"_sendMessageSuccessful" : "Message envoyé.",
-	"_otherValue" : "Other..."	
+	"_otherValue" : "Other...",
+	"_paletteTitle": "Palette"
 };
 
 if(KG.lang === 'fr'){

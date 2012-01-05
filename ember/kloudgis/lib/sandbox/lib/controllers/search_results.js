@@ -1,7 +1,7 @@
 /**
 * Features found on search category selection.
 **/
-KG.searchResultsController = SC.ArrayProxy.create({
+KG.searchResultsController = Ember.ArrayController.create({
 	content: [],
 	closeLabel: "_closeSearch".loc(),
 	listVisible: NO,

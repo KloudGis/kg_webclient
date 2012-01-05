@@ -56,17 +56,19 @@
 	top:0px;
 }
 
-#create-note{
+#palette-button{
 	left:50%;
-	margin-left:3cm;
+	margin-left:-3.6cm;
 	bottom:1px;
 	margin-bottom:2px;
 }
 
-#create-note button{
-	padding:0;
-	border:none;
-	background: none;
+
+#note-button{
+	left:50%;
+	margin-left:3cm;
+	bottom:1px;
+	margin-bottom:2px;
 }
 
 #position-label{

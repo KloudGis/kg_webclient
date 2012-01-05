@@ -1,7 +1,7 @@
 /**
 * Multiples notes list for the popup.
 **/
-KG.notesPopupController = SC.ArrayProxy.create({
+KG.notesPopupController = Ember.ArrayController.create({
 	content: [],
 	marker: null,
 	popupTitle: function(){

@@ -147,9 +147,11 @@ KG.core_sandbox = SC.Object.create({
     }.property('mousePosition'),
 
     autosize: function(element, options) {
-		if(!options){
-			options = {extraSpace:20};
-		}
+        if (!options) {
+            options = {
+                extraSpace: 20
+            };
+        }
         var el = $(element);
         if (el[0]) {
             el.autoResize(options);
