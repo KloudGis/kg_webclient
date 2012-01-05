@@ -40,14 +40,14 @@ KG.core_note = SC.Object.create({
     commitModifications: function(callback) {
         var note = KG.activeNoteController.get('content');
         if (note) {
-			if (note.get('status') !== SC.Record.READY_NEW) {
-            	note = KG.store.find(note);
-			}
+            if (note.get('status') !== SC.Record.READY_NEW) {
+                note = KG.store.find(note);
+            }
             this._store.commitChanges().destroy();
             this._store = null;
             KG.store.commitRecords();
             if (callback) {
-				//set a timeout because the status is already READY otherwise (BUSY_COMMINTING not yet set)
+                //set a timeout because the status is already READY otherwise (BUSY_COMMINTING not yet set)
                 setTimeout(function() {
                     note.onReady(null, callback);
                 },
@@ -101,9 +101,33 @@ KG.core_note = SC.Object.create({
     locateNote: function() {
         this.cancelLocateNote();
         var center = KG.core_leaflet.getCenter();
-        this._new_note_marker = KG.core_leaflet.addNewNoteMarker("_moveNote".loc());
+        var options = {
+            title: "_newNote".loc(),
+            animated: YES,
+            iconPath: 'resources/images/new.png',
+            draggable: YES,
+            popupContent: "_moveNote".loc(),
+            openPopup: YES,
+            dragendTarget: this,
+            dragendCb: this.markerDragged,
+            injectGetNativePositionFunction: YES
+        };
+        var marker = this.createTempMarker();
+        this._new_note_marker = KG.core_leaflet.addMarker(marker, center.get('lon'), center.get('lat'), options);
         return YES;
     },
+
+	createTempMarker:function(){
+		var marker = Ember.Object.create({
+            lon: function() {
+                return this.getNativePosition().get('lon');
+            }.property(),
+            lat: function() {
+                return this.getNativePosition().get('lat');
+            }.property()
+        });
+		return marker;
+	},
 
     /**
 	* Cancel locate note : Remove the temp marker
@@ -132,10 +156,22 @@ KG.core_note = SC.Object.create({
                     },
                     description: feature.get('title')
                 });
-                this._new_note_marker = KG.core_leaflet.addNewNoteMarker(null, feature.get('center'));
+                var lon = feature.get('center').get('lon');
+                var lat = feature.get('center').get('lat');
+                var options = {
+                    title: "_newNote".loc(),
+                    animated: YES,
+                    iconPath: 'resources/images/new.png',
+                    draggable: YES,
+                    dragendTarget: this,
+                    dragendCb: this.markerDragged,
+                	injectGetNativePositionFunction: YES
+		        };
+		        var marker = this.createTempMarker();
+                this._new_note_marker = KG.core_leaflet.addMarker(marker, lon, lat, options);
             }
         } else {
-            if (this._new_note_marker.get('lon') && this._new_note_marker.get('lat')) {
+            if (this._new_note_marker) {
                 note = this._store.createRecord(KG.Note, {
                     coordinate: {
                         x: this._new_note_marker.get('lon'),
@@ -163,7 +199,7 @@ KG.core_note = SC.Object.create({
             this._new_note_marker = null;
             this.set('featureTemplate', null);
         }
-		this.cleanUpActiveNoteElements();
+        this.cleanUpActiveNoteElements();
     },
 
     /**
@@ -332,7 +368,21 @@ KG.core_note = SC.Object.create({
             var marker = KG.noteMarkersController.objectAt(i);
             if (marker) {
                 //add the marker - If the marker was already visible, it replace it (remove the old one)
-                KG.core_leaflet.addMarker(marker, this, this.markerClicked);
+                var iconPath = undefined;
+                if (marker.get('featureCount') > 1) {
+                    iconPath = 'resources/images/group.png';
+                }
+                var options = {
+                    title: marker.get('tooltip'),
+                    animated: NO,
+                    iconPath: iconPath,
+                    draggable: NO,
+                    clickTarget: this,
+                    clickCb: this.markerClicked,
+                    dragendTarget: this,
+                    dragendCb: this.markerDragged
+                };
+                KG.core_leaflet.addMarker(marker, marker.get('lon'), marker.get('lat'), options);
             }
         }
         //readd the hl marker if any (to put it on top)
@@ -342,10 +392,17 @@ KG.core_note = SC.Object.create({
     },
 
     /**
-	* The user just click a marker. Try to continue.
+	* The user just click a marker.
 	**/
     markerClicked: function(marker) {
         KG.statechart.sendAction('clickMarkerAction', marker);
+    },
+
+    /**
+	* The user just drag a marker. 
+	**/
+    markerDragged: function(marker, lon, lat) {
+        KG.statechart.sendAction('markerDragEnded', lon, lat);
     },
 
     /**

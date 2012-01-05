@@ -731,7 +731,7 @@ SC.mixin(KG, {
 
                             hideMarkerPopupAction: function() {},
 
-                            notePositionSetAction: function() {
+                            markerDragEnded: function() {
                                 console.log('note position is now set');
                                 this.gotoState('createNoteState');
                             },
@@ -777,7 +777,7 @@ SC.mixin(KG, {
                                 this.gotoState('navigationState');
                             },
 
-                            notePositionSetAction: function(lon, lat) {
+                            markerDragEnded: function(lon, lat) {
                                 KG.core_note.updatePosition(lon, lat);
                             }
 

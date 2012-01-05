@@ -107,14 +107,14 @@
 
 /* map anim */
 
-.new-note-marker{
+.animated-marker{
 	top:-1000px;
 	transition:top 0.9s ease-out;
 	-webkit-transition:top 0.9s ease-out;
 	-moz-transition:top 0.9s ease-out;
 }
 
-.new-note-marker.new-note-marker-ready{
+.animated-marker.animated-marker-ready{
 	top:0px;
 }
 

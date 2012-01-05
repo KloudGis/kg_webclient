@@ -31,9 +31,30 @@ KG.core_highlight = SC.Object.create({
             return NO;
         }
         try {
-            return KG.core_leaflet.addHighlightMarker(lonLat);
+            var options = {
+                title: null,
+                animated: NO,
+                iconPath: 'resources/images/highlight.png',
+                draggable: NO,
+                dragendTarget: this,
+                dragendCb: this.markerDragged,
+                injectGetNativePositionFunction: YES
+            };
+            var marker = Ember.Object.create({
+                lon: function() {
+                    return this.getNativePosition().get('lon');
+                }.property(),
+                lat: function() {
+                    return this.getNativePosition().get('lat');
+                }.property()
+            });
+            return KG.core_leaflet.addMarker(marker, lonLat.get('lon'), lonLat.get('lat'), options);
         } catch(e) {
             return NO;
         }
+    },
+
+    markerDragged: function(marker, lon, lat) {
+        KG.statechart.sendAction('markerDragEnded', lon, lat);
     }
 })

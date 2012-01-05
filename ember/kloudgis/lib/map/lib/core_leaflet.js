@@ -10,20 +10,10 @@ KG.core_leaflet = SC.Object.create({
     _popupMarker: null,
 
     //icons
-    noteIcon: new L.Icon(),
-    groupIcon: new L.Icon('resources/images/group.png'),
-    newNoteIcon: new L.Icon('resources/images/new.png'),
-    hlNoteIcon: new L.Icon('resources/images/highlight.png'),
+    _icons: [],
 
     //	layerControl: new L.Control.Layers(),
     addToDocument: function(lon, lat, zoom) {
-
-        //add a custom class name to the new note icon to perform an animation.
-        this.newNoteIcon.createIcon = function() {
-            var img = this._createIcon('icon');
-            img.className = img.className + " " + "new-note-marker";
-            return img;
-        };
 
         //patch to make the popup hide on Safari Mac.
         /*  if ($.browser.safari && navigator.platform.indexOf('Mac') == 0) {
@@ -302,31 +292,57 @@ KG.core_leaflet = SC.Object.create({
         if (!zoom) {
             zoom = this.map.getZoom();
         }
-        SC.Logger.debug('setting the map center to: Lat:' + center.get('lat') + ' Lon:' + center.get('lon'));
         this.map.setView(new L.LatLng(center.get('lat'), center.get('lon')), zoom);
         return YES;
     },
 
-    addMarker: function(marker, click_target, click_cb) {
-        var lmarkerLocation = new L.LatLng(marker.get('lat'), marker.get('lon'));
-        var icon = this.noteIcon;
-        if (marker.get('featureCount') > 1) {
-            icon = this.groupIcon;
+    addMarker: function(marker, lon, lat, options) {
+        var title, animated, iconPath, draggable, popupContent, openPopup, clickTarget, clickCb, dragendTarget, dragendCb,injectGetNativePositionFunction;
+        if (options) {
+            title = options.title;
+            animated = options.animated;
+            iconPath = options.iconPath;
+            draggable = options.draggable;
+            popupContent = options.popupContent;
+            openPopup = options.openPopup;
+            clickTarget = options.clickTarget;
+            clickCb = options.clickCb;
+            dragendTarget = options.dragendTarget;
+            dragendCb = options.dragendCb;
+			injectGetNativePositionFunction = options.injectGetNativePositionFunction;
         }
+        var key = iconPath + animated;
+        var icon = this._icons[key];
+        if (!icon) {
+            icon = new L.Icon(iconPath);
+            if (animated) {
+                icon.createIcon = function() {
+                    var img = this._createIcon('icon');
+                    img.className = img.className + " " + "animated-marker";
+                    return img;
+                };
+            }
+            this._icons[key] = icon;
+        }
+        var lmarkerLocation = new L.LatLng(lat, lon);
         var lmarker = new L.Marker(lmarkerLocation, {
-            draggable: false,
-            title: marker.get('tooltip'),
+            draggable: draggable,
+            title: title,
             icon: icon
         });
         this.map.addLayer(lmarker);
-        lmarker.on('click',
-        function() {
-            click_cb.call(click_target, marker);
-        });
-        lmarker.on('dragend',
-        function() {
-            KG.statechart.sendAction('markerDragEnded', lmarker._latlng.lng, lmarker._latlng.lat);
-        })
+        if (clickCb) {
+            lmarker.on('click',
+            function() {
+                clickCb.call(clickTarget, marker, lmarker._latlng.lng, lmarker._latlng.lat);
+            });
+        }
+        if (dragendCb) {
+            lmarker.on('dragend',
+            function() {
+                dragendCb.call(dragendTarget, marker, lmarker._latlng.lng, lmarker._latlng.lat);
+            });
+        }
         if (!SC.none(marker._native_marker)) {
             var map = this.map;
             var old_native = marker._native_marker;
@@ -336,7 +352,29 @@ KG.core_leaflet = SC.Object.create({
             },
             250);
         }
+        if (!SC.none(popupContent)) {
+            lmarker.bindPopup(popupContent);
+            if (!SC.none(openPopup)) {
+                setTimeout(function() {
+                    lmarker.openPopup();
+                },
+                animated ? 1000 : 1);
+            }
+        }
         marker._native_marker = lmarker;
+		if(injectGetNativePositionFunction){
+				marker.getNativePosition = function(){
+					return KG.LonLat.create({lon: lmarker._latlng.lng, lat: lmarker._latlng.lat});
+				}
+		}
+        if (animated) {
+            //animate marker
+            setTimeout(function() {
+                $('.animated-marker').addClass('animated-marker-ready');
+            },
+            50);
+        }
+        return marker;
     },
 
     reAddMarker: function(marker) {
@@ -351,58 +389,6 @@ KG.core_leaflet = SC.Object.create({
             this.map.removeLayer(marker._native_marker);
             marker._native_marker = null;
         }
-    },
-
-    addNewNoteMarker: function(popupContent, pos) {
-        var lpos;
-        if (pos) {
-            lpos = new L.LatLng(pos.get('lat'), pos.get('lon'));
-        } else {
-            lpos = this.map.getCenter();
-        }
-        var lmarker = new L.Marker(lpos, {
-            draggable: true,
-            title: "_newNote".loc(),
-            icon: this.newNoteIcon
-        });
-        lmarker.on('dragend',
-        function() {
-            KG.statechart.sendAction('notePositionSetAction', lmarker._latlng.lng, lmarker._latlng.lat);
-        })
-        if (!SC.none(popupContent)) {
-            lmarker.bindPopup(popupContent);
-        }
-        this.map.addLayer(lmarker);
-        var marker = SC.Object.create({
-            _native_marker: lmarker,
-            isNewNote: YES,
-            lon: function() {
-                if (SC.none(this._native_marker)) {
-                    return NO;
-                }
-                return this._native_marker._latlng.lng;
-            }.property(),
-            lat: function() {
-                if (SC.none(this._native_marker)) {
-                    return NO;
-                }
-                return this._native_marker._latlng.lat;
-            }.property()
-        });
-        //animate marker
-        setTimeout(function() {
-            $('.new-note-marker').addClass('new-note-marker-ready');
-        },
-        50);
-
-        if (!SC.none(popupContent)) {
-            //wait for the anim to open the popup
-            setTimeout(function() {
-                lmarker.openPopup();
-            },
-            1000);
-        }
-        return marker;
     },
 
     enableDraggableMarker: function(marker) {
@@ -425,29 +411,6 @@ KG.core_leaflet = SC.Object.create({
         }
     },
 
-    addHighlightMarker: function(pos) {
-        var lpos = new L.LatLng(pos.get('lat'), pos.get('lon'));
-        var lmarker = new L.Marker(lpos, {
-            draggable: false,
-            icon: this.hlNoteIcon
-        });
-        var marker = SC.Object.create({
-            _native_marker: lmarker,
-            lon: function() {
-                return this._native_marker._latlng.lng;
-            }.property(),
-            lat: function() {
-                return this._native_marker._latlng.lat;
-            }.property()
-        });
-        lmarker.on('dragend',
-        function() {
-            KG.statechart.sendAction('markerDragEnded', lmarker._latlng.lng, lmarker._latlng.lat);
-        })
-        this.map.addLayer(lmarker);
-        return marker;
-    },
-
     addWMSLayer: function(layer) {
         var wms = new L.TileLayer.WMS(layer.get('url'), {
             layers: layer.get('name'),
@@ -463,7 +426,6 @@ KG.core_leaflet = SC.Object.create({
         });
         layer._native_layer = wms;
         this.map.addLayer(wms);
-        //	this.layerControl.addOverlay(wms, layer.get('label'));
     },
 
     //increment counter to include in the wms url to force refresh (not from cache)
