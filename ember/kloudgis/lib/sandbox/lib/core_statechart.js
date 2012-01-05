@@ -105,22 +105,21 @@ SC.mixin(KG, {
                     inspectorVisibleState: SC.State.extend({
 
                         enterState: function() {
-                            var panel = $('#left-side-panel');
-                            panel.addClass('active');
+                            KG.inspectorController.set('active', YES);
                             KG.featureCommentsController.set('commentsPanelVisible', YES);
                         },
 
                         exitState: function() {
-                            var panel = $('#left-side-panel');
-                            panel.removeClass('active');
+                            KG.inspectorController.set('active', NO);
                             KG.core_inspector.commitModifications();
                             KG.core_inspector.removeHighlight();
                             KG.featureCommentsController.set('commentsPanelVisible', NO);
-							KG.featureCommentsController.set('showing', NO);
-							setTimeout(function(){
-								KG.inspectorController.set('feature', null);
-						        KG.inspectorController.set('content', null);
-							},500);
+                            KG.featureCommentsController.set('showing', NO);
+                            setTimeout(function() {
+                                KG.inspectorController.set('feature', null);
+                                KG.inspectorController.set('content', null);
+                            },
+                            500);
                         },
 
                         selectFeatureInspectorAction: function(feature) {
@@ -149,9 +148,12 @@ SC.mixin(KG, {
                                 }
                                 KG.featureCommentsController.set('showing', YES);
                                 setTimeout(function() {
-                                    KG.core_sandbox.autosize('#feature-new-comment-area',{minHeight: 0, extraSpace:45});
+                                    KG.core_sandbox.autosize('#feature-new-comment-area', {
+                                        minHeight: 0,
+                                        extraSpace: 45
+                                    });
                                     if (KG.featureCommentsController.getPath('content.length') === 0) {
-										var area = $("#feature-new-comment-area").focus();
+                                        var area = $("#feature-new-comment-area").focus();
                                     }
                                 },
                                 1);
@@ -760,7 +762,7 @@ SC.mixin(KG, {
 
                             exitState: function() {
                                 console.log('exit createNoteState');
-								KG.core_note.clearCreateNote();
+                                KG.core_note.clearCreateNote();
                                 KG.core_note.rollbackModifications();
                                 KG.activeNoteController.set('content', null);
                                 KG.core_sandbox.destroyAutosize('#note-description-area');
@@ -768,7 +770,9 @@ SC.mixin(KG, {
 
                             confirmNoteAction: function() {
                                 var note = KG.activeNoteController.get('content');
-                                KG.core_note.commitModifications(function(){KG.core_note.refreshMarkers(YES);});
+                                KG.core_note.commitModifications(function() {
+                                    KG.core_note.refreshMarkers(YES);
+                                });
                                 KG.core_note.confirmCreateNote();
                                 this.gotoState('navigationState');
                             },
@@ -849,7 +853,10 @@ SC.mixin(KG, {
                                     }
                                     KG.noteCommentsController.set('showing', YES);
                                     setTimeout(function() {
-                                        KG.core_sandbox.autosize('#note-new-comment-area', {minHeight: 0, extraSpace:20});
+                                        KG.core_sandbox.autosize('#note-new-comment-area', {
+                                            minHeight: 0,
+                                            extraSpace: 20
+                                        });
                                         var area = $("#note-new-comment-area");
                                         if (KG.noteCommentsController.getPath('content.length') === 0) {
                                             area.focus();
@@ -897,8 +904,10 @@ SC.mixin(KG, {
 
                             confirmNoteAction: function() {
                                 var note = KG.activeNoteController.get('content');
-                                KG.core_note.commitModifications(function(){KG.core_note.refreshMarkers(YES);});
-								this.dirtyMarker = NO;
+                                KG.core_note.commitModifications(function() {
+                                    KG.core_note.refreshMarkers(YES);
+                                });
+                                this.dirtyMarker = NO;
                                 this.gotoState('navigationState');
                             },
 

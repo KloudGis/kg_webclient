@@ -24,12 +24,12 @@
 			{{/view}}		
 		</td>
 		<td>
-			{{#view KG.FeatureInfoPopupItemView class="popup-info-item" contentBinding="KG.infoController"}}
+			{{#view KG.FeatureInfoPopupItemView class="popup-info-item" contentBinding="KG.infoController.firstFeature"}}
 				<table class="popup-info-table">
 				<tr>
 					<td>
 						{{#view class="label-ellipsis"}}
-							{{parentView.content.firstFeature.title}}
+							{{parentView.content.title}}
 						{{/view}}	
 					</td>
 					<td>

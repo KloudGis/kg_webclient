@@ -55,20 +55,20 @@
 	top:6px;
 }
 
-#left-side-panel.active #inspector-panel{
+#super-inspector.active #inspector-panel{
 	left:0;
 }
 
-#left-side-panel.active #inspector-title{
+#super-inspector.active #inspector-title{
 	top:0px;
 }
 /* Use transform3d if available (its smooter)*/
 @media screen and (-webkit-transform-3d) {
-	#left-side-panel.active #inspector-panel{
+	#super-inspector.active #inspector-panel{
 		-webkit-transform: translate3d(500px,0,0);
 		left:-500px;
 	}
-	#left-side-panel.active #inspector-title{
+	#super-inspector.active #inspector-title{
 		-webkit-transform: translate3d(0,50px,0);
 		top:-50px;
 	}

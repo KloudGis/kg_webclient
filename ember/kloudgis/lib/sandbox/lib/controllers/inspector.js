@@ -5,6 +5,7 @@ KG.inspectorController = SC.ArrayProxy.create({
 	//attributes
 	content: [],
 	feature: null,
+	active: NO,
 	
 	//inspector title (top)
 	title: function() {

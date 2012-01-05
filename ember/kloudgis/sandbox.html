@@ -26,8 +26,9 @@
 <!-- *** BODY *** -->
   <body>	
 	<div id="box">		
-		<div id="left-side-panel">	
-			<script type="text/x-handlebars">
+		<!-- Inspector Title bar -->
+		<script type="text/x-handlebars">
+		{{#view id="super-inspector" classBinding="KG.inspectorController.active"}}
 			{{#view id="inspector-title" tagName="header"}}
 				{{#view KG.Button tagName="div" class="ios-button inspector-cancel" isVisibleBinding="KG.inspectorController.isDirty" classBinding="isActive" sc_action="cancelInspectorAction" titleBinding="KG.inspectorController.cancelTitle"}}
 					{{loc _cancel}}
@@ -36,17 +37,16 @@
 				{{#view KG.Button tagName="div" class="ios-button inspector-save" classBinding="isActive" sc_action="closeInspectorAction" titleBinding="KG.inspectorController.saveTitle"}}
 					{{KG.inspectorController.saveLabel}}
 				{{/view}}			
-			{{/view}}
-			</script>		
-			<div id="inspector-panel">
-				<script type="text/x-handlebars">							
+			{{/view}}	
+			<!-- Inspector Panel -->
+			<div id="inspector-panel">						
 		    		{{#collection contentBinding="KG.inspectorController" class="inspector-attrs-list"}}
 						{{view KG.InspectorAttributeView class="inspector-list-item" classBinding="itemView.content.css_class"}}
 					{{/collection}}	
 					{{view templateName="feature-comments" class="super-feature-comments"}}																	
-				</script>	
-			</div>
-		</div>
+			</div>				
+		{{/view}}
+		</script>
 		<div id="super-map">
 			<div id="map">		
 			</div>	
