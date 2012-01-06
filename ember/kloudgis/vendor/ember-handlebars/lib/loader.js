@@ -15,8 +15,8 @@ require("ember-handlebars/ext");
 // with Ember's Handlebars and are suitable for use as a view's template.
 // Those with type="text/x-raw-handlebars" will be compiled with regular
 // Handlebars and are suitable for use in views' computed properties.
-Ember.Handlebars.bootstrap = function(ctx) {
-  Ember.$('script[type="text/html"], script[type="text/x-handlebars"], script[type="text/x-raw-handlebars"]', ctx)
+Ember.Handlebars.bootstrap = function() {
+  Ember.$('script[type="text/html"], script[type="text/x-handlebars"], script[type="text/x-raw-handlebars"]')
     .each(function() {
     // Get a reference to the script tag
     var script = Ember.$(this),
@@ -28,7 +28,7 @@ Ember.Handlebars.bootstrap = function(ctx) {
       // id if no name is found.
       templateName = script.attr('data-template-name') || script.attr('id'),
       template = compile(script.html()),
-      view, viewPath, tagName;
+      view, viewPath;
 
     if (templateName) {
       // For templates which have a name, we save them and then remove them from the DOM
@@ -53,13 +53,8 @@ Ember.Handlebars.bootstrap = function(ctx) {
       viewPath = script.attr('data-view');
       view = viewPath ? Ember.getPath(viewPath) : Ember.View;
 
-      // Users can optionally specify a custom tag name to use by setting the
-      // data-tag-name attribute on the script tag.
-      tagName = script.attr('data-tag-name');
-
       view = view.create({
-        template: template,
-        tagName: (tagName) ? tagName : undefined
+        template: template
       });
 
       view._insertElementLater(function() {
@@ -72,8 +67,4 @@ Ember.Handlebars.bootstrap = function(ctx) {
   });
 };
 
-Ember.$(document).ready(
-  function(){
-    Ember.Handlebars.bootstrap( Ember.$(document) );
-  }
-);
+Ember.$(document).ready(Ember.Handlebars.bootstrap);

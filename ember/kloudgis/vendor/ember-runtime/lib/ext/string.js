@@ -13,10 +13,8 @@ require('ember-runtime/system/string');
 var fmt = Ember.String.fmt,
     w   = Ember.String.w,
     loc = Ember.String.loc,
-    camelize = Ember.String.camelize,
     decamelize = Ember.String.decamelize,
-    dasherize = Ember.String.dasherize,
-    underscore = Ember.String.underscore;
+    dasherize = Ember.String.dasherize;
   
 if (Ember.EXTEND_PROTOTYPES) {
 
@@ -40,34 +38,21 @@ if (Ember.EXTEND_PROTOTYPES) {
   String.prototype.loc = function() {
     return loc(this, arguments);
   };
-
-  /**
-    @see Ember.String.camelize
-  */
-  String.prototype.camelize = function() {
-    return camelize(this);
-  };
-
+  
   /**
     @see Ember.String.decamelize
   */
   String.prototype.decamelize = function() {
     return decamelize(this);
   };
-
+  
   /**
     @see Ember.String.dasherize
   */
   String.prototype.dasherize = function() {
     return dasherize(this);
   };
-
-  /**
-    @see Ember.String.underscore
-  */
-  String.prototype.underscore = function() {
-    return underscore(this);
-  };
-
 }
+
+
 

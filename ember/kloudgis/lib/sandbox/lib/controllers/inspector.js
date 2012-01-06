@@ -16,7 +16,8 @@ KG.inspectorController = Ember.ArrayController.create({
     }.property('feature.title'),
 	
 	isDirty: function(){
-		return this.getPath('feature.status') & SC.Record.DIRTY;
+		var dirty = this.getPath('feature.status') & SC.Record.DIRTY;
+		return dirty > 0;
 	}.property('feature.status'),
 	
 	cancelTitle: "_cancelInspector".loc(),

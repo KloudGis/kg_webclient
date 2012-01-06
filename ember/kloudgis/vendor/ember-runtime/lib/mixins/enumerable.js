@@ -13,7 +13,6 @@
 // 
 
 var get = Ember.get, set = Ember.set;
-var a_slice = Array.prototype.slice;
 
 var contexts = [];
 function popCtx() {
@@ -133,7 +132,7 @@ Ember.Enumerable = Ember.Mixin.create( /** @lends Ember.Enumerable */ {
     ret = this.nextObject(0, null, context);
     pushCtx(context);
     return ret ;
-  }).property(),
+  }).property('[]').cacheable(),
 
   /**
     Helper method returns the last object from a collection.
@@ -155,7 +154,7 @@ Ember.Enumerable = Ember.Mixin.create( /** @lends Ember.Enumerable */ {
       return last;
     }
     
-  }).property(),
+  }).property('[]').cacheable(),
 
   /**
     Returns true if the passed object can be found in the receiver.  The
@@ -210,13 +209,18 @@ Ember.Enumerable = Ember.Mixin.create( /** @lends Ember.Enumerable */ {
   },
 
   /**
-    Alias for mapProperty
+    Retrieves the named value on each member object. This is more efficient
+    than using one of the wrapper methods defined here. Objects that
+    implement Ember.Observable will use the get() method, otherwise the property
+    will be accessed directly.
 
-    @params key {String} name of the property
-    @returns {Array} The mapped array.
+    @param {String} key The key to retrieve
+    @returns {Array} Extracted values
   */
   getEach: function(key) {
-    return this.mapProperty(key);
+    return this.map(function(item) {
+      return get(item, key);
+    });
   },
 
   /**
@@ -523,7 +527,7 @@ Ember.Enumerable = Ember.Mixin.create( /** @lends Ember.Enumerable */ {
   */
   invoke: function(methodName) {
     var args, ret = [];
-    if (arguments.length>1) args = a_slice.call(arguments, 1);
+    if (arguments.length>1) args = Array.prototype.slice.call(arguments, 1);
     
     this.forEach(function(x, idx) { 
       var method = x && x[methodName];
@@ -678,6 +682,7 @@ Ember.Enumerable = Ember.Mixin.create( /** @lends Ember.Enumerable */ {
     if (removing === -1) removing = null;
     if (adding   === -1) adding   = null;
     
+    Ember.propertyWillChange(this, '[]');
     if (hasDelta) Ember.propertyWillChange(this, 'length');
     Ember.sendEvent(this, '@enumerable:before', removing, adding);
 
@@ -725,6 +730,7 @@ Ember.Enumerable = Ember.Mixin.create( /** @lends Ember.Enumerable */ {
     
     Ember.sendEvent(this, '@enumerable:change', removing, adding);
     if (hasDelta) Ember.propertyDidChange(this, 'length');
+    Ember.propertyDidChange(this, '[]');
 
     return this ;
   }

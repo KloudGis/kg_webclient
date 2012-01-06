@@ -16,7 +16,6 @@ var Mixin, MixinDelegate, REQUIRED, Alias;
 var classToString, superClassString;
 
 var a_map = Array.prototype.map;
-var a_slice = Array.prototype.slice;
 var EMPTY_META = {}; // dummy for non-writable meta
 var META_SKIP = { __emberproto__: true, __ember_count__: true };
 
@@ -264,21 +263,17 @@ function applyMixin(obj, mixins, partial) {
 }
 
 Ember.mixin = function(obj) {
-  var args = a_slice.call(arguments, 1);
+  var args = Array.prototype.slice.call(arguments, 1);
   return applyMixin(obj, args, false);
 };
 
 
-/**
-  @constructor
-  @name Ember.Mixin
-*/
 Mixin = function() { return initMixin(this, arguments); };
 
 Mixin._apply = applyMixin;
 
 Mixin.applyPartial = function(obj) {
-  var args = a_slice.call(arguments, 1);
+  var args = Array.prototype.slice.call(arguments, 1);
   return applyMixin(obj, args, true);
 };
 
@@ -317,17 +312,15 @@ Mixin.prototype.reopen = function() {
 
 var TMP_ARRAY = [];
 Mixin.prototype.apply = function(obj) {
-  TMP_ARRAY[0] = this;
-  var ret = applyMixin(obj, TMP_ARRAY, false);
   TMP_ARRAY.length=0;
-  return ret;
+  TMP_ARRAY[0] = this;
+  return applyMixin(obj, TMP_ARRAY, false);
 };
 
 Mixin.prototype.applyPartial = function(obj) {
-  TMP_ARRAY[0] = this;
-  var ret = applyMixin(obj, TMP_ARRAY, true);
   TMP_ARRAY.length=0;
-  return ret;
+  TMP_ARRAY[0] = this;
+  return applyMixin(obj, TMP_ARRAY, true);
 };
 
 function _detect(curMixin, targetMixin, seen) {
@@ -352,7 +345,7 @@ Mixin.prototype.detect = function(obj) {
 
 Mixin.prototype.without = function() {
   var ret = new Mixin(this);
-  ret._without = a_slice.call(arguments);
+  ret._without = Array.prototype.slice.call(arguments);
   return ret;
 };
 
@@ -514,13 +507,13 @@ Ember.MixinDelegate = MixinDelegate;
 //
 
 Ember.observer = function(func) {
-  var paths = a_slice.call(arguments, 1);
+  var paths = Array.prototype.slice.call(arguments, 1);
   func.__ember_observes__ = paths;
   return func;
 };
 
 Ember.beforeObserver = function(func) {
-  var paths = a_slice.call(arguments, 1);
+  var paths = Array.prototype.slice.call(arguments, 1);
   func.__ember_observesBefore__ = paths;
   return func;
 };

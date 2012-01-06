@@ -6,6 +6,8 @@ KG.paletteController = Ember.ArrayController.create({
 	content: [],
 	active: NO,
 	
+	isDirty: NO,
+	
 	/* label and image for the create note control*/
     createLabel: "_showPalette".loc()
 });

@@ -64,7 +64,8 @@ test("should trigger an action when clicked", function() {
     button.appendTo('#qunit-fixture');
   });
 
-  synthesizeEvent('click', button);
+  synthesizeEvent('mousedown', button);
+  synthesizeEvent('mouseup', button);
 
   ok(wasClicked);
 });
@@ -89,7 +90,8 @@ test("should trigger an action on a String target when clicked", function() {
     button.appendTo('#qunit-fixture');
   });
 
-  synthesizeEvent('click', button);
+  synthesizeEvent('mousedown', button);
+  synthesizeEvent('mouseup', button);
 
   ok(wasClicked);
 
@@ -128,7 +130,6 @@ test("should not trigger action if mouse leaves area before mouseup", function()
   synthesizeEvent('mouseleave', button);
   synthesizeEvent('mouseenter', button);
   synthesizeEvent('mouseup', button);
-  synthesizeEvent('click', button);
 
   ok(wasClicked);
 });

@@ -130,23 +130,11 @@ Ember.Array = Ember.Mixin.create(Ember.Enumerable, /** @scope Ember.Array.protot
   },
 
   /**
-    Returns the index of the given object's first occurrence.
-    If no startAt argument is given, the starting location to
-    search is 0. If it's negative, will count backward from 
-    the end of the array. Returns -1 if no match is found.
+    Returns the index for a particular object in the index.
 
     @param {Object} object the item to search for
-    @param {Number} startAt optional starting location to search, default 0
-    @returns {Number} index or -1 if not found
-
-    @example
-    var arr = ["a", "b", "c", "d", "a"];
-    arr.indexOf("a");      =>  0
-    arr.indexOf("z");      => -1
-    arr.indexOf("a", 2);   =>  4
-    arr.indexOf("a", -1);  =>  4
-    arr.indexOf("b", 3);   => -1
-    arr.indexOf("a", 100); => -1
+    @param {NUmber} startAt optional starting location to search, default 0
+    @returns {Number} index of -1 if not found
   */
   indexOf: function(object, startAt) {
     var idx, len = get(this, 'length');
@@ -161,23 +149,11 @@ Ember.Array = Ember.Mixin.create(Ember.Enumerable, /** @scope Ember.Array.protot
   },
 
   /**
-    Returns the index of the given object's last occurrence.
-    If no startAt argument is given, the search starts from
-    the last position. If it's negative, will count backward 
-    from the end of the array. Returns -1 if no match is found.
+    Returns the last index for a particular object in the index.
 
     @param {Object} object the item to search for
-    @param {Number} startAt optional starting location to search, default 0
-    @returns {Number} index or -1 if not found
-
-    @example
-    var arr = ["a", "b", "c", "d", "a"];
-    arr.lastIndexOf("a");      =>  4
-    arr.lastIndexOf("z");      => -1
-    arr.lastIndexOf("a", 2);   =>  0
-    arr.lastIndexOf("a", -1);  =>  4
-    arr.lastIndexOf("b", 3);   =>  1
-    arr.lastIndexOf("a", 100); =>  4
+    @param {NUmber} startAt optional starting location to search, default 0
+    @returns {Number} index of -1 if not found
   */
   lastIndexOf: function(object, startAt) {
     var idx, len = get(this, 'length');

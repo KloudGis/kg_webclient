@@ -19,7 +19,6 @@ var normalizeTuple = Ember.normalizeTuple.primitive;
 var normalizePath  = Ember.normalizePath;
 var SIMPLE_PROPERTY = Ember.SIMPLE_PROPERTY;
 var GUID_KEY = Ember.GUID_KEY;
-var META_KEY = Ember.META_KEY;
 var notifyObservers = Ember.notifyObservers;
 
 var FIRST_KEY = /^([^\.\*]+)/;
@@ -36,17 +35,17 @@ function isKeyName(path) {
 
 // ..........................................................
 // DEPENDENT KEYS
-//
+// 
 
 var DEP_SKIP = { __emberproto__: true }; // skip some keys and toString
-function iterDeps(method, obj, depKey, seen, meta) {
-
+function iterDeps(methodName, obj, depKey, seen) {
+  
   var guid = guidFor(obj);
   if (!seen[guid]) seen[guid] = {};
   if (seen[guid][depKey]) return ;
   seen[guid][depKey] = true;
-
-  var deps = meta.deps;
+  
+  var deps = meta(obj, false).deps, method = Ember[methodName];
   deps = deps && deps[depKey];
   if (deps) {
     for(var key in deps) {
@@ -60,18 +59,18 @@ function iterDeps(method, obj, depKey, seen, meta) {
 var WILL_SEEN, DID_SEEN;
 
 // called whenever a property is about to change to clear the cache of any dependent keys (and notify those properties of changes, etc...)
-function dependentKeysWillChange(obj, depKey, meta) {
+function dependentKeysWillChange(obj, depKey) {
   var seen = WILL_SEEN, top = !seen;
   if (top) seen = WILL_SEEN = {};
-  iterDeps(propertyWillChange, obj, depKey, seen, meta);
+  iterDeps('propertyWillChange', obj, depKey, seen);
   if (top) WILL_SEEN = null;
 }
 
 // called whenever a property has just changed to update dependent keys
-function dependentKeysDidChange(obj, depKey, meta) {
+function dependentKeysDidChange(obj, depKey) {
   var seen = DID_SEEN, top = !seen;
   if (top) seen = DID_SEEN = {};
-  iterDeps(propertyDidChange, obj, depKey, seen, meta);
+  iterDeps('propertyDidChange', obj, depKey, seen);
   if (top) DID_SEEN = null;
 }
 
@@ -207,7 +206,6 @@ Wp.add = function(path) {
   // put into a queue and try to connect later.
   } else if (!tuple[0]) {
     pendingQueue.push([this, path]);
-    tuple.length = 0;
     return;
 
   // global path, and object already exists
@@ -218,7 +216,6 @@ Wp.add = function(path) {
     path = tuple[1];
   }
 
-  tuple.length = 0;
   this.chain(key, path, src, separator);
 };
 
@@ -243,7 +240,6 @@ Wp.remove = function(path) {
     path = tuple[1];
   }
 
-  tuple.length = 0;
   this.unchain(key, path);
 };
 
@@ -506,11 +502,11 @@ Ember.rewatch = function(obj) {
     
   @returns {void}
 */
-var propertyWillChange = Ember.propertyWillChange = function(obj, keyName) {
+Ember.propertyWillChange = function(obj, keyName) {
   var m = meta(obj, false), proto = m.proto, desc = m.descs[keyName];
   if (proto === obj) return ;
   if (desc && desc.willChange) desc.willChange(obj, keyName);
-  dependentKeysWillChange(obj, keyName, m);
+  dependentKeysWillChange(obj, keyName);
   chainsWillChange(obj, keyName);
   Ember.notifyBeforeObservers(obj, keyName);
 };
@@ -532,52 +528,11 @@ var propertyWillChange = Ember.propertyWillChange = function(obj, keyName) {
     
   @returns {void}
 */
-var propertyDidChange = Ember.propertyDidChange = function(obj, keyName) {
+Ember.propertyDidChange = function(obj, keyName) {
   var m = meta(obj, false), proto = m.proto, desc = m.descs[keyName];
   if (proto === obj) return ;
   if (desc && desc.didChange) desc.didChange(obj, keyName);
-  dependentKeysDidChange(obj, keyName, m);
+  dependentKeysDidChange(obj, keyName);
   chainsDidChange(obj, keyName);
   Ember.notifyObservers(obj, keyName);
-};
-
-var NODE_STACK = []
-
-/**
-  Tears down the meta on an object so that it can be garbage collected.
-  Multiple calls will have no effect.
-  
-  @param {Object} obj  the object to destroy
-  @returns {void}
-*/
-Ember.destroy = function (obj) {
-  var meta = obj[META_KEY], node, nodes, key, nodeObject;
-  if (meta) {
-    obj[META_KEY] = null;
-    // remove chainWatchers to remove circular references that would prevent GC
-    node = meta.chains;
-    if (node) {
-      NODE_STACK.push(node);
-      // process tree
-      while (NODE_STACK.length > 0) {
-        node = NODE_STACK.pop();
-        // push children
-        nodes = node._chains;
-        if (nodes) {
-          for (key in nodes) {
-            if (nodes.hasOwnProperty(key)) {
-              NODE_STACK.push(nodes[key]);
-            }
-          }
-        }
-        // remove chainWatcher in node object
-        if (node._watching) {
-          nodeObject = node._object;
-          if (nodeObject) {
-            removeChainWatcher(nodeObject, node._key, node);
-          }
-        }
-      }
-    }
-  }
 };

@@ -6,12 +6,11 @@
 
 require("ember-handlebars/ext");
 require("ember-views/views/view");
+/** @class */
 
 var get = Ember.get, set = Ember.set;
 
-/** @class */
-Ember.TextSupport = Ember.Mixin.create(
-/** @scope Ember.TextSupport.prototype */ {
+Ember.TextSupport = Ember.Mixin.create({
 
   value: "",
 
@@ -24,14 +23,17 @@ Ember.TextSupport = Ember.Mixin.create(
 
   focusOut: function(event) {
     this._elementValueDidChange();
+    return false;
   },
 
   change: function(event) {
     this._elementValueDidChange();
+    return false;
   },
 
   keyUp: function(event) {
     this.interpretKeyEvents(event);
+    return false;
   },
 
   /**
@@ -46,14 +48,7 @@ Ember.TextSupport = Ember.Mixin.create(
   },
 
   _elementValueDidChange: function() {
-    var element = this.$();
-
-    if (element.length) {
-      set(this, 'value', this.$().val());
-    } else {
-      // the element is receiving blur because it was
-      // removed, so don't do anything.
-    }
+    set(this, 'value', this.$().val() || '');
   }
 
 });

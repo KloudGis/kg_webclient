@@ -1289,19 +1289,6 @@ test("should be able to use standard Handlebars #each helper", function() {
   equals(view.$().html(), "abc");
 });
 
-test("should be able to use unbound helper in #each helper", function() {
-  view = Ember.View.create({
-    items: Ember.A(['a', 'b', 'c']),
-      template: Ember.Handlebars.compile(
-        "<ul>{{#each items}}<li>{{unbound this}}</li>{{/each}}</ul>")
-  });
-
-  appendView();
-
-  equals(view.$().text(), "abc");
-  equals(view.$('li').children().length, 0, "No markers");
-});
-
 module("Templates redrawing and bindings", {
   setup: function(){
     MyApp = Ember.Object.create({});
@@ -1544,73 +1531,44 @@ test("should update bound values after the view is removed and then re-appended"
 });
 
 test("should update bound values after view's parent is removed and then re-appended", function() {
-  var parentView = Ember.ContainerView.create({
+  var parentView = SC.ContainerView.create({
     childViews: ['testView'],
-    testView: Ember.View.create({
-      template: Ember.Handlebars.compile("{{#if showStuff}}{{boundValue}}{{else}}Not true.{{/if}}"),
+    testView: SC.View.create({
+      template: SC.Handlebars.compile("{{#if showStuff}}{{boundValue}}{{else}}Not true.{{/if}}"),
       showStuff: true,
       boundValue: "foo"
     })
   });
 
-  Ember.run(function() {
+  SC.run(function() {
     parentView.appendTo('#qunit-fixture');
   });
   view = parentView.get('testView');
 
   equal($.trim(view.$().text()), "foo");
-  Ember.run(function() {
+  SC.run(function() {
     set(view, 'showStuff', false);
   });
   equal($.trim(view.$().text()), "Not true.");
 
-  Ember.run(function() {
+  SC.run(function() {
     set(view, 'showStuff', true);
   });
   equal($.trim(view.$().text()), "foo");
 
   parentView.remove();
-  Ember.run(function() {
+  SC.run(function() {
     set(view, 'showStuff', false);
   });
-  Ember.run(function() {
+  SC.run(function() {
     set(view, 'showStuff', true);
   });
-  Ember.run(function() {
+  SC.run(function() {
     parentView.appendTo('#qunit-fixture');
   });
 
-  Ember.run(function() {
+  SC.run(function() {
     set(view, 'boundValue', "bar");
   });
   equal($.trim(view.$().text()), "bar");
 });
-
-test("should call a registered helper for mustache without parameters", function() {
-  Ember.Handlebars.registerHelper('foobar', function() {
-    return 'foobar';
-  });
-
-  view = Ember.View.create({
-    template: Ember.Handlebars.compile("{{foobar}}")
-  });
-
-  appendView();
-
-  ok(view.$().text() === 'foobar', "Regular helper was invoked correctly");
-});
-
-test("should bind to the property if no registered helper found for a mustache without parameters", function() {
-  view = Ember.View.create({
-    template: Ember.Handlebars.compile("{{foobarProperty}}"),
-    foobarProperty: Ember.computed(function() {
-      return 'foobarProperty';
-    })
-  });
-
-  appendView();
-
-  ok(view.$().text() === 'foobarProperty', "Property was bound to correctly");
-});
-
-

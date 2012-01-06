@@ -655,10 +655,11 @@ module("Observable objects & object properties ", {
 
       testArrayObserver: Ember.observer(function(){
         this.abnormal = 'notifiedObserver';
-      }, 'normalArray.@each')
+      }, '*normalArray.[]')
 
     });
   }
+
 });
 
 test('incrementProperty and decrementProperty',function(){
@@ -685,6 +686,7 @@ test('should notify array observer when array changes',function(){
   get(object, 'normalArray').replace(0,0,6);
   equals(object.abnormal, 'notifiedObserver', 'observer should be notified');
 });
+
 
 module("object.addObserver()", {
   setup: function() {

@@ -70,7 +70,7 @@ test("it updates the view if an item is removed", function() {
 test("it works inside a ul element", function() {
   view.destroy();
 
-  var ulView = Ember.View.create({
+  var ulView = SC.View.create({
     template: templateFor('<ul>{{#each people}}<li>{{name}}</li>{{/each}}</ul>'),
     people: people
   });
@@ -79,7 +79,7 @@ test("it works inside a ul element", function() {
 
   equal(ulView.$('li').length, 2, "renders two <li> elements");
 
-  Ember.run(function() {
+  SC.run(function() {
     people.pushObject({name: "Black Francis"});
   });
 
@@ -89,7 +89,7 @@ test("it works inside a ul element", function() {
 test("it works inside a table element", function() {
   view.destroy();
 
-  var tableView = Ember.View.create({
+  var tableView = SC.View.create({
     template: templateFor('<table><tbody>{{#each people}}<tr><td>{{name}}</td></tr>{{/each}}</tbody></table>'),
     people: people
   });
@@ -98,13 +98,13 @@ test("it works inside a table element", function() {
 
   equal(tableView.$('td').length, 2, "renders two <td> elements");
 
-  Ember.run(function() {
+  SC.run(function() {
     people.pushObject({name: "Black Francis"});
   });
 
   equal(tableView.$('td').length, 3, "renders an additional <td> element when an object is added");
 
-  Ember.run(function() {
+  SC.run(function() {
     people.insertAt(0, {name: "Kim Deal"});
   });
 

@@ -1,11 +1,11 @@
 var get = Ember.get, getPath = Ember.getPath;
 
 Ember.TabPaneView = Ember.View.extend({
-  tabsContainer: Ember.computed(function() {
+  tabsContainer: SC.computed(function() {
     return this.nearestInstanceOf(Ember.TabContainerView);
   }).property(),
 
-  isVisible: Ember.computed(function() {
+  isVisible: SC.computed(function() {
     return get(this, 'viewName') === getPath(this, 'tabsContainer.currentView');
   }).property('tabsContainer.currentView')
 });

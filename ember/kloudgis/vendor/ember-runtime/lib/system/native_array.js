@@ -130,7 +130,7 @@ Ember.NativeArray = NativeArray;
 */
 Ember.A = function(arr){
   if (arr === undefined) { arr = []; }
-  return Ember.NativeArray.apply(arr);
+  return Ember.NativeArray.apply(Array.prototype.slice.apply(arr));
 };
 
 /**
@@ -141,8 +141,6 @@ Ember.A = function(arr){
 */
 Ember.NativeArray.activate = function() {
   NativeArray.apply(Array.prototype);
-
-  Ember.A = function(arr) { return arr || []; }
 };
 
 if (Ember.EXTEND_PROTOTYPES) Ember.NativeArray.activate();

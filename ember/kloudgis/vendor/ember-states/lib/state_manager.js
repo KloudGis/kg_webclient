@@ -4,19 +4,28 @@ require('ember-states/state');
 
 Ember.LOG_STATE_TRANSITIONS = false;
 
-/**
-  @class
-*/
-Ember.StateManager = Ember.State.extend(
-/** @scope Ember.State.prototype */ {
-
+Ember.StateManager = Ember.State.extend({
   /**
-    When creating a new statemanager, look for a default state to transition
+    When creating a new storyboard, look for a default state to transition
     into. This state can either be named `start`, or can be specified using the
     `initialState` property.
   */
   init: function() {
     this._super();
+
+    var states = get(this, 'states');
+    if (!states) {
+      states = {};
+      Ember.keys(this).forEach(function(name) {
+        var value = get(this, name);
+
+        if (value && value.isState) {
+          states[name] = value;
+        }
+      }, this);
+
+      set(this, 'states', states);
+    }
 
     var initialState = get(this, 'initialState');
 
@@ -32,13 +41,11 @@ Ember.StateManager = Ember.State.extend(
   currentState: null,
 
   /**
-    @property
-
     If the current state is a view state or the descendent of a view state,
     this property will be the view associated with it. If there is no
     view state active in this state manager, this value will be null.
   */
-  currentView: Ember.computed(function() {
+  currentView: SC.computed(function() {
     var currentState = get(this, 'currentState'),
         view;
 
@@ -64,7 +71,7 @@ Ember.StateManager = Ember.State.extend(
     var action = currentState[event];
 
     if (action) {
-      if (log) { console.log(fmt("STATEMANAGER: Sending event '%@' to state %@.", [event, currentState.name])); }
+      if (log) { console.log(fmt("STORYBOARDS: Sending event '%@' to state %@.", [event, currentState.name])); }
       action.call(currentState, this, context);
     } else {
       var parentState = get(currentState, 'parentState');
@@ -72,72 +79,28 @@ Ember.StateManager = Ember.State.extend(
     }
   },
 
-  findStatesByRoute: function(state, route) {
-    if (!route || route === "") { return undefined; }
-    var r = route.split('.'), ret = [];
-
-    for (var i=0, len = r.length; i < len; i += 1) {
-      var states = get(state, 'states') ;
-
-      if (!states) { return undefined; }
-
-      var s = get(states, r[i]);
-      if (s) { state = s; ret.push(s); }
-      else { return undefined; }
-    }
-
-    return ret;
-  },
-
   goToState: function(name) {
-    if (Ember.empty(name)) { return; }
-
     var currentState = get(this, 'currentState') || this, state, newState;
 
-    var exitStates = [], enterStates;
+    var exitStates = Ember.A();
 
+    newState = getPath(currentState, name);
     state = currentState;
 
-    if (state.routes[name]) {
-      // cache hit
-      exitStates = state.routes[name].exitStates;
-      enterStates = state.routes[name].enterStates;
-      state = state.routes[name].futureState;
-    } else {
-      // cache miss
-
-      newState = this.findStatesByRoute(currentState, name);
-
+    if (!newState) {
       while (state && !newState) {
-        exitStates.unshift(state);
+        exitStates[Ember.guidFor(state)] = state;
+        exitStates.push(state);
 
         state = get(state, 'parentState');
         if (!state) {
-          newState = this.findStatesByRoute(this, name);
-          if (!newState) { return; }
+          state = get(this, 'states');
         }
-        newState = this.findStatesByRoute(state, name);
+        newState = getPath(state, name);
       }
-
-      enterStates = newState.slice(0), exitStates = exitStates.slice(0);
-
-      if (enterStates.length > 0) {
-        state = enterStates[enterStates.length - 1];
-
-        while (enterStates.length > 0 && enterStates[0] === exitStates[0]) {
-          enterStates.shift();
-          exitStates.shift();
-        }
-      }
-
-      currentState.routes[name] = {
-        exitStates: exitStates,
-        enterStates: enterStates,
-        futureState: state
-      };
     }
 
-    this.enterState(exitStates, enterStates, state);
+    this.enterState(state, name, exitStates);
   },
 
   getState: function(name) {
@@ -174,8 +137,23 @@ Ember.StateManager = Ember.State.extend(
     if (!async) { transition.resume(); }
   },
 
-  enterState: function(exitStates, enterStates, state) {
+  enterState: function(parent, name, exitStates) {
     var log = Ember.LOG_STATE_TRANSITIONS;
+
+    var parts = name.split("."), state = parent, enterStates = Ember.A();
+
+    parts.forEach(function(name) {
+      state = state[name];
+
+      var guid = Ember.guidFor(state);
+
+      if (guid in exitStates) {
+        exitStates.removeObject(state);
+        delete exitStates[guid];
+      } else {
+        enterStates.push(state);
+      }
+    });
 
     var stateManager = this;
 
@@ -183,19 +161,13 @@ Ember.StateManager = Ember.State.extend(
       state.exit(stateManager, transition);
     }, function() {
       this.asyncEach(enterStates, function(state, transition) {
-        if (log) { console.log("STATEMANAGER: Entering " + state.name); }
+        if (log) { console.log("STORYBOARDS: Entering " + state.name); }
         state.enter(stateManager, transition);
       }, function() {
-        var startState = state, enteredState, initialSubstate;
-
-        initialSubstate = get(startState, 'initialSubstate');
-
-        if (!initialSubstate) {
-          initialSubstate = 'start';
-        }
+        var startState = state, enteredState;
 
         // right now, start states cannot be entered asynchronously
-        while (startState = get(startState, initialSubstate)) {
+        while (startState = get(startState, 'start')) {
           enteredState = startState;
           startState.enter(stateManager);
         }

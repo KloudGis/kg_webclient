@@ -9,7 +9,6 @@
 require("ember-views/system/render_buffer");
 var get = Ember.get, set = Ember.set, addObserver = Ember.addObserver;
 var getPath = Ember.getPath, meta = Ember.meta, fmt = Ember.String.fmt;
-var a_slice = Array.prototype.slice;
 
 var childViewsProperty = Ember.computed(function() {
   var childViews = get(this, '_childViews');
@@ -152,9 +151,9 @@ Ember.View = Ember.Object.extend(
     If false, the view will appear hidden in DOM.
 
     @type Boolean
-    @default null
+    @default true
   */
-  isVisible: null,
+  isVisible: true,
 
   /**
     Array of child views. You should never edit this array directly.
@@ -301,7 +300,7 @@ Ember.View = Ember.Object.extend(
         var fn = state[name];
 
         if (fn) {
-          var args = a_slice.call(arguments, 1);
+          var args = Array.prototype.slice.call(arguments, 1);
           args.unshift(this);
 
           return fn.apply(this, args);
@@ -430,22 +429,38 @@ Ember.View = Ember.Object.extend(
 
     if (!attributeBindings) { return; }
 
-    attributeBindings.forEach(function(attributeName) {
+    attributeBindings.forEach(function(attribute) {
       // Create an observer to add/remove/change the attribute if the
       // JavaScript property changes.
       var observer = function() {
         elem = this.$();
-        attributeValue = get(this, attributeName);
+        var currentValue = elem.attr(attribute);
+        attributeValue = get(this, attribute);
 
-        Ember.View.applyAttributeBindings(elem, attributeName, attributeValue)
+        type = typeof attributeValue;
+
+        if ((type === 'string' || (type === 'number' && !isNaN(attributeValue))) && attributeValue !== currentValue) {
+          elem.attr(attribute, attributeValue);
+        } else if (attributeValue && type === 'boolean') {
+          elem.attr(attribute, attribute);
+        } else if (!attributeValue) {
+          elem.removeAttr(attribute);
+        }
       };
 
-      addObserver(this, attributeName, observer);
+      addObserver(this, attribute, observer);
 
       // Determine the current value and add it to the render buffer
       // if necessary.
-      attributeValue = get(this, attributeName);
-      Ember.View.applyAttributeBindings(buffer, attributeName, attributeValue);
+      attributeValue = get(this, attribute);
+      type = typeof attributeValue;
+
+      if (type === 'string' || type === 'number') {
+        buffer.attr(attribute, attributeValue);
+      } else if (attributeValue && type === 'boolean') {
+        // Apply boolean attributes in the form attribute="attribute"
+        buffer.attr(attribute, attribute);
+      }
     }, this);
   },
 
@@ -569,9 +584,6 @@ Ember.View = Ember.Object.extend(
     // Schedule the DOM element to be created and appended to the given
     // element after bindings have synchronized.
     this._insertElementLater(function() {
-      if (get(this, 'isVisible') === null) {
-        set(this, 'isVisible', true);
-      }
       this.$().appendTo(target);
     });
 
@@ -930,7 +942,7 @@ Ember.View = Ember.Object.extend(
       buffer.attr('role', role);
     }
 
-    if (get(this, 'isVisible') === false) {
+    if (!get(this, 'isVisible')) {
       buffer.style('display', 'none');
     }
   },
@@ -1192,9 +1204,6 @@ Ember.View = Ember.Object.extend(
     return view;
   },
 
-  becameVisible: Ember.K,
-  becameHidden: Ember.K,
-
   /**
     @private
 
@@ -1202,53 +1211,8 @@ Ember.View = Ember.Object.extend(
     element of the actual DOM element.
   */
   _isVisibleDidChange: Ember.observer(function() {
-    var isVisible = get(this, 'isVisible');
-
-    this.$().toggle(isVisible);
-
-    if (this._isAncestorHidden()) { return; }
-
-    if (isVisible) {
-      this._notifyBecameVisible();
-    } else {
-      this._notifyBecameHidden();
-    }
+    this.$().toggle(get(this, 'isVisible'));
   }, 'isVisible'),
-
-  _notifyBecameVisible: function() {
-    this.becameVisible();
-
-    this.forEachChildView(function(view) {
-      var isVisible = get(view, 'isVisible');
-
-      if (isVisible || isVisible === null) {
-        view._notifyBecameVisible();
-      }
-    });
-  },
-
-  _notifyBecameHidden: function() {
-    this.becameHidden();
-    this.forEachChildView(function(view) {
-      var isVisible = get(view, 'isVisible');
-
-      if (isVisible || isVisible === null) {
-        view._notifyBecameHidden();
-      }
-    });
-  },
-
-  _isAncestorHidden: function() {
-    var parent = get(this, 'parentView');
-
-    while (parent) {
-      if (get(parent, 'isVisible') === false) { return true; }
-
-      parent = get(parent, 'parentView');
-    }
-
-    return false;
-  },
 
   clearBuffer: function() {
     this.invokeRecursively(function(view) {
@@ -1347,17 +1311,3 @@ Ember.View.views = {};
 // at view initialization time. This happens in Ember.ContainerView's init
 // method.
 Ember.View.childViewsProperty = childViewsProperty;
-
-Ember.View.applyAttributeBindings = function(elem, name, value) {
-  var type = typeof value;
-  var currentValue = elem.attr(name);
-
-  // if this changes, also change the logic in ember-handlebars/lib/helpers/binding.js
-  if ((type === 'string' || (type === 'number' && !isNaN(value))) && value !== currentValue) {
-    elem.attr(name, value);
-  } else if (value && type === 'boolean') {
-    elem.attr(name, name);
-  } else if (!value) {
-    elem.removeAttr(name);
-  }
-};

@@ -176,11 +176,8 @@ Ember.run = run = function(target, method) {
 
   var ret, loop;
   run.begin();
-  try {
-    if (target || method) ret = invoke(target, method, arguments, 2);
-  } finally {
-    run.end();
-  }
+  if (target || method) ret = invoke(target, method, arguments, 2);
+  run.end();
   return ret;
 };
 
@@ -488,16 +485,10 @@ Ember.run.cancel = function(timer) {
   delete timers[timer];
 };
 
+
 // ..........................................................
 // DEPRECATED API
 //
-
-/**
-  @namespace
-  @name Ember.RunLoop
-  @deprecated
-  @description Compatibility for Ember.run
-*/
 
 /**
   @deprecated
