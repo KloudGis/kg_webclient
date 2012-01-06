@@ -10,40 +10,47 @@ KG.Button = SC.Button.extend({
         return this.get('label').loc();
     }.property('label'),
 
-    mouseUp: function(e) {
-        this._super(e);
+	mouseLeave: function() {
+		this.cleanDown();
+		return this._super();
+	},
+
+    triggerAction: function() {
+		console.log('trigger ac: ' + this.get('isActive'));
+        this._super();
         var action = get(this, 'sc_action')
         if (action && KG.statechart) {
             KG.statechart.sendAction(action, this.get('content') || this.getPath('itemView.content'));
-			if(this.postAction){
-				this.postAction();
-			}
+            if (this.postAction) {
+                this.postAction();
+            }
         }
-        if (e.stopPropagation) {
-            e.stopPropagation();
-        }
-        return NO;
+		console.log('trigger ac2: ' + this.get('isActive'));
     },
 
     keyUp: function(e) {
         if (e.keyCode == 13) {
-            var action = get(this, 'sc_action')
-            if (action && KG.statechart) {
-                KG.statechart.sendAction(action, this.get('content') || this.getPath('itemView.content'));
-				if(this.postAction){
-					this.postAction();
-				}
+            if (get(this, 'isActive')) {
+
+                // Actually invoke the button's target and action.
+                // This method comes from the Ember.TargetActionSupport mixin.
+                this.triggerAction();
+                set(this, 'isActive', false);
             }
         }
-        return NO;
+        return get(this, 'propagateEvents');
     },
 
-
     touchStart: function(touch) {
-		return YES;//bubble to allow default (mouseEvent)
+        return YES; //bubble to allow default (mouseEvent)
     },
 
     touchEnd: function(touch) {
-		return YES;//bubble
+        return YES; //bubble
     },
+
+	cleanDown:function(){
+		this._mouseDown = false;
+		this.set('isActive', false);
+	}
 });

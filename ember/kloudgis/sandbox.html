@@ -106,7 +106,7 @@
 								{{#view KG.Button class="bookmark-item-author" tagName="td" sc_action="selectBookmarkAction"}}
 									{{itemView.content.user_descriptor}}
 								{{/view}}
-								{{#view KG.BubbleTouchView class="bookmark-item-date" tagName="td"}}
+								{{#view KG.Button class="bookmark-item-date" tagName="td" sc_action="selectBookmarkAction"}}
 									{{itemView.content.formattedDate}}
 								{{/view}}
 								{{#view tagName="td" isVisibleBinding="KG.bookmarksController.editMode"}}

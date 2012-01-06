@@ -29,9 +29,9 @@
 	font-weight:800;
 	padding: 4px 10px 4px 10px;
 	border-radius: 6px;
+	border:1px solid gray;
 	box-shadow: 4px 3px 4px #999; 
 	-webkit-box-shadow: 4px 3px 4px #999; 
-	border: none;
 	cursor: pointer;
 }
 
@@ -39,6 +39,10 @@
 	background-image: -moz-linear-gradient(top, rgba(135,148,203,0.85) 0%, rgba(34,56,159,0.75) 50%, rgba(0,27,145,0.75) 51%, rgba(2,59,152,0.65) 100%);
 	background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(135,148,203,0.85)), color-stop(0.5, rgba(34,56,159,0.75)), color-stop(0.5, rgba(0,27,145,0.75)), to(rgba(2,59,152,0.65))); 
 	background-image: -o-linear-gradient(top, rgba(135,148,203,0.85) 0%, rgba(34,56,159,0.75) 50%, rgba(0,27,145,0.75) 51%, rgba(2,59,152,0.65) 100%);
+}
+
+red-button:hover, .white-button:hover{
+	border:1px solid rgb(100, 100, 100);
 }
 
 .red-button{
@@ -70,7 +74,7 @@
 	border-color: #484E59 #54617D #4C5C7A #54617D;
 }
 
-.ios-button.is-active, .ios-button:hover {
+.ios-button:hover {
 	background-image: -webkit-gradient(linear, left top, left bottom, 
 						from(#7d88a5), 
 						color-stop(0.25, #58698c),
