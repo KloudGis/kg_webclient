@@ -10,35 +10,22 @@ KG.Button = SC.Button.extend({
         return this.get('label').loc();
     }.property('label'),
 
-	mouseLeave: function() {
-		this.cleanDown();
-		return this._super();
-	},
+    //patch --> button not working in leaflet popup???
+    mouseUp: function(e) {
+        this.set('isActive', true);
+        this._super(e);
+    },
 
     triggerAction: function() {
-		console.log('trigger ac: ' + this.get('isActive'));
         this._super();
-        var action = get(this, 'sc_action')
+        var action = get(this, 'sc_action');
+        console.log('trigger action: ' + action);
         if (action && KG.statechart) {
             KG.statechart.sendAction(action, this.get('content') || this.getPath('itemView.content'));
             if (this.postAction) {
                 this.postAction();
             }
         }
-		console.log('trigger ac2: ' + this.get('isActive'));
-    },
-
-    keyUp: function(e) {
-        if (e.keyCode == 13) {
-            if (get(this, 'isActive')) {
-
-                // Actually invoke the button's target and action.
-                // This method comes from the Ember.TargetActionSupport mixin.
-                this.triggerAction();
-                set(this, 'isActive', false);
-            }
-        }
-        return get(this, 'propagateEvents');
     },
 
     touchStart: function(touch) {
@@ -47,10 +34,5 @@ KG.Button = SC.Button.extend({
 
     touchEnd: function(touch) {
         return YES; //bubble
-    },
-
-	cleanDown:function(){
-		this._mouseDown = false;
-		this.set('isActive', false);
-	}
+    }
 });
