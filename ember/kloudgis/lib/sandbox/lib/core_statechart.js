@@ -208,22 +208,15 @@ SC.mixin(KG, {
                     // Palette is visible
                     //******************************
                     paletteVisibleState: SC.State.extend({
-	
-						_timeout: null,
 						
 						enterState: function() {
-							clearTimeout(this._timeout);
                             KG.paletteController.set('active', YES);
 							KG.paletteController.set('content', KG.store.find(KG.FEATURETYPE_QUERY));
                         },
 
                         exitState: function() {
                             KG.paletteController.set('active', NO);
-							this._timeout = setTimeout(function(){
-								KG.paletteController.get('content').destroy();
-								KG.paletteController.set('content', []);
-							}, 1000);
-							
+							//do no clear the paletteController because rebuilding the view takes a while (on mobile)
                         },
 
 						closePaletteAction: function(){
