@@ -115,11 +115,3 @@
 	}
 	
 }
-
-@media screen and (max-width: 480px) {
-	.palette-list > div{
-		position:relative;
-		left:10%;
-		width:80%;
-	}
-}

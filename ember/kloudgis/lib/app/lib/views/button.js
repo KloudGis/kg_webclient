@@ -38,13 +38,12 @@ KG.Button = SC.Button.extend({
         return NO;
     },
 
+
     touchStart: function(touch) {
-        this._super(touch);
-		return NO;//no bubble
+		return YES;//bubble to allow default (mouseEvent)
     },
 
     touchEnd: function(touch) {
-        this._super(touch);
-		return NO;//no bubble
-    }	
+		return YES;//bubble
+    },
 });

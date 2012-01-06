@@ -3,66 +3,68 @@
   "bpm": "1.0.0",
   "bpm:build": {
     "bpm_libs.js": {
-	  	"spade:format": "function",
-      "files": [  
+      "spade:format": "function",
+      "files": [
+
       ]
     },
-	"core_lib.js": {
-		"spade:format": "function",
+    "core_lib.js": {
+      "spade:format": "function",
       "files": [
         "lib/core/lib"
       ]
     },
-	"templates_lib.js": {
-		"spade:format": "function",
+    "templates_lib.js": {
+      "spade:format": "function",
       "files": [
         "templates"
       ]
     },
-	"app_lib.js": {
-		"spade:format": "function",
+    "app_lib.js": {
+      "spade:format": "function",
       "files": [
         "lib/app/lib"
       ]
     },
-	"auth_lib.js": {
-		"spade:format": "function",
+    "auth_lib.js": {
+      "spade:format": "function",
       "files": [
         "lib/auth/lib"
       ]
     },
-	"login_lib.js": {
-		"spade:format": "function",
+    "login_lib.js": {
+      "spade:format": "function",
       "files": [
         "lib/login/lib"
       ]
     },
-	"home_lib.js": {
-		"spade:format": "function",
+    "home_lib.js": {
+      "spade:format": "function",
       "files": [
         "lib/home/lib"
       ]
     },
-	"sandbox_lib.js": {
-		"spade:format": "function",
+    "sandbox_lib.js": {
+      "spade:format": "function",
       "files": [
-        "lib/sandbox/lib","lib/sandbox/templates"
+        "lib/sandbox/lib",
+        "lib/sandbox/templates"
       ]
     },
-	"sandbox_styles.css": {
+    "sandbox_styles.css": {
       "files": [
-	        "lib/sandbox/css"
-	  ],
-				"minifier": "uglify-js"
+        "lib/sandbox/css"
+      ],
+      "minifier": "uglify-js"
     },
-	"map_lib.js": {
-		"spade:format": "function",
+    "map_lib.js": {
+      "spade:format": "function",
       "files": [
         "lib/map/lib"
       ]
     },
-	"signup_lib.js": {
-		"spade:format": "function",
+    "signup_lib.js": {
+      "spade:format": "function",
       "files": [
         "lib/signup/lib"
       ]
@@ -70,8 +72,8 @@
   },
   "dependencies": {
     "ember": ">= 0",
-	"ember-statechart": ">= 0",
-	"ember-datastore": ">= 0",
-    "spade": ">= 0"
+    "spade": ">= 0",
+    "ember-datastore": ">= 0",
+    "ember-statechart": ">= 0"
   }
 }
