@@ -10,7 +10,7 @@
 	{{/view}}	
 	<div id="palette-panel">
 			{{#collection contentBinding="KG.paletteController.content" class="palette-list"}}
-				{{#view KG.Button tagName="div" class="white-button"}}
+				{{#view KG.Button tagName="div" class="white-button" sc_action="selectPaletteItemAction"}}
 					{{itemView.content.label}}
 				{{/view}}
 			{{/collection}}

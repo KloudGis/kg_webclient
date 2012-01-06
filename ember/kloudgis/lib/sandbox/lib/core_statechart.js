@@ -216,11 +216,20 @@ SC.mixin(KG, {
 
                         exitState: function() {
                             KG.paletteController.set('active', NO);
+							KG.paletteController.set('isDirty', NO);
 							//do no clear the paletteController because rebuilding the view takes a while (on mobile)
                         },
 
+						selectPaletteItemAction: function(paletteItem){
+							KG.core_palette.createFeature(paletteItem);
+						},
+
 						closePaletteAction: function(){
 							this.gotoState('allHiddenState');
+						},
+						
+						cancelPaletteAction: function(){
+							KG.core_palette.cancelCreateFeature();
 						},
 
 						showPaletteAction: function(){

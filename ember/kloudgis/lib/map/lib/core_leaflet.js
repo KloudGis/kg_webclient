@@ -356,7 +356,9 @@ KG.core_leaflet = SC.Object.create({
             lmarker.bindPopup(popupContent);
             if (!SC.none(openPopup)) {
                 setTimeout(function() {
-                    lmarker.openPopup();
+					if(lmarker && lmarker._popup && lmarker._map){
+                    	lmarker.openPopup();
+					}	
                 },
                 animated ? 1000 : 1);
             }

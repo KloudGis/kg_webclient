@@ -104,7 +104,7 @@ KG.core_note = SC.Object.create({
         var options = {
             title: "_newNote".loc(),
             animated: YES,
-            iconPath: 'resources/images/new.png',
+            iconPath: 'resources/images/new_marker.png',
             draggable: YES,
             popupContent: "_moveNote".loc(),
             openPopup: YES,
@@ -161,7 +161,7 @@ KG.core_note = SC.Object.create({
                 var options = {
                     title: "_newNote".loc(),
                     animated: YES,
-                    iconPath: 'resources/images/new.png',
+                    iconPath: 'resources/images/new_marker.png',
                     draggable: YES,
                     dragendTarget: this,
                     dragendCb: this.markerDragged,
@@ -370,7 +370,7 @@ KG.core_note = SC.Object.create({
                 //add the marker - If the marker was already visible, it replace it (remove the old one)
                 var iconPath = undefined;
                 if (marker.get('featureCount') > 1) {
-                    iconPath = 'resources/images/group.png';
+                    iconPath = 'resources/images/group_marker.png';
                 }
                 var options = {
                     title: marker.get('tooltip'),
