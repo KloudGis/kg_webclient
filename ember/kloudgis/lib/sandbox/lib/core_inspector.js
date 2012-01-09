@@ -10,14 +10,30 @@ KG.core_inspector = SC.Object.create({
     /* chained store to perform modifications*/
     _store: null,
 
+    createFeature: function(featuretype, lon, lat) {
+        this.commitModifications();
+        this._store = KG.store.chain();
+        var feature = this._store.createRecord(KG.Feature, {
+            ft_id: featuretype.get('id'),
+            geo: featuretype.getDefaultGeoFromPoint(lon, lat)
+        });
+        this.continueSelectFeature(feature);
+    },
+
     selectFeature: function(feature) {
         this.commitModifications();
         this._store = KG.store.chain();
+        this.continueSelectFeature(feature);
+    },
+
+    continueSelectFeature: function(feature) {
         KG.core_highlight.clearHighlight(this._highlight);
         this._highlight = KG.core_highlight.highlightFeature(feature);
-        var nested_feature = this._store.find(feature);
-        KG.inspectorController.set('feature', nested_feature);
-        KG.inspectorController.set('content', nested_feature.getAttributes());
+        if (feature.get('status') !== SC.Record.READY_NEW) {
+            feature = this._store.find(feature);
+        }
+        KG.inspectorController.set('feature', feature);
+        KG.inspectorController.set('content', feature.getAttributes());
     },
 
     removeHighlight: function() {
@@ -34,7 +50,14 @@ KG.core_inspector = SC.Object.create({
         if (!SC.none(this._store)) {
             this._store.commitChanges().destroy();
             this._store = null;
-            KG.store.commitRecords();
+            var feature = KG.inspectorController.get('feature');
+            //commit only this record
+            KG.store.commitRecords(null, null, [feature.get('storeKey')], null,
+            function() {
+                KG.core_layer.getMainWMSFor(feature.get('featuretype')).forEach(function(layer) {
+                    KG.core_leaflet.refreshWMSLayer(layer);
+                });
+            });
         }
     },
 

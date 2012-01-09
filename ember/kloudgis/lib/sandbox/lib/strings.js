@@ -53,7 +53,9 @@ var fr = {
 	"_timeoutSendMessage" : "Erreur lors de l'envoi du message.",
 	"_sendMessageSuccessful" : "Message envoyé.",
 	"_otherValue" : "Autre...",
-	"_paletteTitle": "Palette"
+	"_paletteTitle": "Palette",
+	"_showPalette" : "Afficher la Palette",
+	"_moveFeature": "Glisser le nouveau '%@' où vous le voulez."
 };
 
 var en = {
@@ -75,7 +77,7 @@ var en = {
 	"_noteConfirm": "Create",
 	"_noteUpdate": "Update",
 	"_noteTitlePlaceholder": "Your note",
-	"_moveNote": "Drag where you want it.",
+	"_moveNote": "Drag the note where you want.",
 	"_author": "By %@",
 	"_0comment": "Add a comment",
 	"_1comment": "One comment",
@@ -111,7 +113,9 @@ var en = {
 	"_timeoutSendMessage" : "Failed to send message.",
 	"_sendMessageSuccessful" : "Message envoyé.",
 	"_otherValue" : "Other...",
-	"_paletteTitle": "Palette"
+	"_paletteTitle": "Palette",
+	"_showPalette" : "Show the Palette",
+	"_moveFeature": "Drag the new '%@' where you want."
 };
 
 if(KG.lang === 'fr'){

@@ -1,3 +1,5 @@
+
+KG.localStorageLeafletCacheKey = 'leaflet-wms-cache-count';
 /**
 * Core functions to manage the map (leaflet framework)
 **/
@@ -424,14 +426,16 @@ KG.core_leaflet = SC.Object.create({
             no_gwc: NO,
             kg_layer: layer.get('id'),
             kg_sandbox: KG.get('activeSandboxKey'),
-            auth_token: KG.core_auth.get('authenticationToken')
+            auth_token: KG.core_auth.get('authenticationToken'),
+			counter: this._counter++
         });
         layer._native_layer = wms;
+		localStorage.setItem(KG.localStorageLeafletCacheKey, this._counter);
         this.map.addLayer(wms);
     },
 
     //increment counter to include in the wms url to force refresh (not from cache)
-    _counter: 1,
+    _counter: localStorage.getItem(KG.localStorageLeafletCacheKey) || 1,
 
     refreshWMSLayer: function(layer) {
         if (layer._native_layer) {
@@ -448,6 +452,7 @@ KG.core_leaflet = SC.Object.create({
             });
 
             layer._native_layer.wmsParams.counter = this._counter++;
+			localStorage.setItem(KG.localStorageLeafletCacheKey, this._counter);
             layer._native_layer._update();
         }
     },

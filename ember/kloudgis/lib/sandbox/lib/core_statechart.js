@@ -211,13 +211,22 @@ SC.mixin(KG, {
 						
 						enterState: function() {
                             KG.paletteController.set('active', YES);
-							KG.paletteController.set('content', KG.store.find(KG.FEATURETYPE_QUERY));
+							if(Ember.none(KG.paletteController.get('content'))){
+								var query = SC.Query.local(KG.Featuretype, {conditions:'geometry_type != null'})
+								KG.paletteController.set('content', KG.store.find(query));
+							}							
                         },
 
                         exitState: function() {
                             KG.paletteController.set('active', NO);
 							KG.paletteController.set('isDirty', NO);
+							KG.core_palette.clearCreateFeature();
 							//do no clear the paletteController because rebuilding the view takes a while (on mobile)
+                        },
+
+						paletteMarkerDragEnded: function(params) {
+                            this.gotoState('inspectorVisibleState');
+							KG.core_inspector.createFeature(params.paletteItem, params.lon, params.lat);
                         },
 
 						selectPaletteItemAction: function(paletteItem){
@@ -229,7 +238,7 @@ SC.mixin(KG, {
 						},
 						
 						cancelPaletteAction: function(){
-							KG.core_palette.cancelCreateFeature();
+							KG.core_palette.clearCreateFeature();
 						},
 
 						showPaletteAction: function(){

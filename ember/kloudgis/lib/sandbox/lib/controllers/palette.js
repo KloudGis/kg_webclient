@@ -3,7 +3,7 @@
 **/
 KG.paletteController = Ember.ArrayController.create({
 	//featuretypes
-	content: [],
+	content: null,
 	active: NO,
 	
 	isDirty: NO,

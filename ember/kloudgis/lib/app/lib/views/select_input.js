@@ -29,7 +29,7 @@ KG.SelectInputView = Ember.View.extend({
 	
 	valueSelectChanged: function(){
 		var sv = this.get('valueSelect');
-		console.log('select view value:' + sv);
+		//console.log('select view value:' + sv);
 		if(sv === KG.otherKey){
 			this.set('inputClass', 'visible-element');
 		}else{
@@ -45,7 +45,7 @@ KG.SelectInputView = Ember.View.extend({
 
     valueInputChanged: function(){
 		var iv = this.get('valueInput');
-        console.log('Input view value:' + iv);
+        //console.log('Input view value:' + iv);
 		var v = this.get('value');
 		if(iv !== v){
 			this.set('value', iv);
