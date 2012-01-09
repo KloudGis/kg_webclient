@@ -6,15 +6,11 @@ KG.Button = SC.Button.extend({
 
     attributeBindings: ['type', 'disabled', 'title'],
 
+	manualMouseDown: NO,
+
     label_loc: function() {
         return this.get('label').loc();
     }.property('label'),
-
-    //patch --> button not working in leaflet popup???
-    mouseUp: function(e) {
-        this.set('isActive', true);
-        this._super(e);
-    },
 
     triggerAction: function() {
         this._super();
@@ -34,5 +30,35 @@ KG.Button = SC.Button.extend({
 
     touchEnd: function(touch) {
         return YES; //bubble
-    }
+    },
+
+	//manual mouseDown Event Handling
+
+	_mouseDownListener: null,
+	_element: null,
+
+    didInsertElement: function() {
+        if (this.get('manualMouseDown')) {
+            this._element = this.get('element');
+            var self = this;
+			this._mouseDownListener = function(e) {
+                self.mouseDown(e);
+				if (e.stopPropagation) {
+					e.stopPropagation();
+				} else {
+					e.cancelBubble = true;
+				}
+            };
+            this._element.addEventListener('mousedown', this._mouseDownListener, false);
+        }
+    },
+
+	destroy:function(){
+		if (get(this, 'isDestroyed')) { return; }
+		if (this.get('manualMouseDown') && this._element) {
+			this._element.removeEventListener('mousedown', this._mouseDownListener, false);
+			this._element = null;
+		}  
+		this._super();
+	}
 });
