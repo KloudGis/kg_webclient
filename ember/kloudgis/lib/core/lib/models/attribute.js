@@ -84,6 +84,6 @@ KG.Attribute = SC.Object.extend({
             enumVals.push(possibleVals[i]);
         }
         return enumVals;
-    }.property('attr_type').cacheable(),
+    }.property('attr_type').cacheable()
 
 });

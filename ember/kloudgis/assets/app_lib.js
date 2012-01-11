@@ -215,7 +215,7 @@ KG.SelectView = SC.View.extend({
         var self = this;
 		this.valueChanged();
         this.$('select').change(function(){
-            var val = $('select option:selected').val();
+            var val = self.$('select option:selected').val();
             self.set('value', val);
         });		
     }
