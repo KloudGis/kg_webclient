@@ -68,7 +68,6 @@ KG.core_highlight = SC.Object.create({
 })
 
 });spade.register("kloudgis/map/lib/core_leaflet", function(require, exports, __module, ARGV, ENV, __filename){
-
 KG.localStorageLeafletCacheKey = 'leaflet-wms-cache-count';
 /**
 * Core functions to manage the map (leaflet framework)
@@ -369,7 +368,7 @@ KG.core_leaflet = SC.Object.create({
     },
 
     addMarker: function(marker, lon, lat, options) {
-        var title, animated, iconPath, draggable, popupContent, openPopup, clickTarget, clickCb, dragendTarget, dragendCb,injectGetNativePositionFunction;
+        var title, animated, iconPath, draggable, popupContent, openPopup, clickTarget, clickCb, dragendTarget, dragendCb, injectGetNativePositionFunction;
         if (options) {
             title = options.title;
             animated = options.animated;
@@ -381,7 +380,7 @@ KG.core_leaflet = SC.Object.create({
             clickCb = options.clickCb;
             dragendTarget = options.dragendTarget;
             dragendCb = options.dragendCb;
-			injectGetNativePositionFunction = options.injectGetNativePositionFunction;
+            injectGetNativePositionFunction = options.injectGetNativePositionFunction;
         }
         var key = iconPath + animated;
         var icon = this._icons[key];
@@ -428,19 +427,22 @@ KG.core_leaflet = SC.Object.create({
             lmarker.bindPopup(popupContent);
             if (!SC.none(openPopup)) {
                 setTimeout(function() {
-					if(lmarker && lmarker._popup && lmarker._map){
-                    	lmarker.openPopup();
-					}	
+                    if (lmarker && lmarker._popup && lmarker._map) {
+                        lmarker.openPopup();
+                    }
                 },
                 animated ? 1000 : 1);
             }
         }
         marker._native_marker = lmarker;
-		if(injectGetNativePositionFunction){
-				marker.getNativePosition = function(){
-					return KG.LonLat.create({lon: lmarker._latlng.lng, lat: lmarker._latlng.lat});
-				}
-		}
+        if (injectGetNativePositionFunction) {
+            marker.getNativePosition = function() {
+                return KG.LonLat.create({
+                    lon: lmarker._latlng.lng,
+                    lat: lmarker._latlng.lat
+                });
+            }
+        }
         if (animated) {
             //animate marker
             setTimeout(function() {
@@ -497,10 +499,10 @@ KG.core_leaflet = SC.Object.create({
             kg_layer: layer.get('id'),
             kg_sandbox: KG.get('activeSandboxKey'),
             auth_token: KG.core_auth.get('authenticationToken'),
-			counter: this._counter++
+            counter: this._counter++
         });
         layer._native_layer = wms;
-		localStorage.setItem(KG.localStorageLeafletCacheKey, this._counter);
+        localStorage.setItem(KG.localStorageLeafletCacheKey, this._counter);
         this.map.addLayer(wms);
     },
 
@@ -509,21 +511,14 @@ KG.core_leaflet = SC.Object.create({
 
     refreshWMSLayer: function(layer) {
         if (layer._native_layer) {
-            //fixe: Only remove the dirty tiles
-            layer._native_layer._removeOtherTiles({
-                min: {
-                    x: 0,
-                    y: 0
-                },
-                max: {
-                    x: 0,
-                    y: 0
-                }
-            });
-
-            layer._native_layer.wmsParams.counter = this._counter++;
-			localStorage.setItem(KG.localStorageLeafletCacheKey, this._counter);
-            layer._native_layer._update();
+            var actual = layer._native_layer;
+            this.addWMSLayer(layer);
+            var self = this;
+			//remove the old one after a delay to avoid flash effect
+            setTimeout(function() {
+                self.map.removeLayer(actual);
+            },
+            500);
         }
     },
 

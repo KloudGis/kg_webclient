@@ -634,7 +634,7 @@ KG.core_inspector = SC.Object.create({
     /* chained store to perform modifications*/
     _store: null,
 
-	_commentsView: null,
+    _commentsView: null,
 
     createFeature: function(featuretype, lon, lat) {
         this.commitModifications();
@@ -653,15 +653,18 @@ KG.core_inspector = SC.Object.create({
     },
 
     continueSelectFeature: function(feature) {
-		//ember 0.9.3
-		//do not re-use the comment view because it failed to clean up properly when adding a comment
-		//destroy the old view and create a new one each time the feature change
-		if(this._commentsView){
-			this._commentsView.destroy();
-		}
-		this._commentsView = Ember.View.create({templateName:"feature-comments", classNames:["super-feature-comments"]});
-		this._commentsView.appendTo('#comment-super-panel');
-		
+        //ember 0.9.3
+        //do not re-use the comment view because it failed to clean up properly when adding a comment
+        //destroy the old view and create a new one each time the feature change
+        if (this._commentsView) {
+            this._commentsView.destroy();
+        }
+        this._commentsView = Ember.View.create({
+            templateName: "feature-comments",
+            classNames: ["super-feature-comments"]
+        });
+        this._commentsView.appendTo('#comment-super-panel');
+
         KG.core_highlight.clearHighlight(this._highlight);
         this._highlight = KG.core_highlight.highlightFeature(feature);
         if (feature.get('status') !== SC.Record.READY_NEW) {
@@ -682,21 +685,25 @@ KG.core_inspector = SC.Object.create({
 	* Commit the nested store into the main store and commits all the changes to the server
 	**/
     commitModifications: function() {
-		//ember 0.9.3
-		//bug with manyArray, have to delete the view before the update
-		if(this._commentsView){
-			this._commentsView.destroy();
-			this._commentsView = null;
-		}
+        //ember 0.9.3
+        //bug with manyArray, have to delete the view before the update
+        if (this._commentsView) {
+            this._commentsView.destroy();
+            this._commentsView = null;
+        }
         if (!SC.none(this._store)) {
             this._store.commitChanges().destroy();
             this._store = null;
             var feature = KG.inspectorController.get('feature');
             KG.store.commitRecords(null, null, null, null,
             function() {
-                KG.core_layer.getMainWMSFor(feature.get('featuretype')).forEach(function(layer) {
-                    KG.core_leaflet.refreshWMSLayer(layer);
-                });
+				//wait 1 sec giving some time to gwc
+                setTimeout(function() {
+                    KG.core_layer.getMainWMSFor(feature.get('featuretype')).forEach(function(layer) {
+                        KG.core_leaflet.refreshWMSLayer(layer);
+                    });
+                },
+                1000);
             });
         }
     },
@@ -705,12 +712,12 @@ KG.core_inspector = SC.Object.create({
 	* Discard the changes made in the nested store.
 	**/
     rollbackModifications: function() {
-		//ember 0.9.3
-		//bug with manyArray, have to delete the view before the update
-		if(this._commentsView){
-			this._commentsView.destroy();
-			this._commentsView = null;
-		}
+        //ember 0.9.3
+        //bug with manyArray, have to delete the view before the update
+        if (this._commentsView) {
+            this._commentsView.destroy();
+            this._commentsView = null;
+        }
         if (!SC.none(this._store)) {
             this._store.discardChanges();
             this._store.destroy();
@@ -779,7 +786,7 @@ KG.core_inspector = SC.Object.create({
             KG.store.commitRecords(null, null, [rec_comment.get('storeKey')]);
             rec_comment.onReady(null,
             function() {
-                nested_feature.get('comments').get('editableStoreIds').pushObject(rec_comment.get('id'));			
+                nested_feature.get('comments').get('editableStoreIds').pushObject(rec_comment.get('id'));
                 KG.statechart.sendAction('featureCommentsReadyEvent');
             });
         }
@@ -792,8 +799,8 @@ KG.core_inspector = SC.Object.create({
         var nested_feature = KG.inspectorController.get('feature');
         nested_feature.get('comments').get('editableStoreIds').removeObject(comment.get('id'));
         //find the real (not nested) comment
-		comment = KG.store.find(comment);
-		comment.destroy();
+        comment = KG.store.find(comment);
+        comment.destroy();
         //commit only on record
         KG.store.commitRecords(null, null, [comment.get('storeKey')]);
     }

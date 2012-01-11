@@ -948,7 +948,7 @@ KG.Featuretype = KG.Record.extend({
 				var offset = 0.5;
 				if(KG.core_leaflet){
 					//50 pixels offset
-					offset = KG.core_leaflet.pixelsToWorld(50);
+					offset = KG.core_leaflet.pixelsToWorld(100);
 				}
                 if (gt === 'linestring') {
                     var c1 = {
@@ -957,7 +957,7 @@ KG.Featuretype = KG.Record.extend({
                     };
                     var c2 = {
                         x: lon + offset,
-                        y: lat + offset
+                        y: lat
                     };
                     return {
                         coords: [c1, c2],
