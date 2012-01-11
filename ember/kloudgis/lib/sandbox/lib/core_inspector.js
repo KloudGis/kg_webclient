@@ -10,6 +10,8 @@ KG.core_inspector = SC.Object.create({
     /* chained store to perform modifications*/
     _store: null,
 
+	_commentsView: null,
+
     createFeature: function(featuretype, lon, lat) {
         this.commitModifications();
         this._store = KG.store.chain();
@@ -27,6 +29,15 @@ KG.core_inspector = SC.Object.create({
     },
 
     continueSelectFeature: function(feature) {
+		//ember 0.9.3
+		//do not re-use the comment view because it failed to clean up properly when adding a comment
+		//destroy the old view and create a new one each time the feature change
+		if(this._commentsView){
+			this._commentsView.destroy();
+		}
+		this._commentsView = Ember.View.create({templateName:"feature-comments", classNames:["super-feature-comments"]});
+		this._commentsView.appendTo('#comment-super-panel');
+		
         KG.core_highlight.clearHighlight(this._highlight);
         this._highlight = KG.core_highlight.highlightFeature(feature);
         if (feature.get('status') !== SC.Record.READY_NEW) {
@@ -133,7 +144,7 @@ KG.core_inspector = SC.Object.create({
             KG.store.commitRecords(null, null, [rec_comment.get('storeKey')]);
             rec_comment.onReady(null,
             function() {
-                nested_feature.get('comments').get('editableStoreIds').pushObject(rec_comment.get('id'));
+                nested_feature.get('comments').get('editableStoreIds').pushObject(rec_comment.get('id'));			
                 KG.statechart.sendAction('featureCommentsReadyEvent');
             });
         }

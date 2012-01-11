@@ -3,5 +3,5 @@
 **/
 KG.featureCommentsController = KG.CommentsController.create({
 
-	commentsBinding: 'KG.inspectorController.feature.comments'	
+	commentsBinding: Ember.Binding.oneWay('KG.inspectorController.feature.comments')
 });

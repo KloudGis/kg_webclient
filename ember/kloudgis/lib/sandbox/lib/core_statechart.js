@@ -130,6 +130,7 @@ SC.mixin(KG, {
 
                         selectFeatureInspectorAction: function(feature) {
                             if (feature && feature.get('isSelectable') && feature.get('isInspectorSelectable')) {
+	                            KG.featureCommentsController.set('showing', NO);
                                 KG.core_inspector.selectFeature(feature);
                             }
                         },
