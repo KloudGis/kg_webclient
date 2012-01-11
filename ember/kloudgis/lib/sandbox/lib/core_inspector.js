@@ -58,12 +58,17 @@ KG.core_inspector = SC.Object.create({
 	* Commit the nested store into the main store and commits all the changes to the server
 	**/
     commitModifications: function() {
+		//ember 0.9.3
+		//bug with manyArray, have to delete the view before the update
+		if(this._commentsView){
+			this._commentsView.destroy();
+			this._commentsView = null;
+		}
         if (!SC.none(this._store)) {
             this._store.commitChanges().destroy();
             this._store = null;
             var feature = KG.inspectorController.get('feature');
-            //commit only this record
-            KG.store.commitRecords(null, null, [feature.get('storeKey')], null,
+            KG.store.commitRecords(null, null, null, null,
             function() {
                 KG.core_layer.getMainWMSFor(feature.get('featuretype')).forEach(function(layer) {
                     KG.core_leaflet.refreshWMSLayer(layer);
@@ -76,6 +81,12 @@ KG.core_inspector = SC.Object.create({
 	* Discard the changes made in the nested store.
 	**/
     rollbackModifications: function() {
+		//ember 0.9.3
+		//bug with manyArray, have to delete the view before the update
+		if(this._commentsView){
+			this._commentsView.destroy();
+			this._commentsView = null;
+		}
         if (!SC.none(this._store)) {
             this._store.discardChanges();
             this._store.destroy();
@@ -156,7 +167,9 @@ KG.core_inspector = SC.Object.create({
     deleteComment: function(comment) {
         var nested_feature = KG.inspectorController.get('feature');
         nested_feature.get('comments').get('editableStoreIds').removeObject(comment.get('id'));
-        comment.destroy();
+        //find the real (not nested) comment
+		comment = KG.store.find(comment);
+		comment.destroy();
         //commit only on record
         KG.store.commitRecords(null, null, [comment.get('storeKey')]);
     }

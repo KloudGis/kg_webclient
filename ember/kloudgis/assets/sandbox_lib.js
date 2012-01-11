@@ -682,12 +682,17 @@ KG.core_inspector = SC.Object.create({
 	* Commit the nested store into the main store and commits all the changes to the server
 	**/
     commitModifications: function() {
+		//ember 0.9.3
+		//bug with manyArray, have to delete the view before the update
+		if(this._commentsView){
+			this._commentsView.destroy();
+			this._commentsView = null;
+		}
         if (!SC.none(this._store)) {
             this._store.commitChanges().destroy();
             this._store = null;
             var feature = KG.inspectorController.get('feature');
-            //commit only this record
-            KG.store.commitRecords(null, null, [feature.get('storeKey')], null,
+            KG.store.commitRecords(null, null, null, null,
             function() {
                 KG.core_layer.getMainWMSFor(feature.get('featuretype')).forEach(function(layer) {
                     KG.core_leaflet.refreshWMSLayer(layer);
@@ -700,6 +705,12 @@ KG.core_inspector = SC.Object.create({
 	* Discard the changes made in the nested store.
 	**/
     rollbackModifications: function() {
+		//ember 0.9.3
+		//bug with manyArray, have to delete the view before the update
+		if(this._commentsView){
+			this._commentsView.destroy();
+			this._commentsView = null;
+		}
         if (!SC.none(this._store)) {
             this._store.discardChanges();
             this._store.destroy();
@@ -780,7 +791,9 @@ KG.core_inspector = SC.Object.create({
     deleteComment: function(comment) {
         var nested_feature = KG.inspectorController.get('feature');
         nested_feature.get('comments').get('editableStoreIds').removeObject(comment.get('id'));
-        comment.destroy();
+        //find the real (not nested) comment
+		comment = KG.store.find(comment);
+		comment.destroy();
         //commit only on record
         KG.store.commitRecords(null, null, [comment.get('storeKey')]);
     }
@@ -3689,7 +3702,7 @@ return Ember.Handlebars.compile("{{#view id=\"super-inspector\" classBinding=\"K
 });spade.register("kloudgis/sandbox/templates/multiple_notes_popup", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("{{#view class=\"multiple-notes-title\"}}\n\t{{KG.notesPopupController.popupTitle}}\n{{/view}}\n{{#collection contentBinding=\"KG.notesPopupController\" tagName=\"ul\" class=\"multiple-notes-list no-style-list\"}}\t\t\t\n\t{{#view KG.NotePopupItemView class=\"multiple-notes-item\"}}\n\t\t<table class=\"multiple-notes-table\">\n\t\t<td>\n\t\t{{#view class=\"multiple-notes-item-title\"}}\n\t\t\t{{itemView.content.title}}\n\t\t{{/view}}\n\t\t</td>\n\t\t<td>\n\t\t{{#view class=\"note-author-label\"}}\n\t\t\t{{itemView.content.authorFormatted}}\n\t\t{{/view}}\n\t\t</td>\n\t\t</table>\n\t{{/view}}\n{{/collection}}\n");
 });spade.register("kloudgis/sandbox/templates/note_comments", function(require, exports, __module, ARGV, ENV, __filename){
-return Ember.Handlebars.compile("{{#view KG.Button  manualMouseDown=\"yes\" tagName=\"span\" isVisibleBinding=\"KG.noteCommentsController.showButtonVisible\" classBinding=\"isActive\" sc_action=\"showNoteCommentsAction\"}}\n\t<a href=\"javascript:void(0)\">\n\t\t{{KG.noteCommentsController.commentsLabel}}\n\t\t</a>\n{{/view}}\n{{#view id=\"note-comments-container\" classBinding=\"KG.noteCommentsController.showing\"}}\n\t{{#collection contentBinding=\"KG.noteCommentsController.content\" class=\"comment-list\"}}\n\t\t{{#view KG.Button tagName=\"div\" sc_action=\"toggleDeleteNoteCommentButtonAction\"}}\n\t\t\t<table style=\"width:100%\">\n\t\t\t<tr>\n\t\t\t\t<td>\n\t\t\t\t\t{{#view KG.AuthorView class=\"comment-author\"}}\n\t\t\t\t\t\t{{authorLabel}}\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t{{/view}}\n\t\t\t\t\t{{#view class=\"comment-content\"}}\n\t\t\t\t\t\t{{itemView.content.comment}}\n\t\t\t\t\t{{/view}}\n\t\t\t\t\t{{#view class=\"comment-date\"}}\n\t\t\t\t\t\t{{itemView.content.formattedDate}}\n\t\t\t\t\t{{/view}}\n\t\t\t\t</td>\n\t\t\t\t<td style=\"text-align:right;vertical-align:middle\">\n\t\t\t\t\t{{#view KG.DeleteNoteCommentView class=\"comment-delete red-button\" sc_action=\"deleteNoteCommentButtonAction\"}}\n\t\t\t\t\t\t{{label}}\n\t\t\t\t\t{{/view}}\n\t\t\t\t</td>\n\t\t\t</tr>\n\t\t\t</table>\n\t\t{{/view}}\n\t{{/collection}}\t\t\t\n{{/view}}\n{{view KG.CommentAreaView id=\"note-new-comment-area\" class=\"new-comment-area\" isVisibleBinding=\"KG.noteCommentsController.showing\" valueBinding=\"KG.noteNewCommentController.content\" placeholder_not_loc=\"_commentPlaceholder\" nl_sc_action=\"addNoteCommentAction\"}}\n{{#view KG.LoadingImageView id=\"note-comment-loading\" class=\"comment-loading\" isVisibleBinding=\"KG.noteCommentsController.isLoading\"}}\n\t<img {{bindAttr src=\"loadingImage\"}} alt=\"Loading\"/>\n{{/view}}\n");
+return Ember.Handlebars.compile("{{#view KG.Button  manualMouseDown=\"yes\" tagName=\"span\" isVisibleBinding=\"KG.noteCommentsController.showButtonVisible\" classBinding=\"isActive\" sc_action=\"showNoteCommentsAction\"}}\n\t<a href=\"javascript:void(0)\">\n\t\t{{KG.noteCommentsController.commentsLabel}}\n\t\t</a>\n{{/view}}\n{{#view id=\"note-comments-container\" classBinding=\"KG.noteCommentsController.showing\"}}\n\t{{#collection contentBinding=\"KG.noteCommentsController.content\" class=\"comment-list\"}}\n\t\t{{#view KG.Button manualMouseDown=\"yes\" tagName=\"div\" sc_action=\"toggleDeleteNoteCommentButtonAction\"}}\n\t\t\t<table style=\"width:100%\">\n\t\t\t<tr>\n\t\t\t\t<td>\n\t\t\t\t\t{{#view KG.AuthorView class=\"comment-author\"}}\n\t\t\t\t\t\t{{authorLabel}}\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t{{/view}}\n\t\t\t\t\t{{#view class=\"comment-content\"}}\n\t\t\t\t\t\t{{itemView.content.comment}}\n\t\t\t\t\t{{/view}}\n\t\t\t\t\t{{#view class=\"comment-date\"}}\n\t\t\t\t\t\t{{itemView.content.formattedDate}}\n\t\t\t\t\t{{/view}}\n\t\t\t\t</td>\n\t\t\t\t<td style=\"text-align:right;vertical-align:middle\">\n\t\t\t\t\t{{#view KG.DeleteNoteCommentView manualMouseDown=\"yes\" class=\"comment-delete red-button\" sc_action=\"deleteNoteCommentButtonAction\"}}\n\t\t\t\t\t\t{{label}}\n\t\t\t\t\t{{/view}}\n\t\t\t\t</td>\n\t\t\t</tr>\n\t\t\t</table>\n\t\t{{/view}}\n\t{{/collection}}\t\t\t\n{{/view}}\n{{view KG.CommentAreaView id=\"note-new-comment-area\" class=\"new-comment-area\" isVisibleBinding=\"KG.noteCommentsController.showing\" valueBinding=\"KG.noteNewCommentController.content\" placeholder_not_loc=\"_commentPlaceholder\" nl_sc_action=\"addNoteCommentAction\"}}\n{{#view KG.LoadingImageView id=\"note-comment-loading\" class=\"comment-loading\" isVisibleBinding=\"KG.noteCommentsController.isLoading\"}}\n\t<img {{bindAttr src=\"loadingImage\"}} alt=\"Loading\"/>\n{{/view}}\n");
 });spade.register("kloudgis/sandbox/templates/palette", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("{{#view id=\"super-palette\" classBinding=\"KG.paletteController.active\"}}\t\n\t{{#view id=\"palette-title\" tagName=\"header\"}}\n\t\t{{#view KG.Button tagName=\"div\" class=\"ios-button ios-tb-left\" isVisibleBinding=\"KG.paletteController.isDirty\" classBinding=\"isActive\" sc_action=\"cancelPaletteAction\" titleBinding=\"KG.paletteController.cancelTitle\"}}\n\t\t\t{{loc _cancel}}\n\t\t{{/view}}\n\t\t<h1 class=\"label-ellipsis\" {{bindAttr title=\"KG.paletteController.title\"}}>{{loc _paletteTitle}}</h1>\n\t\t{{#view KG.Button tagName=\"div\" class=\"ios-button ios-tb-right\" classBinding=\"isActive\" sc_action=\"closePaletteAction\" titleBinding=\"KG.paletteController.closeTitle\"}}\n\t\t\t{{loc _close}}\n\t\t{{/view}}\n\t{{/view}}\t\n\t<div id=\"palette-panel\">\n\t\t\t{{#collection contentBinding=\"KG.paletteController.content\" class=\"palette-list\"}}\n\t\t\t\t{{#view KG.Button tagName=\"div\" class=\"white-button\" sc_action=\"selectPaletteItemAction\"}}\n\t\t\t\t\t{{itemView.content.label}}\n\t\t\t\t{{/view}}\n\t\t\t{{/collection}}\n\t</div>\n{{/view}}\n");
 });spade.register("kloudgis/sandbox/templates/send_text_notification", function(require, exports, __module, ARGV, ENV, __filename){

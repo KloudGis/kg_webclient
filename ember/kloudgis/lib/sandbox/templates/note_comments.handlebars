@@ -5,7 +5,7 @@
 {{/view}}
 {{#view id="note-comments-container" classBinding="KG.noteCommentsController.showing"}}
 	{{#collection contentBinding="KG.noteCommentsController.content" class="comment-list"}}
-		{{#view KG.Button tagName="div" sc_action="toggleDeleteNoteCommentButtonAction"}}
+		{{#view KG.Button manualMouseDown="yes" tagName="div" sc_action="toggleDeleteNoteCommentButtonAction"}}
 			<table style="width:100%">
 			<tr>
 				<td>
@@ -20,7 +20,7 @@
 					{{/view}}
 				</td>
 				<td style="text-align:right;vertical-align:middle">
-					{{#view KG.DeleteNoteCommentView class="comment-delete red-button" sc_action="deleteNoteCommentButtonAction"}}
+					{{#view KG.DeleteNoteCommentView manualMouseDown="yes" class="comment-delete red-button" sc_action="deleteNoteCommentButtonAction"}}
 						{{label}}
 					{{/view}}
 				</td>
