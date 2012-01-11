@@ -177,9 +177,15 @@ KG.core_inspector = SC.Object.create({
         //find the real (not nested) comment
         comment = KG.store.find(comment);
         comment.destroy();
-        //commit only on record
+        //commit only this record
         KG.store.commitRecords(null, null, [comment.get('storeKey')]);
-    }
+    },
+
+	deleteFeature: function(){
+		var nested_feature = KG.inspectorController.get('feature');
+		nested_feature.destroy();
+		//commit is done after by the statechart
+	}
 });
 
 //lazzy creation too speed up app launch

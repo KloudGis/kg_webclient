@@ -194,7 +194,9 @@ KG.Store = SC.DataSource.extend({
         var id = store.idFor(storeKey);
         var url;
         if (!SC.none(id)) {
-            if (rtype === KG.Note) {
+            if (rtype === KG.Feature) {
+                url = KG.get('serverHost') + 'api_data/protected/features/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+            } else if (rtype === KG.Note) {
                 url = KG.get('serverHost') + 'api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             } else if (rtype === KG.NoteComment) {
                 url = KG.get('serverHost') + 'api_data/protected/note_comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
@@ -265,7 +267,9 @@ KG.Store = SC.DataSource.extend({
         var id = store.idFor(storeKey);
         var url;
         if (!SC.none(id)) {
-            if (rtype === KG.Note) {
+            if (rtype === KG.Feature) {
+                url = KG.get('serverHost') + 'api_data/protected/features/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
+            } else if (rtype === KG.Note) {
                 url = KG.get('serverHost') + 'api_data/protected/notes/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));
             } else if (rtype === KG.NoteComment) {
                 url = KG.get('serverHost') + 'api_data/protected/note_comments/%@?sandbox=%@'.fmt(id, KG.get('activeSandboxKey'));

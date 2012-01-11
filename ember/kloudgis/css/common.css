@@ -33,6 +33,7 @@
 	box-shadow: 4px 3px 4px #999; 
 	-webkit-box-shadow: 4px 3px 4px #999; 
 	cursor: pointer;
+	text-align:center;
 }
 
 .red-button.is-active, .white-button.is-active{
@@ -72,6 +73,7 @@ red-button:hover, .white-button:hover{
 	-webkit-user-select: none;
 	border: solid 1px #54617D;
 	border-color: #484E59 #54617D #4C5C7A #54617D;
+	text-align:center;
 }
 
 .ios-button:hover {

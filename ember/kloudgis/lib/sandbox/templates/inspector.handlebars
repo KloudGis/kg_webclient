@@ -13,6 +13,9 @@
 			{{view KG.InspectorAttributeView class="inspector-list-item" classBinding="itemView.content.css_class"}}
 		{{/collection}}	
 		<div id="comment-super-panel">
-		</div>																
+		</div>			
+		{{#view KG.Button tagName="div" class="delete-feature red-button" classBinding="isActive" sc_action="deleteFeatureInspectorAction" titleBinding="KG.inspectorController.deleteTitle"}}
+			{{loc _Delete}}
+		{{/view}}													
 	</div>				
 {{/view}}

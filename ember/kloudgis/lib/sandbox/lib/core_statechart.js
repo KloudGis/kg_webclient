@@ -202,7 +202,12 @@ SC.mixin(KG, {
                                 KG.core_inspector.deleteComment(comment);
                                 KG.featureDeleteCommentController.set('content', null);
                             }
-                        }
+                        },
+
+						deleteFeatureInspectorAction: function(){
+							KG.core_inspector.deleteFeature();
+							this.gotoState('allHiddenState');
+						}
                     }),
 
 					//******************************
