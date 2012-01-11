@@ -12,11 +12,12 @@ body{
 
 #kloud-logo{
 	display: block;
-	height:256px;
-	margin:0px auto;
-	border:none;
 }
 
+#kloud-logo img{
+	display: block;
+	margin:0px auto;
+}
 
 #sandboxes-title{
 	margin-left: 10px;
