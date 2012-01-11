@@ -607,7 +607,7 @@ KG.Attribute = SC.Object.extend({
         if (!found) {
             enumVals.insertAt(0, {
                 key: value,
-                label: '?'
+                label: ''
             });
         }
         return enumVals;
