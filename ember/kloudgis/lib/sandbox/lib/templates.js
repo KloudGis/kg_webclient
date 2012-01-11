@@ -1,14 +1,19 @@
 //generic templates
-Ember.TEMPLATES['catalog-renderer'] = spade.require('kloudgis/~templates/catalog_renderer');
-Ember.TEMPLATES['catalog-any-renderer'] = spade.require('kloudgis/~templates/catalog_text_renderer');
-Ember.TEMPLATES['text-renderer'] = spade.require('kloudgis/~templates/text_renderer');
-Ember.TEMPLATES['num-renderer'] = spade.require('kloudgis/~templates/num_renderer');
-Ember.TEMPLATES['num-range-renderer'] = spade.require('kloudgis/~templates/num_range_renderer');
-Ember.TEMPLATES['bool-renderer'] = spade.require('kloudgis/~templates/bool_renderer');
-Ember.TEMPLATES['img-renderer'] = spade.require('kloudgis/~templates/img_renderer');
-Ember.TEMPLATES['label-renderer'] = spade.require('kloudgis/~templates/label_renderer');
+Ember.TEMPLATES['switch'] = spade.require('kloudgis/~templates/switch');
+Ember.TEMPLATES['select'] = spade.require('kloudgis/~templates/select');
+Ember.TEMPLATES['select-input'] = spade.require('kloudgis/~templates/select_input');
 
 //Sandbox specific templates
+//inspector renderers
+Ember.TEMPLATES['catalog-renderer'] = spade.require('kloudgis/sandbox/templates/catalog_renderer');
+Ember.TEMPLATES['catalog-any-renderer'] = spade.require('kloudgis/sandbox/templates/catalog_text_renderer');
+Ember.TEMPLATES['text-renderer'] = spade.require('kloudgis/sandbox/templates/text_renderer');
+Ember.TEMPLATES['num-renderer'] = spade.require('kloudgis/sandbox/templates/num_renderer');
+Ember.TEMPLATES['num-range-renderer'] = spade.require('kloudgis/sandbox/templates/num_range_renderer');
+Ember.TEMPLATES['bool-renderer'] = spade.require('kloudgis/sandbox/templates/bool_renderer');
+Ember.TEMPLATES['img-renderer'] = spade.require('kloudgis/sandbox/templates/img_renderer');
+Ember.TEMPLATES['label-renderer'] = spade.require('kloudgis/sandbox/templates/label_renderer');
+
 Ember.TEMPLATES['info-popup'] = spade.require('kloudgis/sandbox/templates/info_popup');
 Ember.TEMPLATES['add-bookmark'] = spade.require('kloudgis/sandbox/templates/add_bookmark');
 Ember.TEMPLATES['send-text-notification'] = spade.require('kloudgis/sandbox/templates/send_text_notification');

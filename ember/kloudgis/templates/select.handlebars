@@ -1,0 +1,7 @@
+{{#view KG.SelectView contentBinding="parentView.content" valueBinding="parentView.value" disabledBinding="parentView.disabled"}}
+	<select {{bindAttr disabled="disabled"}}>
+		{{#each content}}
+			<option {{bindAttr value="key"}} >{{label}}</option>
+		{{/each}}
+	</select>
+{{/view}}

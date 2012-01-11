@@ -12,8 +12,7 @@ KG.SwitchView = KG.Button.extend({
 		return this.getPath('value');
 	}.property('value'),
 	
-	mouseUp: function(e) {
-		this._super(e);
+	triggerAction: function() {
 		this.set('on', !this.get('on'));
 	}
 });

@@ -36,5 +36,9 @@ KG.inspectorController = Ember.ArrayController.create({
 		}else{
 			return "_close".loc();
 		}
-	}.property('isDirty')
+	}.property('isDirty'),
+	
+	isReadOnly: function(){
+		return !KG.core_sandbox.get('hasWriteAccess');
+	}.property('KG.core_sandbox.hasWriteAccess')
 });

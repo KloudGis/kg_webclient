@@ -14,7 +14,7 @@
 		{{/collection}}	
 		<div id="comment-super-panel">
 		</div>			
-		{{#view KG.Button tagName="div" class="delete-feature red-button" classBinding="isActive" sc_action="deleteFeatureInspectorAction" titleBinding="KG.inspectorController.deleteTitle"}}
+		{{#view KG.Button tagName="div" class="delete-feature red-button" classBinding="isActive" sc_action="deleteFeatureInspectorAction" titleBinding="KG.inspectorController.deleteTitle" disabledBinding="KG.inspectorController.isReadOnly"}}
 			{{loc _Delete}}
 		{{/view}}													
 	</div>				

@@ -15,7 +15,6 @@ KG.Button = SC.Button.extend({
     triggerAction: function() {
         this._super();
         var action = get(this, 'sc_action');
-        console.log('trigger action: ' + action);
         if (action && KG.statechart) {
             KG.statechart.sendAction(action, this.get('content') || this.getPath('itemView.content'));
             if (this.postAction) {
