@@ -513,6 +513,8 @@ SC.mixin(KG, {
                     },
 
                     mapZoomedAction: function() {
+						//remove all marker because Leaflet will not render them while zooming and it make a flash after.
+						KG.core_note.removeAllMarkers();
                         KG.core_note.refreshMarkers();
                     },
 

@@ -280,7 +280,11 @@ KG.inspectorController = Ember.ArrayController.create({
 	
 	isReadOnly: function(){
 		return !KG.core_sandbox.get('hasWriteAccess');
-	}.property('KG.core_sandbox.hasWriteAccess')
+	}.property('KG.core_sandbox.hasWriteAccess'),
+	
+	isWriteable: function(){
+		return !this.get('isReadOnly');
+	}.property('isReadOnly')
 });
 
 });spade.register("kloudgis/sandbox/lib/controllers/layers", function(require, exports, __module, ARGV, ENV, __filename){
@@ -1188,6 +1192,18 @@ KG.core_note = SC.Object.create({
         }
     },
 
+	removeAllMarkers: function(){		
+		var content = KG.noteMarkersController.get('content');
+		if(content){
+			content.forEach(function(marker){
+				KG.core_leaflet.removeMarker(marker);
+                var rtype = marker.get('store').recordTypeFor(marker.get('storeKey'));
+                KG.store.unloadRecord(rtype, marker.get('id'));
+			});
+			content.destroy();
+		}
+	},
+
     /**
 	* flush and recalculate the note clusters
 	**/
@@ -1230,7 +1246,7 @@ KG.core_note = SC.Object.create({
                 //remove the shadow but keep the markers because it is still visible - will be removed on insert of the new one
                 KG.core_leaflet.removeShadow(old);
             } else {
-                //completly remove the marker - no good anymore
+                //completly remove the marker - not good anymore
                 KG.core_leaflet.removeMarker(old);
                 var rtype = old.get('store').recordTypeFor(old.get('storeKey'));
                 KG.store.unloadRecord(rtype, old.get('id'));
@@ -2367,6 +2383,8 @@ SC.mixin(KG, {
                     },
 
                     mapZoomedAction: function() {
+						//remove all marker because Leaflet will not render them while zooming and it make a flash after.
+						KG.core_note.removeAllMarkers();
                         KG.core_note.refreshMarkers();
                     },
 
@@ -3737,7 +3755,7 @@ return Ember.Handlebars.compile("<span class=\"inspector-attr-name\">\n\t{{itemV
 });spade.register("kloudgis/sandbox/templates/info_popup", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("{{#collection contentBinding=\"KG.infoController\"  isVisibleBinding=\"KG.infoController.listVisible\" class=\"popup-info-list\"}}\n\t{{#view KG.FeatureInfoPopupItemView class=\"popup-info-item\" ignoreIfFirst=\"true\"}}\n\t\t<table class=\"popup-info-table more-features-zone\">\n\t\t\t<tr>\n\t\t\t\t<td>\n\t\t\t\t\t{{#view class=\"label-ellipsis\"}}\n\t\t\t\t\t\t{{itemView.content.title}}\n\t\t\t\t\t{{/view}}\t\t\t\n\t\t\t\t</td>\n\t\t\t\t<td>\n\t\t\t\t\t{{#view KG.Button manualMouseDown=\"yes\" sc_action=\"selectFeatureInspectorAction\" class=\"popup-info-select\" tagName=\"div\" classBinding=\"isActive\"}}\t\n\t\t\t\t\t\t<img src=\"resources/images/right_arrow_32.png\"/>\t\t\n\t\t\t\t\t{{/view}}\n\t\t\t\t</td>\n\t\t\t</tr>\n\t\t</table>\n\t{{/view}}\t\t\n{{/collection}}\n<table class=\"popup-info-master-row-table\">\n\t<tr>\n\t\t<td>\n\t\t\t{{#view KG.ExpandButtonView tagName=\"div\" class=\"popup-info-expand\" isVisibleBinding=\"KG.infoController.multipleFeatures\" sclassBinding=\"isActive\" expandedBinding=\"KG.infoController.listVisible\"}}\t\n\t\t\t\t<img {{bindAttr src=\"logo\"}}/>\t\t\n\t\t\t{{/view}}\t\t\n\t\t</td>\n\t\t<td>\n\t\t\t{{#view KG.FeatureInfoPopupItemView class=\"popup-info-item\" contentBinding=\"KG.infoController.firstFeature\"}}\n\t\t\t\t<table class=\"popup-info-table\">\n\t\t\t\t<tr>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{#view class=\"label-ellipsis\"}}\n\t\t\t\t\t\t\t{{parentView.content.title}}\n\t\t\t\t\t\t{{/view}}\t\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{#view KG.Button manualMouseDown=\"yes\" sc_action=\"selectFeatureInspectorAction\" class=\"popup-info-select\" contentBinding=\"KG.infoController.firstFeature\" tagName=\"div\" classBinding=\"isActive\"}}\t\n\t\t\t\t\t\t\t<img src=\"resources/images/right_arrow_32.png\"/>\t\t\n\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t</table>\n\t\t\t{{/view}}\t\n\t\t</td>\n\t</tr>\n</table>\n");
 });spade.register("kloudgis/sandbox/templates/inspector", function(require, exports, __module, ARGV, ENV, __filename){
-return Ember.Handlebars.compile("{{#view id=\"super-inspector\" classBinding=\"KG.inspectorController.active\"}}\n\t{{#view id=\"inspector-title\" tagName=\"header\"}}\n\t\t{{#view KG.Button tagName=\"div\" class=\"ios-button ios-tb-left\" isVisibleBinding=\"KG.inspectorController.isDirty\" classBinding=\"isActive\" sc_action=\"cancelInspectorAction\" titleBinding=\"KG.inspectorController.cancelTitle\"}}\n\t\t\t{{loc _cancel}}\n\t\t{{/view}}\n\t\t<h1 class=\"label-ellipsis\" {{bindAttr title=\"KG.inspectorController.title\"}}>{{KG.inspectorController.title}}</h1>\n\t\t{{#view KG.Button tagName=\"div\" class=\"ios-button ios-tb-right\" classBinding=\"isActive\" sc_action=\"closeInspectorAction\" titleBinding=\"KG.inspectorController.saveTitle\"}}\n\t\t\t{{KG.inspectorController.saveLabel}}\n\t\t{{/view}}\t\t\t\n\t{{/view}}\t\n\t<div id=\"inspector-panel\">\t\t\t\t\t\t\n\t\t{{#collection contentBinding=\"KG.inspectorController\" class=\"inspector-attrs-list\"}}\n\t\t\t{{view KG.InspectorAttributeView class=\"inspector-list-item\" classBinding=\"itemView.content.css_class\"}}\n\t\t{{/collection}}\t\n\t\t<div id=\"comment-super-panel\">\n\t\t</div>\t\t\t\n\t\t{{#view KG.Button tagName=\"div\" class=\"delete-feature red-button\" classBinding=\"isActive\" sc_action=\"deleteFeatureInspectorAction\" titleBinding=\"KG.inspectorController.deleteTitle\" disabledBinding=\"KG.inspectorController.isReadOnly\"}}\n\t\t\t{{loc _Delete}}\n\t\t{{/view}}\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t</div>\t\t\t\t\n{{/view}}\n");
+return Ember.Handlebars.compile("{{#view id=\"super-inspector\" classBinding=\"KG.inspectorController.active\"}}\n\t{{#view id=\"inspector-title\" tagName=\"header\"}}\n\t\t{{#view KG.Button tagName=\"div\" class=\"ios-button ios-tb-left\" isVisibleBinding=\"KG.inspectorController.isDirty\" classBinding=\"isActive\" sc_action=\"cancelInspectorAction\" titleBinding=\"KG.inspectorController.cancelTitle\"}}\n\t\t\t{{loc _cancel}}\n\t\t{{/view}}\n\t\t<h1 class=\"label-ellipsis\" {{bindAttr title=\"KG.inspectorController.title\"}}>{{KG.inspectorController.title}}</h1>\n\t\t{{#view KG.Button tagName=\"div\" class=\"ios-button ios-tb-right\" classBinding=\"isActive\" sc_action=\"closeInspectorAction\" titleBinding=\"KG.inspectorController.saveTitle\"}}\n\t\t\t{{KG.inspectorController.saveLabel}}\n\t\t{{/view}}\t\t\t\n\t{{/view}}\t\n\t<div id=\"inspector-panel\">\t\t\t\t\t\t\n\t\t{{#collection contentBinding=\"KG.inspectorController\" class=\"inspector-attrs-list\"}}\n\t\t\t{{view KG.InspectorAttributeView class=\"inspector-list-item\" classBinding=\"itemView.content.css_class\"}}\n\t\t{{/collection}}\t\n\t\t<div id=\"comment-super-panel\">\n\t\t</div>\t\t\t\n\t\t{{#view KG.Button tagName=\"div\" class=\"delete-feature red-button\" classBinding=\"isActive\" sc_action=\"deleteFeatureInspectorAction\" titleBinding=\"KG.inspectorController.deleteTitle\" isVisibleBinding=\"KG.inspectorController.isWriteable\"}}\n\t\t\t{{loc _Delete}}\n\t\t{{/view}}\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t</div>\t\t\t\t\n{{/view}}\n");
 });spade.register("kloudgis/sandbox/templates/label_renderer", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("<span class=\"inspector-attr-name\">\n\t{{itemView.content.label}}\n</span>\t\n\n<div class=\"inspector-attr-value\">\n\t<span>\n\t\t{{itemView.content.value}}\n\t</span>\n</div>\n");
 });spade.register("kloudgis/sandbox/templates/multiple_notes_popup", function(require, exports, __module, ARGV, ENV, __filename){

@@ -314,6 +314,18 @@ KG.core_note = SC.Object.create({
         }
     },
 
+	removeAllMarkers: function(){		
+		var content = KG.noteMarkersController.get('content');
+		if(content){
+			content.forEach(function(marker){
+				KG.core_leaflet.removeMarker(marker);
+                var rtype = marker.get('store').recordTypeFor(marker.get('storeKey'));
+                KG.store.unloadRecord(rtype, marker.get('id'));
+			});
+			content.destroy();
+		}
+	},
+
     /**
 	* flush and recalculate the note clusters
 	**/
@@ -356,7 +368,7 @@ KG.core_note = SC.Object.create({
                 //remove the shadow but keep the markers because it is still visible - will be removed on insert of the new one
                 KG.core_leaflet.removeShadow(old);
             } else {
-                //completly remove the marker - no good anymore
+                //completly remove the marker - not good anymore
                 KG.core_leaflet.removeMarker(old);
                 var rtype = old.get('store').recordTypeFor(old.get('storeKey'));
                 KG.store.unloadRecord(rtype, old.get('id'));
