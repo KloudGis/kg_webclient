@@ -25,7 +25,7 @@
 				<a href="home.html"></a>
 			</span>
 			<script type="text/x-handlebars">
-						{{#view KG.Button id="palette-button" tagName="div" titleBinding="KG.paletteController.createLabel" class="kg-controls clickable unselectable" classBinding="isActive" sc_action="showPaletteAction"}}
+						{{#view KG.Button id="palette-button" tagName="div" titleBinding="KG.paletteController.createLabel" class="kg-controls clickable unselectable" classBinding="isActive" sc_action="showPaletteAction" isVisibleBinding="KG.paletteController.isAvailable"}}
 							<img src="resources/images/palette.png"/>
 						{{/view}}
 			</script>
