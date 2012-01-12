@@ -41,14 +41,13 @@ KG.Button = SC.Button.extend({
             this._element = this.get('element');
             var self = this;
 			this._mouseDownListener = function(e) {
-                self.mouseDown(e);
-				if (e.stopPropagation) {
-					e.stopPropagation();
-				} else {
-					e.cancelBubble = true;
-				}
+                return self.mouseDown(e);
+            };
+			this._clickListener = function(e) {
+                return self.click(e);
             };
             this._element.addEventListener('mousedown', this._mouseDownListener, false);
+			this._element.addEventListener('click', this._clickListener, false);
         }
     },
 
@@ -56,6 +55,7 @@ KG.Button = SC.Button.extend({
 		if (get(this, 'isDestroyed')) { return; }
 		if (this.get('manualMouseDown') && this._element) {
 			this._element.removeEventListener('mousedown', this._mouseDownListener, false);
+			this._element.removeEventListener('click', this._clickListener, false);
 			this._element = null;
 		}  
 		this._super();

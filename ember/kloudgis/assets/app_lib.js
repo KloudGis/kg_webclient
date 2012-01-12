@@ -53,20 +53,6 @@ Handlebars.registerHelper('highlight', function(property) {
   return new Handlebars.SafeString('<span class="highlight">'+value+'</span>');
 });
 
-//temp fix on jQuery1.6.2 (to remove with 1.7)
-(function(){
-    // remove layerX and layerY
-    var all = $.event.props,
-        len = all.length,
-        res = [];
-    while (len--) {
-      var el = all[len];
-      if (el != 'layerX' && el != 'layerY') res.push(el);
-    }
-    $.event.props = res;
-}());
-//end temp fix
-
 //jQuery extension
 $.extend({
     //extract from the URL a query value
@@ -157,14 +143,13 @@ KG.Button = SC.Button.extend({
             this._element = this.get('element');
             var self = this;
 			this._mouseDownListener = function(e) {
-                self.mouseDown(e);
-				if (e.stopPropagation) {
-					e.stopPropagation();
-				} else {
-					e.cancelBubble = true;
-				}
+                return self.mouseDown(e);
+            };
+			this._clickListener = function(e) {
+                return self.click(e);
             };
             this._element.addEventListener('mousedown', this._mouseDownListener, false);
+			this._element.addEventListener('click', this._clickListener, false);
         }
     },
 
@@ -172,6 +157,7 @@ KG.Button = SC.Button.extend({
 		if (get(this, 'isDestroyed')) { return; }
 		if (this.get('manualMouseDown') && this._element) {
 			this._element.removeEventListener('mousedown', this._mouseDownListener, false);
+			this._element.removeEventListener('click', this._clickListener, false);
 			this._element = null;
 		}  
 		this._super();

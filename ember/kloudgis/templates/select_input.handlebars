@@ -1,4 +1,4 @@
-{{#view KG.SelectInputView contentBinding="parentView.content" valueBinding="parentView.value" disabledBinding="parentView.disabled"}}
-	{{view templateName="select" contentBinding="parentView.content" valueBinding="parentView.valueSelect" disabledBinding="parentView.disabled"}}
-	{{view Ember.TextField valueBinding="parentView.valueInput" classBinding="parentView.inputClass" disabledBinding="parentView.disabled"}}
+{{#view KG.SelectInputView contentBinding="content" valueBinding="value" disabledBinding="disabled"}}
+	{{view templateName="select" contentBinding="content" valueBinding="valueSelect" disabledBinding="disabled"}}
+	{{view Ember.TextField valueBinding="valueInput" classNameBindings="inputClass"  disabledBinding="disabled"}}
 {{/view}}

@@ -101,7 +101,7 @@ Ember._RenderBuffer = Ember.Object.extend(
     set(this ,'elementClasses', Ember.A());
     set(this, 'elementAttributes', {});
     set(this, 'elementStyle', {});
-    set(this, 'childBuffers', Ember.A());
+    set(this, 'childBuffers', []);
     set(this, 'elements', {});
   },
 
@@ -112,7 +112,7 @@ Ember._RenderBuffer = Ember.Object.extend(
     @returns {Ember.RenderBuffer} this
   */
   push: function(string) {
-    get(this, 'childBuffers').pushObject(String(string));
+    get(this, 'childBuffers').push(String(string));
     return this;
   },
 
@@ -138,15 +138,38 @@ Ember._RenderBuffer = Ember.Object.extend(
     return this;
   },
 
+  // duck type attribute functionality like jQuery so a render buffer
+  // can be used like a jQuery object in attribute binding scenarios.
+
   /**
     Adds an attribute which will be rendered to the element.
 
     @param {String} name The name of the attribute
     @param {String} value The value to add to the attribute
-    @returns {Ember.RenderBuffer} this
+    @returns {Ember.RenderBuffer|String} this or the current attribute value
   */
   attr: function(name, value) {
-    get(this, 'elementAttributes')[name] = value;
+    var attributes = get(this, 'elementAttributes');
+
+    if (arguments.length === 1) {
+      return attributes[name]
+    } else {
+      attributes[name] = value;
+    }
+
+    return this;
+  },
+
+  /**
+    Remove an attribute from the list of attributes to render.
+
+    @param {String} name The name of the attribute
+    @returns {Ember.RenderBuffer} this
+  */
+  removeAttr: function(name) {
+    var attributes = get(this, 'elementAttributes');
+    delete attributes[name];
+
     return this;
   },
 
@@ -224,7 +247,7 @@ Ember._RenderBuffer = Ember.Object.extend(
   */
   begin: function(tagName) {
     return this.newBuffer(tagName, this, function(buffer) {
-      get(this, 'childBuffers').pushObject(buffer);
+      get(this, 'childBuffers').push(buffer);
     });
   },
 
@@ -235,7 +258,7 @@ Ember._RenderBuffer = Ember.Object.extend(
   */
   prepend: function(tagName) {
     return this.newBuffer(tagName, this, function(buffer) {
-      get(this, 'childBuffers').insertAt(0, buffer);
+      get(this, 'childBuffers').splice(0, 0, buffer);
     });
   },
 
@@ -263,7 +286,7 @@ Ember._RenderBuffer = Ember.Object.extend(
     return this.newBuffer(tagName, parentBuffer, function(buffer) {
       var siblings = get(parentBuffer, 'childBuffers');
       var index = siblings.indexOf(this);
-      siblings.insertAt(index + 1, buffer);
+      siblings.splice(index + 1, 0, buffer);
     });
   },
 

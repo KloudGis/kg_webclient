@@ -1,6 +1,6 @@
 {
   "name": "jquery",
-  "version": "1.6.2",
+  "version": "1.7.1",
   "description": "The write less, do more JavaScript library.",
   "summary": "jQuery JavaScript Library",
   "homepage": "http://jquery.com",
@@ -8,10 +8,11 @@
   "directories": {
     "lib": "lib"
   },
-
   "bpm:build": {
     "bpm_libs.js": {
-      "files": ["lib"],
+      "files": [
+        "lib"
+      ],
       "modes": "*"
     }
   }

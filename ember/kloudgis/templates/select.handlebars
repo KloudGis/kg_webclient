@@ -1,4 +1,4 @@
-{{#view KG.SelectView contentBinding="parentView.content" valueBinding="parentView.value" disabledBinding="parentView.disabled"}}
+{{#view KG.SelectView contentBinding="content" valueBinding="value" disabledBinding="disabled"}}
 	<select {{bindAttr disabled="disabled"}}>
 		{{#each content}}
 			<option {{bindAttr value="key"}} >{{label}}</option>

@@ -898,6 +898,37 @@ test("should update boundIf blocks if the conditional changes", function() {
   equals(view.$('#first').text(), "bam", "re-renders block when condition changes to true");
 });
 
+test("should not update boundIf if truthiness does not change", function() {
+  var renderCount = 0;
+
+  view = Ember.View.create({
+    template: Ember.Handlebars.compile('<h1 id="first">{{#boundIf "shouldDisplay"}}{{view InnerViewClass}}{{/boundIf}}</h1>'),
+
+    shouldDisplay: true,
+
+    InnerViewClass: Ember.View.extend({
+      template: Ember.Handlebars.compile("bam"),
+
+      render: function() {
+        renderCount++;
+        return this._super.apply(this, arguments);
+      }
+    })
+  });
+
+  appendView();
+
+  equals(renderCount, 1, "precond - should have rendered once");
+  equals(view.$('#first').text(), "bam", "renders block when condition is true");
+
+  Ember.run(function() {
+    set(view, 'shouldDisplay', 1);
+  });
+
+  equals(renderCount, 1, "should not have rerendered");
+  equals(view.$('#first').text(), "bam", "renders block when condition is true");
+});
+
 test("boundIf should support parent access", function(){
   view = Ember.View.create({
     template: Ember.Handlebars.compile(
@@ -1289,6 +1320,32 @@ test("should be able to use standard Handlebars #each helper", function() {
   equals(view.$().html(), "abc");
 });
 
+test("should be able to use unbound helper in #each helper", function() {
+  view = Ember.View.create({
+    items: Ember.A(['a', 'b', 'c', 1, 2, 3]),
+    template: Ember.Handlebars.compile(
+      "<ul>{{#each items}}<li>{{unbound this}}</li>{{/each}}</ul>")
+  });
+
+  appendView();
+
+  equals(view.$().text(), "abc123");
+  equals(view.$('li').children().length, 0, "No markers");
+});
+
+test("should be able to use unbound helper in #each helper (with objects)", function() {
+  view = Ember.View.create({
+    items: Ember.A([{wham: 'bam'}, {wham: 1}]),
+    template: Ember.Handlebars.compile(
+      "<ul>{{#each items}}<li>{{unbound wham}}</li>{{/each}}</ul>")
+  });
+
+  appendView();
+
+  equals(view.$().text(), "bam1");
+  equals(view.$('li').children().length, 0, "No markers");
+});
+
 module("Templates redrawing and bindings", {
   setup: function(){
     MyApp = Ember.Object.create({});
@@ -1531,44 +1588,73 @@ test("should update bound values after the view is removed and then re-appended"
 });
 
 test("should update bound values after view's parent is removed and then re-appended", function() {
-  var parentView = SC.ContainerView.create({
+  var parentView = Ember.ContainerView.create({
     childViews: ['testView'],
-    testView: SC.View.create({
-      template: SC.Handlebars.compile("{{#if showStuff}}{{boundValue}}{{else}}Not true.{{/if}}"),
+    testView: Ember.View.create({
+      template: Ember.Handlebars.compile("{{#if showStuff}}{{boundValue}}{{else}}Not true.{{/if}}"),
       showStuff: true,
       boundValue: "foo"
     })
   });
 
-  SC.run(function() {
+  Ember.run(function() {
     parentView.appendTo('#qunit-fixture');
   });
   view = parentView.get('testView');
 
   equal($.trim(view.$().text()), "foo");
-  SC.run(function() {
+  Ember.run(function() {
     set(view, 'showStuff', false);
   });
   equal($.trim(view.$().text()), "Not true.");
 
-  SC.run(function() {
+  Ember.run(function() {
     set(view, 'showStuff', true);
   });
   equal($.trim(view.$().text()), "foo");
 
   parentView.remove();
-  SC.run(function() {
+  Ember.run(function() {
     set(view, 'showStuff', false);
   });
-  SC.run(function() {
+  Ember.run(function() {
     set(view, 'showStuff', true);
   });
-  SC.run(function() {
+  Ember.run(function() {
     parentView.appendTo('#qunit-fixture');
   });
 
-  SC.run(function() {
+  Ember.run(function() {
     set(view, 'boundValue', "bar");
   });
   equal($.trim(view.$().text()), "bar");
 });
+
+test("should call a registered helper for mustache without parameters", function() {
+  Ember.Handlebars.registerHelper('foobar', function() {
+    return 'foobar';
+  });
+
+  view = Ember.View.create({
+    template: Ember.Handlebars.compile("{{foobar}}")
+  });
+
+  appendView();
+
+  ok(view.$().text() === 'foobar', "Regular helper was invoked correctly");
+});
+
+test("should bind to the property if no registered helper found for a mustache without parameters", function() {
+  view = Ember.View.create({
+    template: Ember.Handlebars.compile("{{foobarProperty}}"),
+    foobarProperty: Ember.computed(function() {
+      return 'foobarProperty';
+    })
+  });
+
+  appendView();
+
+  ok(view.$().text() === 'foobarProperty', "Property was bound to correctly");
+});
+
+
