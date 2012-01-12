@@ -25,12 +25,12 @@
 				<a href="home.html"></a>
 			</span>
 			<script type="text/x-handlebars">
-						{{#view KG.Button id="palette-button" tagName="div" titleBinding="KG.paletteController.createLabel" class="kg-controls clickable unselectable" classBinding="isActive" sc_action="showPaletteAction" isVisibleBinding="KG.paletteController.isAvailable"}}
+						{{#view KG.Button id="palette-button" tagName="div" titleBinding="KG.paletteController.createLabel" class="kg-controls clickable unselectable"  sc_action="showPaletteAction" isVisibleBinding="KG.paletteController.isAvailable"}}
 							<img src="resources/images/palette.png"/>
 						{{/view}}
 			</script>
 			<script type="text/x-handlebars">
-					{{#view KG.Button id="note-button" tagName="div" titleBinding="KG.activeNoteController.createLabel" class="kg-controls clickable unselectable" classBinding="isActive" sc_action="createNoteAction"}}
+					{{#view KG.Button id="note-button" tagName="div" titleBinding="KG.activeNoteController.createLabel" class="kg-controls clickable unselectable"  sc_action="createNoteAction"}}
 						<img src="resources/images/note.png"/>
 					{{/view}}
 			</script>
@@ -164,7 +164,7 @@
 	<script type="text/x-handlebars">
 		{{#view id="search-result" classBinding="KG.searchResultsController.listVisible"}}
 		{{#view class="search-title-area" }}
-			{{#view KG.Button class="x-button search-close-button" classBinding="isActive" sc_action="hideSearchResultAction" titleBinding="KG.searchResultsController.closeLabel"}}
+			{{#view KG.Button class="x-button search-close-button"  sc_action="hideSearchResultAction" titleBinding="KG.searchResultsController.closeLabel"}}
 			{{/view}}
 			<div id="title-label">
 				{{KG.searchResultsController.listTitle}}
@@ -181,12 +181,12 @@
 							{{/view}}
 						</td>
 						<td class="search-select-cell">
-							{{#view KG.Button isVisibleBinding="itemView.content.isSelectable" class="search-select" tagName="div" classBinding="isActive" sc_action="selectFeatureInspectorAction"}}	
+							{{#view KG.Button isVisibleBinding="itemView.content.isSelectable" class="search-select" tagName="div"  sc_action="selectFeatureInspectorAction"}}	
 								<img src="resources/images/right_arrow_32.png"/>		
 							{{/view}}
 						</td>
 						<td class="search-select-cell">
-							{{#view KG.Button isVisibleBinding="itemView.content.hasCreateNote" class="search-create-note" tagName="div" classBinding="isActive" sc_action="createNoteFromFeatureAction"}}	
+							{{#view KG.Button isVisibleBinding="itemView.content.hasCreateNote" class="search-create-note" tagName="div"  sc_action="createNoteFromFeatureAction"}}	
 								<img src="resources/images/note.png"/>		
 							{{/view}}
 						</td>

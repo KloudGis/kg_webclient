@@ -9,7 +9,8 @@ var fr = {
 	"_errorLoading": "Erreur lors du chargement des projets.",
 	"_welcomeUser": "Bienvenue %@",
 	"_wrong-membership": "Vous n'être pas membre de ce projet.",
-	"_sbDateFormat": "%@/%@/%@"
+	"_sbDateFormat": "%@/%@/%@",
+	"_createSandboxTitle": "Créer un nouveau sandbox"
 };
 
 var en = {
@@ -20,7 +21,8 @@ var en = {
 	"_errorLoading": "Cannot load the projects.",
 	"_welcomeUser": "Welcome %@",
 	"_wrong-membership": "You are not a member of this project.",
-	"_sbDateFormat": "%@/%@/%@"
+	"_sbDateFormat": "%@/%@/%@",
+	"_createSandboxTitle": "Create a new sandbox"
 };
 
 if(KG.lang === 'fr'){

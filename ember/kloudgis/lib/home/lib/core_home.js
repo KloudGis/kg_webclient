@@ -3,6 +3,8 @@
 **/
 KG.core_home = SC.Object.create({
 	
+	createSandboxTitle: "_createSandboxTitle".loc(),
+	
 	connectedUserLabel: function(){
 		var user = KG.core_auth.get('activeUser');
 		if(user){

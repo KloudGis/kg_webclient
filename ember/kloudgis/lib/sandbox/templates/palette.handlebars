@@ -1,10 +1,10 @@
 {{#view id="super-palette" classBinding="KG.paletteController.active"}}	
 	{{#view id="palette-title" tagName="header"}}
-		{{#view KG.Button tagName="div" class="ios-button ios-tb-left" isVisibleBinding="KG.paletteController.isDirty" classBinding="isActive" sc_action="cancelPaletteAction" titleBinding="KG.paletteController.cancelTitle"}}
+		{{#view KG.Button tagName="div" class="ios-button ios-tb-left" isVisibleBinding="KG.paletteController.isDirty"  sc_action="cancelPaletteAction" titleBinding="KG.paletteController.cancelTitle"}}
 			{{loc _cancel}}
 		{{/view}}
 		<h1 class="label-ellipsis" {{bindAttr title="KG.paletteController.title"}}>{{loc _paletteTitle}}</h1>
-		{{#view KG.Button tagName="div" class="ios-button ios-tb-right" classBinding="isActive" sc_action="closePaletteAction" titleBinding="KG.paletteController.closeTitle"}}
+		{{#view KG.Button tagName="div" class="ios-button ios-tb-right"  sc_action="closePaletteAction" titleBinding="KG.paletteController.closeTitle"}}
 			{{loc _close}}
 		{{/view}}
 	{{/view}}	

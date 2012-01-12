@@ -12,10 +12,10 @@
 	{{#view KG.TextArea id="note-description-area" disabledBinding="KG.activeNoteController.isDisabled" valueBinding="KG.activeNoteController*content.description"}}
 	{{/view}}
 	{{#view class="active-note-popup-bottom"}}
-		{{#view KG.Button  manualMouseDown="yes" isVisibleBinding="KG.activeNoteController.isUpdateVisible" class="white-button" classBinding="isActive" sc_action="confirmNoteAction"}}
+		{{#view KG.Button  manualMouseDown="yes" isVisibleBinding="KG.activeNoteController.isUpdateVisible" class="white-button" sc_action="confirmNoteAction"}}
 			{{KG.activeNoteController.confirmLabel}}
 		{{/view}}		
-		{{#view KG.Button manualMouseDown="yes" isVisibleBinding="KG.activeNoteController.isDeleteVisible" class="red-button" classBinding="isActive" sc_action="deleteNoteAction"}}
+		{{#view KG.Button manualMouseDown="yes" isVisibleBinding="KG.activeNoteController.isDeleteVisible" class="red-button"  sc_action="deleteNoteAction"}}
 			{{KG.activeNoteController.deleteLabel}}
 		{{/view}}
 		{{#view class="note-author-label"}}

@@ -1,9 +1,9 @@
 <div id="send-notification-panel">
 	{{KG.sendNotificationController.notificationLabel}}
-	{{view KG.Button class="x-button notification-close-button" classBinding="isActive" sc_action="closeSendNotificationAction" titleBinding="KG.sendNotificationController.closeLabel"}}
+	{{view KG.Button class="x-button notification-close-button"  sc_action="closeSendNotificationAction" titleBinding="KG.sendNotificationController.closeLabel"}}
 	{{view KG.TextNotificationAreaView valueBinding="KG.sendNotificationController.content"}}
 	{{KG.sendNotificationController.feedbackMessage}}
-	{{#view KG.Button class="white-button send-notification-button" classBinding="isActive" sc_action="sendNotificationButtonAction"}}
+	{{#view KG.Button class="white-button send-notification-button"  sc_action="sendNotificationButtonAction"}}
 		{{KG.sendNotificationController.sendLabel}}
 	{{/view}}
 	{{view SC.Checkbox valueBinding="KG.sendNotificationController.sendOnEnterValue"}}

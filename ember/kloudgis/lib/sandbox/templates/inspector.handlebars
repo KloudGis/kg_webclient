@@ -1,10 +1,10 @@
 {{#view id="super-inspector" classBinding="KG.inspectorController.active"}}
 	{{#view id="inspector-title" tagName="header"}}
-		{{#view KG.Button tagName="div" class="ios-button ios-tb-left" isVisibleBinding="KG.inspectorController.isDirty" classBinding="isActive" sc_action="cancelInspectorAction" titleBinding="KG.inspectorController.cancelTitle"}}
+		{{#view KG.Button tagName="div" class="ios-button ios-tb-left" isVisibleBinding="KG.inspectorController.isDirty"  sc_action="cancelInspectorAction" titleBinding="KG.inspectorController.cancelTitle"}}
 			{{loc _cancel}}
 		{{/view}}
 		<h1 class="label-ellipsis" {{bindAttr title="KG.inspectorController.title"}}>{{KG.inspectorController.title}}</h1>
-		{{#view KG.Button tagName="div" class="ios-button ios-tb-right" classBinding="isActive" sc_action="closeInspectorAction" titleBinding="KG.inspectorController.saveTitle"}}
+		{{#view KG.Button tagName="div" class="ios-button ios-tb-right"  sc_action="closeInspectorAction" titleBinding="KG.inspectorController.saveTitle"}}
 			{{KG.inspectorController.saveLabel}}
 		{{/view}}			
 	{{/view}}	
@@ -14,7 +14,7 @@
 		{{/collection}}	
 		<div id="comment-super-panel">
 		</div>			
-		{{#view KG.Button tagName="div" class="delete-feature red-button" classBinding="isActive" sc_action="deleteFeatureInspectorAction" titleBinding="KG.inspectorController.deleteTitle" isVisibleBinding="KG.inspectorController.isWriteable"}}
+		{{#view KG.Button tagName="div" class="delete-feature red-button"  sc_action="deleteFeatureInspectorAction" titleBinding="KG.inspectorController.deleteTitle" isVisibleBinding="KG.inspectorController.isWriteable"}}
 			{{loc _Delete}}
 		{{/view}}													
 	</div>				
