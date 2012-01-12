@@ -318,10 +318,10 @@ KG.core_note = SC.Object.create({
 	* flush and recalculate the note clusters
 	**/
     refreshMarkers: function(force) {
-        console.log('Refresh markers, Force:' + force);
         var bounds = KG.core_leaflet.getBounds();
         var zoom = KG.core_leaflet.getZoom();
         if (force || SC.none(this._zoom) || this._zoom != zoom || SC.none(this._bounds) || !this._bounds.contains(bounds)) {
+	        console.log('Refresh markers, Force:' + force);
             var fatBounds = KG.core_leaflet.getFatBounds();
             var dist = KG.core_leaflet.pixelsToWorld(20); //cluster within 20 pixels
             var currentMarkers = [];

@@ -174,7 +174,11 @@ KG.core_sandbox = SC.Object.create({
     },
 
     hasWriteAccess: function() {
-        return this.get('membership').access_type === 'owner' || this.get('membership').access_type === 'write';
+		var member = this.get('membership');
+		if(!Ember.none(member)){
+        	return member.access_type === 'owner' || member.access_type === 'write';
+		}
+		return NO;
     }.property('membership')
 });
 

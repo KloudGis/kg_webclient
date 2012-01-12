@@ -1192,10 +1192,10 @@ KG.core_note = SC.Object.create({
 	* flush and recalculate the note clusters
 	**/
     refreshMarkers: function(force) {
-        console.log('Refresh markers, Force:' + force);
         var bounds = KG.core_leaflet.getBounds();
         var zoom = KG.core_leaflet.getZoom();
         if (force || SC.none(this._zoom) || this._zoom != zoom || SC.none(this._bounds) || !this._bounds.contains(bounds)) {
+	        console.log('Refresh markers, Force:' + force);
             var fatBounds = KG.core_leaflet.getFatBounds();
             var dist = KG.core_leaflet.pixelsToWorld(20); //cluster within 20 pixels
             var currentMarkers = [];
@@ -1750,7 +1750,11 @@ KG.core_sandbox = SC.Object.create({
     },
 
     hasWriteAccess: function() {
-        return this.get('membership').access_type === 'owner' || this.get('membership').access_type === 'write';
+		var member = this.get('membership');
+		if(!Ember.none(member)){
+        	return member.access_type === 'owner' || member.access_type === 'write';
+		}
+		return NO;
     }.property('membership')
 });
 
