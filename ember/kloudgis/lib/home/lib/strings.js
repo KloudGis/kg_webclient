@@ -10,7 +10,14 @@ var fr = {
 	"_welcomeUser": "Bienvenue %@",
 	"_wrong-membership": "Vous n'être pas membre de ce projet.",
 	"_sbDateFormat": "%@/%@/%@",
-	"_createSandboxTitle": "Créer un nouveau sandbox"
+	"_by" : "Par",
+	"_createSandboxTitle": "Créer un nouveau sandbox",
+	"_add" : "Ajouter",
+	"_cancel": "Annuler",
+	"_create": "Créer",
+	"_sandboxName": "Le nom du projet",
+	"_nameAlreadyTaken" : "Vous avez déjà un projet de ce nom."
+	
 };
 
 var en = {
@@ -22,7 +29,13 @@ var en = {
 	"_welcomeUser": "Welcome %@",
 	"_wrong-membership": "You are not a member of this project.",
 	"_sbDateFormat": "%@/%@/%@",
-	"_createSandboxTitle": "Create a new sandbox"
+	"_by" : "By",
+	"_createSandboxTitle": "Create a new sandbox",
+	"_add" : "Add",
+	"_cancel": "Cancel",
+	"_create": "Create",
+	"_sandboxName": "The Sandbox Name",
+	"_nameAlreadyTaken" : "You already have a sandbox with that name"
 };
 
 if(KG.lang === 'fr'){

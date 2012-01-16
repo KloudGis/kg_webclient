@@ -1,0 +1,18 @@
+{{#view KG.TitleView id="sandboxes-title" class="page-title"}}
+	{{titleString}}
+{{/view}}
+{{#view}}
+{{#collection contentBinding="KG.sandboxesController" class="sandbox-list"}}
+		{{#view KG.SandboxView tagName="div" class="sandbox-list-item common-list-button"}}
+			{{#view tagName="span" class="sandbox-name"}}
+				{{itemView.content.name}}
+			{{/view}}
+			<span class="sandbox-owner-label">{{loc _by}} {{itemView.content.ownerDescriptor}}</span>
+			<span>{{itemView.content.formattedDate}}</span>
+		{{/view}}
+{{/collection}}
+	
+{{#view KG.Button  id="create-sandbox-button" class="white-button" sc_action="createSandboxAction" titleBinding="KG.core_home.createSandboxTitle" isVisibleBinding="KG.sandboxesController.recordsReady"}}
+	<img src="resources/images/add_30.png">
+{{/view}}	
+{{/view}}		

@@ -52,10 +52,11 @@ KG.core_home = SC.Object.create({
 });
 
 $(document).ready(function() {
+	var v = KG.SandboxListView.create({elementId:"sandbox-list-panel", templateName: 'sandbox-list'});
+	v.appendTo('#super-panel');
+	v2 = KG.AddSandboxView.create({elementId:"add-sandbox-panel", templateName: 'add-sandbox'});
+	v2.appendTo('#super-panel');
     KG.statechart.initStatechart();
-	 if ($.browser.isIphone) {
-		setTimeout(function() { window.scrollTo(0, 1) }, 1000);
-	 }
 });
 
 

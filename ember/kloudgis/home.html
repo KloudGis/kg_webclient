@@ -1,51 +1,30 @@
 <html>
   <head>
+	<meta name="apple-mobile-web-app-capable" content="no" />
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="description" content="">
 	<meta name="author" content="Kloudgis.org">
-	<meta name="viewport" content="width=600">
+	<meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<link rel="shortcut icon" href="favicon.ico">
 	<link rel="apple-touch-icon" href="apple-touch-icon.png">
 	
 	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen"  />
+	<link rel="stylesheet" href="css/common.css" type="text/css" media="screen"  />
 	<link rel="stylesheet" href="css/home.css" type="text/css" media="screen"  />
     <title></title>
   </head>
   <body>
-	<iframe id="if-spinner" src="spinner.html"></iframe>
-	<script type="text/x-handlebars">	
-		{{#view SC.Button  id="logout-button" target="KG.core_home" action="logout"}}
-			Logout
-		{{/view}}
-	 </script>
 	<script type="text/x-handlebars">	
 		{{#view  id="welcome-usr-label"}}
 			{{KG.core_home.connectedUserLabel}}
 		{{/view}}
-	 </script>
-	<a id="kloud-logo" href="index.html">
-			<img src="resources/images/kloudgis_black_128.png" alt="Kloudgis"/>
-	</a>
-	
-	<span id="query-message"></span>
-	<script type="text/x-handlebars">		
-		{{#view KG.TitleView id="sandboxes-title"}}
-			{{titleString}}
+		{{#view id="error-message"}}
+			{{KG.pageController.errorMessage}}
 		{{/view}}
 	</script>
-	<script type="text/x-handlebars">	
-		{{#collection contentBinding="KG.sandboxesController" tagName="ul" class="sandbox-list"}}
-			{{#view KG.SandboxView class="sandbox-list-item"}}
-				{{#view KG.OpenSandboxLinkView tagName="a" class="open-sandbox-link"}}
-					{{title}}
-				{{/view}}
-				<span>{{itemView.content.formattedDate}}</span>
-			{{/view}}
-		{{/collection}}
-		
-		{{view KG.Button  id="create-sandbox-button" tagName="div" sc_action="createSandboxAction" titleBinding="KG.core_home.createSandboxTitle"}}			
-	 </script>	
+	<div id="super-panel">
+	</div>
   </body>
 
 <!-- load all of the dependencies --> 

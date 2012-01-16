@@ -1,0 +1,14 @@
+{{#view id="add-sandbox-title" class="page-title"}}
+	{{KG.pageController.addTitle}}
+{{/view}}
+{{#view}}
+	<div>
+		{{view KG.TextField placeholder_not_loc="_sandboxName" valueBinding="KG.addSandboxController.name"}}	
+	</div>
+	{{#view KG.Button class="white-button" sc_action="cancelCreateAction"}}
+		<img src="resources/images/cancel_30.png">
+	{{/view}}
+	{{#view KG.Button class="white-button" sc_action="commitCreateAction"}}
+		<img src="resources/images/checkmark_30.png">
+	{{/view}}
+{{/view}}

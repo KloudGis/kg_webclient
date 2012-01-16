@@ -171,6 +171,8 @@ KG.Store = SC.DataSource.extend({
             url = KG.get('serverHost') + 'api_data/protected/feature_comments?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
         } else if (rtype === KG.Bookmark) {
             url = KG.get('serverHost') + 'api_data/protected/bookmarks?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
+        } else if (rtype === KG.Sandbox) {
+            url = KG.get('serverHost') + 'api_sandbox/protected/sandboxes';
         }
         if (url) {
             this.ajaxSupport(store, storeKey, 'POST', url, JSON.stringify(store.readDataHash(storeKey)));

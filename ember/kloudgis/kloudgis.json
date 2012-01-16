@@ -41,7 +41,8 @@
     "home_lib.js": {
       "spade:format": "function",
       "files": [
-        "lib/home/lib"
+        "lib/home/lib",
+		"lib/home/templates"
       ]
     },
     "sandbox_lib.js": {

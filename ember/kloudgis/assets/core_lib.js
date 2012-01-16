@@ -230,6 +230,8 @@ KG.Store = SC.DataSource.extend({
             url = KG.get('serverHost') + 'api_data/protected/feature_comments?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
         } else if (rtype === KG.Bookmark) {
             url = KG.get('serverHost') + 'api_data/protected/bookmarks?sandbox=%@'.fmt(KG.get('activeSandboxKey'));
+        } else if (rtype === KG.Sandbox) {
+            url = KG.get('serverHost') + 'api_sandbox/protected/sandboxes';
         }
         if (url) {
             this.ajaxSupport(store, storeKey, 'POST', url, JSON.stringify(store.readDataHash(storeKey)));
@@ -1151,7 +1153,13 @@ KG.Record = SC.Record.extend({
 KG.Sandbox = KG.Record.extend({
 
 	name: SC.Record.attr(String),
-	key: SC.Record.attr(String)	
+	key: SC.Record.attr(String)	,	
+	owner: SC.Record.attr(Number),
+	ownerDescriptor: SC.Record.attr(String),
+	
+	lat: SC.Record.attr(Number),
+	lon: SC.Record.attr(Number),
+	zoom: SC.Record.attr(Number)
 });
 
 });spade.register("kloudgis/core/lib/models/search_category", function(require, exports, __module, ARGV, ENV, __filename){
