@@ -12,6 +12,7 @@ body{
 	margin-left:-250px;
 	overflow-x:hidden;
 	overflow-y:hidden;
+	min-height:320px;
 }
 
 .page-title{
@@ -220,7 +221,7 @@ body{
 }
 
 #add-sandbox-panel{
-	margin:0 25px 25px 25px;
+	margin:0 40px 0px 40px;
 }
 
 #add-sandbox-panel .page-title{
@@ -272,6 +273,10 @@ body{
 	
 	.sandbox-list{
 		-webkit-overflow-scrolling: touch;
+	}
+	
+	#map{
+		height:130px
 	}
 }
 
