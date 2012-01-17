@@ -206,13 +206,11 @@ KG.core_leaflet = SC.Object.create({
     },
 
     onZoom: function(e) {
-        KG.statechart.sendAction('mapZoomedAction', this);
-        KG.core_sandbox.setCenter(this.getCenter(), this.getZoom());
+        KG.statechart.sendAction('mapZoomedAction', this.getCenter(), this.getZoom());
     },
 
     onMove: function(e) {
-        KG.statechart.sendAction('mapMovedAction', this);
-        KG.core_sandbox.setCenter(this.getCenter(), this.getZoom());
+        KG.statechart.sendAction('mapMovedAction', this.getCenter(), this.getZoom());
     },
 
     onClick: function(e) {

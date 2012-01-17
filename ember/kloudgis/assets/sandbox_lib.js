@@ -2382,14 +2382,16 @@ SC.mixin(KG, {
 
                     initialSubstate: 'navigationState',
 
-                    mapMovedAction: function() {
+                    mapMovedAction: function(center, zoom) {
                         KG.core_note.refreshMarkers();
+						KG.core_sandbox.setCenter(center, zoom);
                     },
 
-                    mapZoomedAction: function() {
+                    mapZoomedAction: function(center, zoom) {
 						//remove all marker because Leaflet will not render them while zooming and it make a flash after.
 						KG.core_note.removeAllMarkers();
                         KG.core_note.refreshMarkers();
+						KG.core_sandbox.setCenter(center, zoom);
                     },
 
                     //anytime, the user can perfrom a search

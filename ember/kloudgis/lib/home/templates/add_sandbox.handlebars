@@ -5,10 +5,12 @@
 	<div>
 		{{view KG.TextField placeholder_not_loc="_sandboxName" valueBinding="KG.addSandboxController.name"}}	
 	</div>
-	{{#view KG.Button class="white-button" sc_action="cancelCreateAction"}}
+	{{loc _position class="field-label"}}
+	<div id="map"></div>
+	{{#view KG.Button class="white-button" sc_action="cancelCreateAction" titleBinding="KG.addSandboxController.cancelCreateTooltip"}}
 		<img src="resources/images/cancel_30.png">
 	{{/view}}
-	{{#view KG.Button class="white-button" sc_action="commitCreateAction"}}
+	{{#view KG.Button class="white-button" sc_action="commitCreateAction" titleBinding="KG.addSandboxController.commitCreateTooltip"}}
 		<img src="resources/images/checkmark_30.png">
 	{{/view}}
 {{/view}}

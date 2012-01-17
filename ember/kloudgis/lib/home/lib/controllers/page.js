@@ -4,6 +4,8 @@ KG.pageController = Ember.Object.create({
 	
 	addSandboxHidden: YES,
 	
+	deleteMode: NO,
+	
 	addTitle: '_createSandboxTitle'.loc(),
 	
 	errorMessage: '',

@@ -112,7 +112,7 @@ a.leaflet-active {
 	/* *** KG change *** Set the margin top to 1 cm */
 
 .leaflet-control.leaflet-control-zoom {
-	margin-top: 1.5cm;
+	margin-top: 1cm;
 }
 	
 .leaflet-control-zoom {

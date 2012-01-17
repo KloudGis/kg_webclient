@@ -6,44 +6,52 @@ require("ember-statechart");
 KG = Ember.Application.create({
     lang: 'fr',
     activeSandboxKey: null,
-	serverHost: '/',
-	
-	//set to NO for PRODUCTION
-	debugMode: YES,
-	
-	enableLogger:function(){
-		if(!this._oldLogger){
-			return;
-		}
-		window.console.log = this._oldLogger;
-	},
-	
-	_oldLogger: null,
-	
-	disableLogger: function(){
-		this._oldLogger = window.console.log;
-		window.console.log = function(){};
-	}
+    serverHost: '/',
+
+    //set to NO for PRODUCTION
+    debugMode: YES,
+
+    enableLogger: function() {
+        if (!this._oldLogger) {
+            return;
+        }
+        window.console.log = this._oldLogger;
+    },
+
+    _oldLogger: null,
+
+    disableLogger: function() {
+        this._oldLogger = window.console.log;
+        window.console.log = function() {};
+    }
 });
 
 //default: Disable log is not Debug 
-if(!KG.get('debugMode')){
-	KG.disableLogger();
+if (!KG.get('debugMode')) {
+    KG.disableLogger();
 }
 
 //loc helper
-Handlebars.registerHelper('loc', function(property, options) {
-  	var value = property.loc();
-	if(options.hash.id){
-		var tag = options.hash.tagName || 'span';
-		return new Handlebars.SafeString('<'+tag+' id="'+options.hash.id+'">'+value+'</'+tag+'>'); 
-	}
-	return value;
+Handlebars.registerHelper('loc',
+function(property, options) {
+    var value = property.loc();
+    if (options.hash.id) {
+        var tag = options.hash.tagName || 'span';
+        return new Handlebars.SafeString('<' + tag + ' id="' + options.hash.id + '">' + value + '</' + tag + '>');
+    } else if (options.hash.class) {
+        var tag = options.hash.tagName || 'span';
+        return new Handlebars.SafeString('<' + tag + ' class="' + options.hash.class + '">' + value + '</' + tag + '>');
+    } else if (options.hash.tagName) {
+        var tag = options.hash.tagName;
+        return new Handlebars.SafeString('<' + tag + '>' + value + '</' + tag + '>');
+    }
+    return value;
 });
 //highlight helper
-Handlebars.registerHelper('highlight', function(property) {
-  var value = SC.getPath(this, property);
-  return new Handlebars.SafeString('<span class="highlight">'+value+'</span>');
+Handlebars.registerHelper('highlight',
+function(property) {
+    var value = SC.getPath(this, property);
+    return new Handlebars.SafeString('<span class="highlight">' + value + '</span>');
 });
 
 //jQuery extension

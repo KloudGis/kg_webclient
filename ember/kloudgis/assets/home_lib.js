@@ -7,6 +7,16 @@
 spade.register("kloudgis/home/lib/controllers/add_sandbox", function(require, exports, __module, ARGV, ENV, __filename){
 KG.addSandboxController = Ember.Object.create({
 	name: '',
+	
+	cancelCreateTooltip: '_cancelTooltip'.loc(),
+	
+	commitCreateTooltip: '_commitTooltip'.loc(),
+});
+
+});spade.register("kloudgis/home/lib/controllers/delete", function(require, exports, __module, ARGV, ENV, __filename){
+KG.deleteController = Ember.ArrayController.create({
+	
+	content: []
 });
 
 });spade.register("kloudgis/home/lib/controllers/page", function(require, exports, __module, ARGV, ENV, __filename){
@@ -15,6 +25,8 @@ KG.pageController = Ember.Object.create({
 	listSandboxHidden: NO,
 	
 	addSandboxHidden: YES,
+	
+	deleteMode: NO,
 	
 	addTitle: '_createSandboxTitle'.loc(),
 	
@@ -119,6 +131,7 @@ $(document).ready(function() {
 	v2 = KG.AddSandboxView.create({elementId:"add-sandbox-panel", templateName: 'add-sandbox'});
 	v2.appendTo('#super-panel');
     KG.statechart.initStatechart();
+	setTimeout(function(){KG.core_leaflet.addToDocument();}, 100);
 });
 
 
@@ -167,18 +180,20 @@ SC.mixin(KG, {
 
             loggedInState: SC.State.extend({
 
-                initialSubstate: 'selectSandboxState',
+                initialSubstate: 'listSandboxState',
 
                 enterState: function() {
                     console.log('hi!');
                     KG.core_home.loadSandboxList();
                     var mess = $.getQueryString('message');
-					if(mess){
-                    	KG.pageController.set('errorMessage', mess.loc());
-					}			
+                    if (mess) {
+                        KG.pageController.set('errorMessage', mess.loc());
+                    }
                 },
 
-                selectSandboxState: SC.State.extend({
+                listSandboxState: SC.State.extend({
+
+                    initialSubstate: 'selectSandboxState',
 
                     enterState: function() {
                         KG.pageController.set('listSandboxHidden', NO);
@@ -192,43 +207,93 @@ SC.mixin(KG, {
                         this.gotoState('createSandboxState');
                     },
 
-                    openSandboxAction: function(sbKey) {
-                        window.location.href = "sandbox.html?sandbox=" + sbKey
-                    }
+                    selectSandboxState: SC.State.extend({
+
+                        enterState: function() {},
+
+                        exitState: function() {},
+
+	                    openSandboxAction: function(sbKey) {
+	                        window.location.href = "sandbox.html?sandbox=" + sbKey
+	                    },
+
+                        toggleDeleteSandboxModeAction: function() {
+                            this.gotoState('deleteSandboxState');
+                        }
+                    }),
+
+                    deleteSandboxState: SC.State.extend({
+
+                        enterState: function() {
+                            KG.pageController.set('deleteMode', YES);
+                        },
+
+                        exitState: function() {
+                            KG.pageController.set('deleteMode', NO);
+							KG.deleteController.set('content', []);
+                        },
+
+                        toggleDeleteSandboxModeAction: function() {
+                            this.gotoState('selectSandboxState');
+                        },
+
+						deleteSandboxAction:function(){
+							console.log('delete selected sandboxes');
+							var select = KG.deleteController.get('content');
+							select.forEach(function(sandbox){
+								sandbox.destroy();
+							});
+							KG.store.commitRecords();
+							this.gotoState('selectSandboxState');
+						},
+
+						checkSandboxAction: function(content){
+							console.log('add to delete sandbox');
+							if(content){
+								if(KG.deleteController.indexOf(content) > -1){
+									KG.deleteController.removeObject(content);
+								}else{
+									KG.deleteController.pushObject(content);
+								}
+							}
+						}
+                    }),
 
                 }),
 
                 createSandboxState: SC.State.extend({
 
-                    _timeout: null,
-
                     enterState: function() {
                         console.log('Enter create sandbox state!');
-						KG.pageController.set('errorMessage', '');
+                        KG.pageController.set('errorMessage', '');
                         KG.pageController.set('addSandboxHidden', NO);
                     },
 
                     exitState: function() {
                         console.log('Exit create sandbox state!');
-						//to close mobile keyboard
-						$('#add-sandbox-panel input').blur(); 
+                        //to close mobile keyboard
+                        $('#add-sandbox-panel input').blur();
                         KG.pageController.set('addSandboxHidden', YES);
                         KG.addSandboxController.set('name', '');
                     },
 
                     commitCreateAction: function() {
                         var name = KG.getPath('addSandboxController.name');
-                        if (!Ember.none(name)) {
+                        if (!Ember.none(name) && name.length > 0) {
                             var qUnique = SC.Query.local(KG.Sandbox, {
                                 conditions: "name='%@'".fmt(name)
                             });
                             var res = KG.store.find(qUnique);
                             if (res.get('length') > 0) {
                                 console.log('sb name already in use');
-								KG.pageController.set('errorMessage', '_nameAlreadyTaken'.loc());
+                                KG.pageController.set('errorMessage', '_nameAlreadyTaken'.loc());
                             } else {
+                                var center = KG.core_leaflet.getCenter();
                                 var rec = KG.store.createRecord(KG.Sandbox, {
-                                    name: name
+                                    name: name,
+                                    lon: center.get('lon'),
+                                    lat: center.get('lat'),
+                                    zoom: KG.core_leaflet.getZoom()
                                 });
                                 KG.store.commitRecords();
                                 rec.onReady(null,
@@ -237,7 +302,7 @@ SC.mixin(KG, {
                                 });
                                 rec.onError(null,
                                 function() {
-									rec.destroy();
+                                    rec.destroy();
                                     KG.statechart.sendAction('sandboxCreateError');
                                 });
                             }
@@ -246,13 +311,22 @@ SC.mixin(KG, {
                         }
                     },
 
-					sandboxCreateSuccess: function(){
-						this.gotoState('selectSandboxState');
-					},
-					
-					sandboxCreateError: function(){
-						console.log('error while commit');
-					},
+                    sandboxCreateSuccess: function() {
+                        this.gotoState('selectSandboxState');
+                    },
+
+                    sandboxCreateError: function() {
+                        console.log('error while commit');
+
+                    },
+
+                    httpError: function(status) {
+                        if (status == 400) {
+                            KG.pageController.set('errorMessage', '_requestError'.loc());
+                        } else {
+                            KG.pageController.set('errorMessage', '_serverError'.loc());
+                        }
+                    },
 
                     cancelCreateAction: function() {
                         var rec = KG.addSandboxController.get('content');
@@ -274,16 +348,19 @@ require("kloudgis/core/lib/main_ds");
 require("kloudgis/core/lib/core_date");
 require("kloudgis/app/lib/views/button");
 require("kloudgis/app/lib/views/text_field");
+require("kloudgis/map/lib/core_leaflet");
 require("./strings");
 require("./templates");
 require("./controllers/sandboxes");
 require("./controllers/page");
 require("./controllers/add_sandbox");
+require("./controllers/delete");
 require("./core_statechart");
 require("./views/title");
 require("./views/sandbox");
 require("./views/sandbox_list");
 require("./views/add_sandbox");
+require("./views/delete_checkbox");
 require("./core_home");
 
 });spade.register("kloudgis/home/lib/strings", function(require, exports, __module, ARGV, ENV, __filename){
@@ -301,13 +378,18 @@ var fr = {
 	"_wrong-membership": "Vous n'être pas membre de ce projet.",
 	"_sbDateFormat": "%@/%@/%@",
 	"_by" : "Par",
-	"_createSandboxTitle": "Créer un nouveau sandbox",
+	"_createSandboxTitle": "Créer un nouveau projet",
 	"_add" : "Ajouter",
-	"_cancel": "Annuler",
-	"_create": "Créer",
+	"_cancelTooltip": "Annuler",
+	"_commitTooltip": "Sauvegarder",
 	"_sandboxName": "Le nom du projet",
-	"_nameAlreadyTaken" : "Vous avez déjà un projet de ce nom."
-	
+	"_nameAlreadyTaken" : "Vous avez déjà un projet de ce nom.",
+	"_position" : "Emplacement de départ",
+	"_requestError": "Erreur, le nom du projet semble invalide.",
+	"_serverError": "Erreur du serveur, veuillez réessayer plus tard.",
+	"_delete": "Supprimer",
+	"_sandboxDescription": "Par %@ à %@",
+	"_leave": "Quitter"
 };
 
 var en = {
@@ -322,10 +404,16 @@ var en = {
 	"_by" : "By",
 	"_createSandboxTitle": "Create a new sandbox",
 	"_add" : "Add",
-	"_cancel": "Cancel",
-	"_create": "Create",
+	"_cancelTooltip": "Cancel",
+	"_commitTooltip": "Save",
 	"_sandboxName": "The Sandbox Name",
-	"_nameAlreadyTaken" : "You already have a sandbox with that name"
+	"_nameAlreadyTaken" : "You already have a sandbox with that name",
+	"_position" : "Start Position",
+	"_requestError": "Error, the sandbox's name might be invalid.",
+	"_serverError": "Server error, please try again later.",
+	"_delete": "Delete",
+	"_sandboxDescription": "By %@ at %@",
+	"_leave": "Leave"
 };
 
 if(KG.lang === 'fr'){
@@ -350,13 +438,37 @@ KG.AddSandboxView = Ember.View.extend({
 	hiddenBinding: 'KG.pageController.addSandboxHidden'
 })
 
+});spade.register("kloudgis/home/lib/views/delete_checkbox", function(require, exports, __module, ARGV, ENV, __filename){
+KG.DeleteCheckboxView = KG.Button.extend({
+	
+	isChecked: NO,
+
+	
+	isOwner: function(){
+		var content = this.getPath('itemView.content');
+		if(content && content.get('owner') === KG.core_auth.get('activeUser').id){
+			return YES;
+		}
+		return NO;
+	}.property('itemView.content'),
+	
+	deleteListDidChange: function(){
+		var content = this.getPath('itemView.content');
+		if(KG.deleteController.indexOf(content) > -1){
+			this.set('isChecked', YES);
+		}else{
+			this.set('isChecked', NO);
+		}		
+	}.observes('itemView.content', 'KG.deleteController.length')
+});
+
 });spade.register("kloudgis/home/lib/views/sandbox", function(require, exports, __module, ARGV, ENV, __filename){
 //super view to show the sandbox properties
 KG.SandboxView = KG.Button.extend({
 
     triggerAction: function() {
 		console.log('open!!');
-        KG.statechart.sendAction('openSandboxAction', this.getPath('itemView.content.key'));
+        KG.statechart.sendAction('openSandboxAction', this.getPath('itemView.content.guid'));
     }
 });
 
@@ -378,7 +490,7 @@ KG.TitleView = SC.View.extend({
 });
 
 });spade.register("kloudgis/home/templates/add_sandbox", function(require, exports, __module, ARGV, ENV, __filename){
-return Ember.Handlebars.compile("{{#view id=\"add-sandbox-title\" class=\"page-title\"}}\n\t{{KG.pageController.addTitle}}\n{{/view}}\n{{#view}}\n\t<div>\n\t\t{{view KG.TextField placeholder_not_loc=\"_sandboxName\" valueBinding=\"KG.addSandboxController.name\"}}\t\n\t</div>\n\t{{#view KG.Button class=\"white-button\" sc_action=\"cancelCreateAction\"}}\n\t\t<img src=\"resources/images/cancel_30.png\">\n\t{{/view}}\n\t{{#view KG.Button class=\"white-button\" sc_action=\"commitCreateAction\"}}\n\t\t<img src=\"resources/images/checkmark_30.png\">\n\t{{/view}}\n{{/view}}\n");
+return Ember.Handlebars.compile("{{#view id=\"add-sandbox-title\" class=\"page-title\"}}\n\t{{KG.pageController.addTitle}}\n{{/view}}\n{{#view}}\n\t<div>\n\t\t{{view KG.TextField placeholder_not_loc=\"_sandboxName\" valueBinding=\"KG.addSandboxController.name\"}}\t\n\t</div>\n\t{{loc _position class=\"field-label\"}}\n\t<div id=\"map\"></div>\n\t{{#view KG.Button class=\"white-button\" sc_action=\"cancelCreateAction\" titleBinding=\"KG.addSandboxController.cancelCreateTooltip\"}}\n\t\t<img src=\"resources/images/cancel_30.png\">\n\t{{/view}}\n\t{{#view KG.Button class=\"white-button\" sc_action=\"commitCreateAction\" titleBinding=\"KG.addSandboxController.commitCreateTooltip\"}}\n\t\t<img src=\"resources/images/checkmark_30.png\">\n\t{{/view}}\n{{/view}}\n");
 });spade.register("kloudgis/home/templates/sandbox_list", function(require, exports, __module, ARGV, ENV, __filename){
-return Ember.Handlebars.compile("{{#view KG.TitleView id=\"sandboxes-title\" class=\"page-title\"}}\n\t{{titleString}}\n{{/view}}\n{{#view}}\n{{#collection contentBinding=\"KG.sandboxesController\" class=\"sandbox-list\"}}\n\t\t{{#view KG.SandboxView tagName=\"div\" class=\"sandbox-list-item common-list-button\"}}\n\t\t\t{{#view tagName=\"span\" class=\"sandbox-name\"}}\n\t\t\t\t{{itemView.content.name}}\n\t\t\t{{/view}}\n\t\t\t<span class=\"sandbox-owner-label\">{{loc _by}} {{itemView.content.ownerDescriptor}}</span>\n\t\t\t<span>{{itemView.content.formattedDate}}</span>\n\t\t{{/view}}\n{{/collection}}\n\t\n{{#view KG.Button  id=\"create-sandbox-button\" class=\"white-button\" sc_action=\"createSandboxAction\" titleBinding=\"KG.core_home.createSandboxTitle\" isVisibleBinding=\"KG.sandboxesController.recordsReady\"}}\n\t<img src=\"resources/images/add_30.png\">\n{{/view}}\t\n{{/view}}\t\t\n");
+return Ember.Handlebars.compile("{{#view KG.TitleView id=\"sandboxes-title\" class=\"page-title\"}}\n\t{{titleString}}\n{{/view}}\n{{#view}}\n{{#collection contentBinding=\"KG.sandboxesController\" class=\"sandbox-list\"}}\n\t\t{{#view KG.SandboxView tagName=\"div\" class=\"sandbox-list-item common-list-button\"}}\n\t\t\t{{#view KG.DeleteCheckboxView  class=\"delete-button\" sc_action=\"checkSandboxAction\" classBinding=\"KG.pageController.deleteMode isChecked isOwner\"}}\n\t\t\t\t<span>✓</span> {{loc _leave tagName=\"span\"}}\n\t\t\t{{/view}}\n\t\t\t{{#view tagName=\"span\" class=\"sandbox-name\"}}\n\t\t\t\t{{itemView.content.name}}\n\t\t\t{{/view}}\n\t\t\t<div class=\"info-line\">\n\t\t\t\t{{itemView.content.formattedDescription}}\n\t\t\t</div>\n\t\t{{/view}}\n{{/collection}}\n\t\n{{#view KG.Button  id=\"create-sandbox-button\" class=\"white-button\" sc_action=\"createSandboxAction\" titleBinding=\"KG.core_home.createSandboxTitle\" isVisibleBinding=\"KG.sandboxesController.recordsReady\"}}\n\t<img src=\"resources/images/add_30.png\">\n{{/view}}\n{{#view KG.Button  id=\"delete-mode-button\" class=\"white-button\" sc_action=\"toggleDeleteSandboxModeAction\" titleBinding=\"KG.core_home.deleteSandboxTitle\" isVisibleBinding=\"KG.sandboxesController.recordsReady\"}}\n\t<img src=\"resources/images/delete_30.png\">\n{{/view}}\t\n{{#view KG.Button id=\"delete-sandbox-button\" class=\"red-button\" sc_action=\"deleteSandboxAction\" classBinding=\"KG.pageController.deleteMode\"}}\n\t{{loc _delete}}\n{{/view}}\n{{/view}}\t\t\n");
 });

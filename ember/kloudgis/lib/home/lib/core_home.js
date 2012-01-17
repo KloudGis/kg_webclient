@@ -57,6 +57,7 @@ $(document).ready(function() {
 	v2 = KG.AddSandboxView.create({elementId:"add-sandbox-panel", templateName: 'add-sandbox'});
 	v2.appendTo('#super-panel');
     KG.statechart.initStatechart();
+	setTimeout(function(){KG.core_leaflet.addToDocument();}, 100);
 });
 
 

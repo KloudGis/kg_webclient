@@ -11,13 +11,18 @@ var fr = {
 	"_wrong-membership": "Vous n'être pas membre de ce projet.",
 	"_sbDateFormat": "%@/%@/%@",
 	"_by" : "Par",
-	"_createSandboxTitle": "Créer un nouveau sandbox",
+	"_createSandboxTitle": "Créer un nouveau projet",
 	"_add" : "Ajouter",
-	"_cancel": "Annuler",
-	"_create": "Créer",
+	"_cancelTooltip": "Annuler",
+	"_commitTooltip": "Sauvegarder",
 	"_sandboxName": "Le nom du projet",
-	"_nameAlreadyTaken" : "Vous avez déjà un projet de ce nom."
-	
+	"_nameAlreadyTaken" : "Vous avez déjà un projet de ce nom.",
+	"_position" : "Emplacement de départ",
+	"_requestError": "Erreur, le nom du projet semble invalide.",
+	"_serverError": "Erreur du serveur, veuillez réessayer plus tard.",
+	"_delete": "Supprimer",
+	"_sandboxDescription": "Par %@ à %@",
+	"_leave": "Quitter"
 };
 
 var en = {
@@ -32,10 +37,16 @@ var en = {
 	"_by" : "By",
 	"_createSandboxTitle": "Create a new sandbox",
 	"_add" : "Add",
-	"_cancel": "Cancel",
-	"_create": "Create",
+	"_cancelTooltip": "Cancel",
+	"_commitTooltip": "Save",
 	"_sandboxName": "The Sandbox Name",
-	"_nameAlreadyTaken" : "You already have a sandbox with that name"
+	"_nameAlreadyTaken" : "You already have a sandbox with that name",
+	"_position" : "Start Position",
+	"_requestError": "Error, the sandbox's name might be invalid.",
+	"_serverError": "Server error, please try again later.",
+	"_delete": "Delete",
+	"_sandboxDescription": "By %@ at %@",
+	"_leave": "Leave"
 };
 
 if(KG.lang === 'fr'){
