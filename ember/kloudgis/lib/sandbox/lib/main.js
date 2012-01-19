@@ -13,6 +13,10 @@ require("./strings");
 require("./core_statechart");
 require("./core_sandbox");
 require("./controllers/comments");
+
+//active user
+require('./controllers/active_user');
+require('./views/user_button');
 //templates
 require("./templates");
 
@@ -26,8 +30,9 @@ require("./core_search");
 require("./controllers/search");
 require("./controllers/search_results");
 require("./views/search_field");
-require("./views/search_result_label");
+require("./views/records_button");
 //search plugins
+require("./views/plugin_records_button");
 require("./search_plugins/core_google");
 require("./search_plugins/core_geonames");
 require("./search_plugins/core_osm");
@@ -79,14 +84,12 @@ require("./core_notification");
 require("./controllers/notifications");
 require("./controllers/send_notification");
 require("./views/notification");
-require("./views/notification_button");
 require("./views/text_notification_area");
 
 //bookmark
 require("./core_bookmark");
 require("./controllers/bookmarks");
 require("./controllers/add_bookmark");
-require("kloudgis/app/lib/views/bubble_touch");
 require("./views/bookmark_button");
 require("./views/edit_bookmark_button");
 require("./views/bookmark_item");

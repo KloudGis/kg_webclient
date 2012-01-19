@@ -5,6 +5,9 @@ KG.core_search = SC.Object.create({
 
     plugins: [],
 	searchAsked: NO,
+	
+	//the search panel view
+	_view: null,
 
     addPlugin: function(plugin) {
         this.plugins.pushObject(plugin);
@@ -49,6 +52,7 @@ KG.core_search = SC.Object.create({
         var cat = KG.searchResultsController.get('category');
         if (SC.none(cat)) {
             var plugin = KG.searchResultsController.get('plugin');
+			KG.searchResultsController.set('content', null);
             if (!SC.none(plugin)) {
                 plugin.loadRecords(null, function(records) {
                     KG.searchResultsController.set('content', records);
@@ -74,4 +78,15 @@ KG.core_search = SC.Object.create({
         },
         600);
     }
+});
+
+//lazzy creation too speed up app launch
+$(document).ready(function() {
+    setTimeout(function() {
+        KG.core_search._view = Ember.View.create({
+            templateName: 'search-panel'
+        });
+        KG.core_search._view.append();
+    },
+    1000);
 });

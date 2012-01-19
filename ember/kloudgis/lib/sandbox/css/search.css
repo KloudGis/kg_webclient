@@ -1,65 +1,52 @@
-/* search control on the bottom of the screen */
-#search-control{
+#search-button{
+	width:24px;
+	height:28px;
+	left:3px;
+}
+
+#search-button .button-image{
+	width:24px;
+	height:24px;
+	display:block;
+	background: url('../resources/images/search.png') no-repeat center;
+}
+
+
+#super-search-popup{
+	overflow:visible;
+	z-index:10;
+	position: absolute;
+	width:6cm;
+	margin-left:-3cm;
+	padding:8px;
+	top:-100%;
 	left:50%;
-	margin:0 0 0 -2.25cm;
-	bottom:3px;
-	width:4.5cm;
-	max-height:30%;	
-	overflow-x:hidden;
+	transition:top 0.4s ease-in;
+	-webkit-transition:top 0.4s ease-in;
+	-moz-transition:top 0.4s ease-in;
+	background:rgba(255,255,255,0.9);
+	border-radius:6px;
+	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+}
+
+#search-popup{
+	max-height:500px;
 	overflow-y:auto;
-	transition:all 0.3s ease-in;
-	-webkit-transition:all 0.3s ease-in;
-	-moz-transition:all 0.3s ease-in;
 }
 
-#search-control.has-results{
-	background: rgba(0,0,0,0.6);
-	max-height:40%;	
+#super-search-popup.active-popup{
+	top:30%;
 }
 
-#search-control input{
+.search-close-button{
+	position:absolute;
+	right:-15px;
+	top:-15px;
+}
+
+#super-search-popup input{
 	width:100%;
-}
-
-.search-cat-list{
-	font-size:14px;
-	padding-top: 10px;
-	margin:0;
-}
-
-.search-cat-item{
-	margin-top:2px;
-	padding:0.1cm;
-	text-align: left;
-	border-radius: 10px;
-	border: 1px solid rgba(0,0,0,0.5);
-	cursor: pointer;
-}
-
-.search-cat-item:hover{
-	background-color: rgba(0,0,0,0.5);
-}
-
-.search-category-table{
-	width:100%;
-	margin:0;
-	padding:0
-	border: none;
-	border-spacing: 0px;
-	color:white;
-}
-
-.search-category-table td{
-	vertical-align: middle;
-	text-align:right;
-}
-
-.cat-size-label{
-	max-width: 1.1cm;
-}
-
-.cat-title-label{
-	max-width: 2.4cm;
 }
 
 .search-plugin-item{
@@ -77,110 +64,98 @@
 	border-radius: 10px;
 }
 
-.cat-title-label{
-	max-width: 3cm;	
+.search-cat-list div .search-cat-item{
+	border-top: 1px solid gray;
 }
 
-/* search results (middle of the screen)*/
-
-#search-result{
-	z-index:10;
-	position: absolute;
-	width:6cm;
-	margin-left:-3cm;
-	padding:8px;
-	top:-100%;
-	left:50%;
-	transition:top 1s ease-in;
-	-webkit-transition:top 1s ease-in;
-	-moz-transition:top 1s ease-in;
-	background:rgba(0,0,0,0.6);
-	border-radius:12px;
+.search-cat-list div .search-cat-item:hover{
+	border-top: 1px solid transparent;
 }
 
-#search-result.list-visible{
-	top:20%;	
+.search-cat-list div:first-child .search-cat-item{
+	border-top: none;
 }
 
-.search-title-area{
+.search-cat-item{
 	position: relative;
-	width:100%;
-	color:white;
-	text-align: center;
-}
-
-#title-label{
-	margin:10px;
-	font-size:16px;
-}
-
-.search-close-button{
-	float: right;
-	margin-top: -34px;
-	margin-right:-28px;
-}
-
-/* 2 fingers scroll on iOS.  iScroll4 can solve it.*/
-.search-list-area{
+	padding:6px;
 	font-size:14px;
-	position:relative;
-	width: 100%;
-	max-height:6cm;
-	overflow-x:hidden;
-	overflow-y: auto;
 }
 
-.search-list-area.has-results{
+.search-cat-item:hover{
+	border-radius: 6px;
 }
 
-.search-list-item{
-	text-align:right;
-	width:100%;
+.search-cat-item div{
+	width:auto;
+	max-width:5cm;
+	display:inline-block;
 }
 
-.search-list-item > span{
-	position:relative;
-	bottom:5px;
+.search-cat-item span{
+	width:auto;
+	position:absolute;
+	right:5px;
+}
+
+#search-popup .search-cat-item.records-visible, #search-popup .search-plugin-item.records-visible {
+	border-top-left-radius:6px;
+	border-top-right-radius:6px;
+	border-bottom-left-radius:0;
+	border-bottom-right-radius:0;
+	color:white;
+	font-weight: bold;
+	background-color: #787878;
 }
 
 .search-result-list{
-	margin:10px;
+	max-height:0;
+	border-bottom-left-radius:6px;
+	border-bottom-right-radius:6px;
+	color:white;
+	font-size:12px;
+	font-weight: bold;
+	background-color: #787878;
+	background-image: -webkit-linear-gradient(top, rgb(120, 120, 120), rgb(45, 45, 45));
+	background-image: -moz-linear-gradient(top, rgb(120, 120, 120), rgb(45, 45, 45));
+	transition:max-height 1s;
+	-webkit-transition: max-height 1s;
+	-moz-transition:max-height 1s;
 }
 
-.search-result-list > div{
-	margin-top:2px;
-	padding:0 0.5em 0 0.5em;
-	border-radius: 10px;
-	border: 1px solid rgba(0,0,0,0.5);
-	cursor: pointer;
+.search-result-list.records-visible{
+	max-height:1000px;
 }
 
-.search-result-list > div:hover{
-	background: rgba(0,0,0,0.5);
+.search-record-item{
+	padding:6px;
+	position: relative;
 }
 
-.search-result-table{
-	color: white;
-	border: none;
-	border-spacing: 0px;
+
+.search-record-item div:first-child{
+	width:auto;
+	margin-right:30px;
 }
 
-.search-result-table td{
-	vertical-align:middle;
+.search-record-item:hover{
+	border-radius: 6px;
 }
 
-.search-title-cell{
-	width:100%;
+.search-select{
+	position:absolute;
+	top:-2px;
+	right:-1px;
 }
 
-.search-select-cell{
-	width:32px;
-	height:32px;
+
+.search-create-note{
+	position:absolute;
+	top:2px;
+	right:2px;
 }
 
-.feature-title-label{
-	margin-left:1em;
-}
+
 
 
 

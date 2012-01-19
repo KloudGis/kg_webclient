@@ -84,35 +84,35 @@ SC.mixin(KG, {
                 // Inspector and the palette
                 //******************************
                 inspectorPaletteState: SC.State.extend({
-	
+
                     initialSubstate: 'allHiddenState',
 
-					selectFeatureInspectorAction: function(feature) {
+                    selectFeatureInspectorAction: function(feature) {
                         if (feature && feature.get('isSelectable') && feature.get('isInspectorSelectable')) {
                             this.gotoState('inspectorVisibleState');
                             KG.core_inspector.selectFeature(feature);
                         }
                     },
 
-					showPaletteAction: function(){
-						this.gotoState('paletteVisibleState');
-					},
+                    showPaletteAction: function() {
+                        this.gotoState('paletteVisibleState');
+                    },
 
                     //******************************
                     // Inspector and Palette are Hidden 
                     //******************************
                     allHiddenState: SC.State.extend({
-                      
-                    }),
+
+}),
 
                     //******************************
                     // Inspector is visible
                     //******************************
                     inspectorVisibleState: SC.State.extend({
-						
+
                         enterState: function() {
-							KG.inspectorController.set('active', YES);                      
-							KG.featureCommentsController.set('commentsPanelVisible', YES);
+                            KG.inspectorController.set('active', YES);
+                            KG.featureCommentsController.set('commentsPanelVisible', YES);
                         },
 
                         exitState: function() {
@@ -130,7 +130,7 @@ SC.mixin(KG, {
 
                         selectFeatureInspectorAction: function(feature) {
                             if (feature && feature.get('isSelectable') && feature.get('isInspectorSelectable')) {
-	                            KG.featureCommentsController.set('showing', NO);
+                                KG.featureCommentsController.set('showing', NO);
                                 KG.core_inspector.selectFeature(feature);
                             }
                         },
@@ -204,53 +204,55 @@ SC.mixin(KG, {
                             }
                         },
 
-						deleteFeatureInspectorAction: function(){
-							KG.core_inspector.deleteFeature();
-							this.gotoState('allHiddenState');
-						}
+                        deleteFeatureInspectorAction: function() {
+                            KG.core_inspector.deleteFeature();
+                            this.gotoState('allHiddenState');
+                        }
                     }),
 
-					//******************************
+                    //******************************
                     // Palette is visible
                     //******************************
                     paletteVisibleState: SC.State.extend({
-						
-						enterState: function() {
+
+                        enterState: function() {
                             KG.paletteController.set('active', YES);
-							if(Ember.none(KG.paletteController.get('content'))){
-								var query = SC.Query.local(KG.Featuretype, {conditions:'geometry_type != null'})
-								KG.paletteController.set('content', KG.store.find(query));
-							}							
+                            if (Ember.none(KG.paletteController.get('content'))) {
+                                var query = SC.Query.local(KG.Featuretype, {
+                                    conditions: 'geometry_type != null'
+                                })
+                                KG.paletteController.set('content', KG.store.find(query));
+                            }
                         },
 
                         exitState: function() {
                             KG.paletteController.set('active', NO);
-							KG.paletteController.set('isDirty', NO);
-							KG.core_palette.clearCreateFeature();
-							//do no clear the paletteController because rebuilding the view takes a while (on mobile)
+                            KG.paletteController.set('isDirty', NO);
+                            KG.core_palette.clearCreateFeature();
+                            //do no clear the paletteController because rebuilding the view takes a while (on mobile)
                         },
 
-						paletteMarkerDragEnded: function(params) {
+                        paletteMarkerDragEnded: function(params) {
                             this.gotoState('inspectorVisibleState');
-							KG.core_inspector.createFeature(params.paletteItem, params.lon, params.lat);
+                            KG.core_inspector.createFeature(params.paletteItem, params.lon, params.lat);
                         },
 
-						selectPaletteItemAction: function(paletteItem){
-							KG.core_palette.createFeature(paletteItem);
-						},
+                        selectPaletteItemAction: function(paletteItem) {
+                            KG.core_palette.createFeature(paletteItem);
+                        },
 
-						closePaletteAction: function(){
-							this.gotoState('allHiddenState');
-						},
-						
-						cancelPaletteAction: function(){
-							KG.core_palette.clearCreateFeature();
-						},
+                        closePaletteAction: function() {
+                            this.gotoState('allHiddenState');
+                        },
 
-						showPaletteAction: function(){
-							this.gotoState('allHiddenState');
-						}
-					})
+                        cancelPaletteAction: function() {
+                            KG.core_palette.clearCreateFeature();
+                        },
+
+                        showPaletteAction: function() {
+                            this.gotoState('allHiddenState');
+                        }
+                    })
                 }),
 
                 //******************************
@@ -508,39 +510,24 @@ SC.mixin(KG, {
 
                     initialSubstate: 'navigationState',
 
+                    backHomeAction: function() {
+                        window.location.href = "home.html";
+                    },
+
                     mapMovedAction: function(center, zoom) {
                         KG.core_note.refreshMarkers();
-						KG.core_sandbox.setCenter(center, zoom);
+                        KG.core_sandbox.setCenter(center, zoom);
                     },
 
                     mapZoomedAction: function(center, zoom) {
-						//remove all marker because Leaflet will not render them while zooming and it make a flash after.
-						KG.core_note.removeAllMarkers();
+                        //remove all marker because Leaflet will not render them while zooming and it make a flash after.
+                        KG.core_note.removeAllMarkers();
                         KG.core_note.refreshMarkers();
-						KG.core_sandbox.setCenter(center, zoom);
+                        KG.core_sandbox.setCenter(center, zoom);
                     },
 
-                    //anytime, the user can perfrom a search
-                    searchAction: function() {
-                        KG.core_search.searchFeatures();
-                    },
-
-                    //select a search category from the list -> activate the result dialog
-                    selectSearchCategoryAction: function(cat) {
-                        KG.searchResultsController.set('category', cat);
-                        this.gotoState('searchResultsState');
-                    },
-
-                    //select a search plugin from the list
-                    selectSearchPluginAction: function(plugin) {
-                        KG.searchResultsController.set('category', null);
-                        KG.searchResultsController.set('plugin', plugin);
-                        this.gotoState('searchResultsState');
-                    },
-
-                    //wipe the search category results
-                    clearSearchAction: function() {
-                        KG.core_search.clearSearchFeatures();
+                    toogleSearchPopopAction: function() {
+                        this.gotoState('searchState');
                     },
 
                     //a note as been clicked -> activate the note
@@ -561,6 +548,39 @@ SC.mixin(KG, {
                         window.location.href = "index.html";
                     },
 
+                    createNoteAction: function() {
+                        this.gotoState('locateNoteState');
+                    },
+
+					clickOnMapAction: function(lonLat) {
+                        if (!this._ignoreMouseClicked) {
+                            KG.core_sandbox.set('mousePosition', lonLat);
+                            KG.core_info.findFeaturesAt(lonLat);
+                        }
+                    },
+
+                    mousePositionChanged: function(lonLat) {
+                        KG.core_sandbox.set('mousePosition', lonLat);
+                    },
+
+                    featureInfoReady: function() {
+                        this.gotoState("popupFeatureInfoState");
+                    },
+
+                    clickMarkerAction: function(marker) {
+                        KG.core_note.continueMarkerClicked(marker);
+                    },
+
+                    noteSelectedAction: function(note, params) {
+                        KG.core_note.activateNote(note, params);
+                        this.gotoState('editNoteState');
+                    },
+
+                    multipleNotesSelectedAction: function(notes, marker) {
+                        KG.core_note.activateMultipleNotes(notes, marker);
+                        this.gotoState('multipleNotesState');
+                    },
+
                     //******************************
                     // Default state - Navigation
                     //******************************
@@ -570,8 +590,6 @@ SC.mixin(KG, {
 
                         enterState: function() {
                             console.log('enter navigation state');
-                            //enable search field
-                            KG.searchController.set('fieldDisabled', NO);
                             //refresh markers
                             KG.core_note.refreshMarkers();
                             var self = this;
@@ -582,79 +600,61 @@ SC.mixin(KG, {
                         },
 
                         exitState: function() {
-                            //disable search field
-                            KG.searchController.set('fieldDisabled', YES);
                             this._ignoreMouseClicked = YES;
-                        },
-
-                        clickOnMapAction: function(lonLat) {
-                            if (!this._ignoreMouseClicked) {
-                                KG.core_sandbox.set('mousePosition', lonLat);
-                                KG.core_info.findFeaturesAt(lonLat);
-                            }
-                        },
-
-                        mousePositionChanged: function(lonLat) {
-                            KG.core_sandbox.set('mousePosition', lonLat);
-                        },
-
-                        featureInfoReady: function() {
-                            this.gotoState("popupFeatureInfoState");
-                        },
-
-                        clickMarkerAction: function(marker) {
-                            KG.core_note.continueMarkerClicked(marker);
-                        },
-
-                        noteSelectedAction: function(note, params) {
-                            KG.core_note.activateNote(note, params);
-                            this.gotoState('editNoteState');
-                        },
-
-                        multipleNotesSelectedAction: function(notes, marker) {
-                            KG.core_note.activateMultipleNotes(notes, marker);
-                            this.gotoState('multipleNotesState');
-                        },
-
-                        createNoteAction: function() {
-                            this.gotoState('locateNoteState');
-                        }
+                        }                      
                     }),
 
                     //******************************
-                    // Show the search result
+                    // Show the search panel
                     //******************************
-                    searchResultsState: SC.State.extend({
+                    searchState: SC.State.extend({
 
                         _highlight: null,
                         _hlMarker: null,
 
                         enterState: function() {
-                            console.log('show results state');
-                            KG.core_search.showResults();
+							KG.searchController.set('activePopup', YES);
                         },
 
                         exitState: function() {
-                            KG.core_search.hideResults();
+							KG.searchController.set('activePopup', NO);
+							KG.searchController.set('search', '');
                             KG.core_highlight.clearHighlight(this._highlight);
                             this._highlight = null;
                             KG.core_highlight.clearHighlightMarker(this._hlMarker);
                             this._hlMarker = null;
                         },
 
+						toogleSearchPopopAction: function() {
+	                        this.gotoState('navigationState');
+	                    },
+	
+	                    searchAction: function() {
+	                        KG.core_search.searchFeatures();
+	                    },
+	
+	                    clearSearchAction: function() {
+	                        KG.core_search.clearSearchFeatures();
+	                    },
+
                         selectSearchCategoryAction: function(cat) {
-                            KG.searchResultsController.set('category', cat);
-                            KG.core_search.showResults();
+							KG.searchResultsController.set('plugin', null);
+							if( KG.searchResultsController.get('category') === cat){
+								KG.searchResultsController.set('category', null);
+							}else{
+                            	KG.searchResultsController.set('category', cat);
+                            	KG.core_search.showResults();
+							}
                         },
 
                         selectSearchPluginAction: function(plugin) {
                             KG.searchResultsController.set('category', null);
-                            KG.searchResultsController.set('plugin', plugin);
-                            KG.core_search.showResults();
-                        },
-
-                        hideSearchResultAction: function() {
-                            this.gotoState('navigationState');
+							if(KG.searchResultsController.get('plugin') == plugin){
+								KG.searchResultsController.set('plugin', null);
+							}else{
+                            	KG.searchResultsController.set('plugin', plugin);
+                            	KG.core_search.showResults();
+							}
                         },
 
                         createNoteFromFeatureAction: function(feature) {

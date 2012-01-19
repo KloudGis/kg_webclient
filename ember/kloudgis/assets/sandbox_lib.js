@@ -89,6 +89,18 @@ KG.activeNoteController = SC.Object.create({
 
 });
 
+});spade.register("kloudgis/sandbox/lib/controllers/active_user", function(require, exports, __module, ARGV, ENV, __filename){
+KG.activeUserController = Ember.Object.create({
+	//user name
+	name: null,
+	
+	activePopup: NO,
+
+	activeUserDidChange: function(){
+		this.set('name', KG.core_auth.get('activeUser').name);
+	}.observes('KG.core_auth.activeUser')
+});
+
 });spade.register("kloudgis/sandbox/lib/controllers/add_bookmark", function(require, exports, __module, ARGV, ENV, __filename){
 KG.addBookmarkController = SC.Object.create({
 	
@@ -408,6 +420,7 @@ KG.searchController = Ember.ArrayController.create({
 	content: [],
 	searchHistorySize: 5,
 	searchValue: null,
+	activePopup: NO,
 	
 	hasResults: function(){
 		return this.getPath('content.length') > 0;
@@ -1603,6 +1616,7 @@ KG.core_sandbox = SC.Object.create({
     membership: null,
     isSandboxOwner: NO,
 
+	sandboxLabel: '',
     mousePosition: null,
 
     setCenter: function(lonLat, zoom) {
@@ -1696,7 +1710,7 @@ KG.core_sandbox = SC.Object.create({
 
     metaDidChange: function() {
         console.log('Meta changed.');
-        $('#active-sandbox-label span').text(this.get('sandboxMeta').name);
+        KG.core_sandbox.set('sandboxLabel', this.get('sandboxMeta').name);
         this.set('isSandboxOwner', KG.core_auth.get('activeUser').id === this.get('sandboxMeta').owner)
     }.observes('sandboxMeta'),
 
@@ -1799,6 +1813,9 @@ KG.core_search = SC.Object.create({
 
     plugins: [],
 	searchAsked: NO,
+	
+	//the search panel view
+	_view: null,
 
     addPlugin: function(plugin) {
         this.plugins.pushObject(plugin);
@@ -1843,6 +1860,7 @@ KG.core_search = SC.Object.create({
         var cat = KG.searchResultsController.get('category');
         if (SC.none(cat)) {
             var plugin = KG.searchResultsController.get('plugin');
+			KG.searchResultsController.set('content', null);
             if (!SC.none(plugin)) {
                 plugin.loadRecords(null, function(records) {
                     KG.searchResultsController.set('content', records);
@@ -1868,6 +1886,17 @@ KG.core_search = SC.Object.create({
         },
         600);
     }
+});
+
+//lazzy creation too speed up app launch
+$(document).ready(function() {
+    setTimeout(function() {
+        KG.core_search._view = Ember.View.create({
+            templateName: 'search-panel'
+        });
+        KG.core_search._view.append();
+    },
+    1000);
 });
 
 });spade.register("kloudgis/sandbox/lib/core_statechart", function(require, exports, __module, ARGV, ENV, __filename){
@@ -1958,35 +1987,35 @@ SC.mixin(KG, {
                 // Inspector and the palette
                 //******************************
                 inspectorPaletteState: SC.State.extend({
-	
+
                     initialSubstate: 'allHiddenState',
 
-					selectFeatureInspectorAction: function(feature) {
+                    selectFeatureInspectorAction: function(feature) {
                         if (feature && feature.get('isSelectable') && feature.get('isInspectorSelectable')) {
                             this.gotoState('inspectorVisibleState');
                             KG.core_inspector.selectFeature(feature);
                         }
                     },
 
-					showPaletteAction: function(){
-						this.gotoState('paletteVisibleState');
-					},
+                    showPaletteAction: function() {
+                        this.gotoState('paletteVisibleState');
+                    },
 
                     //******************************
                     // Inspector and Palette are Hidden 
                     //******************************
                     allHiddenState: SC.State.extend({
-                      
-                    }),
+
+}),
 
                     //******************************
                     // Inspector is visible
                     //******************************
                     inspectorVisibleState: SC.State.extend({
-						
+
                         enterState: function() {
-							KG.inspectorController.set('active', YES);                      
-							KG.featureCommentsController.set('commentsPanelVisible', YES);
+                            KG.inspectorController.set('active', YES);
+                            KG.featureCommentsController.set('commentsPanelVisible', YES);
                         },
 
                         exitState: function() {
@@ -2004,7 +2033,7 @@ SC.mixin(KG, {
 
                         selectFeatureInspectorAction: function(feature) {
                             if (feature && feature.get('isSelectable') && feature.get('isInspectorSelectable')) {
-	                            KG.featureCommentsController.set('showing', NO);
+                                KG.featureCommentsController.set('showing', NO);
                                 KG.core_inspector.selectFeature(feature);
                             }
                         },
@@ -2078,53 +2107,55 @@ SC.mixin(KG, {
                             }
                         },
 
-						deleteFeatureInspectorAction: function(){
-							KG.core_inspector.deleteFeature();
-							this.gotoState('allHiddenState');
-						}
+                        deleteFeatureInspectorAction: function() {
+                            KG.core_inspector.deleteFeature();
+                            this.gotoState('allHiddenState');
+                        }
                     }),
 
-					//******************************
+                    //******************************
                     // Palette is visible
                     //******************************
                     paletteVisibleState: SC.State.extend({
-						
-						enterState: function() {
+
+                        enterState: function() {
                             KG.paletteController.set('active', YES);
-							if(Ember.none(KG.paletteController.get('content'))){
-								var query = SC.Query.local(KG.Featuretype, {conditions:'geometry_type != null'})
-								KG.paletteController.set('content', KG.store.find(query));
-							}							
+                            if (Ember.none(KG.paletteController.get('content'))) {
+                                var query = SC.Query.local(KG.Featuretype, {
+                                    conditions: 'geometry_type != null'
+                                })
+                                KG.paletteController.set('content', KG.store.find(query));
+                            }
                         },
 
                         exitState: function() {
                             KG.paletteController.set('active', NO);
-							KG.paletteController.set('isDirty', NO);
-							KG.core_palette.clearCreateFeature();
-							//do no clear the paletteController because rebuilding the view takes a while (on mobile)
+                            KG.paletteController.set('isDirty', NO);
+                            KG.core_palette.clearCreateFeature();
+                            //do no clear the paletteController because rebuilding the view takes a while (on mobile)
                         },
 
-						paletteMarkerDragEnded: function(params) {
+                        paletteMarkerDragEnded: function(params) {
                             this.gotoState('inspectorVisibleState');
-							KG.core_inspector.createFeature(params.paletteItem, params.lon, params.lat);
+                            KG.core_inspector.createFeature(params.paletteItem, params.lon, params.lat);
                         },
 
-						selectPaletteItemAction: function(paletteItem){
-							KG.core_palette.createFeature(paletteItem);
-						},
+                        selectPaletteItemAction: function(paletteItem) {
+                            KG.core_palette.createFeature(paletteItem);
+                        },
 
-						closePaletteAction: function(){
-							this.gotoState('allHiddenState');
-						},
-						
-						cancelPaletteAction: function(){
-							KG.core_palette.clearCreateFeature();
-						},
+                        closePaletteAction: function() {
+                            this.gotoState('allHiddenState');
+                        },
 
-						showPaletteAction: function(){
-							this.gotoState('allHiddenState');
-						}
-					})
+                        cancelPaletteAction: function() {
+                            KG.core_palette.clearCreateFeature();
+                        },
+
+                        showPaletteAction: function() {
+                            this.gotoState('allHiddenState');
+                        }
+                    })
                 }),
 
                 //******************************
@@ -2382,39 +2413,24 @@ SC.mixin(KG, {
 
                     initialSubstate: 'navigationState',
 
+                    backHomeAction: function() {
+                        window.location.href = "home.html";
+                    },
+
                     mapMovedAction: function(center, zoom) {
                         KG.core_note.refreshMarkers();
-						KG.core_sandbox.setCenter(center, zoom);
+                        KG.core_sandbox.setCenter(center, zoom);
                     },
 
                     mapZoomedAction: function(center, zoom) {
-						//remove all marker because Leaflet will not render them while zooming and it make a flash after.
-						KG.core_note.removeAllMarkers();
+                        //remove all marker because Leaflet will not render them while zooming and it make a flash after.
+                        KG.core_note.removeAllMarkers();
                         KG.core_note.refreshMarkers();
-						KG.core_sandbox.setCenter(center, zoom);
+                        KG.core_sandbox.setCenter(center, zoom);
                     },
 
-                    //anytime, the user can perfrom a search
-                    searchAction: function() {
-                        KG.core_search.searchFeatures();
-                    },
-
-                    //select a search category from the list -> activate the result dialog
-                    selectSearchCategoryAction: function(cat) {
-                        KG.searchResultsController.set('category', cat);
-                        this.gotoState('searchResultsState');
-                    },
-
-                    //select a search plugin from the list
-                    selectSearchPluginAction: function(plugin) {
-                        KG.searchResultsController.set('category', null);
-                        KG.searchResultsController.set('plugin', plugin);
-                        this.gotoState('searchResultsState');
-                    },
-
-                    //wipe the search category results
-                    clearSearchAction: function() {
-                        KG.core_search.clearSearchFeatures();
+                    toogleSearchPopopAction: function() {
+                        this.gotoState('searchState');
                     },
 
                     //a note as been clicked -> activate the note
@@ -2435,6 +2451,39 @@ SC.mixin(KG, {
                         window.location.href = "index.html";
                     },
 
+                    createNoteAction: function() {
+                        this.gotoState('locateNoteState');
+                    },
+
+					clickOnMapAction: function(lonLat) {
+                        if (!this._ignoreMouseClicked) {
+                            KG.core_sandbox.set('mousePosition', lonLat);
+                            KG.core_info.findFeaturesAt(lonLat);
+                        }
+                    },
+
+                    mousePositionChanged: function(lonLat) {
+                        KG.core_sandbox.set('mousePosition', lonLat);
+                    },
+
+                    featureInfoReady: function() {
+                        this.gotoState("popupFeatureInfoState");
+                    },
+
+                    clickMarkerAction: function(marker) {
+                        KG.core_note.continueMarkerClicked(marker);
+                    },
+
+                    noteSelectedAction: function(note, params) {
+                        KG.core_note.activateNote(note, params);
+                        this.gotoState('editNoteState');
+                    },
+
+                    multipleNotesSelectedAction: function(notes, marker) {
+                        KG.core_note.activateMultipleNotes(notes, marker);
+                        this.gotoState('multipleNotesState');
+                    },
+
                     //******************************
                     // Default state - Navigation
                     //******************************
@@ -2444,8 +2493,6 @@ SC.mixin(KG, {
 
                         enterState: function() {
                             console.log('enter navigation state');
-                            //enable search field
-                            KG.searchController.set('fieldDisabled', NO);
                             //refresh markers
                             KG.core_note.refreshMarkers();
                             var self = this;
@@ -2456,79 +2503,61 @@ SC.mixin(KG, {
                         },
 
                         exitState: function() {
-                            //disable search field
-                            KG.searchController.set('fieldDisabled', YES);
                             this._ignoreMouseClicked = YES;
-                        },
-
-                        clickOnMapAction: function(lonLat) {
-                            if (!this._ignoreMouseClicked) {
-                                KG.core_sandbox.set('mousePosition', lonLat);
-                                KG.core_info.findFeaturesAt(lonLat);
-                            }
-                        },
-
-                        mousePositionChanged: function(lonLat) {
-                            KG.core_sandbox.set('mousePosition', lonLat);
-                        },
-
-                        featureInfoReady: function() {
-                            this.gotoState("popupFeatureInfoState");
-                        },
-
-                        clickMarkerAction: function(marker) {
-                            KG.core_note.continueMarkerClicked(marker);
-                        },
-
-                        noteSelectedAction: function(note, params) {
-                            KG.core_note.activateNote(note, params);
-                            this.gotoState('editNoteState');
-                        },
-
-                        multipleNotesSelectedAction: function(notes, marker) {
-                            KG.core_note.activateMultipleNotes(notes, marker);
-                            this.gotoState('multipleNotesState');
-                        },
-
-                        createNoteAction: function() {
-                            this.gotoState('locateNoteState');
-                        }
+                        }                      
                     }),
 
                     //******************************
-                    // Show the search result
+                    // Show the search panel
                     //******************************
-                    searchResultsState: SC.State.extend({
+                    searchState: SC.State.extend({
 
                         _highlight: null,
                         _hlMarker: null,
 
                         enterState: function() {
-                            console.log('show results state');
-                            KG.core_search.showResults();
+							KG.searchController.set('activePopup', YES);
                         },
 
                         exitState: function() {
-                            KG.core_search.hideResults();
+							KG.searchController.set('activePopup', NO);
+							KG.searchController.set('search', '');
                             KG.core_highlight.clearHighlight(this._highlight);
                             this._highlight = null;
                             KG.core_highlight.clearHighlightMarker(this._hlMarker);
                             this._hlMarker = null;
                         },
 
+						toogleSearchPopopAction: function() {
+	                        this.gotoState('navigationState');
+	                    },
+	
+	                    searchAction: function() {
+	                        KG.core_search.searchFeatures();
+	                    },
+	
+	                    clearSearchAction: function() {
+	                        KG.core_search.clearSearchFeatures();
+	                    },
+
                         selectSearchCategoryAction: function(cat) {
-                            KG.searchResultsController.set('category', cat);
-                            KG.core_search.showResults();
+							KG.searchResultsController.set('plugin', null);
+							if( KG.searchResultsController.get('category') === cat){
+								KG.searchResultsController.set('category', null);
+							}else{
+                            	KG.searchResultsController.set('category', cat);
+                            	KG.core_search.showResults();
+							}
                         },
 
                         selectSearchPluginAction: function(plugin) {
                             KG.searchResultsController.set('category', null);
-                            KG.searchResultsController.set('plugin', plugin);
-                            KG.core_search.showResults();
-                        },
-
-                        hideSearchResultAction: function() {
-                            this.gotoState('navigationState');
+							if(KG.searchResultsController.get('plugin') == plugin){
+								KG.searchResultsController.set('plugin', null);
+							}else{
+                            	KG.searchResultsController.set('plugin', plugin);
+                            	KG.core_search.showResults();
+							}
                         },
 
                         createNoteFromFeatureAction: function(feature) {
@@ -2882,6 +2911,10 @@ require("./strings");
 require("./core_statechart");
 require("./core_sandbox");
 require("./controllers/comments");
+
+//active user
+require('./controllers/active_user');
+require('./views/user_button');
 //templates
 require("./templates");
 
@@ -2895,8 +2928,9 @@ require("./core_search");
 require("./controllers/search");
 require("./controllers/search_results");
 require("./views/search_field");
-require("./views/search_result_label");
+require("./views/records_button");
 //search plugins
+require("./views/plugin_records_button");
 require("./search_plugins/core_google");
 require("./search_plugins/core_geonames");
 require("./search_plugins/core_osm");
@@ -2948,14 +2982,12 @@ require("./core_notification");
 require("./controllers/notifications");
 require("./controllers/send_notification");
 require("./views/notification");
-require("./views/notification_button");
 require("./views/text_notification_area");
 
 //bookmark
 require("./core_bookmark");
 require("./controllers/bookmarks");
 require("./controllers/add_bookmark");
-require("kloudgis/app/lib/views/bubble_touch");
 require("./views/bookmark_button");
 require("./views/edit_bookmark_button");
 require("./views/bookmark_item");
@@ -3367,6 +3399,12 @@ Ember.TEMPLATES['select-input'] = spade.require('kloudgis/~templates/select_inpu
 
 //Sandbox specific templates
 //inspector renderers
+Ember.TEMPLATES['page-header'] = spade.require('kloudgis/sandbox/templates/page_header');
+Ember.TEMPLATES['active-user-panel'] = spade.require('kloudgis/sandbox/templates/active_user_panel');
+Ember.TEMPLATES['notification-panel'] = spade.require('kloudgis/sandbox/templates/notification_panel');
+Ember.TEMPLATES['bookmark-panel'] = spade.require('kloudgis/sandbox/templates/bookmark_panel');
+Ember.TEMPLATES['search-panel'] = spade.require('kloudgis/sandbox/templates/search_panel');
+
 Ember.TEMPLATES['catalog-renderer'] = spade.require('kloudgis/sandbox/templates/catalog_renderer');
 Ember.TEMPLATES['catalog-any-renderer'] = spade.require('kloudgis/sandbox/templates/catalog_text_renderer');
 Ember.TEMPLATES['text-renderer'] = spade.require('kloudgis/sandbox/templates/text_renderer');
@@ -3675,22 +3713,52 @@ KG.NotificationView = SC.View.extend({
 	}.property('content')
 })
 
-});spade.register("kloudgis/sandbox/lib/views/notification_button", function(require, exports, __module, ARGV, ENV, __filename){
-KG.NotificationButtonView = KG.Button.extend({
-	notificationPath: 'resources/images/notification.png',
-	notificationActivePath:  'resources/images/notification.png',
+});spade.register("kloudgis/sandbox/lib/views/plugin_records_button", function(require, exports, __module, ARGV, ENV, __filename){
+KG.PluginRecordsButtonView = KG.Button.extend({
 	
-	activatedBinding: "KG.notificationsController.activePopup",
+	recordsVisible: NO,
 	
-	notificationCountBinding: "KG.notificationsController.length",
+	tagName:'div',
 	
-	notificationImg: function(){
-		if(this.get('activated')){
-			return this.get('notificationActivePath');
+	activePluginDidChange: function(){
+		var cat = this.get('content');
+		if(cat === KG.searchResultsController.get('plugin')){
+			this.set('recordsVisible', YES);
 		}else{
-			return this.get('notificationPath');
+			this.set('recordsVisible', NO);
 		}
-	}.property('activated')
+	}.observes('KG.searchResultsController.plugin'),
+	
+	records:function(){
+		if(this.get('recordsVisible')){
+			return KG.searchResultsController.get('content');
+		}
+	}.property('recordsVisible', 'KG.searchResultsController.content')
+	
+	
+});
+
+});spade.register("kloudgis/sandbox/lib/views/records_button", function(require, exports, __module, ARGV, ENV, __filename){
+KG.RecordsButtonView = KG.Button.extend({
+	
+	recordsVisible: NO,
+	
+	tagName:'div',
+	
+	activeCategoryDidChange: function(){
+		var cat = this.get('content');
+		if(cat === KG.searchResultsController.get('category')){
+			this.set('recordsVisible', YES);
+		}else{
+			this.set('recordsVisible', NO);
+		}
+	}.observes('KG.searchResultsController.category'),
+	
+	records:function(){
+		if(this.get('recordsVisible')){
+			return KG.searchResultsController.get('content');
+		}
+	}.property('recordsVisible', 'KG.searchResultsController.content')
 	
 	
 });
@@ -3719,21 +3787,6 @@ KG.SearchField = KG.TextField.extend({
 	}.observes('value')
 });
 
-});spade.register("kloudgis/sandbox/lib/views/search_result_label", function(require, exports, __module, ARGV, ENV, __filename){
-/**
-* View to renderer a feature in the search result list.
-**/
-
-KG.SearchResultLabelView = KG.Button.extend({
-	
-	tagName:'div',
-	
-	mouseUp: function(e){
-		KG.statechart.sendAction('featureZoomAction', this.getPath('itemView.content'));
-		return NO;
-	}
-});
-
 });spade.register("kloudgis/sandbox/lib/views/text_notification_area", function(require, exports, __module, ARGV, ENV, __filename){
 KG.TextNotificationAreaView = KG.TextArea.extend({
 
@@ -3744,10 +3797,25 @@ KG.TextNotificationAreaView = KG.TextArea.extend({
     },
 });
 
+});spade.register("kloudgis/sandbox/lib/views/user_button", function(require, exports, __module, ARGV, ENV, __filename){
+KG.UserButtonView = KG.Button.extend({
+	activePopup: NO,
+	
+	activePopupBinding: 'KG.activeUserController.activePopup',
+	
+	triggerAction: function() {
+		this.set('activePopup', !this.get('activePopup'));
+	}
+});
+
 });spade.register("kloudgis/sandbox/templates/active_note_popup", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("{{#view class=\"active-note-popup\"}}\t\n\t{{#view KG.Button manualMouseDown=\"yes\" class=\"note-zoom-button\" isVisibleBinding=\"KG.activeNoteController.isOldRecord\" tagName=\"div\" sc_action=\"zoomNoteAction\"}}\n\t\t<a href=\"javascript:void(0)\">zoom</a>\n\t{{/view}}\t\n\t{{#view class=\"note-date-label\"}}\n\t\t{{KG.activeNoteController.content.formattedDate}}\n\t{{/view}}\t\t\t\n\t<span>{{KG.activeNoteController.titleLabel}}</span>\n\t{{#view KG.TextField valueBinding=\"KG.activeNoteController.titleValue\" disabledBinding=\"KG.activeNoteController.isDisabled\" type=\"text\" placeholder_not_loc=\"_noteTitlePlaceholder\" }}\n\t{{/view}}\n\t<span>{{KG.activeNoteController.descriptionLabel}}</span>\n\t{{#view KG.TextArea id=\"note-description-area\" disabledBinding=\"KG.activeNoteController.isDisabled\" valueBinding=\"KG.activeNoteController*content.description\"}}\n\t{{/view}}\n\t{{#view class=\"active-note-popup-bottom\"}}\n\t\t{{#view KG.Button  manualMouseDown=\"yes\" isVisibleBinding=\"KG.activeNoteController.isUpdateVisible\" class=\"white-button\" sc_action=\"confirmNoteAction\"}}\n\t\t\t{{KG.activeNoteController.confirmLabel}}\n\t\t{{/view}}\t\t\n\t\t{{#view KG.Button manualMouseDown=\"yes\" isVisibleBinding=\"KG.activeNoteController.isDeleteVisible\" class=\"red-button\"  sc_action=\"deleteNoteAction\"}}\n\t\t\t{{KG.activeNoteController.deleteLabel}}\n\t\t{{/view}}\n\t\t{{#view class=\"note-author-label\"}}\n\t\t\t{{KG.activeNoteController.content.authorFormatted}}\n\t\t{{/view}}\n\t{{/view}}\n\t{{view templateName=\"note-comments\"}}\n{{/view}}\n");
+});spade.register("kloudgis/sandbox/templates/active_user_panel", function(require, exports, __module, ARGV, ENV, __filename){
+return Ember.Handlebars.compile("{{#view KG.UserButtonView id=\"active-user-button\" tagName=\"div\" class=\"header-button\"}}\n\t<div class=\"message-label\"><span class=\"label-ellipsis\">{{KG.activeUserController.name}}</span></div>\n\t{{#view id=\"super-active-user-popup\" isVisibleBinding=\"activePopup\"}}\n\t\t\t{{#view id=\"active-user-popup\" }}\t\t\t\t\t\n\t\t\t\t\t{{#view KG.Button sc_action=\"backHomeAction\"}}\n\t\t\t\t\t\t{{loc _backHome}}\n\t\t\t\t\t{{/view}}\n\t\t\t{{/view}}\n\t{{/view}}\n{{/view}}\n");
 });spade.register("kloudgis/sandbox/templates/add_bookmark", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("<div id=\"add-bookmark-panel\">\n\t{{KG.addBookmarkController.addBookmarkLabel}}\n\t{{view KG.Button class=\"x-button bookmark-close-button\"  sc_action=\"closeAddBookmarkAction\" titleBinding=\"KG.addBookmarkController.closeTitle\"}}\n\t{{view KG.TextField valueBinding=\"KG.addBookmarkController.content\" nl_sc_action=\"addBookmarkAction\"}}\n\t{{#view KG.Button class=\"white-button add-bookmark-button\"  sc_action=\"addBookmarkAction\"}}\n\t\t{{KG.addBookmarkController.addLabel}}\n\t{{/view}}\t\t\n</div>\n");
+});spade.register("kloudgis/sandbox/templates/bookmark_panel", function(require, exports, __module, ARGV, ENV, __filename){
+return Ember.Handlebars.compile("{{#view KG.Button id=\"bookmark-button\" tagName=\"div\" sc_action=\"toggleBookmarkPopupAction\" class=\"header-button header-button-icon\" classBinding=\"KG.bookmarksController.activePopup\"}}\n\t\t<span class=\"button-image\"><span>\t\n\t\t{{#view id=\"super-bookmark-popup\" isVisibleBinding=\"KG.bookmarksController.activePopup\"}}\n\t\t\t\t\t{{#view id=\"bookmark-popup\" isVisibleBinding=\"KG.bookmarksController.activePopup\"}}\t\t\t\t\t\t\n\t\t\t\t\t\t<div id=\"bookmark-top-bar\">\n\t\t\t\t\t\t\t{{loc _bookmarkTitle id=\"bookmark-label\" tagName=\"div\"}}\n\t\t\t\t\t\t\t{{#view KG.Button id=\"bookmark-add-button\" tagName=\"span\" class=\"white-button unselectable\" sc_action=\"addBookmarkAction\"}}\n\t\t\t\t\t\t\t\t{{loc _bookmarkAdd}}\n\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{#view KG.EditBookmarkButtonView id=\"bookmark-edit-button\" tagName=\"span\" class=\"white-button unselectable\" sc_action=\"editBookmarkAction\"}}\n\t\t\t\t\t\t\t\t{{loc _bookmarkEdit}}\n\t\t\t\t\t\t\t{{/view}}\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div id=\"bookmark-collection\">\n\t\t\t\t\t\t{{#collection id=\"bookmark-list\" contentBinding=\"KG.bookmarksController.content\" tagName=\"table\" itemViewClass=\"KG.BookmarkItemView\" classBinding=\"KG.bookmarksController.editMode\"}}\t\n\t\t\t\t\t\t\t\t{{#view KG.Button class=\"bookmark-item-label\" tagName=\"td\" sc_action=\"selectBookmarkAction\"}}\n\t\t\t\t\t\t\t\t\t{{itemView.content.label}}\n\t\t\t\t\t\t\t\t{{/view}}\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t{{#view KG.Button class=\"bookmark-item-author\" tagName=\"td\" sc_action=\"selectBookmarkAction\"}}\n\t\t\t\t\t\t\t\t\t{{itemView.content.user_descriptor}}\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t{{#view KG.Button class=\"bookmark-item-date\" tagName=\"td\" sc_action=\"selectBookmarkAction\"}}\n\t\t\t\t\t\t\t\t\t{{itemView.content.formattedDate}}\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t{{#view tagName=\"td\" isVisibleBinding=\"KG.bookmarksController.editMode\"}}\n\t\t\t\t\t\t\t\t\t{{#view KG.BookmarkDeleteButtonView class=\"bookmark-delete red-button unselectable\" sc_action=\"deleteBookmarkAction\"}}\n\t\t\t\t\t\t\t\t\t\t-\n\t\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t{{/collection}}\n\t\t\t\t\t\t</div>\n\t\t\t\t\t{{/view}}\n\t\t{{/view}}\n{{/view}}\n");
 });spade.register("kloudgis/sandbox/templates/bool_renderer", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("<span class=\"inspector-attr-name\">\n\t{{itemView.content.label}}\n</span>\t\n{{view templateName=\"switch\" class=\"inspector-attr-value\" contentBinding=\"itemView.content.value\" disabledBinding=\"KG.inspectorController.isReadOnly\"}}\n");
 });spade.register("kloudgis/sandbox/templates/catalog_renderer", function(require, exports, __module, ARGV, ENV, __filename){
@@ -3768,12 +3836,18 @@ return Ember.Handlebars.compile("<span class=\"inspector-attr-name\">\n\t{{itemV
 return Ember.Handlebars.compile("{{#view class=\"multiple-notes-title\"}}\n\t{{KG.notesPopupController.popupTitle}}\n{{/view}}\n{{#collection contentBinding=\"KG.notesPopupController\" tagName=\"ul\" class=\"multiple-notes-list no-style-list\"}}\t\t\t\n\t{{#view KG.NotePopupItemView class=\"multiple-notes-item\"}}\n\t\t<table class=\"multiple-notes-table\">\n\t\t<td>\n\t\t{{#view class=\"multiple-notes-item-title\"}}\n\t\t\t{{itemView.content.title}}\n\t\t{{/view}}\n\t\t</td>\n\t\t<td>\n\t\t{{#view class=\"note-author-label\"}}\n\t\t\t{{itemView.content.authorFormatted}}\n\t\t{{/view}}\n\t\t</td>\n\t\t</table>\n\t{{/view}}\n{{/collection}}\n");
 });spade.register("kloudgis/sandbox/templates/note_comments", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("{{#view KG.Button  manualMouseDown=\"yes\" tagName=\"span\" isVisibleBinding=\"KG.noteCommentsController.showButtonVisible\"  sc_action=\"showNoteCommentsAction\"}}\n\t<a href=\"javascript:void(0)\">\n\t\t{{KG.noteCommentsController.commentsLabel}}\n\t\t</a>\n{{/view}}\n{{#view id=\"note-comments-container\" classBinding=\"KG.noteCommentsController.showing\"}}\n\t{{#collection contentBinding=\"KG.noteCommentsController.content\" class=\"comment-list\"}}\n\t\t{{#view KG.Button manualMouseDown=\"yes\" tagName=\"div\" sc_action=\"toggleDeleteNoteCommentButtonAction\"}}\n\t\t\t<table style=\"width:100%\">\n\t\t\t<tr>\n\t\t\t\t<td>\n\t\t\t\t\t{{#view KG.AuthorView class=\"comment-author\"}}\n\t\t\t\t\t\t{{authorLabel}}\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t{{/view}}\n\t\t\t\t\t{{#view class=\"comment-content\"}}\n\t\t\t\t\t\t{{itemView.content.comment}}\n\t\t\t\t\t{{/view}}\n\t\t\t\t\t{{#view class=\"comment-date\"}}\n\t\t\t\t\t\t{{itemView.content.formattedDate}}\n\t\t\t\t\t{{/view}}\n\t\t\t\t</td>\n\t\t\t\t<td style=\"text-align:right;vertical-align:middle\">\n\t\t\t\t\t{{#view KG.DeleteNoteCommentView manualMouseDown=\"yes\" class=\"comment-delete red-button\" sc_action=\"deleteNoteCommentButtonAction\"}}\n\t\t\t\t\t\t{{label}}\n\t\t\t\t\t{{/view}}\n\t\t\t\t</td>\n\t\t\t</tr>\n\t\t\t</table>\n\t\t{{/view}}\n\t{{/collection}}\t\t\t\n{{/view}}\n{{view KG.CommentAreaView id=\"note-new-comment-area\" class=\"new-comment-area\" isVisibleBinding=\"KG.noteCommentsController.showing\" valueBinding=\"KG.noteNewCommentController.content\" placeholder_not_loc=\"_commentPlaceholder\" nl_sc_action=\"addNoteCommentAction\"}}\n{{#view KG.LoadingImageView id=\"note-comment-loading\" class=\"comment-loading\" isVisibleBinding=\"KG.noteCommentsController.isLoading\"}}\n\t<img {{bindAttr src=\"loadingImage\"}} alt=\"Loading\"/>\n{{/view}}\n");
+});spade.register("kloudgis/sandbox/templates/notification_panel", function(require, exports, __module, ARGV, ENV, __filename){
+return Ember.Handlebars.compile("{{#view KG.Button id=\"notification-button\" tagName=\"div\" sc_action=\"toggleNotificationPopupAction\" class=\"header-button header-button-icon\" classBinding=\"KG.notificationsController.activePopup\" notificationCountBinding=\"KG.notificationsController.length\"}}\n\t\t{{#view class=\"capsule-label\" isVisibleBinding=\"KG.notificationsController.hasNotification\"}}\n\t\t\t{{parentView.notificationCount}}\n\t\t{{/view}}\n\t\t<span class=\"button-image\"><span>\n\t\t{{#view id=\"super-notification-popup\" isVisibleBinding=\"KG.notificationsController.activePopup\"}}\n\t\t\t\t\t\t{{#view id=\"notification-popup\" }}\n\t\t\t\t\t\t\t{{#view id=\"notification-label\"}}\n\t\t\t\t\t\t\t\t{{loc _notificationTitle}}\n\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t{{#view KG.Button id=\"notification-send-button\" tagName=\"span\" class=\"white-button unselectable\" classBinding=\"KG.notificationsController.hasNotification\" sc_action=\"sendTextNotificationAction\"}}\n\t\t\t\t\t\t\t\t{{loc _notificationSendText}}\n\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{#view KG.Button id=\"notification-clear-button\" tagName=\"span\" class=\"red-button unselectable\" \n\t\t\t\t\t\t\t isVisibleBinding=\"KG.notificationsController.hasNotification\" sc_action=\"clearNotificationAction\"}}\n\t\t\t\t\t\t\t\t{{loc _notificationClear}}\n\t\t\t\t\t\t\t{{/view}}\t\t\t\t\t\t\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t{{#collection id=\"notification-collection\" contentBinding=\"KG.notificationsController.content\"}}\t\t\t\t\t\n\t\t\t\t\t\t\t\t{{#view KG.NotificationView class=\"notification-item\"}}\n\t\t\t\t\t\t\t\t\t{{#view class=\"notification-item-title\"}}\n\t\t\t\t\t\t\t\t\t\t<a {{bindAttr href=\"parentView.authorMailTo\"}}> {{parentView.authorValue}}</a>{{parentView.titleValue}}{{parentView.dateValue}}\n\t\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t\t{{#view class=\"notification-item-message\"}}\n\t\t\t\t\t\t\t\t\t\t<!-- triple brakets to unescape HTML -->\n\t\t\t\t\t\t\t\t\t\t{{{parentView.messageValue}}}\n\t\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t{{/collection}}\n\t\t\t\t\t\t{{/view}}\n\t\t{{/view}}\n{{/view}}\t\t\t\n");
 });spade.register("kloudgis/sandbox/templates/num_range_renderer", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("<span class=\"inspector-attr-name\">\n\t{{itemView.content.label}}\n</span>\t\n<div class=\"inspector-attr-value\">\n\t{{#view KG.NumericTextField valueBinding=\"itemView.content.value\" type=\"range\" minBinding=\"itemView.content.min\" maxBinding=\"itemView.content.max\" stepBinding=\"itemView.content.step\" disabledBinding=\"KG.inspectorController.isReadOnly\"}}\n\t{{/view}}\n</div>\n");
 });spade.register("kloudgis/sandbox/templates/num_renderer", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("<span class=\"inspector-attr-name\">\n\t{{itemView.content.label}}\n</span>\t\n<div class=\"inspector-attr-value\">\n\t{{#view KG.NumericTextField valueBinding=\"itemView.content.value\" type=\"number\" minBinding=\"itemView.content.min\" maxBinding=\"itemView.content.max\" stepBinding=\"itemView.content.step\" disabledBinding=\"KG.inspectorController.isReadOnly\"}}\n\t{{/view}}\n</div>\n");
+});spade.register("kloudgis/sandbox/templates/page_header", function(require, exports, __module, ARGV, ENV, __filename){
+return Ember.Handlebars.compile("{{#view tagName=\"header\" id=\"sandbox-header\"}}\n\t{{#view KG.Button id=\"active-sandbox-button\" tagName=\"div\" class=\"header-button\" disabled=\"yes\"}}\n\t\t<div class=\"message-label\"><span class=\"label-ellipsis\">{{KG.core_sandbox.sandboxLabel}}</span></div>\n\t{{/view}}\n\t{{view templateName=\"active-user-panel\"}}\n\t{{#view KG.Button id=\"palette-button\" tagName=\"div\" class=\"header-button header-button-icon\" sc_action=\"showPaletteAction\"}}\n\t\t<img src=\"resources/images/palette.png\">\n\t{{/view}}\n\t{{#view KG.Button id=\"create-note-button\" tagName=\"div\" class=\"header-button header-button-icon\" sc_action=\"createNoteAction\"}}\n\t\t<img src=\"resources/images/note.png\">\n\t{{/view}}\n\t{{view templateName=\"notification-panel\"}}\n\t\n\t{{#view KG.Button id=\"search-button\" tagName=\"div\" sc_action=\"toogleSearchPopopAction\" class=\"header-button header-button-icon\" classBinding=\"KG.searchController.activePopup\"}}\n\t\t\t<span class=\"button-image\"><span>\n\t{{/view}}\n\t\n\t{{view templateName=\"bookmark-panel\"}}\n{{/view}}\n");
 });spade.register("kloudgis/sandbox/templates/palette", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("{{#view id=\"super-palette\" classBinding=\"KG.paletteController.active\"}}\t\n\t{{#view id=\"palette-title\" tagName=\"header\"}}\n\t\t{{#view KG.Button tagName=\"div\" class=\"ios-button ios-tb-left\" isVisibleBinding=\"KG.paletteController.isDirty\"  sc_action=\"cancelPaletteAction\" titleBinding=\"KG.paletteController.cancelTitle\"}}\n\t\t\t{{loc _cancel}}\n\t\t{{/view}}\n\t\t<h1 class=\"label-ellipsis\" {{bindAttr title=\"KG.paletteController.title\"}}>{{loc _paletteTitle}}</h1>\n\t\t{{#view KG.Button tagName=\"div\" class=\"ios-button ios-tb-right\"  sc_action=\"closePaletteAction\" titleBinding=\"KG.paletteController.closeTitle\"}}\n\t\t\t{{loc _close}}\n\t\t{{/view}}\n\t{{/view}}\t\n\t<div id=\"palette-panel\">\n\t\t\t{{#collection contentBinding=\"KG.paletteController.content\" class=\"palette-list\"}}\n\t\t\t\t{{#view KG.Button tagName=\"div\" class=\"white-button\" sc_action=\"selectPaletteItemAction\"}}\n\t\t\t\t\t{{itemView.content.label}}\n\t\t\t\t{{/view}}\n\t\t\t{{/collection}}\n\t</div>\n{{/view}}\n");
+});spade.register("kloudgis/sandbox/templates/search_panel", function(require, exports, __module, ARGV, ENV, __filename){
+return Ember.Handlebars.compile("{{#view id=\"super-search-popup\" classBinding=\"KG.searchController.activePopup\"}}\n\t\t\t\t{{view KG.Button class=\"x-button search-close-button\"  sc_action=\"toogleSearchPopopAction\"}}\n\t\t\t\t{{#view id=\"search-popup\" }}\n\t\t\t\t\t{{view KG.SearchField resultsBinding=\"KG.searchController.searchHistorySize\" placeholder_not_loc=\"_search\" valueBinding=\"KG.searchController.searchValue\"}}\n\t\t\t\t\t\t{{#collection contentBinding=\"KG.searchController\" isVisibleBinding=\"KG.searchController.hasResults\" class=\"search-cat-list\" itemViewClass=\"KG.RecordsButtonView\"}}\t\t\n\t\t\t\t\t\t\t{{#view KG.Button class=\"search-cat-item common-list-button\" tagName=\"div\" sc_action=\"selectSearchCategoryAction\" recordsVisibleBinding=\"recordsVisible\" classBinding=\"recordsVisible\"}}\n\t\t\t\t\t\t\t\t{{#view class=\"cat-title-label label-ellipsis\" titleBinding=\"itemView.content.title\"}}\n\t\t\t\t\t\t\t\t\t{{itemView.content.title}}\n\t\t\t\t\t\t\t\t{{/view}}\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t{{#view class=\"cat-size-label label-ellipsis capsule-label\" tagName=\"span\"}}\n\t\t\t\t\t\t\t\t\t{{itemView.content.count}}\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{#collection contentBinding=\"records\" class=\"search-result-list\" recordsVisibleBinding=\"recordsVisible\" classBinding=\"recordsVisible\"}}\n\t\t\t\t\t\t\t\t{{#view KG.Button class=\"search-record-item common-list-button\" tagName=\"div\" sc_action=\"featureZoomAction\"}}\n\t\t\t\t\t\t\t\t\t{{#view class=\"label-ellipsis\" titleBinding=\"itemView.content.title\"}}\n\t\t\t\t\t\t\t\t\t\t{{itemView.content.title}}\n\t\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t\t{{#view KG.Button isVisibleBinding=\"itemView.content.isSelectable\" class=\"search-select\" tagName=\"div\"  sc_action=\"selectFeatureInspectorAction\"}}\t\n\t\t\t\t\t\t\t\t\t\t<img src=\"resources/images/right_arrow_32.png\"/>\t\t\n\t\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{/collection}}\n\t\t\t\t\t\t{{/collection}}\n\t\t\t\t\t\t{{#collection contentBinding=\"KG.core_search.plugins\" isVisibleBinding=\"KG.core_search.searchAsked\" class=\"search-cat-list\" itemViewClass=\"KG.PluginRecordsButtonView\"}}\n\t\t\t\t\t\t\t{{#view KG.Button class=\"search-plugin-item common-list-button\" tagName=\"div\" sc_action=\"selectSearchPluginAction\" recordsVisibleBinding=\"recordsVisible\" classBinding=\"recordsVisible\"}}\n\t\t\t\t\t\t\t\t{{#view class=\"plugin-title-label label-ellipsis\" titleBinding=\"itemView.content.title\"}}\n\t\t\t\t\t\t\t\t\t{{itemView.content.title}}\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{#collection contentBinding=\"records\" class=\"search-result-list\" recordsVisibleBinding=\"recordsVisible\" classBinding=\"recordsVisible\"}}\n\t\t\t\t\t\t\t\t{{#view KG.Button class=\"search-record-item common-list-button\" tagName=\"div\" sc_action=\"featureZoomAction\"}}\n\t\t\t\t\t\t\t\t\t{{#view class=\"label-ellipsis\" titleBinding=\"itemView.content.title\"}}\n\t\t\t\t\t\t\t\t\t\t{{itemView.content.title}}\n\t\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t\t{{#view KG.Button isVisibleBinding=\"itemView.content.hasCreateNote\" class=\"search-create-note\" tagName=\"div\"  sc_action=\"createNoteFromFeatureAction\"}}\t\n\t\t\t\t\t\t\t\t\t\t<img src=\"resources/images/note_black.png\"/>\t\t\n\t\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{/collection}}\n\t\t\t\t\t\t{{/collection}}\n\t\t\t\t{{/view}}\n{{/view}}\n");
 });spade.register("kloudgis/sandbox/templates/send_text_notification", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("<div id=\"send-notification-panel\">\n\t{{KG.sendNotificationController.notificationLabel}}\n\t{{view KG.Button class=\"x-button notification-close-button\"  sc_action=\"closeSendNotificationAction\" titleBinding=\"KG.sendNotificationController.closeLabel\"}}\n\t{{view KG.TextNotificationAreaView valueBinding=\"KG.sendNotificationController.content\"}}\n\t{{KG.sendNotificationController.feedbackMessage}}\n\t{{#view KG.Button class=\"white-button send-notification-button\"  sc_action=\"sendNotificationButtonAction\"}}\n\t\t{{KG.sendNotificationController.sendLabel}}\n\t{{/view}}\n\t{{view SC.Checkbox valueBinding=\"KG.sendNotificationController.sendOnEnterValue\"}}\n\t<img src=\"resources/images/return.png\" {{bindAttr title=\"KG.sendNotificationController.sendOnEnterTooltip\"}}/>\n\t{{#view KG.LoadingImageView isVisibleBinding=\"KG.sendNotificationController.hasNotificationPending\"}}\n\t\t<img {{bindAttr src=\"loadingImage\"}} alt=\"Loading\"/>\n  \t{{/view}}\t\t\n</div>\n");
 });spade.register("kloudgis/sandbox/templates/text_renderer", function(require, exports, __module, ARGV, ENV, __filename){

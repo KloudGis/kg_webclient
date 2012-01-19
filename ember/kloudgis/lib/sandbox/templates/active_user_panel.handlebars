@@ -1,0 +1,10 @@
+{{#view KG.UserButtonView id="active-user-button" tagName="div" class="header-button"}}
+	<div class="message-label"><span class="label-ellipsis">{{KG.activeUserController.name}}</span></div>
+	{{#view id="super-active-user-popup" isVisibleBinding="activePopup"}}
+			{{#view id="active-user-popup" }}					
+					{{#view KG.Button sc_action="backHomeAction"}}
+						{{loc _backHome}}
+					{{/view}}
+			{{/view}}
+	{{/view}}
+{{/view}}

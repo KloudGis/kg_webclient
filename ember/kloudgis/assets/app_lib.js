@@ -93,19 +93,6 @@ jQuery.extend(jQuery.browser, {
     isIphone: navigator.userAgent.toLowerCase().indexOf('iphone') > 0
 });
 
-});spade.register("kloudgis/app/lib/views/bubble_touch", function(require, exports, __module, ARGV, ENV, __filename){
-KG.BubbleTouchView = SC.View.extend({
-    touchStart: function(touch) {
-        this._super(touch);
-        return YES; //bubble
-    },
-
-    touchEnd: function(touch) {
-        this._super(touch);
-        return YES; //bubble
-    }
-});
-
 });spade.register("kloudgis/app/lib/views/button", function(require, exports, __module, ARGV, ENV, __filename){
 /**
 * Extend the SC.Button to add more attributes and send Statechart action
@@ -115,12 +102,6 @@ var get = SC.get;
 KG.Button = SC.Button.extend({
 
     attributeBindings: ['type', 'disabled', 'title'],
-
-	manualMouseDown: NO,
-
-    label_loc: function() {
-        return this.get('label').loc();
-    }.property('label'),
 
     triggerAction: function() {
         this._super();
@@ -133,15 +114,8 @@ KG.Button = SC.Button.extend({
         }
     },
 
-    touchStart: function(touch) {
-        return YES; //bubble to allow default (mouseEvent)
-    },
-
-    touchEnd: function(touch) {
-        return YES; //bubble
-    },
-
 	//manual mouseDown Event Handling
+	manualMouseDown: NO,
 
 	_mouseDownListener: null,
 	_element: null,
@@ -209,10 +183,10 @@ KG.LoadingImageView = SC.View.extend({
 
 });spade.register("kloudgis/app/lib/views/numeric_text_field", function(require, exports, __module, ARGV, ENV, __filename){
 /**
-* Extend the SC.TextArea to add more attributes and localize the placeholder
+* Extend the Ember.TextField to add more attributes and localize the placeholder
 **/
 
-KG.NumericTextField = KG.TextField.extend({
+KG.NumericTextField = Ember.TextField.extend({
 
     attributeBindings: ['type', 'placeholder', 'value', 'autofocus', 'min', 'max', 'step']
 });

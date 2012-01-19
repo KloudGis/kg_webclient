@@ -1,0 +1,34 @@
+{{#view KG.Button id="bookmark-button" tagName="div" sc_action="toggleBookmarkPopupAction" class="header-button header-button-icon" classBinding="KG.bookmarksController.activePopup"}}
+		<span class="button-image"><span>	
+		{{#view id="super-bookmark-popup" isVisibleBinding="KG.bookmarksController.activePopup"}}
+					{{#view id="bookmark-popup" isVisibleBinding="KG.bookmarksController.activePopup"}}						
+						<div id="bookmark-top-bar">
+							{{loc _bookmarkTitle id="bookmark-label" tagName="div"}}
+							{{#view KG.Button id="bookmark-add-button" tagName="span" class="white-button unselectable" sc_action="addBookmarkAction"}}
+								{{loc _bookmarkAdd}}
+							{{/view}}
+							{{#view KG.EditBookmarkButtonView id="bookmark-edit-button" tagName="span" class="white-button unselectable" sc_action="editBookmarkAction"}}
+								{{loc _bookmarkEdit}}
+							{{/view}}											
+						</div>
+						<div id="bookmark-collection">
+						{{#collection id="bookmark-list" contentBinding="KG.bookmarksController.content" tagName="table" itemViewClass="KG.BookmarkItemView" classBinding="KG.bookmarksController.editMode"}}	
+								{{#view KG.Button class="bookmark-item-label" tagName="td" sc_action="selectBookmarkAction"}}
+									{{itemView.content.label}}
+								{{/view}}								
+								{{#view KG.Button class="bookmark-item-author" tagName="td" sc_action="selectBookmarkAction"}}
+									{{itemView.content.user_descriptor}}
+								{{/view}}
+								{{#view KG.Button class="bookmark-item-date" tagName="td" sc_action="selectBookmarkAction"}}
+									{{itemView.content.formattedDate}}
+								{{/view}}
+								{{#view tagName="td" isVisibleBinding="KG.bookmarksController.editMode"}}
+									{{#view KG.BookmarkDeleteButtonView class="bookmark-delete red-button unselectable" sc_action="deleteBookmarkAction"}}
+										-
+									{{/view}}
+								{{/view}}
+						{{/collection}}
+						</div>
+					{{/view}}
+		{{/view}}
+{{/view}}

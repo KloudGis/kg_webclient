@@ -5,6 +5,12 @@ Ember.TEMPLATES['select-input'] = spade.require('kloudgis/~templates/select_inpu
 
 //Sandbox specific templates
 //inspector renderers
+Ember.TEMPLATES['page-header'] = spade.require('kloudgis/sandbox/templates/page_header');
+Ember.TEMPLATES['active-user-panel'] = spade.require('kloudgis/sandbox/templates/active_user_panel');
+Ember.TEMPLATES['notification-panel'] = spade.require('kloudgis/sandbox/templates/notification_panel');
+Ember.TEMPLATES['bookmark-panel'] = spade.require('kloudgis/sandbox/templates/bookmark_panel');
+Ember.TEMPLATES['search-panel'] = spade.require('kloudgis/sandbox/templates/search_panel');
+
 Ember.TEMPLATES['catalog-renderer'] = spade.require('kloudgis/sandbox/templates/catalog_renderer');
 Ember.TEMPLATES['catalog-any-renderer'] = spade.require('kloudgis/sandbox/templates/catalog_text_renderer');
 Ember.TEMPLATES['text-renderer'] = spade.require('kloudgis/sandbox/templates/text_renderer');

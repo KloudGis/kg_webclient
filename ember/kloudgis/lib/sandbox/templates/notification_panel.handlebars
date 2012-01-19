@@ -1,0 +1,33 @@
+{{#view KG.Button id="notification-button" tagName="div" sc_action="toggleNotificationPopupAction" class="header-button header-button-icon" classBinding="KG.notificationsController.activePopup" notificationCountBinding="KG.notificationsController.length"}}
+		{{#view class="capsule-label" isVisibleBinding="KG.notificationsController.hasNotification"}}
+			{{parentView.notificationCount}}
+		{{/view}}
+		<span class="button-image"><span>
+		{{#view id="super-notification-popup" isVisibleBinding="KG.notificationsController.activePopup"}}
+						{{#view id="notification-popup" }}
+							{{#view id="notification-label"}}
+								{{loc _notificationTitle}}
+							{{/view}}
+							<div>
+							{{#view KG.Button id="notification-send-button" tagName="span" class="white-button unselectable" classBinding="KG.notificationsController.hasNotification" sc_action="sendTextNotificationAction"}}
+								{{loc _notificationSendText}}
+							{{/view}}
+							{{#view KG.Button id="notification-clear-button" tagName="span" class="red-button unselectable" 
+							 isVisibleBinding="KG.notificationsController.hasNotification" sc_action="clearNotificationAction"}}
+								{{loc _notificationClear}}
+							{{/view}}						
+							</div>
+							{{#collection id="notification-collection" contentBinding="KG.notificationsController.content"}}					
+								{{#view KG.NotificationView class="notification-item"}}
+									{{#view class="notification-item-title"}}
+										<a {{bindAttr href="parentView.authorMailTo"}}> {{parentView.authorValue}}</a>{{parentView.titleValue}}{{parentView.dateValue}}
+									{{/view}}
+									{{#view class="notification-item-message"}}
+										<!-- triple brakets to unescape HTML -->
+										{{{parentView.messageValue}}}
+									{{/view}}
+								{{/view}}
+								{{/collection}}
+						{{/view}}
+		{{/view}}
+{{/view}}			

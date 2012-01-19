@@ -1,0 +1,19 @@
+{{#view tagName="header" id="sandbox-header"}}
+	{{#view KG.Button id="active-sandbox-button" tagName="div" class="header-button" disabled="yes"}}
+		<div class="message-label"><span class="label-ellipsis">{{KG.core_sandbox.sandboxLabel}}</span></div>
+	{{/view}}
+	{{view templateName="active-user-panel"}}
+	{{#view KG.Button id="palette-button" tagName="div" class="header-button header-button-icon" sc_action="showPaletteAction"}}
+		<img src="resources/images/palette.png">
+	{{/view}}
+	{{#view KG.Button id="create-note-button" tagName="div" class="header-button header-button-icon" sc_action="createNoteAction"}}
+		<img src="resources/images/note.png">
+	{{/view}}
+	{{view templateName="notification-panel"}}
+	
+	{{#view KG.Button id="search-button" tagName="div" sc_action="toogleSearchPopopAction" class="header-button header-button-icon" classBinding="KG.searchController.activePopup"}}
+			<span class="button-image"><span>
+	{{/view}}
+	
+	{{view templateName="bookmark-panel"}}
+{{/view}}

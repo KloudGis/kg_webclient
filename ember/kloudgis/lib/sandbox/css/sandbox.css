@@ -1,114 +1,105 @@
-#box{
-	position:absolute;
-	left:0px;
-	top:0px;
-	right:0px;
-	bottom:0px;	
-}
-
-#box.mobile{
-	bottom:-60px;
-}
-
-#super-map {
-	top:0;
-	left:0;
-	height:100%;
-	width:100%;
-	position:fixed;
-}
-
 #map {
-	height:100%;
+	position:absolute;
+	left:0;
+	right:0;
+	top:45px;
+	bottom:0;
 	border: none;
 }
 
-.kg-controls{
-	font-size: 0.3cm;
-	z-index:9;
-	position: absolute;
+#sandbox-header{
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	height:44px;
+	background-color: #787878;
+	background-image: -webkit-linear-gradient(top, rgb(120, 120, 120), rgb(45, 45, 45));
+	background-image: -moz-linear-gradient(top, rgb(120, 120, 120), rgb(45, 45, 45));
+	border-bottom:solid 1px rgb(122,122,122);
+}
+
+.header-button{
+	position:absolute;
+	height:28px;
+	top:6px;
+	font-size: 12px;
+	color: white;
+	text-shadow: rgba(0, 0, 0, 0.797) 0px -1px 0px;
 	text-align:center;
-	margin: 0.1cm;
-	padding: 0.1cm;
-	border-radius: 0.2cm;
-	background-color: rgba(0,0,0,0.25);	
+	border: 1px solid rgb(34,34,34);
+	border-radius:6px;
 	font-weight: bold;
 }
 
-.kg-controls.clickable:hover{
-	background-color: rgba(0,0,0,0.40);	
+.header-button.is-active{
+	background: rgb(45, 45, 45);
 }
 
-.kg-controls a{
-	color:black;
-	padding: 0.5em 0.5em;
-	right:0px;
-	top:1cm;
-	text-shadow: 0px -1px 2px #fff;		
+.header-button > .message-label{
+	padding: 6px;
 }
 
-.kg-controls a:hover{
-	color:white;
+.header-button > div span{
+	display:inline-block;
 }
 
-#back-home{
-	right:0px;
-	top:0px;
+.header-button-icon{
+	padding: 0 6px 0 6px;
+}
+
+/* Button on the headers */
+
+#active-sandbox-button{
+	width:120px;
+	left:50%;
+	margin-left:-60px;
+}
+
+#active-user-button{
+	width:80px;
+	right:3px;
 }
 
 #palette-button{
-	left:50%;
-	margin-left:-3.6cm;
-	bottom:1px;
-	margin-bottom:2px;
+	right:130px;
 }
 
-
-#note-button{
-	left:50%;
-	margin-left:3cm;
-	bottom:1px;
-	margin-bottom:2px;
+#create-note-button{
+	right:200px;
 }
 
-#position-label{
-	padding: 0.5em 1em;
-	right:0px;
-	top:1cm;
-	text-shadow: 0px -1px 2px #fff;
+#super-active-user-popup{
+	position:absolute;
+	z-index:20;
+	right:0;
+	top:29px;
+	width:100px;
+	background: rgba(255,255,255,0.9);
+	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
 }
 
-#position-label span{
-	display: block;
-	text-align: left;
+#active-user-popup{
+	margin:5px;
 }
 
-#active-sandbox-label{
-	position: absolute;
-	left:50%;
-	top:0px;
-	width:2.5cm;
-	height:18px;
-	margin-left:-1.25cm;
-	z-index:2;
-	text-align: center;
-	font-size: 12px;
-	font-weight: bold;
-	color: #333;
-    background: rgba(255, 255, 255, 0.8);
-	box-shadow: 0 0 10px #333;
-	-webkit-box-shadow: 0 0 10px #333;
-}
-
-#active-sandbox-label span{
-	display: block;
-	padding-top:2px;
+#active-user-popup button{
 	width:100%;
 }
 
+#position-label{
+	z-index:21;
+	padding: 0 5px;
+	position:absolute;
+	bottom:16px;
+	right:0px;
+	font: 10px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
+	color: #333;
+	background-color: rgba(255, 255, 255, 0.7);
+}
 
 /* map anim */
-
 .animated-marker{
 	top:-1000px;
 	transition:top 0.9s ease-out;

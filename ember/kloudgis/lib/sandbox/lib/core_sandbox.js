@@ -7,6 +7,7 @@ KG.core_sandbox = SC.Object.create({
     membership: null,
     isSandboxOwner: NO,
 
+	sandboxLabel: '',
     mousePosition: null,
 
     setCenter: function(lonLat, zoom) {
@@ -100,7 +101,7 @@ KG.core_sandbox = SC.Object.create({
 
     metaDidChange: function() {
         console.log('Meta changed.');
-        $('#active-sandbox-label span').text(this.get('sandboxMeta').name);
+        KG.core_sandbox.set('sandboxLabel', this.get('sandboxMeta').name);
         this.set('isSandboxOwner', KG.core_auth.get('activeUser').id === this.get('sandboxMeta').owner)
     }.observes('sandboxMeta'),
 

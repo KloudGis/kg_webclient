@@ -6,12 +6,6 @@ KG.Button = SC.Button.extend({
 
     attributeBindings: ['type', 'disabled', 'title'],
 
-	manualMouseDown: NO,
-
-    label_loc: function() {
-        return this.get('label').loc();
-    }.property('label'),
-
     triggerAction: function() {
         this._super();
         var action = get(this, 'sc_action');
@@ -23,15 +17,8 @@ KG.Button = SC.Button.extend({
         }
     },
 
-    touchStart: function(touch) {
-        return YES; //bubble to allow default (mouseEvent)
-    },
-
-    touchEnd: function(touch) {
-        return YES; //bubble
-    },
-
 	//manual mouseDown Event Handling
+	manualMouseDown: NO,
 
 	_mouseDownListener: null,
 	_element: null,

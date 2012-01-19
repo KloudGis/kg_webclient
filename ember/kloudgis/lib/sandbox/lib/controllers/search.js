@@ -5,6 +5,7 @@ KG.searchController = Ember.ArrayController.create({
 	content: [],
 	searchHistorySize: 5,
 	searchValue: null,
+	activePopup: NO,
 	
 	hasResults: function(){
 		return this.getPath('content.length') > 0;

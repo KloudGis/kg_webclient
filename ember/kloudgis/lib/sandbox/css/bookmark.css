@@ -1,14 +1,7 @@
-#bookmark-panel{
-	z-index:21;
-	position: absolute;
-	left:50%;
-	top:0px;
-	margin-left:-95px;
-}
-
 #bookmark-button{
-	width:0.7cm;
-	height:0.7cm;
+	width:24px;
+	height:28px;
+	left:80px;
 }
 
 /* Button when the popup is visible*/
@@ -18,16 +11,24 @@
 	border-bottom-left-radius: 0;
 }
 
+#bookmark-button .button-image{
+	width:24px;
+	height:24px;
+	display:block;
+	background: url('../resources/images/bookmark.png') no-repeat center;
+}
+
+#bookmark-button.active-popup .button-image{
+	background: url('../resources/images/bookmark_black.png') no-repeat center;
+}
+
 #super-bookmark-popup{
-	margin-top:35px;
-	max-height:85%;
-	overflow-x:hidden;
 	overflow-y:auto;
+	max-height:400px;
 	z-index:20;
 	position:absolute;
-	margin-left:-92px;
-	left:50%;
-	top:0;
+	top:28px;
+	left:0;
 	width:6.5cm;
 	box-shadow:3px 6px 6px #666;
 	-webkit-box-shadow: 3px 6px 6px #666;
@@ -43,12 +44,14 @@
 
 #bookmark-top-bar{
 	width:100%;
+	padding-bottom:15px;
 }
 
 #bookmark-label{
+	color:#666;
 	text-align:center;
+	text-shadow: none;
 	font-size:13px;
-	font-weight:bold;
 	padding-bottom:0.2cm;
 }
 
@@ -63,7 +66,9 @@
 #bookmark-list{
 	width:100%;
 	border-collapse:collapse;
-	margin-top:0.4cm;
+	text-shadow: none;
+	text-align: left;
+	font-weight: normal;
 }
 
 #bookmark-list tr{

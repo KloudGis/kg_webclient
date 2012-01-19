@@ -1,7 +1,7 @@
 /**
-* Extend the SC.TextArea to add more attributes and localize the placeholder
+* Extend the Ember.TextField to add more attributes and localize the placeholder
 **/
-KG.NumericTextField = KG.TextField.extend({
+KG.NumericTextField = Ember.TextField.extend({
 
     attributeBindings: ['type', 'placeholder', 'value', 'autofocus', 'min', 'max', 'step']
 });
