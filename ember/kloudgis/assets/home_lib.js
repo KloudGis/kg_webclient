@@ -389,7 +389,8 @@ var fr = {
 	"_serverError": "Erreur du serveur, veuillez réessayer plus tard.",
 	"_delete": "Supprimer",
 	"_sandboxDescription": "Par %@ à %@",
-	"_leave": "Quitter"
+	"_leave": "Quitter",
+	"_cancel": "Annuler"
 };
 
 var en = {
@@ -413,7 +414,8 @@ var en = {
 	"_serverError": "Server error, please try again later.",
 	"_delete": "Delete",
 	"_sandboxDescription": "By %@ at %@",
-	"_leave": "Leave"
+	"_leave": "Leave",
+	"_cancel": "Cancel"
 };
 
 if(KG.lang === 'fr'){
@@ -492,5 +494,5 @@ KG.TitleView = SC.View.extend({
 });spade.register("kloudgis/home/templates/add_sandbox", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("{{#view id=\"add-sandbox-title\" class=\"page-title\"}}\n\t{{KG.pageController.addTitle}}\n{{/view}}\n{{#view}}\n\t<div>\n\t\t{{view KG.TextField placeholder_not_loc=\"_sandboxName\" valueBinding=\"KG.addSandboxController.name\"}}\t\n\t</div>\n\t{{loc _position class=\"field-label\"}}\n\t<div id=\"map\"></div>\n\t{{#view KG.Button class=\"white-button\" sc_action=\"cancelCreateAction\" titleBinding=\"KG.addSandboxController.cancelCreateTooltip\"}}\n\t\t<img src=\"resources/images/cancel_30.png\">\n\t{{/view}}\n\t{{#view KG.Button class=\"white-button\" sc_action=\"commitCreateAction\" titleBinding=\"KG.addSandboxController.commitCreateTooltip\"}}\n\t\t<img src=\"resources/images/checkmark_30.png\">\n\t{{/view}}\n{{/view}}\n");
 });spade.register("kloudgis/home/templates/sandbox_list", function(require, exports, __module, ARGV, ENV, __filename){
-return Ember.Handlebars.compile("{{#view KG.TitleView id=\"sandboxes-title\" class=\"page-title\"}}\n\t{{titleString}}\n{{/view}}\n{{#view}}\n{{#collection contentBinding=\"KG.sandboxesController\" class=\"sandbox-list\"}}\n\t\t{{#view KG.SandboxView tagName=\"div\" class=\"sandbox-list-item common-list-button\"}}\n\t\t\t{{#view KG.DeleteCheckboxView  class=\"delete-button\" sc_action=\"checkSandboxAction\" classBinding=\"KG.pageController.deleteMode isChecked isOwner\"}}\n\t\t\t\t<span>✓</span> {{loc _leave tagName=\"span\"}}\n\t\t\t{{/view}}\n\t\t\t{{#view tagName=\"span\" class=\"sandbox-name\"}}\n\t\t\t\t{{itemView.content.name}}\n\t\t\t{{/view}}\n\t\t\t<div class=\"info-line\">\n\t\t\t\t{{itemView.content.formattedDescription}}\n\t\t\t</div>\n\t\t{{/view}}\n{{/collection}}\n\t\n{{#view KG.Button  id=\"create-sandbox-button\" class=\"white-button\" sc_action=\"createSandboxAction\" titleBinding=\"KG.core_home.createSandboxTitle\" isVisibleBinding=\"KG.sandboxesController.recordsReady\"}}\n\t<img src=\"resources/images/add_30.png\">\n{{/view}}\n{{#view KG.Button  id=\"delete-mode-button\" class=\"white-button\" sc_action=\"toggleDeleteSandboxModeAction\" titleBinding=\"KG.core_home.deleteSandboxTitle\" isVisibleBinding=\"KG.sandboxesController.recordsReady\"}}\n\t<img src=\"resources/images/delete_30.png\">\n{{/view}}\t\n{{#view KG.Button id=\"delete-sandbox-button\" class=\"red-button\" sc_action=\"deleteSandboxAction\" classBinding=\"KG.pageController.deleteMode\"}}\n\t{{loc _delete}}\n{{/view}}\n{{/view}}\t\t\n");
+return Ember.Handlebars.compile("{{#view KG.TitleView id=\"sandboxes-title\" class=\"page-title\"}}\n\t{{titleString}}\n{{/view}}\n{{#view}}\n{{#collection contentBinding=\"KG.sandboxesController\" class=\"sandbox-list\"}}\n\t\t{{#view KG.SandboxView tagName=\"div\" class=\"sandbox-list-item common-list-button\"}}\n\t\t\t{{#view KG.DeleteCheckboxView  class=\"delete-button\" sc_action=\"checkSandboxAction\" classBinding=\"KG.pageController.deleteMode isChecked isOwner\"}}\n\t\t\t\t<span>✓</span> {{loc _leave tagName=\"span\"}}\n\t\t\t{{/view}}\n\t\t\t{{#view tagName=\"span\" class=\"sandbox-name\"}}\n\t\t\t\t{{itemView.content.name}}\n\t\t\t{{/view}}\n\t\t\t<div class=\"info-line\">\n\t\t\t\t{{itemView.content.formattedDescription}}\n\t\t\t</div>\n\t\t{{/view}}\n{{/collection}}\n\t\n{{#view KG.Button  id=\"create-sandbox-button\" class=\"white-button\" sc_action=\"createSandboxAction\" titleBinding=\"KG.core_home.createSandboxTitle\" isVisibleBinding=\"KG.sandboxesController.recordsReady\"}}\n\t<img src=\"resources/images/add_30.png\">\n{{/view}}\n{{#view KG.Button  id=\"delete-mode-button\" class=\"white-button\" sc_action=\"toggleDeleteSandboxModeAction\" titleBinding=\"KG.core_home.deleteSandboxTitle\" isVisibleBinding=\"KG.sandboxesController.recordsReady\" classBinding=\"KG.pageController.deleteMode\"}}\n\t<div></div>\n\t{{loc _cancel tagName=\"span\"}}\n{{/view}}\t\n{{#view KG.Button id=\"delete-sandbox-button\" class=\"red-button\" sc_action=\"deleteSandboxAction\" classBinding=\"KG.pageController.deleteMode\"}}\n\t{{loc _delete}}\n{{/view}}\n{{/view}}\t\t\n");
 });

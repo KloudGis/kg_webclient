@@ -22,7 +22,8 @@ var fr = {
 	"_serverError": "Erreur du serveur, veuillez réessayer plus tard.",
 	"_delete": "Supprimer",
 	"_sandboxDescription": "Par %@ à %@",
-	"_leave": "Quitter"
+	"_leave": "Quitter",
+	"_cancel": "Annuler"
 };
 
 var en = {
@@ -46,7 +47,8 @@ var en = {
 	"_serverError": "Server error, please try again later.",
 	"_delete": "Delete",
 	"_sandboxDescription": "By %@ at %@",
-	"_leave": "Leave"
+	"_leave": "Leave",
+	"_cancel": "Cancel"
 };
 
 if(KG.lang === 'fr'){
