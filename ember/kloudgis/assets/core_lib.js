@@ -679,7 +679,12 @@ KG.Bookmark = KG.Record.extend({
 	        return KG.core_date.formatDateSimple(date);
         }
         return '';
-    }.property('date_create')
+    }.property('date_create'),
+
+
+	formattedDescription: function(){
+		return "_bookmarkDescription".loc(this.get('user_descriptor'), this.get('formattedDate'));
+	}.property('formattedDate', 'ownerDescriptor')
 });
 
 });spade.register("kloudgis/core/lib/models/bounds", function(require, exports, __module, ARGV, ENV, __filename){

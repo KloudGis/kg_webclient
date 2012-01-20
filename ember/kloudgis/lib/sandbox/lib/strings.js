@@ -55,7 +55,8 @@ var fr = {
 	"_otherValue" : "Autre...",
 	"_paletteTitle": "Palette",
 	"_showPalette" : "Afficher la Palette",
-	"_moveFeature": "Glisser le nouveau '%@' où vous le voulez."
+	"_moveFeature": "Glisser le nouveau '%@' où vous le voulez.",
+	"_bookmarkDescription": "Par %@ à %@"
 };
 
 var en = {
@@ -115,7 +116,8 @@ var en = {
 	"_otherValue" : "Other...",
 	"_paletteTitle": "Palette",
 	"_showPalette" : "Show the Palette",
-	"_moveFeature": "Drag the new '%@' where you want."
+	"_moveFeature": "Drag the new '%@' where you want.",
+	"_bookmarkDescription": "By %@ at %@"
 };
 
 if(KG.lang === 'fr'){

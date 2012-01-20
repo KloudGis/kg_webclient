@@ -1,4 +1,4 @@
 KG.BookmarkItemView = KG.Button.extend({
-	classNames: ['bookmark-item'],
-	tagName: 'tr'
+	classNames: ['bookmark-item','common-list-button'],
+	tagName:"div"
 });

@@ -80,42 +80,28 @@
 	color: white;
 }
 
-#bookmark-list td{
-	padding-top:5px;
-	padding-bottom:5px;
-	padding-right:3px;
+#bookmark-list .bookmark-delete{
+	position:absolute;
+	right:3px;
+	top:2px;
+}
+
+.bookmark-item{
+	color:#333;
+	padding:5px 10px 5px 10px;
 	vertical-align:middle;
-	border:1px solid #E6E6E6;
+	position: relative;
+	border-top:1px solid #E6E6E6;
 }
 
-#bookmark-list  tr td:nth-child(1){
-	font-size:14px;
-	text-align:center;
-	border-right:none;
-	min-width: 80px;
-	cursor: pointer;
+.bookmark-item:hover{
+	border-radius: 6px;
 }
 
-#bookmark-list tr td:nth-child(2){
-	font-size:11px;
-	border-right:none;
-	border-left:none;
-	cursor: pointer;
+#bookmark-list .bookmark-item:first-child{
+		border-top:1px solid transparent;
 }
 
-#bookmark-list tr td:nth-child(3){
-	font-style: italic;
-	font-size:11px;
-	border-left:none;
-}
-
-#bookmark-list.edit-mode tr td:nth-child(3){
-	border-right:none;
-}
-
-#bookmark-list tr td:nth-child(4){
-	border-left:none;
-}
 
 
 /*  Add Bookmark panel */

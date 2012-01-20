@@ -3316,7 +3316,8 @@ var fr = {
 	"_otherValue" : "Autre...",
 	"_paletteTitle": "Palette",
 	"_showPalette" : "Afficher la Palette",
-	"_moveFeature": "Glisser le nouveau '%@' où vous le voulez."
+	"_moveFeature": "Glisser le nouveau '%@' où vous le voulez.",
+	"_bookmarkDescription": "Par %@ à %@"
 };
 
 var en = {
@@ -3376,7 +3377,8 @@ var en = {
 	"_otherValue" : "Other...",
 	"_paletteTitle": "Palette",
 	"_showPalette" : "Show the Palette",
-	"_moveFeature": "Drag the new '%@' where you want."
+	"_moveFeature": "Drag the new '%@' where you want.",
+	"_bookmarkDescription": "By %@ at %@"
 };
 
 if(KG.lang === 'fr'){
@@ -3482,8 +3484,8 @@ KG.BookmarkDeleteButtonView = KG.Button.extend({
 
 });spade.register("kloudgis/sandbox/lib/views/bookmark_item", function(require, exports, __module, ARGV, ENV, __filename){
 KG.BookmarkItemView = KG.Button.extend({
-	classNames: ['bookmark-item'],
-	tagName: 'tr'
+	classNames: ['bookmark-item','common-list-button'],
+	tagName:"div"
 });
 
 });spade.register("kloudgis/sandbox/lib/views/comment_area", function(require, exports, __module, ARGV, ENV, __filename){
@@ -3815,7 +3817,7 @@ return Ember.Handlebars.compile("{{#view KG.UserButtonView id=\"active-user-butt
 });spade.register("kloudgis/sandbox/templates/add_bookmark", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("<div id=\"add-bookmark-panel\">\n\t{{KG.addBookmarkController.addBookmarkLabel}}\n\t{{view KG.Button class=\"x-button bookmark-close-button\"  sc_action=\"closeAddBookmarkAction\" titleBinding=\"KG.addBookmarkController.closeTitle\"}}\n\t{{view KG.TextField valueBinding=\"KG.addBookmarkController.content\" nl_sc_action=\"addBookmarkAction\"}}\n\t{{#view KG.Button class=\"white-button add-bookmark-button\"  sc_action=\"addBookmarkAction\"}}\n\t\t{{KG.addBookmarkController.addLabel}}\n\t{{/view}}\t\t\n</div>\n");
 });spade.register("kloudgis/sandbox/templates/bookmark_panel", function(require, exports, __module, ARGV, ENV, __filename){
-return Ember.Handlebars.compile("{{#view KG.Button id=\"bookmark-button\" tagName=\"div\" sc_action=\"toggleBookmarkPopupAction\" class=\"header-button header-button-icon\" classBinding=\"KG.bookmarksController.activePopup\"}}\n\t\t<span class=\"button-image\"><span>\t\n\t\t{{#view id=\"super-bookmark-popup\" isVisibleBinding=\"KG.bookmarksController.activePopup\"}}\n\t\t\t\t\t{{#view id=\"bookmark-popup\" isVisibleBinding=\"KG.bookmarksController.activePopup\"}}\t\t\t\t\t\t\n\t\t\t\t\t\t<div id=\"bookmark-top-bar\">\n\t\t\t\t\t\t\t{{loc _bookmarkTitle id=\"bookmark-label\" tagName=\"div\"}}\n\t\t\t\t\t\t\t{{#view KG.Button id=\"bookmark-add-button\" tagName=\"span\" class=\"white-button unselectable\" sc_action=\"addBookmarkAction\"}}\n\t\t\t\t\t\t\t\t{{loc _bookmarkAdd}}\n\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{#view KG.EditBookmarkButtonView id=\"bookmark-edit-button\" tagName=\"span\" class=\"white-button unselectable\" sc_action=\"editBookmarkAction\"}}\n\t\t\t\t\t\t\t\t{{loc _bookmarkEdit}}\n\t\t\t\t\t\t\t{{/view}}\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div id=\"bookmark-collection\">\n\t\t\t\t\t\t{{#collection id=\"bookmark-list\" contentBinding=\"KG.bookmarksController.content\" tagName=\"table\" itemViewClass=\"KG.BookmarkItemView\" classBinding=\"KG.bookmarksController.editMode\"}}\t\n\t\t\t\t\t\t\t\t{{#view KG.Button class=\"bookmark-item-label\" tagName=\"td\" sc_action=\"selectBookmarkAction\"}}\n\t\t\t\t\t\t\t\t\t{{itemView.content.label}}\n\t\t\t\t\t\t\t\t{{/view}}\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t{{#view KG.Button class=\"bookmark-item-author\" tagName=\"td\" sc_action=\"selectBookmarkAction\"}}\n\t\t\t\t\t\t\t\t\t{{itemView.content.user_descriptor}}\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t{{#view KG.Button class=\"bookmark-item-date\" tagName=\"td\" sc_action=\"selectBookmarkAction\"}}\n\t\t\t\t\t\t\t\t\t{{itemView.content.formattedDate}}\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t{{#view tagName=\"td\" isVisibleBinding=\"KG.bookmarksController.editMode\"}}\n\t\t\t\t\t\t\t\t\t{{#view KG.BookmarkDeleteButtonView class=\"bookmark-delete red-button unselectable\" sc_action=\"deleteBookmarkAction\"}}\n\t\t\t\t\t\t\t\t\t\t-\n\t\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t{{/collection}}\n\t\t\t\t\t\t</div>\n\t\t\t\t\t{{/view}}\n\t\t{{/view}}\n{{/view}}\n");
+return Ember.Handlebars.compile("{{#view KG.Button id=\"bookmark-button\" tagName=\"div\" sc_action=\"toggleBookmarkPopupAction\" class=\"header-button header-button-icon\" classBinding=\"KG.bookmarksController.activePopup\"}}\n\t\t<span class=\"button-image\"><span>\t\n\t\t{{#view id=\"super-bookmark-popup\" isVisibleBinding=\"KG.bookmarksController.activePopup\"}}\n\t\t\t\t\t{{#view id=\"bookmark-popup\" isVisibleBinding=\"KG.bookmarksController.activePopup\"}}\t\t\t\t\t\t\n\t\t\t\t\t\t<div id=\"bookmark-top-bar\">\n\t\t\t\t\t\t\t{{loc _bookmarkTitle id=\"bookmark-label\" tagName=\"div\"}}\n\t\t\t\t\t\t\t{{#view KG.Button id=\"bookmark-add-button\" tagName=\"span\" class=\"white-button unselectable\" sc_action=\"addBookmarkAction\"}}\n\t\t\t\t\t\t\t\t{{loc _bookmarkAdd}}\n\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{#view KG.EditBookmarkButtonView id=\"bookmark-edit-button\" tagName=\"span\" class=\"white-button unselectable\" sc_action=\"editBookmarkAction\"}}\n\t\t\t\t\t\t\t\t{{loc _bookmarkEdit}}\n\t\t\t\t\t\t\t{{/view}}\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div id=\"bookmark-collection\">\n\t\t\t\t\t\t{{#collection id=\"bookmark-list\" contentBinding=\"KG.bookmarksController.content\" itemViewClass=\"KG.BookmarkItemView\" classBinding=\"KG.bookmarksController.editMode\"}}\t\n\t\t\t\t\t\t\t\t{{#view KG.Button class=\"bookmark-item-label\" tagName=\"div\" sc_action=\"selectBookmarkAction\"}}\n\t\t\t\t\t\t\t\t\t{{itemView.content.label}}\n\t\t\t\t\t\t\t\t{{/view}}\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t{{#view KG.Button class=\"bookmark-item-author\" tagName=\"span\" sc_action=\"selectBookmarkAction\"}}\n\t\t\t\t\t\t\t\t\t{{itemView.content.formattedDescription}}\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t{{#view KG.BookmarkDeleteButtonView isVisibleBinding=\"KG.bookmarksController.editMode\" class=\"bookmark-delete red-button unselectable\" sc_action=\"deleteBookmarkAction\"}}\n\t\t\t\t\t\t\t\t\t-\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t{{/collection}}\n\t\t\t\t\t\t</div>\n\t\t\t\t\t{{/view}}\n\t\t{{/view}}\n{{/view}}\n");
 });spade.register("kloudgis/sandbox/templates/bool_renderer", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("<span class=\"inspector-attr-name\">\n\t{{itemView.content.label}}\n</span>\t\n{{view templateName=\"switch\" class=\"inspector-attr-value\" contentBinding=\"itemView.content.value\" disabledBinding=\"KG.inspectorController.isReadOnly\"}}\n");
 });spade.register("kloudgis/sandbox/templates/catalog_renderer", function(require, exports, __module, ARGV, ENV, __filename){

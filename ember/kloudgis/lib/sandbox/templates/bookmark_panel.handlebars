@@ -12,20 +12,15 @@
 							{{/view}}											
 						</div>
 						<div id="bookmark-collection">
-						{{#collection id="bookmark-list" contentBinding="KG.bookmarksController.content" tagName="table" itemViewClass="KG.BookmarkItemView" classBinding="KG.bookmarksController.editMode"}}	
-								{{#view KG.Button class="bookmark-item-label" tagName="td" sc_action="selectBookmarkAction"}}
+						{{#collection id="bookmark-list" contentBinding="KG.bookmarksController.content" itemViewClass="KG.BookmarkItemView" classBinding="KG.bookmarksController.editMode"}}	
+								{{#view KG.Button class="bookmark-item-label" tagName="div" sc_action="selectBookmarkAction"}}
 									{{itemView.content.label}}
 								{{/view}}								
-								{{#view KG.Button class="bookmark-item-author" tagName="td" sc_action="selectBookmarkAction"}}
-									{{itemView.content.user_descriptor}}
+								{{#view KG.Button class="bookmark-item-author" tagName="span" sc_action="selectBookmarkAction"}}
+									{{itemView.content.formattedDescription}}
 								{{/view}}
-								{{#view KG.Button class="bookmark-item-date" tagName="td" sc_action="selectBookmarkAction"}}
-									{{itemView.content.formattedDate}}
-								{{/view}}
-								{{#view tagName="td" isVisibleBinding="KG.bookmarksController.editMode"}}
-									{{#view KG.BookmarkDeleteButtonView class="bookmark-delete red-button unselectable" sc_action="deleteBookmarkAction"}}
-										-
-									{{/view}}
+								{{#view KG.BookmarkDeleteButtonView isVisibleBinding="KG.bookmarksController.editMode" class="bookmark-delete red-button unselectable" sc_action="deleteBookmarkAction"}}
+									-
 								{{/view}}
 						{{/collection}}
 						</div>
