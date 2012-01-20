@@ -1884,7 +1884,7 @@ KG.core_search = SC.Object.create({
             //hide bottom list too.
             KG.core_search.clearSearchFeatures();
         },
-        600);
+        800);
     }
 });
 
@@ -2517,11 +2517,13 @@ SC.mixin(KG, {
 
                         enterState: function() {
 							KG.searchController.set('activePopup', YES);
+							$('#search-popup input').focus();
                         },
 
                         exitState: function() {
 							KG.searchController.set('activePopup', NO);
-							KG.searchController.set('search', '');
+							KG.searchController.set('searchValue', '');
+							KG.core_search.hideResults();
                             KG.core_highlight.clearHighlight(this._highlight);
                             this._highlight = null;
                             KG.core_highlight.clearHighlightMarker(this._hlMarker);

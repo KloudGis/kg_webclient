@@ -1074,6 +1074,7 @@
 	position: relative;
 	padding:6px;
 	font-size:14px;
+	text-align:center;
 }
 
 .search-cat-item:hover{

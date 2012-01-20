@@ -76,7 +76,7 @@ KG.core_search = SC.Object.create({
             //hide bottom list too.
             KG.core_search.clearSearchFeatures();
         },
-        600);
+        800);
     }
 });
 
