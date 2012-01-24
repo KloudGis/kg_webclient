@@ -10,7 +10,6 @@ spade.register("kloudgis/login/lib/core_login", function(require, exports, __mod
 **/
 
 KG.core_login = SC.Object.create({
-	showLogin: NO,
     isBusy: NO,
     errorMessage: '',
 	rememberMe: NO,
@@ -119,105 +118,6 @@ $(document).ready(function() {
     KG.statechart.initStatechart();
 });
 
-});spade.register("kloudgis/login/lib/core_statechart", function(require, exports, __module, ARGV, ENV, __filename){
-/**
-*  Statechart for the login page. 
-**/
-
-SC.mixin(KG, {
-    //global state chart
-    statechart: SC.Statechart.create({
-        //log trace
-        trace: NO,
-
-        rootState: SC.State.extend({
-
-            initialSubstate: 'tryLoginAutoState',
-
-            tryLoginAutoState: SC.State.extend({
-                enterState: function() {
-                    console.log('try auto login state');
-                    var user = $.getQueryString('user');
-                    if (SC.none(user)) {
-                        setTimeout(function() {
-                            KG.core_login.tryLoginAuto();	
-                        },
-                        1);
-                    } else {
-                        this.gotoState('loggedOutState');
-                    }
-                },
-
-                authenticationSucceeded: function(sender) {
-                    console.log('auto auth success');
-                    this.gotoState('loggedInState');
-                },
-
-                authenticationFailed: function(sender) {
-                    console.log('auto auth failed');
-                    this.gotoState('loggedOutState');
-                }
-            }),
-
-            loggedOutState: SC.State.extend({
-
-                enterState: function() {
-                    console.log('Logged out state');
-                    KG.core_login.set('showLogin', YES);
-                    $('#if-spinner').fadeOut();
-                    var user = $.getQueryString('user');
-                    if (!SC.none(user)) {
-                        KG.credential.set('user', user);
-                    }
-                },
-
-                loginAction: function(sender) {
-                    KG.core_login.login();
-                },
-
-                authenticationSucceeded: function() {
-                    this.gotoState('loggedInState');
-                },
-
-                authenticationFailed: function() {}
-
-            }),
-
-            loggedInState: SC.State.extend({
-
-                enterState: function() {
-                    console.log('login successful');
-                    window.location.href = "home.html";
-                }
-            }),
-
-            signupAction: function(sender) {
-                window.location.href = "signup.html";
-            },
-        })
-    })
-});
-
-});spade.register("kloudgis/login/lib/main", function(require, exports, __module, ARGV, ENV, __filename){
-// ==========================================================================
-// Project:   kloudgis
-// Copyright: ©2011 My Company Inc. All rights reserved.
-// ==========================================================================
-
-//application files
-
-require("kloudgis/auth/lib/main");
-require('./strings');
-require("./core_statechart");
-require('./core_login');
-require('kloudgis/app/lib/views/text_field');
-require('kloudgis/app/lib/views/loading_image');
-require('kloudgis/app/lib/views/button');
-
-
-
-
-
 });spade.register("kloudgis/login/lib/strings", function(require, exports, __module, ARGV, ENV, __filename){
 /**
 * Localize the login page.
@@ -260,21 +160,9 @@ var en = {
 };
 
 if(KG.lang === 'fr'){
-	SC.STRINGS = fr;
+	jQuery.extend(Ember.STRINGS, fr);
 }else{
-	SC.STRINGS = en;
+	jQuery.extend(Ember.STRINGS, en);
 }
-
-
-//do the localize after the rendering
-SC.run.schedule('render',null, function(){
-	console.log('localize page');
-	document.title = "_loginTitle".loc();
-	$("#email-label").text("_email".loc());
-	$("#pwd-label").text("_pwd".loc());
-	$("#login-button").text("_login".loc());
-	$("#signup-title").text("_signupTitle".loc());
-	$("#signup-button").text("_signup".loc());	
-});
 
 });

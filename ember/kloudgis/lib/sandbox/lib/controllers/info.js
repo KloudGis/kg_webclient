@@ -17,5 +17,16 @@ KG.infoController = Ember.ArrayController.create({
 	
 	firstFeature: function(){
 		return this.getPath('content.firstObject');
-	}.property('content', 'content.length')
+	}.property('content', 'content.length'),
+	
+	allButFirst: function(){
+		var content = this.get('content');
+		if(content && content.get('length') > 0){
+			var array = content.toArray();
+			array.splice(0,1);
+			return array;
+		}else{
+			return [];
+		}
+	}.property('content', 'content.length').cacheable()
 });

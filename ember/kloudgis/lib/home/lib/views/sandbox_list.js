@@ -1,4 +1,5 @@
 KG.SandboxListView = Ember.View.extend({
-	classNameBindings: ['hidden'],
-	hiddenBinding: 'KG.pageController.listSandboxHidden'
+	classNameBindings: ['hidden', 'pushed'],
+	hiddenBinding: 'KG.homePanelController.listSandboxHidden',
+	pushedBinding: 'KG.homePanelController.listSandboxPushed'
 })

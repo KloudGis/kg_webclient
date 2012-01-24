@@ -38,19 +38,7 @@ var en = {
 };
 
 if(KG.lang === 'fr'){
-	SC.STRINGS = fr;
+	jQuery.extend(Ember.STRINGS, fr);
 }else{
-	SC.STRINGS = en;
+	jQuery.extend(Ember.STRINGS, en);
 }
-
-
-//do the localize after the rendering
-SC.run.schedule('render',null, function(){
-	console.log('localize page');
-	document.title = "_loginTitle".loc();
-	$("#email-label").text("_email".loc());
-	$("#pwd-label").text("_pwd".loc());
-	$("#login-button").text("_login".loc());
-	$("#signup-title").text("_signupTitle".loc());
-	$("#signup-button").text("_signup".loc());	
-});

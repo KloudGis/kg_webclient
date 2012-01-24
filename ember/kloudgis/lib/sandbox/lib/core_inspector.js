@@ -194,7 +194,7 @@ $(document).ready(function() {
         KG.core_inspector._view = Ember.View.create({
             templateName: 'inspector'
         });
-        KG.core_inspector._view.append();
+        KG.core_inspector._view.appendTo('#main-sandbox-view');
     },
     1000);
 });

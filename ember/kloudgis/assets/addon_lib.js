@@ -1,36 +1,10 @@
-//framework dependencies
-require("ember");
-require("ember-statechart");
+/* ===========================================================================
+   BPM Combined Asset File
+   MANIFEST: kloudgis ()
+   This file is generated automatically by the bpm (http://www.bpmjs.org)
+   =========================================================================*/
 
-//create the namespace
-KG = Ember.Application.create({
-    lang: 'fr',
-    activeSandboxKey: null,
-    serverHost: '/',
-
-    //set to NO for PRODUCTION
-    debugMode: YES,
-
-    enableLogger: function() {
-        if (!this._oldLogger) {
-            return;
-        }
-        window.console.log = this._oldLogger;
-    },
-
-    _oldLogger: null,
-
-    disableLogger: function() {
-        this._oldLogger = window.console.log;
-        window.console.log = function() {};
-    }
-});
-
-//default: Disable log is not Debug 
-if (!KG.get('debugMode')) {
-    KG.disableLogger();
-}
-
+spade.register("kloudgis/addon/lib/handlebars/helpers", function(require, exports, __module, ARGV, ENV, __filename){
 //loc helper
 Handlebars.registerHelper('loc',
 function(property, options) {
@@ -47,12 +21,15 @@ function(property, options) {
     }
     return value;
 });
+
 //highlight helper
 Handlebars.registerHelper('highlight',
 function(property) {
     var value = SC.getPath(this, property);
     return new Handlebars.SafeString('<span class="highlight">' + value + '</span>');
 });
+
+});spade.register("kloudgis/addon/lib/jquery/helpers", function(require, exports, __module, ARGV, ENV, __filename){
 
 //jQuery extension
 $.extend({
@@ -84,4 +61,6 @@ $.extend({
 //detect safari mobile
 jQuery.extend(jQuery.browser, {
     isIphone: navigator.userAgent.toLowerCase().indexOf('iphone') > 0
+});
+
 });

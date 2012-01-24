@@ -1,0 +1,17 @@
+{{#view id="main-home-view" class="main-panel" classBinding="KG.pageController.homeHidden KG.pageController.homePushedLeft KG.pageController.homePushedRight"}}
+	<div id="home-header">
+		{{#view KG.Button id="logout-button" sc_action="logoutAction"}}
+			{{loc _logout}}
+		{{/view}}
+		{{#view  id="welcome-usr-label"}}
+			{{KG.core_home.connectedUserLabel}}	
+		{{/view}}
+		{{#view class="home-error-message error-message"}}
+			{{KG.homePanelController.errorMessage}}
+		{{/view}}
+	</div>
+	<div id="super-home-panel">
+		{{view KG.SandboxListView id="sandbox-list-panel" templateName="sandbox-list"}}
+		{{view KG.AddSandboxView id="add-sandbox-panel" templateName="add-sandbox"}}
+	</div>
+{{/view}}

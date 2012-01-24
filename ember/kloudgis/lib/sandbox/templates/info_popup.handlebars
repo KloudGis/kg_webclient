@@ -1,45 +1,5 @@
-{{#collection contentBinding="KG.infoController"  isVisibleBinding="KG.infoController.listVisible" class="popup-info-list"}}
-	{{#view KG.FeatureInfoPopupItemView class="popup-info-item" ignoreIfFirst="true"}}
-		<table class="popup-info-table more-features-zone">
-			<tr>
-				<td>
-					{{#view class="label-ellipsis"}}
-						{{itemView.content.title}}
-					{{/view}}			
-				</td>
-				<td>
-					{{#view KG.Button manualMouseDown="yes" sc_action="selectFeatureInspectorAction" class="popup-info-select" tagName="div" }}	
-						<img src="resources/images/right_arrow_32.png"/>		
-					{{/view}}
-				</td>
-			</tr>
-		</table>
-	{{/view}}		
-{{/collection}}
-<table class="popup-info-master-row-table">
-	<tr>
-		<td>
-			{{#view KG.ExpandButtonView tagName="div" class="popup-info-expand" isVisibleBinding="KG.infoController.multipleFeatures" expandedBinding="KG.infoController.listVisible"}}	
-				<img {{bindAttr src="logo"}}/>		
-			{{/view}}		
-		</td>
-		<td>
-			{{#view KG.FeatureInfoPopupItemView class="popup-info-item" contentBinding="KG.infoController.firstFeature"}}
-				<table class="popup-info-table">
-				<tr>
-					<td>
-						{{#view class="label-ellipsis"}}
-							{{parentView.content.title}}
-						{{/view}}	
-					</td>
-					<td>
-						{{#view KG.Button manualMouseDown="yes" sc_action="selectFeatureInspectorAction" class="popup-info-select" contentBinding="KG.infoController.firstFeature" tagName="div" }}	
-							<img src="resources/images/right_arrow_32.png"/>		
-						{{/view}}
-					</td>
-				</tr>
-				</table>
-			{{/view}}	
-		</td>
-	</tr>
-</table>
+{{collection contentBinding="KG.infoController.allButFirst"  isVisibleBinding="KG.infoController.listVisible" class="popup-info-list" itemViewClass="KG.FeatureInfoPopupItemView"}}	
+{{view KG.FeatureInfoPopupItemView contentBinding="KG.infoController.firstFeature" class="master-row"}}
+{{#view KG.ExpandButtonView tagName="div" class="popup-info-expand-button" isVisibleBinding="KG.infoController.multipleFeatures" expandedBinding="KG.infoController.listVisible"}}	
+	<img {{bindAttr src="logo"}}/>		
+{{/view}}

@@ -4,7 +4,7 @@
 {{#view}}
 {{#collection contentBinding="KG.sandboxesController" class="sandbox-list"}}
 		{{#view KG.SandboxView tagName="div" class="sandbox-list-item common-list-button"}}
-			{{#view KG.DeleteCheckboxView  class="delete-button" sc_action="checkSandboxAction" classBinding="KG.pageController.deleteMode isChecked isOwner"}}
+			{{#view KG.DeleteCheckboxView  class="delete-button" sc_action="checkSandboxAction" classBinding="KG.homePanelController.deleteMode isChecked isOwner"}}
 				<span>✓</span> {{loc _leave tagName="span"}}
 			{{/view}}
 			{{#view tagName="span" class="sandbox-name"}}
@@ -19,11 +19,11 @@
 {{#view KG.Button  id="create-sandbox-button" class="white-button" sc_action="createSandboxAction" titleBinding="KG.core_home.createSandboxTitle" isVisibleBinding="KG.sandboxesController.recordsReady"}}
 	<img src="resources/images/add_30.png">
 {{/view}}
-{{#view KG.Button  id="delete-mode-button" class="white-button" sc_action="toggleDeleteSandboxModeAction" titleBinding="KG.core_home.deleteSandboxTitle" isVisibleBinding="KG.sandboxesController.recordsReady" classBinding="KG.pageController.deleteMode"}}
+{{#view KG.Button  id="delete-mode-button" class="white-button" sc_action="toggleDeleteSandboxModeAction" titleBinding="KG.core_home.deleteSandboxTitle" isVisibleBinding="KG.sandboxesController.recordsReady" classBinding="KG.homePanelController.deleteMode"}}
 	<div></div>
 	{{loc _cancel tagName="span"}}
 {{/view}}	
-{{#view KG.Button id="delete-sandbox-button" class="red-button" sc_action="deleteSandboxAction" classBinding="KG.pageController.deleteMode"}}
+{{#view KG.Button id="delete-sandbox-button" class="red-button" sc_action="deleteSandboxAction" classBinding="KG.homePanelController.deleteMode"}}
 	{{loc _delete}}
 {{/view}}
 {{/view}}		

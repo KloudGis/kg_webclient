@@ -1,18 +1,26 @@
-body{
-	background: url('../resources/images/back-bg.jpg') repeat;
-	overflow-x: hidden;
+
+
+#main-home-view.home-hidden div{
+	display:none;
 }
 
-#super-panel{
+#main-home-view.home-pushed-left{
+	left:-150%;
+}
+
+#main-home-view.home-pushed-right{
+	left:150%;
+}
+
+#super-home-panel{
 	position:absolute;
-	top:40px;
+	top:55px;
 	bottom:0;
 	left:50%;
 	width:500px;
 	margin-left:-250px;
+	min-height:585px;
 	overflow-x:hidden;
-	overflow-y:hidden;
-	min-height:320px;
 }
 
 .page-title{
@@ -27,26 +35,25 @@ body{
 
 #sandbox-list-panel, #add-sandbox-panel{
 	position:absolute;
-	top:0px;
-	left:0px;
-	right:0px;
-	bottom:0px;
-	-webkit-transition: -webkit-transform 0.7s;
-	-moz-transition: -moz-transform 0.7s;
-	-webkit-transform: translate3d(0,0,0);
-	-moz-transform: translateX(0px);
+	top:0;
+	left:0;
+	width:100%;
+	bottom:0;
+	-webkit-transition: left 0.7s;
+	-moz-transition: left 0.7s;
 }
 
-#sandbox-list-panel.hidden{
-	-webkit-transform: translate3d(-130%,0,0);
-	-moz-transform: translateX(-130%);
+#sandbox-list-panel.pushed{
+	left:-150%;
 }
 
-#add-sandbox-panel.hidden{
-	-webkit-transform: translate3d(130%,0,0);
-	-moz-transform: translateX(130%);
+#sandbox-list-panel.hidden div,#add-sandbox-panel.hidden div{
+	display:none;
 }
 
+#add-sandbox-panel.pushed{
+	left:150%;
+}
 
 .sandbox-list{
 	position:absolute;
@@ -168,20 +175,21 @@ body{
 	text-align:left;
 }
 
-#welcome-usr-label{
+#home-header{
+	position:relative;
+	top:3px;
+	width:500px;
+	margin:0 auto;
+}
+
+#welcome-usr-label{	
 	color:white;
-	margin-top:5px;
-	width:100%;
-	text-align: center;
+	text-align: left;
 	font-size: 14px;
 }
 
-#error-message{
-	width: 100%;
-	text-align:center;
-	color:red;
-	font-size: 16px;
-	margin:3px;
+#logout-button{
+	float:right;
 }
 
 #create-sandbox-button{
@@ -246,15 +254,15 @@ body{
 	opacity:1;
 }
 
-#add-sandbox-panel{
-	margin:0 40px 0px 40px;
-}
-
 #add-sandbox-panel .page-title{
 	margin-left: 0;
 }
 
 /* Add sandbox panel */
+
+#inner-add-sandbox-panel{
+}
+
 #add-sandbox-panel .white-button{
 	margin-top:22px;
 	padding:3px;
@@ -267,14 +275,15 @@ body{
 }
 
 #add-sandbox-panel input{
-	width:100%;
+	width:300px;
 	padding:6px;
 	border-radius:4px;
 }
 
-#map{
-	width:100%;
-	height:50%;
+#add-sandbox-map{
+	position:relative;
+	width:500px;
+	height:400px;
 }
 
 #add-sandbox-panel .field-label{
@@ -283,26 +292,3 @@ body{
 	margin: 15px 0 5px 0;
 	color: white;
 }
-
-
-/* MOBILE */
-
-@media screen and (max-width: 480px) {
-	
-	#super-panel{
-		left:0;
-		width:auto;
-		margin-left:0;
-		right:0;
-		bottom:10px;
-	}
-	
-	.sandbox-list{
-		-webkit-overflow-scrolling: touch;
-	}
-	
-	#map{
-		height:130px
-	}
-}
-

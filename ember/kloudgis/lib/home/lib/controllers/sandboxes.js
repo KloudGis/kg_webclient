@@ -2,7 +2,7 @@
 * List of sandbox
 **/
 KG.sandboxesController = Ember.ArrayController.create({
-	content: [],
+	content: null,
 	recordsReady:  NO,
 	title: '',
 		

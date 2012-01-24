@@ -14,16 +14,28 @@
         "lib/core/lib"
       ]
     },
+	"addon_lib.js": {
+      "spade:format": "function",
+      "files": [
+        "lib/addon/lib"
+      ]
+    },
+	"view_lib.js": {
+      "spade:format": "function",
+      "files": [
+        "lib/view/lib"
+      ]
+    },
     "templates_lib.js": {
       "spade:format": "function",
       "files": [
-        "templates"
+        "lib/templates"
       ]
     },
     "app_lib.js": {
       "spade:format": "function",
       "files": [
-        "lib/app/lib"
+        "lib/app_demo/lib","lib/app_demo/templates"
       ]
     },
     "auth_lib.js": {

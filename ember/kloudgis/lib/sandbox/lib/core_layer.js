@@ -17,6 +17,15 @@ KG.core_layer = SC.Object.create({
         });
     },
 
+    cleanUp: function() {
+        var layers = KG.layersController.get('content');
+        if (layers) {
+            layers.forEach(function(lay) {
+                KG.core_leaflet.removeLayer(lay)
+            });
+        }
+    },
+
     getLayersSelection: function() {
         var layers = KG.layersController.get('content');
         if (!SC.none(layers) && layers.get('length') > 0) {
@@ -26,7 +35,7 @@ KG.core_layer = SC.Object.create({
         return [];
     },
 
-/* Return the main layer if there is at least one visible layer matched the featureytpe*/
+    /* Return the main layer if there is at least one visible layer matched the featureytpe*/
     getMainWMSFor: function(featuretype) {
         var layers = KG.layersController.get('content');
         if (!SC.none(layers) && layers.get('length') > 0) {

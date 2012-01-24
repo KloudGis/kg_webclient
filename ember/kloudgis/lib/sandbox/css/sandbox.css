@@ -1,3 +1,15 @@
+#main-sandbox-view.sandbox-hidden div{
+	display:none;
+}
+
+#main-sandbox-view.sandbox-pushed-left{
+	left:-150%;
+}
+
+#main-sandbox-view.sandbox-pushed-right{
+	left:150%;
+}
+
 #map {
 	position:absolute;
 	left:0;
@@ -78,6 +90,7 @@
 	background: rgba(255,255,255,0.9);
 	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
 	-webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+	border-radius:6px;
 }
 
 #active-user-popup{

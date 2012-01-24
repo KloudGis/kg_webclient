@@ -97,7 +97,11 @@ KG.activeUserController = Ember.Object.create({
 	activePopup: NO,
 
 	activeUserDidChange: function(){
-		this.set('name', KG.core_auth.get('activeUser').name);
+		if(KG.core_auth.get('activeUser')){
+			this.set('name', KG.core_auth.get('activeUser').name);
+		}else{
+			this.set('name','');
+		}
 	}.observes('KG.core_auth.activeUser')
 });
 
@@ -245,7 +249,18 @@ KG.infoController = Ember.ArrayController.create({
 	
 	firstFeature: function(){
 		return this.getPath('content.firstObject');
-	}.property('content', 'content.length')
+	}.property('content', 'content.length'),
+	
+	allButFirst: function(){
+		var content = this.get('content');
+		if(content && content.get('length') > 0){
+			var array = content.toArray();
+			array.splice(0,1);
+			return array;
+		}else{
+			return [];
+		}
+	}.property('content', 'content.length').cacheable()
 });
 
 });spade.register("kloudgis/sandbox/lib/controllers/inspector", function(require, exports, __module, ARGV, ENV, __filename){
@@ -618,6 +633,7 @@ KG.core_info = SC.Object.create({
                 var div = this._div_info;
 				this._view_info = SC.View.create({
 		            templateName: 'info-popup',
+					classNames:['super-info-popup']
 		        });
 		        this._view_info.appendTo(div);
 				setTimeout(function(){KG.core_leaflet.showPopupInfo(center, div);},1);               
@@ -843,7 +859,7 @@ $(document).ready(function() {
         KG.core_inspector._view = Ember.View.create({
             templateName: 'inspector'
         });
-        KG.core_inspector._view.append();
+        KG.core_inspector._view.appendTo('#main-sandbox-view');
     },
     1000);
 });
@@ -869,6 +885,15 @@ KG.core_layer = SC.Object.create({
         });
     },
 
+    cleanUp: function() {
+        var layers = KG.layersController.get('content');
+        if (layers) {
+            layers.forEach(function(lay) {
+                KG.core_leaflet.removeLayer(lay)
+            });
+        }
+    },
+
     getLayersSelection: function() {
         var layers = KG.layersController.get('content');
         if (!SC.none(layers) && layers.get('length') > 0) {
@@ -878,7 +903,7 @@ KG.core_layer = SC.Object.create({
         return [];
     },
 
-/* Return the main layer if there is at least one visible layer matched the featureytpe*/
+    /* Return the main layer if there is at least one visible layer matched the featureytpe*/
     getMainWMSFor: function(featuretype) {
         var layers = KG.layersController.get('content');
         if (!SC.none(layers) && layers.get('length') > 0) {
@@ -1600,7 +1625,7 @@ $(document).ready(function() {
         KG.core_palette._view = Ember.View.create({
             templateName: 'palette'
         });
-        KG.core_palette._view.append();
+        KG.core_palette._view.appendTo('#main-sandbox-view');
     },
     1000);
 });
@@ -1618,9 +1643,46 @@ KG.core_sandbox = SC.Object.create({
 
 	sandboxLabel: '',
     mousePosition: null,
+	mapAdded: NO,
+	
+	cleanUp:function(){
+		this.set('sandboxMeta', {});
+		this.set('membership', null);
+		this.set('isSandboxOwner', NO);
+		this.set('sandboxLabel', '');
+		this.set('mousePosition', null);
+		
+		KG.store.unloadRecords(KG.FeatureType);
+		KG.store.unloadRecords(KG.AttrType);
+		KG.store.unloadRecords(KG.Bookmark);
+		KG.store.unloadRecords(KG.Feature);	
+		KG.core_layer.cleanUp();
+		KG.store.unloadRecords(KG.Layer);
+		KG.core_note.removeAllMarkers();
+		KG.store.unloadRecords(KG.Note);
+		KG.store.unloadRecords(KG.NoteMarker);
+		this.setCenter(null,null);
+		//FIXME: Use of a state to manage the popup ?
+		KG.activeUserController.set('activePopup', NO);
+		
+		this._clearRecordArray(KG.bookmarksController.get('content'));
+		this._clearRecordArray(KG.layersController.get('content'));
+		this._clearRecordArray(KG.paletteController.get('content'));
+		this._clearRecordArray(KG.searchController.get('content'));
+	},
+	
+	_clearRecordArray: function(rarray){
+		if(!Ember.none(rarray) && rarray.destroy){
+			rarray.destroy();
+		}
+	},
 
     setCenter: function(lonLat, zoom) {
-        window.location.hash = 'lon:%@;lat:%@;zoom:%@'.fmt(lonLat.get('lon').toFixed(4), lonLat.get('lat').toFixed(4), zoom);
+		if(!lonLat){
+			window.location.hash=''
+		}else{
+        	window.location.hash = 'lon:%@;lat:%@;zoom:%@'.fmt(lonLat.get('lon').toFixed(4), lonLat.get('lat').toFixed(4), zoom);
+		}
     },
 
     authenticate: function() {
@@ -1731,7 +1793,14 @@ KG.core_sandbox = SC.Object.create({
 
     addMap: function() {
         var hash = this.extractHashValues();
-        KG.core_leaflet.addToDocument(hash.lon, hash.lat, hash.zoom);
+		if(this.get('mapAdded')){
+			if(hash.lon && hash.lat){
+				KG.core_leaflet.setCenter(KG.LonLat.create({lon:hash.lon, lat:hash.lat}), hash.zoom);
+			}
+		}else{
+			this.set('mapAdded', YES);
+        	KG.core_leaflet.addToDocument(hash.lon, hash.lat, hash.zoom);	
+		}
     },
 
     createNote: function() {
@@ -1790,18 +1859,6 @@ KG.core_sandbox = SC.Object.create({
 		}
 		return NO;
     }.property('membership')
-});
-
-$(document).ready(function() {
-    KG.statechart.initStatechart();
-    /*if ($.browser.isIphone) {
-        //tweaks to hide the address bar
-        $('#box').addClass('mobile');
-        setTimeout(function() {
-            window.scrollTo(0, 1);
-        },
-        1000);
-    }*/
 });
 
 });spade.register("kloudgis/sandbox/lib/core_search", function(require, exports, __module, ARGV, ENV, __filename){
@@ -1894,1023 +1951,23 @@ $(document).ready(function() {
         KG.core_search._view = Ember.View.create({
             templateName: 'search-panel'
         });
-        KG.core_search._view.append();
+        KG.core_search._view.appendTo('#main-sandbox-view');
     },
     1000);
 });
 
-});spade.register("kloudgis/sandbox/lib/core_statechart", function(require, exports, __module, ARGV, ENV, __filename){
-/**
-* Statechart for the sandbox page
-**/
-
-SC.mixin(KG, {
-    //sandbox page state chart
-    statechart: SC.Statechart.create({
-        //log trace
-        trace: NO,
-
-        rootState: SC.State.extend({
-
-            initialSubstate: 'tryAuthenticateState',
-
-            //******************************
-            // transient state to check 
-            // if the user is logged in
-            //******************************
-            tryAuthenticateState: SC.State.extend({
-                enterState: function() {
-                    var sb = $.getQueryString('sandbox');
-                    KG.set('activeSandboxKey', sb);
-
-                    setTimeout(function() {
-                        KG.core_sandbox.authenticate();
-                    },
-                    1);
-                },
-
-                authenticationSucceeded: function() {
-                    this.gotoState('tryMembershipState');
-                },
-
-                authenficationFailed: function() {
-                    window.location.href = "index.html";
-                }
-            }),
-
-            //******************************
-            // transient state to check 
-            // if the user is a member of 
-            // the selected sandbox
-            //******************************
-            tryMembershipState: SC.State.extend({
-
-                enterState: function() {
-                    //show the map to not slow down the app
-                    KG.core_sandbox.addMap();
-                    KG.core_sandbox.membershipCheck();
-                    KG.core_sandbox.fetchSandboxMeta();
-                },
-
-                membershipSucceeded: function() {
-                    this.gotoState('runningState');
-                },
-
-                membershipFailed: function() {
-                    window.location.href = "home.html?message=_wrong-membership";
-                }
-            }),
-
-            //login successful on the map service.  We can add the layers
-            mapLoginSucceeded: function() {
-                KG.core_layer.loadLayers();
-                KG.core_bookmark.loadBookmarks();
-            },
-
-            //******************************
-            // Running 
-            // The user can now use the App.
-            //******************************
-            runningState: SC.State.extend({
-
-                substatesAreConcurrent: YES,
-
-                enterState: function() {
-                    KG.core_notification.listen();
-                    //fetch the featuretypes and attrtypes locally
-                    KG.store.find(KG.FEATURETYPE_QUERY);
-                    KG.store.find(KG.ATTRTYPE_QUERY);
-                },
-
-                //******************************
-                // Concurrent state for Inpector
-                // Inspector and the palette
-                //******************************
-                inspectorPaletteState: SC.State.extend({
-
-                    initialSubstate: 'allHiddenState',
-
-                    selectFeatureInspectorAction: function(feature) {
-                        if (feature && feature.get('isSelectable') && feature.get('isInspectorSelectable')) {
-                            this.gotoState('inspectorVisibleState');
-                            KG.core_inspector.selectFeature(feature);
-                        }
-                    },
-
-                    showPaletteAction: function() {
-                        this.gotoState('paletteVisibleState');
-                    },
-
-                    //******************************
-                    // Inspector and Palette are Hidden 
-                    //******************************
-                    allHiddenState: SC.State.extend({
-
-}),
-
-                    //******************************
-                    // Inspector is visible
-                    //******************************
-                    inspectorVisibleState: SC.State.extend({
-
-                        enterState: function() {
-                            KG.inspectorController.set('active', YES);
-                            KG.featureCommentsController.set('commentsPanelVisible', YES);
-                        },
-
-                        exitState: function() {
-                            KG.inspectorController.set('active', NO);
-                            KG.core_inspector.commitModifications();
-                            KG.core_inspector.removeHighlight();
-                            KG.featureCommentsController.set('commentsPanelVisible', NO);
-                            KG.featureCommentsController.set('showing', NO);
-                            setTimeout(function() {
-                                KG.inspectorController.set('feature', null);
-                                KG.inspectorController.set('content', null);
-                            },
-                            500);
-                        },
-
-                        selectFeatureInspectorAction: function(feature) {
-                            if (feature && feature.get('isSelectable') && feature.get('isInspectorSelectable')) {
-                                KG.featureCommentsController.set('showing', NO);
-                                KG.core_inspector.selectFeature(feature);
-                            }
-                        },
-
-                        closeInspectorAction: function() {
-                            this.gotoState('allHiddenState');
-                        },
-
-                        cancelInspectorAction: function() {
-                            KG.core_inspector.rollbackModifications();
-                            this.gotoState('allHiddenState');
-                        },
-
-                        showFeatureCommentsAction: function() {
-                            if (KG.featureCommentsController.get('showing')) {
-                                //hide comment section
-                                KG.featureCommentsController.set('showing', NO);
-                            } else {
-                                //show comment section
-                                if (KG.featureCommentsController.get('length') === 0) {
-                                    KG.core_inspector.fetchComments();
-                                }
-                                KG.featureCommentsController.set('showing', YES);
-                                setTimeout(function() {
-                                    KG.core_sandbox.autosize('#feature-new-comment-area', {
-                                        minHeight: 0,
-                                        extraSpace: 45
-                                    });
-                                    if (KG.featureCommentsController.getPath('content.length') === 0) {
-                                        var area = $("#feature-new-comment-area").focus();
-                                    }
-                                },
-                                1);
-                            }
-                        },
-
-                        addFeatureCommentAction: function() {
-                            var comment = KG.featureNewCommentController.get('content');
-                            if (!SC.none(comment)) {
-                                comment = comment.replace("\n", '');
-                                if (comment.length > 0) {
-                                    KG.core_inspector.addComment(comment);
-                                }
-                            }
-                            KG.featureNewCommentController.set('content', '');
-                        },
-
-                        featureCommentsReadyEvent: function() {
-                            setTimeout(function() {
-                                console.log('scroll to bottom');
-                                var container = $('#feature-comments-container');
-                                if (container[0]) {
-                                    container.scrollTop(container[0].scrollHeight);
-                                }
-                            },
-                            1);
-                        },
-
-                        toggleDeleteFeatureCommentButtonAction: function(comment) {
-                            if (KG.featureDeleteCommentController.get('content') === comment) {
-                                KG.featureDeleteCommentController.set('content', null);
-                            } else {
-                                KG.featureDeleteCommentController.set('content', comment);
-                            }
-                        },
-
-                        deleteFeatureCommentButtonAction: function(comment) {
-                            if (KG.featureDeleteCommentController.get('content') == comment) {
-                                KG.core_inspector.deleteComment(comment);
-                                KG.featureDeleteCommentController.set('content', null);
-                            }
-                        },
-
-                        deleteFeatureInspectorAction: function() {
-                            KG.core_inspector.deleteFeature();
-                            this.gotoState('allHiddenState');
-                        }
-                    }),
-
-                    //******************************
-                    // Palette is visible
-                    //******************************
-                    paletteVisibleState: SC.State.extend({
-
-                        enterState: function() {
-                            KG.paletteController.set('active', YES);
-                            if (Ember.none(KG.paletteController.get('content'))) {
-                                var query = SC.Query.local(KG.Featuretype, {
-                                    conditions: 'geometry_type != null'
-                                })
-                                KG.paletteController.set('content', KG.store.find(query));
-                            }
-                        },
-
-                        exitState: function() {
-                            KG.paletteController.set('active', NO);
-                            KG.paletteController.set('isDirty', NO);
-                            KG.core_palette.clearCreateFeature();
-                            //do no clear the paletteController because rebuilding the view takes a while (on mobile)
-                        },
-
-                        paletteMarkerDragEnded: function(params) {
-                            this.gotoState('inspectorVisibleState');
-                            KG.core_inspector.createFeature(params.paletteItem, params.lon, params.lat);
-                        },
-
-                        selectPaletteItemAction: function(paletteItem) {
-                            KG.core_palette.createFeature(paletteItem);
-                        },
-
-                        closePaletteAction: function() {
-                            this.gotoState('allHiddenState');
-                        },
-
-                        cancelPaletteAction: function() {
-                            KG.core_palette.clearCreateFeature();
-                        },
-
-                        showPaletteAction: function() {
-                            this.gotoState('allHiddenState');
-                        }
-                    })
-                }),
-
-                //******************************
-                // Concurrent state for Popup that 
-                // cannot be visible at the same time.
-                // Map Interaction
-                //******************************
-                interactionPopupState: SC.State.extend({
-                    initialSubstate: 'noPopupState',
-
-                    toggleNotificationPopupAction: function() {
-                        this.gotoState('notificationPopupState');
-                    },
-
-                    toggleBookmarkPopupAction: function() {
-                        this.gotoState('bookmarkPopupState');
-                    },
-
-                    //******************************
-                    // No popup visible
-                    //******************************
-                    noPopupState: SC.State.extend({
-                        //nothing to do so far
-                    }),
-
-                    //******************************
-                    // Notification Popup
-                    //******************************
-                    notificationPopupState: SC.State.extend({
-
-                        enterState: function() {
-                            KG.notificationsController.set('activePopup', YES);
-                        },
-
-                        exitState: function() {
-                            KG.notificationsController.set('activePopup', NO);
-                        },
-
-                        sendTextNotificationAction: function() {
-                            this.gotoState('sendNotificationState');
-                        },
-
-                        toggleNotificationPopupAction: function() {
-                            this.gotoState('noPopupState');
-                        },
-
-                        clearNotificationAction: function() {
-                            KG.notificationsController.set('content', []);
-                            this.gotoState('noPopupState');
-                        }
-                    }),
-
-                    //******************************
-                    // Show a popup dialog to send a notification
-                    //******************************
-                    sendNotificationState: SC.State.extend({
-
-                        view: null,
-                        timeout: null,
-
-                        enterState: function() {
-                            KG.sendNotificationController.set('showing', YES);
-                            this.view = SC.View.create({
-                                templateName: 'send-text-notification'
-                            });
-                            this.view.append();
-                            KG.core_sandbox.autosize('#send-notification-panel textarea');
-                            this.focusArea();
-                        },
-
-                        exitState: function() {
-                            KG.sendNotificationController.set('showing', NO);
-                            KG.core_sandbox.destroyAutosize('#send-notification-panel textarea');
-                            this.view.destroy();
-                            this.view = null;
-                            if (this.timeout) {
-                                clearTimeout(this.timeout);
-                                this.timeout = null;
-                            }
-                            KG.sendNotificationController.set('pendingMessage', null);
-                            KG.sendNotificationController.set('feedbackMessage', '');
-                            KG.sendNotificationController.set('content', '');
-                        },
-
-                        focusArea: function() {
-                            setTimeout(function() {
-                                $('#send-notification-panel textarea').focus();
-                            },
-                            300);
-                        },
-
-                        sendNotificationButtonAction: function() {
-                            setTimeout(function() {
-                                $('#send-notification-panel textarea').data('AutoResizer').check();
-                            },
-                            305);
-                            this.sendNotificationAction();
-                            this.focusArea();
-                        },
-
-                        sendNotificationAction: function() {
-                            var message = KG.sendNotificationController.get('content');
-                            if (message && message.length > 0) {
-                                KG.sendNotificationController.set('content', '');
-                                if (this.timeout) {
-                                    clearTimeout(this.timeout);
-                                }
-                                var notification = KG.Message.create({
-                                    type: 'text',
-                                    user_descriptor: KG.core_sandbox.get('membership').user_descriptor,
-                                    author: KG.core_auth.get('activeUser').user,
-                                    content: {
-                                        text: message
-                                    },
-                                    dateMillis: new Date().getTime()
-                                });
-                                KG.sendNotificationController.set('pendingNotification', notification);
-                                var ret = KG.core_notification.postMessage(notification);
-                                if (!ret) {
-                                    KG.sendNotificationController.set('feedbackMessage', '_failedToSendMessage'.loc());
-                                } else {
-                                    KG.sendNotificationController.set('feedbackMessage', '');
-                                    //10s timeout
-                                    this.timeout = setTimeout(function() {
-                                        KG.sendNotificationController.set('pendingNotification', null);
-                                        KG.sendNotificationController.set('feedbackMessage', '_timeoutSendMessage'.loc());
-                                    },
-                                    10000);
-                                }
-                            }
-                        },
-
-                        notificationSent: function(message) {
-                            var pending = KG.sendNotificationController.get('pendingNotification');
-                            if (message && pending && SC.isEqual(message, pending)) {
-                                KG.sendNotificationController.set('pendingNotification', null);
-                                KG.sendNotificationController.set('feedbackMessage', '_sendMessageSuccessful'.loc());
-                                if (this.timeout) {
-                                    clearTimeout(this.timeout);
-                                }
-                            }
-                        },
-
-                        closeSendNotificationAction: function() {
-                            this.gotoState('noPopupState');
-                        }
-                    }),
-
-                    //******************************
-                    // Bookmark Popup
-                    //******************************
-                    bookmarkPopupState: SC.State.extend({
-
-                        initialSubstate: 'normalModeState',
-
-                        enterState: function() {
-                            KG.bookmarksController.set('activePopup', YES);
-                            KG.core_bookmark.refreshBookmarks();
-                        },
-
-                        exitState: function() {
-                            KG.bookmarksController.set('activePopup', NO);
-                        },
-
-                        toggleBookmarkPopupAction: function() {
-                            this.gotoState('noPopupState');
-                        },
-
-                        refreshBookmarkAction: function() {
-                            KG.core_bookmark.refreshBookmarks();
-                        },
-
-                        normalModeState: SC.State.extend({
-
-                            selectBookmarkAction: function(bookmark) {
-                                KG.core_bookmark.gotoBookmark(bookmark);
-                                this.gotoState('noPopupState');
-                            },
-
-                            editBookmarkAction: function() {
-                                this.gotoState('editModeState');
-                            },
-
-                            addBookmarkAction: function() {
-                                this.gotoState('addModeState');
-                            }
-                        }),
-
-                        editModeState: SC.State.extend({
-
-                            enterState: function() {
-                                KG.bookmarksController.set('editMode', YES);
-                            },
-
-                            exitState: function() {
-                                KG.bookmarksController.set('editMode', NO);
-                            },
-
-                            deleteBookmarkAction: function(bookmark) {
-                                KG.core_bookmark.deleteBookmark(bookmark);
-                            },
-
-                            editBookmarkAction: function() {
-                                this.gotoState('normalModeState');
-                            },
-
-                            addBookmarkAction: function() {
-                                this.gotoState('addModeState');
-                            }
-                        }),
-
-                        addModeState: SC.State.extend({
-                            view: null,
-
-                            enterState: function() {
-                                this.view = SC.View.create({
-                                    templateName: 'add-bookmark'
-                                });
-                                this.view.append();
-                                setTimeout(function() {
-                                    $('#add-bookmark-panel input').focus();
-                                },
-                                300);
-                            },
-
-                            exitState: function() {
-                                this.view.destroy();
-                                KG.addBookmarkController.set('content', '');
-                            },
-
-                            addBookmarkAction: function() {
-                                var label = KG.addBookmarkController.get('content');
-                                var center = KG.core_leaflet.getCenter();
-                                var zoom = KG.core_leaflet.getZoom();
-                                KG.core_bookmark.addBookmark(label, center, zoom);
-                                this.gotoState('normalModeState');
-                            },
-
-                            closeAddBookmarkAction: function() {
-                                this.gotoState('noPopupState');
-                            },
-
-                            editBookmarkAction: function() {
-                                this.gotoState('editModeState');
-                            },
-                        })
-                    })
-                }),
-
-                //******************************
-                // Concurrent state for Map Interaction
-                // Map Interaction
-                //******************************
-                mapInteractionState: SC.State.extend({
-
-                    initialSubstate: 'navigationState',
-
-                    backHomeAction: function() {
-                        window.location.href = "home.html";
-                    },
-
-                    mapMovedAction: function(center, zoom) {
-                        KG.core_note.refreshMarkers();
-                        KG.core_sandbox.setCenter(center, zoom);
-                    },
-
-                    mapZoomedAction: function(center, zoom) {
-                        //remove all marker because Leaflet will not render them while zooming and it make a flash after.
-                        KG.core_note.removeAllMarkers();
-                        KG.core_note.refreshMarkers();
-                        KG.core_sandbox.setCenter(center, zoom);
-                    },
-
-                    toogleSearchPopopAction: function() {
-                        this.gotoState('searchState');
-                    },
-
-                    //a note as been clicked -> activate the note
-                    clickMarkerAction: function(marker) {
-                        this.gotoState('navigationState');
-                        KG.core_note.continueMarkerClicked(marker);
-                    },
-
-                    //an ajax error happen... if 401, validate the login state
-                    httpError: function(code) {
-                        if (code === 401) {
-                            KG.core_sandbox.authenticate();
-                        }
-                    },
-
-                    //the user if definitly not logged in -> bring him back to the login page
-                    authenficationFailed: function() {
-                        window.location.href = "index.html";
-                    },
-
-                    createNoteAction: function() {
-                        this.gotoState('locateNoteState');
-                    },
-
-					clickOnMapAction: function(lonLat) {
-                        if (!this._ignoreMouseClicked) {
-                            KG.core_sandbox.set('mousePosition', lonLat);
-                            KG.core_info.findFeaturesAt(lonLat);
-                        }
-                    },
-
-                    mousePositionChanged: function(lonLat) {
-                        KG.core_sandbox.set('mousePosition', lonLat);
-                    },
-
-                    featureInfoReady: function() {
-                        this.gotoState("popupFeatureInfoState");
-                    },
-
-                    clickMarkerAction: function(marker) {
-                        KG.core_note.continueMarkerClicked(marker);
-                    },
-
-                    noteSelectedAction: function(note, params) {
-                        KG.core_note.activateNote(note, params);
-                        this.gotoState('editNoteState');
-                    },
-
-                    multipleNotesSelectedAction: function(notes, marker) {
-                        KG.core_note.activateMultipleNotes(notes, marker);
-                        this.gotoState('multipleNotesState');
-                    },
-
-                    //******************************
-                    // Default state - Navigation
-                    //******************************
-                    navigationState: SC.State.extend({
-
-                        _ignoreMouseClicked: YES,
-
-                        enterState: function() {
-                            console.log('enter navigation state');
-                            //refresh markers
-                            KG.core_note.refreshMarkers();
-                            var self = this;
-                            setTimeout(function() {
-                                self._ignoreMouseClicked = NO
-                            },
-                            100);
-                        },
-
-                        exitState: function() {
-                            this._ignoreMouseClicked = YES;
-                        }                      
-                    }),
-
-                    //******************************
-                    // Show the search panel
-                    //******************************
-                    searchState: SC.State.extend({
-
-                        _highlight: null,
-                        _hlMarker: null,
-
-                        enterState: function() {
-							KG.searchController.set('activePopup', YES);
-							$('#search-popup input').focus();
-                        },
-
-                        exitState: function() {
-							KG.searchController.set('activePopup', NO);
-							KG.searchController.set('searchValue', '');
-							KG.core_search.hideResults();
-                            KG.core_highlight.clearHighlight(this._highlight);
-                            this._highlight = null;
-                            KG.core_highlight.clearHighlightMarker(this._hlMarker);
-                            this._hlMarker = null;
-                        },
-
-						toogleSearchPopopAction: function() {
-	                        this.gotoState('navigationState');
-	                    },
-	
-	                    searchAction: function() {
-	                        KG.core_search.searchFeatures();
-	                    },
-	
-	                    clearSearchAction: function() {
-	                        KG.core_search.clearSearchFeatures();
-	                    },
-
-                        selectSearchCategoryAction: function(cat) {
-							KG.searchResultsController.set('plugin', null);
-							if( KG.searchResultsController.get('category') === cat){
-								KG.searchResultsController.set('category', null);
-							}else{
-                            	KG.searchResultsController.set('category', cat);
-                            	KG.core_search.showResults();
-							}
-                        },
-
-                        selectSearchPluginAction: function(plugin) {
-                            KG.searchResultsController.set('category', null);
-							if(KG.searchResultsController.get('plugin') == plugin){
-								KG.searchResultsController.set('plugin', null);
-							}else{
-                            	KG.searchResultsController.set('plugin', plugin);
-                            	KG.core_search.showResults();
-							}
-                        },
-
-                        createNoteFromFeatureAction: function(feature) {
-                            //create the note and put it in edit mode
-                            if (feature) {
-                                KG.core_leaflet.setCenter(feature.get('center'));
-                                KG.core_note.set('featureTemplate', feature);
-                                this.gotoState('createNoteState');
-                            }
-                        },
-
-                        featureZoomAction: function(feature) {
-                            KG.core_highlight.clearHighlightMarker(this._hlMarker);
-                            KG.core_highlight.clearHighlight(this._highlight);
-                            this._highlight = KG.core_highlight.highlightFeature(feature);
-                            if (KG.store.recordTypeFor(feature.get('storeKey')) === KG.Note) {
-                                this._hlMarker = KG.core_highlight.addHighlightMarker(feature.get('center'));
-                                KG.core_note.setHighlightMarker(this._hlMarker);
-                            }
-                            KG.core_leaflet.setCenter(feature.get('center'));
-
-                        },
-
-                        selectFeatureInspectorAction: function(feature) {
-                            KG.core_highlight.clearHighlightMarker(this._hlMarker);
-                            if (KG.store.recordTypeFor(feature.get('storeKey')) === KG.Note) {
-                                var marker = KG.core_highlight.addHighlightMarker(feature.get('center'));
-                                KG.core_note.setHighlightMarker(marker);
-                                KG.core_note.activateNote(feature, {
-                                    marker: marker
-                                });
-                                this.gotoState('editNoteState');
-                            }
-                        }
-                    }),
-
-                    //******************************
-                    // Show the Feature Info result
-                    //******************************
-                    popupFeatureInfoState: SC.State.extend({
-
-                        _highlight: null,
-
-                        enterState: function() {
-                            console.log('enter popupFeatureInfoState');
-                            KG.core_info.showInfoPopup();
-                        },
-
-                        exitState: function() {
-                            KG.core_highlight.clearHighlight(this._highlight);
-                            this._highlight = null;
-                            KG.core_info.hideInfoPopup();
-                        },
-
-                        hideInfoPopupAction: function() {
-                            this.gotoState('navigationState');
-                        },
-
-                        selectFeatureInspectorAction: function() {
-                            //the concurrent inspector state take care of showing the inspector
-                            this.gotoState('navigationState');
-                        },
-
-                        featureInfoMouseUpAction: function(feature) {
-                            KG.core_highlight.clearHighlight(this._highlight);
-                            this._highlight = KG.core_highlight.highlightFeature(feature);
-                        },
-
-                        featureInfoMouseEnterAction: function(feature) {
-                            KG.core_highlight.clearHighlight(this._highlight);
-                            this._highlight = KG.core_highlight.highlightFeature(feature);
-                        },
-
-                        featureInfoMouseLeaveAction: function(feature) {
-                            KG.core_highlight.clearHighlight(this._highlight);
-                        }
-                    }),
-
-                    //******************************
-                    // Show a popup dialog for note
-                    //******************************
-                    popupNoteState: SC.State.extend({
-
-                        initialSubstate: 'locateNoteState',
-
-                        exitState: function() {
-                            KG.core_leaflet.closePopup();
-                            KG.core_note.clearCreateNote();
-                            var marker = KG.activeNoteController.get('marker');
-                            if (marker) {
-                                KG.core_leaflet.disableDraggableMarker(marker);
-                            }
-                        },
-
-                        mapMovedAction: function() {
-                            //override map interaction action
-                        },
-
-                        mapZoomedAction: function() {
-                            //override map interaction action
-                        },
-
-                        hideMarkerPopupAction: function() {
-                            console.log('marker popup closed, go back to navigation...');
-                            this.gotoState('navigationState');
-                        },
-
-                        clickOnMapAction: function(lonLat) {
-                            console.log('click outside the popup');
-                            this.gotoState('navigationState');
-                        },
-
-                        //******************************
-                        // As the user to locate the note
-                        // to create
-                        //******************************
-                        locateNoteState: SC.State.extend({
-
-                            enterState: function() {
-                                console.log('enter locatenotestate');
-                                this._ignoreCancel = YES;
-                                var self = this;
-                                setTimeout(function() {
-                                    self._ignoreCancel = NO;
-                                },
-                                500);
-                                KG.core_note.locateNote();
-                                KG.activeNoteController.set('createNoteLabel', "_cancelCreateNote".loc());
-                            },
-
-                            exitState: function() {
-                                KG.activeNoteController.set('createNoteLabel', "_createNote".loc());
-                            },
-
-                            hideMarkerPopupAction: function() {},
-
-                            markerDragEnded: function() {
-                                console.log('note position is now set');
-                                this.gotoState('createNoteState');
-                            },
-
-                            createNoteAction: function() {
-                                if (!this._ignoreCancel) {
-                                    console.log('cancel create note!');
-                                    //cancel
-                                    KG.core_note.cancelLocateNote();
-                                    this.gotoState('navigationState');
-                                }
-                            }
-                        }),
-
-                        //******************************
-                        // Show the form to enter the 
-                        // note properties
-                        //******************************
-                        createNoteState: SC.State.extend({
-
-                            enterState: function() {
-                                console.log('enter createNoteState');
-                                KG.core_note.createNote();
-                                KG.core_sandbox.autosize('#note-description-area');
-                            },
-
-                            exitState: function() {
-                                console.log('exit createNoteState');
-                                KG.core_note.clearCreateNote();
-                                KG.core_note.rollbackModifications();
-                                KG.activeNoteController.set('content', null);
-                                KG.core_sandbox.destroyAutosize('#note-description-area');
-                            },
-
-                            confirmNoteAction: function() {
-                                var note = KG.activeNoteController.get('content');
-                                KG.core_note.commitModifications(function() {
-                                    KG.core_note.refreshMarkers(YES);
-                                });
-                                KG.core_note.confirmCreateNote();
-                                this.gotoState('navigationState');
-                            },
-
-                            cancelCreateNoteAction: function() {
-                                this.gotoState('navigationState');
-                            },
-
-                            markerDragEnded: function(lon, lat) {
-                                KG.core_note.updatePosition(lon, lat);
-                            }
-
-                        }),
-
-                        //******************************
-                        // Show a dialog with a list
-                        // of notes to let the user pick one.
-                        //******************************
-                        multipleNotesState: SC.State.extend({
-
-                            enterState: function() {
-                                console.log('enter multiple notes');
-                            },
-
-                            exitState: function() {
-                                console.log('exit multiple notes');
-                                KG.core_note.cleanUpMultipleNotesElements();
-                                KG.notesPopupController.set('marker', null);
-                                KG.notesPopupController.set('content', []);
-                            },
-
-                            noteSelectedAction: function(note, params) {
-                                KG.core_note.activateNote(note, params);
-                                this.gotoState('editNoteState');
-                            }
-                        }),
-
-                        //******************************
-                        // Edit note popup.
-                        // Detail view on the active Note
-                        //******************************
-                        editNoteState: SC.State.extend({
-
-                            dirtyMarker: NO,
-
-                            enterState: function() {
-                                console.log('enter editNoteState');
-                                KG.core_note.beginModifications();
-                                KG.noteNewCommentController.set('content', '');
-                                KG.noteCommentsController.set('showing', NO);
-                                KG.noteCommentsController.set('commentsPanelVisible', YES);
-                                KG.noteCommentsController.set('isLoading', NO);
-                                KG.core_sandbox.autosize('#note-description-area');
-                            },
-
-                            exitState: function() {
-                                console.log('exit editNoteState');
-                                KG.core_note.postEdition();
-                                KG.activeNoteController.set('content', null);
-                                KG.noteCommentsController.set('showing', NO);
-                                KG.noteCommentsController.set('commentsPanelVisible', NO);
-                                KG.noteDeleteCommentController.set('content', null);
-                                KG.core_sandbox.destroyAutosize('#note-description-area');
-                                if (this.dirtyMarker) {
-                                    KG.core_note.refreshMarkers(YES);
-                                    this.dirtyMarker = NO;
-                                }
-                            },
-
-                            showNoteCommentsAction: function() {
-                                if (KG.noteCommentsController.get('showing')) {
-                                    //hide comment section
-                                    KG.noteCommentsController.set('showing', NO);
-                                } else {
-                                    //show comment section
-                                    if (KG.noteCommentsController.get('length') === 0) {
-                                        KG.core_note.fetchComments();
-                                    }
-                                    KG.noteCommentsController.set('showing', YES);
-                                    setTimeout(function() {
-                                        KG.core_sandbox.autosize('#note-new-comment-area', {
-                                            minHeight: 0,
-                                            extraSpace: 20
-                                        });
-                                        var area = $("#note-new-comment-area");
-                                        if (KG.noteCommentsController.getPath('content.length') === 0) {
-                                            area.focus();
-                                        }
-                                    },
-                                    1);
-                                }
-                            },
-
-                            addNoteCommentAction: function() {
-                                var comment = KG.noteNewCommentController.get('content');
-                                if (!SC.none(comment)) {
-                                    comment = comment.replace("\n", '');
-                                    if (comment.length > 0) {
-                                        KG.core_note.addCommentToActiveNote(comment);
-                                    }
-                                }
-                                KG.noteNewCommentController.set('content', '');
-                            },
-
-                            noteCommentsReadyEvent: function() {
-                                setTimeout(function() {
-                                    var container = $('#note-comments-container');
-                                    if (container[0]) {
-                                        container.scrollTop(container[0].scrollHeight);
-                                    }
-                                },
-                                1);
-                            },
-
-                            toggleDeleteNoteCommentButtonAction: function(comment) {
-                                if (KG.noteDeleteCommentController.get('content') === comment) {
-                                    KG.noteDeleteCommentController.set('content', null);
-                                } else {
-                                    KG.noteDeleteCommentController.set('content', comment);
-                                }
-                            },
-
-                            deleteNoteCommentButtonAction: function(comment) {
-                                if (KG.noteDeleteCommentController.get('content') == comment) {
-                                    KG.core_note.deleteComment(comment);
-                                    KG.noteDeleteCommentController.set('content', null);
-                                }
-                            },
-
-                            confirmNoteAction: function() {
-                                var note = KG.activeNoteController.get('content');
-                                KG.core_note.commitModifications(function() {
-                                    KG.core_note.refreshMarkers(YES);
-                                });
-                                this.dirtyMarker = NO;
-                                this.gotoState('navigationState');
-                            },
-
-                            deleteNoteAction: function() {
-                                KG.core_note.deleteActiveNote();
-                                KG.core_note.commitModifications();
-                                this.gotoState('navigationState');
-                            },
-
-                            zoomNoteAction: function() {
-                                KG.core_note.zoomActiveNote();
-                                this.gotoState('navigationState');
-                            },
-
-                            markerDragEnded: function(lon, lat) {
-                                this.dirtyMarker = YES;
-                                KG.core_note.updatePosition(lon, lat);
-                            }
-                        })
-                    })
-                })
-            })
-        })
-    })
-});
-
 });spade.register("kloudgis/sandbox/lib/main", function(require, exports, __module, ARGV, ENV, __filename){
-require("kloudgis/app/lib/main");
-require("kloudgis/app/lib/views/button");
-require("kloudgis/app/lib/views/text_field");
-require("kloudgis/app/lib/views/numeric_text_field");
-require("kloudgis/app/lib/views/text_area");
-require("kloudgis/app/lib/views/loading_image");
+require("kloudgis/view/lib/views/button");
+require("kloudgis/view/lib/views/text_field");
+require("kloudgis/view/lib/views/numeric_text_field");
+require("kloudgis/view/lib/views/text_area");
+require("kloudgis/view/lib/views/loading_image");
 require("kloudgis/auth/lib/main");
 require("kloudgis/core/lib/main_ds");
 require("kloudgis/core/lib/models/feature");
 require("kloudgis/core/lib/models/bounds");
 require("kloudgis/core/lib/core_date");
 require("./strings");
-require("./core_statechart");
 require("./core_sandbox");
 require("./controllers/comments");
 
@@ -2942,9 +1999,9 @@ require("./search_plugins/core_yahoo");
 require("./core_inspector");
 require("./controllers/inspector");
 require("./views/inspector_attribute");
-require("kloudgis/app/lib/views/switch");
-require("kloudgis/app/lib/views/select");
-require("kloudgis/app/lib/views/select_input");
+require("kloudgis/view/lib/views/switch");
+require("kloudgis/view/lib/views/select");
+require("kloudgis/view/lib/views/select_input");
 require("./views/delete_feature_comment");
 require("./controllers/feature_comments");
 require("./controllers/feature_new_comment");
@@ -3384,22 +2441,16 @@ var en = {
 };
 
 if(KG.lang === 'fr'){
-	SC.STRINGS = fr;
+	jQuery.extend(Ember.STRINGS, fr);
 }else{
-	SC.STRINGS = en;
+	jQuery.extend(Ember.STRINGS, en);
 }
-
-//do the localize after the rendering
-SC.run.schedule('render',null, function(){
-	console.log('localize page');
-	$('#back-home a').text("_backHome".loc());
-});
 
 });spade.register("kloudgis/sandbox/lib/templates", function(require, exports, __module, ARGV, ENV, __filename){
 //generic templates
-Ember.TEMPLATES['switch'] = spade.require('kloudgis/~templates/switch');
-Ember.TEMPLATES['select'] = spade.require('kloudgis/~templates/select');
-Ember.TEMPLATES['select-input'] = spade.require('kloudgis/~templates/select_input');
+Ember.TEMPLATES['switch'] = spade.require('kloudgis/templates/switch');
+Ember.TEMPLATES['select'] = spade.require('kloudgis/templates/select');
+Ember.TEMPLATES['select-input'] = spade.require('kloudgis/templates/select_input');
 
 //Sandbox specific templates
 //inspector renderers
@@ -3419,6 +2470,7 @@ Ember.TEMPLATES['img-renderer'] = spade.require('kloudgis/sandbox/templates/img_
 Ember.TEMPLATES['label-renderer'] = spade.require('kloudgis/sandbox/templates/label_renderer');
 
 Ember.TEMPLATES['info-popup'] = spade.require('kloudgis/sandbox/templates/info_popup');
+Ember.TEMPLATES['info-item'] = spade.require('kloudgis/sandbox/templates/info_item');
 Ember.TEMPLATES['add-bookmark'] = spade.require('kloudgis/sandbox/templates/add_bookmark');
 Ember.TEMPLATES['send-text-notification'] = spade.require('kloudgis/sandbox/templates/send_text_notification');
 Ember.TEMPLATES['active-note-popup'] = spade.require('kloudgis/sandbox/templates/active_note_popup');
@@ -3604,38 +2656,28 @@ KG.ExpandButtonView = SC.Button.extend({
 *  One Feature in the featureinfo popup.
 **/
 
-KG.FeatureInfoPopupItemView = SC.Button.extend({
+KG.FeatureInfoPopupItemView = KG.Button.extend({
 	
 	classNames: 'info-popup-item'.w(),
+	
+	templateName:'info-item',
 	
 	content: null,
 	
 	tagName: 'div',
 	
-	isVisible: function(){
-		if(this.get('ignoreIfFirst')){
-			if(this.getPath('itemView.contentIndex') === 0){
-				return NO;
-			}
-		}
-		return YES;
-	}.property('ignoreIfFirst'),
+	sc_action: 'featureInfoMouseUpAction',
+	
+	manualMouseDown: YES,
 
-	
-	mouseUp: function(e){
-		var content = this.get('content') || this.getPath('itemView.content');
-		KG.statechart.sendAction('featureInfoMouseUpAction', content);
-		return NO;
-	},
-	
 	mouseEnter: function(e){
-		var content = this.get('content') || this.getPath('itemView.content');
+		var content = this.get('content');
 		KG.statechart.sendAction('featureInfoMouseEnterAction', content);
 		return NO;
 	},
 	
 	mouseLeave: function(e){
-		var content = this.get('content') || this.getPath('itemView.content');
+		var content = this.get('content');
 		KG.statechart.sendAction('featureInfoMouseLeaveAction', content);
 		return NO;
 	}
@@ -3830,14 +2872,16 @@ return Ember.Handlebars.compile("<span class=\"inspector-attr-name\">\n\t{{itemV
 return Ember.Handlebars.compile("{{#view KG.Button tagName=\"span\"   isVisibleBinding=\"KG.featureCommentsController.showButtonVisible\" sc_action=\"showFeatureCommentsAction\"}}\n\t<a href=\"javascript:void(0)\">\n\t\t{{KG.featureCommentsController.commentsLabel}}\n\t</a>\n{{/view}}\n{{#view id=\"feature-comments-container\" classBinding=\"KG.featureCommentsController.showing\"}}\n\t{{#collection contentBinding=\"KG.featureCommentsController.content\" class=\"comment-list\"}}\n\t\t{{#view KG.Button tagName=\"div\" sc_action=\"toggleDeleteFeatureCommentButtonAction\"}}\n\t\t\t<table style=\"width:100%\">\n\t\t\t<tr>\n\t\t\t\t<td>\n\t\t\t\t\t{{#view KG.AuthorView class=\"comment-author\"}}\n\t\t\t\t\t\t{{authorLabel}}\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t{{/view}}\n\t\t\t\t\t{{#view class=\"comment-content\"}}\n\t\t\t\t\t\t{{itemView.content.comment}}\n\t\t\t\t\t{{/view}}\n\t\t\t\t\t{{#view class=\"comment-date\"}}\n\t\t\t\t\t\t{{itemView.content.formattedDate}}\n\t\t\t\t\t{{/view}}\n\t\t\t\t</td>\n\t\t\t\t<td style=\"text-align:right;vertical-align:middle\">\n\t\t\t\t\t{{#view KG.DeleteFeatureCommentView class=\"comment-delete red-button\" sc_action=\"deleteFeatureCommentButtonAction\"}}\n\t\t\t\t\t\t{{label}}\n\t\t\t\t\t{{/view}}\n\t\t\t\t</td>\n\t\t\t</tr>\n\t\t\t</table>\n\t\t{{/view}}\n\t{{/collection}}\t\t\t\n{{/view}}\n{{view KG.CommentAreaView id=\"feature-new-comment-area\" class=\"new-comment-area\" isVisibleBinding=\"KG.featureCommentsController.showing\" nl_sc_action=\"addFeatureCommentAction\" valueBinding=\"KG.featureNewCommentController.content\" placeholder_not_loc=\"_commentPlaceholder\"}}\n{{#view KG.LoadingImageView id=\"feature-comment-loading\" class=\"comment-loading\" isVisibleBinding=\"KG.featureCommentsController.isLoading\"}}\n\t<img {{bindAttr src=\"loadingImage\"}} alt=\"Loading\"/>\n{{/view}}\n");
 });spade.register("kloudgis/sandbox/templates/img_renderer", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("<span class=\"inspector-attr-name\">\n\t{{itemView.content.label}}\n</span>\t\n\n<div class=\"inspector-attr-value\">\n\t<img {{bindAttr src=\"itemView.content.imgBase64Value\"}}/>\n</div>\n");
+});spade.register("kloudgis/sandbox/templates/info_item", function(require, exports, __module, ARGV, ENV, __filename){
+return Ember.Handlebars.compile("<div class=\"info-item-row\">\n\t{{#view class=\"label-ellipsis\"}}\n\t\t{{parentView.content.title}}\n\t{{/view}}\t\t\t\n\t{{#view KG.Button manualMouseDown=\"yes\" sc_action=\"selectFeatureInspectorAction\" contentBinding=\"content\" tagName=\"div\" }}\t\n\t\t<img src=\"resources/images/right_arrow_32.png\"/>\t\t\n\t{{/view}}\n</div>\n");
 });spade.register("kloudgis/sandbox/templates/info_popup", function(require, exports, __module, ARGV, ENV, __filename){
-return Ember.Handlebars.compile("{{#collection contentBinding=\"KG.infoController\"  isVisibleBinding=\"KG.infoController.listVisible\" class=\"popup-info-list\"}}\n\t{{#view KG.FeatureInfoPopupItemView class=\"popup-info-item\" ignoreIfFirst=\"true\"}}\n\t\t<table class=\"popup-info-table more-features-zone\">\n\t\t\t<tr>\n\t\t\t\t<td>\n\t\t\t\t\t{{#view class=\"label-ellipsis\"}}\n\t\t\t\t\t\t{{itemView.content.title}}\n\t\t\t\t\t{{/view}}\t\t\t\n\t\t\t\t</td>\n\t\t\t\t<td>\n\t\t\t\t\t{{#view KG.Button manualMouseDown=\"yes\" sc_action=\"selectFeatureInspectorAction\" class=\"popup-info-select\" tagName=\"div\" }}\t\n\t\t\t\t\t\t<img src=\"resources/images/right_arrow_32.png\"/>\t\t\n\t\t\t\t\t{{/view}}\n\t\t\t\t</td>\n\t\t\t</tr>\n\t\t</table>\n\t{{/view}}\t\t\n{{/collection}}\n<table class=\"popup-info-master-row-table\">\n\t<tr>\n\t\t<td>\n\t\t\t{{#view KG.ExpandButtonView tagName=\"div\" class=\"popup-info-expand\" isVisibleBinding=\"KG.infoController.multipleFeatures\" expandedBinding=\"KG.infoController.listVisible\"}}\t\n\t\t\t\t<img {{bindAttr src=\"logo\"}}/>\t\t\n\t\t\t{{/view}}\t\t\n\t\t</td>\n\t\t<td>\n\t\t\t{{#view KG.FeatureInfoPopupItemView class=\"popup-info-item\" contentBinding=\"KG.infoController.firstFeature\"}}\n\t\t\t\t<table class=\"popup-info-table\">\n\t\t\t\t<tr>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{#view class=\"label-ellipsis\"}}\n\t\t\t\t\t\t\t{{parentView.content.title}}\n\t\t\t\t\t\t{{/view}}\t\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{#view KG.Button manualMouseDown=\"yes\" sc_action=\"selectFeatureInspectorAction\" class=\"popup-info-select\" contentBinding=\"KG.infoController.firstFeature\" tagName=\"div\" }}\t\n\t\t\t\t\t\t\t<img src=\"resources/images/right_arrow_32.png\"/>\t\t\n\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t</table>\n\t\t\t{{/view}}\t\n\t\t</td>\n\t</tr>\n</table>\n");
+return Ember.Handlebars.compile("{{collection contentBinding=\"KG.infoController.allButFirst\"  isVisibleBinding=\"KG.infoController.listVisible\" class=\"popup-info-list\" itemViewClass=\"KG.FeatureInfoPopupItemView\"}}\t\n{{view KG.FeatureInfoPopupItemView contentBinding=\"KG.infoController.firstFeature\" class=\"master-row\"}}\n{{#view KG.ExpandButtonView tagName=\"div\" class=\"popup-info-expand-button\" isVisibleBinding=\"KG.infoController.multipleFeatures\" expandedBinding=\"KG.infoController.listVisible\"}}\t\n\t<img {{bindAttr src=\"logo\"}}/>\t\t\n{{/view}}\n");
 });spade.register("kloudgis/sandbox/templates/inspector", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("{{#view id=\"super-inspector\" classBinding=\"KG.inspectorController.active\"}}\n\t{{#view id=\"inspector-title\" tagName=\"header\"}}\n\t\t{{#view KG.Button tagName=\"div\" class=\"ios-button ios-tb-left\" isVisibleBinding=\"KG.inspectorController.isDirty\"  sc_action=\"cancelInspectorAction\" titleBinding=\"KG.inspectorController.cancelTitle\"}}\n\t\t\t{{loc _cancel}}\n\t\t{{/view}}\n\t\t<h1 class=\"label-ellipsis\" {{bindAttr title=\"KG.inspectorController.title\"}}>{{KG.inspectorController.title}}</h1>\n\t\t{{#view KG.Button tagName=\"div\" class=\"ios-button ios-tb-right\"  sc_action=\"closeInspectorAction\" titleBinding=\"KG.inspectorController.saveTitle\"}}\n\t\t\t{{KG.inspectorController.saveLabel}}\n\t\t{{/view}}\t\t\t\n\t{{/view}}\t\n\t<div id=\"inspector-panel\">\t\t\t\t\t\t\n\t\t{{#collection contentBinding=\"KG.inspectorController\" class=\"inspector-attrs-list\"}}\n\t\t\t{{view KG.InspectorAttributeView class=\"inspector-list-item\" classBinding=\"itemView.content.css_class\"}}\n\t\t{{/collection}}\t\n\t\t<div id=\"comment-super-panel\">\n\t\t</div>\t\t\t\n\t\t{{#view KG.Button tagName=\"div\" class=\"delete-feature red-button\"  sc_action=\"deleteFeatureInspectorAction\" titleBinding=\"KG.inspectorController.deleteTitle\" isVisibleBinding=\"KG.inspectorController.isWriteable\"}}\n\t\t\t{{loc _Delete}}\n\t\t{{/view}}\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t</div>\t\t\t\t\n{{/view}}\n");
 });spade.register("kloudgis/sandbox/templates/label_renderer", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("<span class=\"inspector-attr-name\">\n\t{{itemView.content.label}}\n</span>\t\n\n<div class=\"inspector-attr-value\">\n\t<span>\n\t\t{{itemView.content.value}}\n\t</span>\n</div>\n");
 });spade.register("kloudgis/sandbox/templates/multiple_notes_popup", function(require, exports, __module, ARGV, ENV, __filename){
-return Ember.Handlebars.compile("{{#view class=\"multiple-notes-title\"}}\n\t{{KG.notesPopupController.popupTitle}}\n{{/view}}\n{{#collection contentBinding=\"KG.notesPopupController\" tagName=\"ul\" class=\"multiple-notes-list no-style-list\"}}\t\t\t\n\t{{#view KG.NotePopupItemView class=\"multiple-notes-item\"}}\n\t\t<table class=\"multiple-notes-table\">\n\t\t<td>\n\t\t{{#view class=\"multiple-notes-item-title\"}}\n\t\t\t{{itemView.content.title}}\n\t\t{{/view}}\n\t\t</td>\n\t\t<td>\n\t\t{{#view class=\"note-author-label\"}}\n\t\t\t{{itemView.content.authorFormatted}}\n\t\t{{/view}}\n\t\t</td>\n\t\t</table>\n\t{{/view}}\n{{/collection}}\n");
+return Ember.Handlebars.compile("{{#view class=\"multiple-notes-title\"}}\n\t{{KG.notesPopupController.popupTitle}}\n{{/view}}\n{{#collection contentBinding=\"KG.notesPopupController\" tagName=\"ul\" class=\"multiple-notes-list no-style-list\"}}\t\t\t\n\t{{#view KG.NotePopupItemView class=\"multiple-notes-item common-list-button\"}}\n\t\t<table class=\"multiple-notes-table\">\n\t\t<td>\n\t\t{{#view class=\"multiple-notes-item-title\"}}\n\t\t\t{{itemView.content.title}}\n\t\t{{/view}}\n\t\t</td>\n\t\t<td>\n\t\t{{#view class=\"note-author-label\"}}\n\t\t\t{{itemView.content.authorFormatted}}\n\t\t{{/view}}\n\t\t</td>\n\t\t</table>\n\t{{/view}}\n{{/collection}}\n");
 });spade.register("kloudgis/sandbox/templates/note_comments", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("{{#view KG.Button  manualMouseDown=\"yes\" tagName=\"span\" isVisibleBinding=\"KG.noteCommentsController.showButtonVisible\"  sc_action=\"showNoteCommentsAction\"}}\n\t<a href=\"javascript:void(0)\">\n\t\t{{KG.noteCommentsController.commentsLabel}}\n\t\t</a>\n{{/view}}\n{{#view id=\"note-comments-container\" classBinding=\"KG.noteCommentsController.showing\"}}\n\t{{#collection contentBinding=\"KG.noteCommentsController.content\" class=\"comment-list\"}}\n\t\t{{#view KG.Button manualMouseDown=\"yes\" tagName=\"div\" sc_action=\"toggleDeleteNoteCommentButtonAction\"}}\n\t\t\t<table style=\"width:100%\">\n\t\t\t<tr>\n\t\t\t\t<td>\n\t\t\t\t\t{{#view KG.AuthorView class=\"comment-author\"}}\n\t\t\t\t\t\t{{authorLabel}}\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t{{/view}}\n\t\t\t\t\t{{#view class=\"comment-content\"}}\n\t\t\t\t\t\t{{itemView.content.comment}}\n\t\t\t\t\t{{/view}}\n\t\t\t\t\t{{#view class=\"comment-date\"}}\n\t\t\t\t\t\t{{itemView.content.formattedDate}}\n\t\t\t\t\t{{/view}}\n\t\t\t\t</td>\n\t\t\t\t<td style=\"text-align:right;vertical-align:middle\">\n\t\t\t\t\t{{#view KG.DeleteNoteCommentView manualMouseDown=\"yes\" class=\"comment-delete red-button\" sc_action=\"deleteNoteCommentButtonAction\"}}\n\t\t\t\t\t\t{{label}}\n\t\t\t\t\t{{/view}}\n\t\t\t\t</td>\n\t\t\t</tr>\n\t\t\t</table>\n\t\t{{/view}}\n\t{{/collection}}\t\t\t\n{{/view}}\n{{view KG.CommentAreaView id=\"note-new-comment-area\" class=\"new-comment-area\" isVisibleBinding=\"KG.noteCommentsController.showing\" valueBinding=\"KG.noteNewCommentController.content\" placeholder_not_loc=\"_commentPlaceholder\" nl_sc_action=\"addNoteCommentAction\"}}\n{{#view KG.LoadingImageView id=\"note-comment-loading\" class=\"comment-loading\" isVisibleBinding=\"KG.noteCommentsController.isLoading\"}}\n\t<img {{bindAttr src=\"loadingImage\"}} alt=\"Loading\"/>\n{{/view}}\n");
 });spade.register("kloudgis/sandbox/templates/notification_panel", function(require, exports, __module, ARGV, ENV, __filename){

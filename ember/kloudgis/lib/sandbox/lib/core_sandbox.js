@@ -9,9 +9,46 @@ KG.core_sandbox = SC.Object.create({
 
 	sandboxLabel: '',
     mousePosition: null,
+	mapAdded: NO,
+	
+	cleanUp:function(){
+		this.set('sandboxMeta', {});
+		this.set('membership', null);
+		this.set('isSandboxOwner', NO);
+		this.set('sandboxLabel', '');
+		this.set('mousePosition', null);
+		
+		KG.store.unloadRecords(KG.FeatureType);
+		KG.store.unloadRecords(KG.AttrType);
+		KG.store.unloadRecords(KG.Bookmark);
+		KG.store.unloadRecords(KG.Feature);	
+		KG.core_layer.cleanUp();
+		KG.store.unloadRecords(KG.Layer);
+		KG.core_note.removeAllMarkers();
+		KG.store.unloadRecords(KG.Note);
+		KG.store.unloadRecords(KG.NoteMarker);
+		this.setCenter(null,null);
+		//FIXME: Use of a state to manage the popup ?
+		KG.activeUserController.set('activePopup', NO);
+		
+		this._clearRecordArray(KG.bookmarksController.get('content'));
+		this._clearRecordArray(KG.layersController.get('content'));
+		this._clearRecordArray(KG.paletteController.get('content'));
+		this._clearRecordArray(KG.searchController.get('content'));
+	},
+	
+	_clearRecordArray: function(rarray){
+		if(!Ember.none(rarray) && rarray.destroy){
+			rarray.destroy();
+		}
+	},
 
     setCenter: function(lonLat, zoom) {
-        window.location.hash = 'lon:%@;lat:%@;zoom:%@'.fmt(lonLat.get('lon').toFixed(4), lonLat.get('lat').toFixed(4), zoom);
+		if(!lonLat){
+			window.location.hash=''
+		}else{
+        	window.location.hash = 'lon:%@;lat:%@;zoom:%@'.fmt(lonLat.get('lon').toFixed(4), lonLat.get('lat').toFixed(4), zoom);
+		}
     },
 
     authenticate: function() {
@@ -122,7 +159,14 @@ KG.core_sandbox = SC.Object.create({
 
     addMap: function() {
         var hash = this.extractHashValues();
-        KG.core_leaflet.addToDocument(hash.lon, hash.lat, hash.zoom);
+		if(this.get('mapAdded')){
+			if(hash.lon && hash.lat){
+				KG.core_leaflet.setCenter(KG.LonLat.create({lon:hash.lon, lat:hash.lat}), hash.zoom);
+			}
+		}else{
+			this.set('mapAdded', YES);
+        	KG.core_leaflet.addToDocument(hash.lon, hash.lat, hash.zoom);	
+		}
     },
 
     createNote: function() {
@@ -181,16 +225,4 @@ KG.core_sandbox = SC.Object.create({
 		}
 		return NO;
     }.property('membership')
-});
-
-$(document).ready(function() {
-    KG.statechart.initStatechart();
-    /*if ($.browser.isIphone) {
-        //tweaks to hide the address bar
-        $('#box').addClass('mobile');
-        setTimeout(function() {
-            window.scrollTo(0, 1);
-        },
-        1000);
-    }*/
 });

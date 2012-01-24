@@ -17,19 +17,7 @@
 
 .multiple-notes-item{
 	padding: 0.5em;
-}
-
-.multiple-notes-item:hover{
-	background: rgba(0,0,255,0.5);
-	color: white;
-}
-
-.multiple-notes-item:hover table{
-	color: white;
-}
-
-.multiple-notes-item:hover table .note-author-label{
-	color: white;
+	border-radius: 6px;
 }
 
 .multiple-notes-table td{

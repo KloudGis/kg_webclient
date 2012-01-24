@@ -1,11 +1,15 @@
 /**
 * Core functions to perform highlights
+* 
 **/
 KG.core_highlight = SC.Object.create({
 
+	//use map leaflet default object.
+	map: KG.core_leaflet,
+
     clearHighlight: function(hl) {
         if (hl) {
-            KG.core_leaflet.removeHighlight(hl);
+            this.map.removeHighlight(hl);
         }
     },
 
@@ -14,7 +18,7 @@ KG.core_highlight = SC.Object.create({
             return NO;
         }
         try {
-            return KG.core_leaflet.addHighlight(feature.get('geo'));
+            return this.map.addHighlight(feature.get('geo'));
         } catch(e) {
             return null;
         }
@@ -22,7 +26,7 @@ KG.core_highlight = SC.Object.create({
 
     clearHighlightMarker: function(hlMarker) {
         if (hlMarker) {
-            KG.core_leaflet.removeMarker(hlMarker);
+            this.map.removeMarker(hlMarker);
         }
     },
 
@@ -48,7 +52,7 @@ KG.core_highlight = SC.Object.create({
                     return this.getNativePosition().get('lat');
                 }.property()
             });
-            return KG.core_leaflet.addMarker(marker, lonLat.get('lon'), lonLat.get('lat'), options);
+            return this.map.addMarker(marker, lonLat.get('lon'), lonLat.get('lat'), options);
         } catch(e) {
             return NO;
         }

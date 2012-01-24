@@ -7,13 +7,17 @@
 spade.register("kloudgis/map/lib/core_highlight", function(require, exports, __module, ARGV, ENV, __filename){
 /**
 * Core functions to perform highlights
+* 
 **/
 
 KG.core_highlight = SC.Object.create({
 
+	//use map leaflet default object.
+	map: KG.core_leaflet,
+
     clearHighlight: function(hl) {
         if (hl) {
-            KG.core_leaflet.removeHighlight(hl);
+            this.map.removeHighlight(hl);
         }
     },
 
@@ -22,7 +26,7 @@ KG.core_highlight = SC.Object.create({
             return NO;
         }
         try {
-            return KG.core_leaflet.addHighlight(feature.get('geo'));
+            return this.map.addHighlight(feature.get('geo'));
         } catch(e) {
             return null;
         }
@@ -30,7 +34,7 @@ KG.core_highlight = SC.Object.create({
 
     clearHighlightMarker: function(hlMarker) {
         if (hlMarker) {
-            KG.core_leaflet.removeMarker(hlMarker);
+            this.map.removeMarker(hlMarker);
         }
     },
 
@@ -56,7 +60,7 @@ KG.core_highlight = SC.Object.create({
                     return this.getNativePosition().get('lat');
                 }.property()
             });
-            return KG.core_leaflet.addMarker(marker, lonLat.get('lon'), lonLat.get('lat'), options);
+            return this.map.addMarker(marker, lonLat.get('lon'), lonLat.get('lat'), options);
         } catch(e) {
             return NO;
         }
@@ -68,11 +72,25 @@ KG.core_highlight = SC.Object.create({
 })
 
 });spade.register("kloudgis/map/lib/core_leaflet", function(require, exports, __module, ARGV, ENV, __filename){
-KG.localStorageLeafletCacheKey = 'leaflet-wms-cache-count';
 /**
 * Core functions to manage the map (leaflet framework)
+*  Default Object Instance
 **/
-KG.core_leaflet = SC.Object.create({
+
+KG.core_leaflet = KG.MapLeaflet.create({
+});
+
+});spade.register("kloudgis/map/lib/main", function(require, exports, __module, ARGV, ENV, __filename){
+require("./map_leaflet");
+require("./core_leaflet");
+require("./core_highlight");
+
+});spade.register("kloudgis/map/lib/map_leaflet", function(require, exports, __module, ARGV, ENV, __filename){
+KG.localStorageLeafletCacheKey = 'leaflet-wms-cache-count';
+/**
+* CLASS - Core functions to manage the map (leaflet framework)
+**/
+KG.MapLeaflet = SC.Object.extend({
 
     map: null,
 
@@ -82,12 +100,20 @@ KG.core_leaflet = SC.Object.create({
 
     //icons
     _icons: [],
+	_added : NO,
+	
+    baseLayer: 'Bing',
 
     //	layerControl: new L.Control.Layers(),
-    addToDocument: function(lon, lat, zoom) {
+    addToDocument: function(lon, lat, zoom, element) {
+		if(this._added){
+			return;
+		}else{
+			this._added = YES;
+		}
 
         //patch to make the popup hide on Safari Mac.
-        /*  if ($.browser.safari && navigator.platform.indexOf('Mac') == 0) {
+          if ($.browser.safari && navigator.platform.indexOf('Mac') == 0) {
             L.Popup.prototype._close = function() {
                 if (this._opened) {
                     this._map.removeLayer(this);
@@ -99,38 +125,23 @@ KG.core_leaflet = SC.Object.create({
                     }
                 }
             };
-        }*/
+        }
 
         var baseLayer;
-        var key = 'Anvn3DMhTFsggcirvNz1TNQrxCzksEg-b47gtD7AO1iOzZicEiF2mFZoleYMkX8z';
-        baseLayer = new L.BingLayer(key);
-
-        /*        var osmURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-		var at = 'OSM';
-		baseLayer = new L.TileLayer(osmURL, {
-		    maxZoom: 20,
-		    attribution: at
-		});
-		*/
-
-        /*	var key = '8ccaf9c293f247d6b18a30fce375e298';
-        var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/' + key + '/997/256/{z}/{x}/{y}.png',
-        cloudmadeAttribution = 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
-        baseLayer = new L.TileLayer(cloudmadeUrl, {
-            maxZoom: 18,
-            attribution: cloudmadeAttribution
-        });
-   *?
-        /*var mapquestUrl = 'http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
-        mapquestAttribution = "Data CC-By-SA by <a href='http://openstreetmap.org/' target='_blank'>OpenStreetMap</a>, Tiles Courtesy of <a href='http://open.mapquest.com' target='_blank'>MapQuest</a>",
-        baseLayer = new L.TileLayer(mapquestUrl, {
-            maxZoom: 18,
-            attribution: mapquestAttribution,
-            subdomains: ['1', '2', '3', '4']
-        });*/
-
+		if(this.get('baseLayer') === 'OSM'){
+			var osmURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+			var at = 'OSM';
+			baseLayer = new L.TileLayer(osmURL, {
+			    maxZoom: 20,
+			    attribution: at
+			});
+		}else{
+        	var key = 'Anvn3DMhTFsggcirvNz1TNQrxCzksEg-b47gtD7AO1iOzZicEiF2mFZoleYMkX8z';
+        	baseLayer = new L.BingLayer(key);
+		}
+		element = element || 'map';
         // initialize the map on the "map" div
-        var map = new L.Map('map', {});
+        var map = new L.Map(element, {});
         //default QUEBEC
         lon = lon || -72;
         lat = lat || 46;
@@ -504,6 +515,12 @@ KG.core_leaflet = SC.Object.create({
         this.map.addLayer(wms);
     },
 
+	removeLayer: function(layer) {
+		if (layer._native_layer) {
+			this.map.removeLayer(layer._native_layer);
+		}
+	},
+	
     //increment counter to include in the wms url to force refresh (not from cache)
     _counter: localStorage.getItem(KG.localStorageLeafletCacheKey) || 1,
 
@@ -821,5 +838,30 @@ L.BingLayer = L.TileLayer.extend({
         return (sw2.lat <= ne.lat) && (sw2.lng <= ne.lng) && (sw.lat <= ne2.lat) && (sw.lng <= ne2.lng);
     }
 });
+
+
+     /*        var osmURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+		var at = 'OSM';
+		baseLayer = new L.TileLayer(osmURL, {
+		    maxZoom: 20,
+		    attribution: at
+		});
+		*/
+
+     /*	var key = '8ccaf9c293f247d6b18a30fce375e298';
+     var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/' + key + '/997/256/{z}/{x}/{y}.png',
+     cloudmadeAttribution = 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
+     baseLayer = new L.TileLayer(cloudmadeUrl, {
+         maxZoom: 18,
+         attribution: cloudmadeAttribution
+     });
+*?
+     /*var mapquestUrl = 'http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
+     mapquestAttribution = "Data CC-By-SA by <a href='http://openstreetmap.org/' target='_blank'>OpenStreetMap</a>, Tiles Courtesy of <a href='http://open.mapquest.com' target='_blank'>MapQuest</a>",
+     baseLayer = new L.TileLayer(mapquestUrl, {
+         maxZoom: 18,
+         attribution: mapquestAttribution,
+         subdomains: ['1', '2', '3', '4']
+     });*/
 
 });

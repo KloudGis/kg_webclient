@@ -1,13 +1,29 @@
-body{
-	width: 450px;
-	margin: 0px auto;
+
+#main-login-view.login-hidden div{
+	display:none;
 }
 
-#if-spinner{
-	position: absolute;	
-	width:450px;
-	height:60px;
-	top:45%;
+#main-login-view.login-pushed-left{
+	left:-150%;
+}
+
+#main-login-view.login-pushed-right{
+	left:150%;
+}
+
+#main-login-view > div{
+	width:400px;
+	margin:0px auto;
+}
+
+#loading{
+	position:absolute;
+	width:50px;
+	height:50px;
+	left:50%;
+	margin-left:-25px;
+	top:50%;
+	margin-top:-25px;	
 }
 
 #kloud-logo{
@@ -20,7 +36,6 @@ body{
 	margin:0px auto;
 }
 
-
 #kloud-brand{
 	margin-left: 10px;
 	display: block;
@@ -28,8 +43,7 @@ body{
 	font-size: 24px;
 	line-height: 28px;
 	font-weight: bold;
-	color: #333;
-	text-shadow: rgba(255, 255, 255, .9) 0px 1px 0px;
+	color: #fff;
 }
 
 #kloud-loading{
@@ -48,7 +62,7 @@ body{
   background: -moz-linear-gradient(0% 100% 90deg,#254981,#4C74A9);
   background: -o-linear-gradient(top, #4C74A9 0%, #254981 100%);
   border-radius: 8px;  
-  box-shadow: rgba(0, 0, 0, 0.4) 2px 2px 10px;
+  box-shadow: rgba(0, 0, 0, 0.8) 2px 2px 10px;
 } 
 
 #login-button {
@@ -102,13 +116,6 @@ body{
   -webkit-text-stroke: 0.5px transparent;
 }
 
-#error-message{
-  margin-top: 5px;
-  margin-left:25px;
-  font-size: 12px;
-  color: rgb(182,37,55);
-}
-
 .login-pane .ember-text-field {
 	width: 90%;
 	float:right;
@@ -137,8 +144,7 @@ body{
 	margin-top: 20px;
 	font-size: 14px;
 	font-weight: bold;
-	color: #333;
-	text-shadow: rgba(255, 255, 255, .9) 0px 1px 0px;
+	color: white;
 }
 
 #signup-button{	
@@ -151,7 +157,6 @@ body{
 	font-size: 14px;
 	font-weight: bold;
 	color: white;
-	text-shadow: 0 1px 1px #333;
 	box-shadow: rgba(0, 0, 0, 0.4) 2px 2px 8px; 
 	-webkit-box-shadow: rgba(0, 0, 0, 0.4) 2px 2px 8px; 
 	white-space: nowrap;

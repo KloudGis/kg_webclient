@@ -104,6 +104,10 @@
 	border-radius: 6px;
 }
 
+.bookmark-item-label{
+	font-size: 14px;
+}
+
 #bookmark-list .bookmark-item:first-child{
 		border-top:1px solid transparent;
 }
@@ -216,11 +220,13 @@
 }
 
 .leaflet-popup.info-popup .leaflet-popup-content-wrapper{
-	background: rgba(0,0,0,0.6);
+	background-color: #787878;
+	background-image: -webkit-linear-gradient(top, rgb(120, 120, 120), rgb(45, 45, 45));
+	background-image: -moz-linear-gradient(top, rgb(120, 120, 120), rgb(45, 45, 45));
 	box-shadow: none;
 }
 .leaflet-popup.info-popup .leaflet-popup-tip{
-	background: rgba(0,0,0,0.6);
+	background: rgb(45, 45, 45);
 	padding: 0px;
 }
 
@@ -228,66 +234,43 @@
 	margin: 0px;
 }
 
-.popup-info-table{
-	width:100%;
-	border: none;
-	border-spacing: 0px;
+
+.super-info-popup{
+	position:relative;	
 }
 
-.popup-info-table td{
-	vertical-align: middle;
-	width: 100%;
-	max-width:250px;
-	color: white;
-	white-space: nowrap;
-	padding: 0px;
-	margin: 0px;
-	text-align: right;
+.info-item-row{
+	position:relative;
+	font-size:14px;
+	color:white;
 }
 
-.popup-info-table td span{
-	
+.info-item-row:hover{
+	font-weight:bold;
 }
 
-.more-features-zone{
-	margin-top:0px;
+.info-item-row > div:first-child{
+	margin-right:30px;
+	margin-left:10px;
+	padding:5px;
 }
 
-.popup-info-master-row-table{
-	width: 100%;
-	border: none;
-	border-spacing: 0px;
-	margin: 5px 0px;
+.info-item-row > div:last-child{
+	position:absolute;
+	right:-2px;
+	top:-1px;
+	cursor:pointer;
 }
 
-.popup-info-master-row-table td{
-	width: 100%;
-	vertical-align: middle;
+.master-row .info-item-row > div:first-child{
+	margin-left:30px;
 }
 
-.popup-info-item{
-	min-width: 80px;
-	border-radius: 16px;
-	border: 1px solid rgba(0,0,0,0.5);
-	cursor: pointer;
-	margin: 2px 5px;	
-}
-
-.popup-info-item span{	
-	margin:0px 5px 0px 10px;
-	text-align: right;
-}
-
-.popup-info-item:hover{
-	background: rgba(0,0,0,0.5);
-}
-
-.popup-info-select{
-	padding:0px;
-	border: none;
-	background: none;
-	width:32px;
-	text-align: right;
+.popup-info-expand-button{
+	position: absolute;
+	left: 0;
+	bottom:-5px;
+	cursor:pointer;
 }
 
 
@@ -341,6 +324,7 @@
 
 #super-inspector.active #inspector-title{
 	top:0px;
+	left: 0;
 }
 /* Use transform3d if available (its smooter)*/
 @media screen and (-webkit-transform-3d) {
@@ -351,6 +335,7 @@
 	#super-inspector.active #inspector-title{
 		-webkit-transform: translate3d(0,50px,0);
 		top:-50px;
+		left: 0;
 	}
 }
 
@@ -361,6 +346,7 @@
 
 #inspector-title h1{
 	position: absolute;
+	width:auto;
 	top:7px;
 	left:95px;
 	right:95px;
@@ -511,19 +497,7 @@
 
 .multiple-notes-item{
 	padding: 0.5em;
-}
-
-.multiple-notes-item:hover{
-	background: rgba(0,0,255,0.5);
-	color: white;
-}
-
-.multiple-notes-item:hover table{
-	color: white;
-}
-
-.multiple-notes-item:hover table .note-author-label{
-	color: white;
+	border-radius: 6px;
 }
 
 .multiple-notes-table td{
@@ -879,6 +853,18 @@
 	}
 	
 }
+#main-sandbox-view.sandbox-hidden div{
+	display:none;
+}
+
+#main-sandbox-view.sandbox-pushed-left{
+	left:-150%;
+}
+
+#main-sandbox-view.sandbox-pushed-right{
+	left:150%;
+}
+
 #map {
 	position:absolute;
 	left:0;
@@ -959,6 +945,7 @@
 	background: rgba(255,255,255,0.9);
 	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
 	-webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+	border-radius:6px;
 }
 
 #active-user-popup{

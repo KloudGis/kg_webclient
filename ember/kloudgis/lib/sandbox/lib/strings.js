@@ -121,13 +121,7 @@ var en = {
 };
 
 if(KG.lang === 'fr'){
-	SC.STRINGS = fr;
+	jQuery.extend(Ember.STRINGS, fr);
 }else{
-	SC.STRINGS = en;
+	jQuery.extend(Ember.STRINGS, en);
 }
-
-//do the localize after the rendering
-SC.run.schedule('render',null, function(){
-	console.log('localize page');
-	$('#back-home a').text("_backHome".loc());
-});

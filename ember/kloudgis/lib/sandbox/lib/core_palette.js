@@ -49,7 +49,7 @@ $(document).ready(function() {
         KG.core_palette._view = Ember.View.create({
             templateName: 'palette'
         });
-        KG.core_palette._view.append();
+        KG.core_palette._view.appendTo('#main-sandbox-view');
     },
     1000);
 });

@@ -78,6 +78,7 @@ KG.core_info = SC.Object.create({
                 var div = this._div_info;
 				this._view_info = SC.View.create({
 		            templateName: 'info-popup',
+					classNames:['super-info-popup']
 		        });
 		        this._view_info.appendTo(div);
 				setTimeout(function(){KG.core_leaflet.showPopupInfo(center, div);},1);               

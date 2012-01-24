@@ -2,7 +2,7 @@
 * Localize the page
 **/
 var fr = { 
-	"_homeTitle": "Kloudgis",
+	"_logout": "Déconnection",
 	"_sandboxesListOne": "Votre projet:",
 	"_sandboxesList": "Vos %@ projets:",
 	"_sandboxesNothing": "Vous n'avez pas de projet.",
@@ -27,7 +27,7 @@ var fr = {
 };
 
 var en = {
-	"_homeTitle": "Kloudgis",
+	"_logout": "Logout",
 	"_sandboxesListOne": "Your projet:",
 	"_sandboxesList": "Your %@ projets:",
 	"_sandboxesNothing": "You don't have any project.",
@@ -52,13 +52,7 @@ var en = {
 };
 
 if(KG.lang === 'fr'){
-	SC.STRINGS = fr;
+	jQuery.extend(Ember.STRINGS, fr);
 }else{
-	SC.STRINGS = en;
+	jQuery.extend(Ember.STRINGS, en);
 }
-
-//do the localize after the rendering
-SC.run.schedule('render',null, function(){
-	console.log('localize page');
-	document.title = "_homeTitle".loc();
-});

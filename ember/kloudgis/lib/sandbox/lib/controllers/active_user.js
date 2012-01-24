@@ -5,6 +5,10 @@ KG.activeUserController = Ember.Object.create({
 	activePopup: NO,
 
 	activeUserDidChange: function(){
-		this.set('name', KG.core_auth.get('activeUser').name);
+		if(KG.core_auth.get('activeUser')){
+			this.set('name', KG.core_auth.get('activeUser').name);
+		}else{
+			this.set('name','');
+		}
 	}.observes('KG.core_auth.activeUser')
 });

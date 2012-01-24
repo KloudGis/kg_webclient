@@ -1,11 +1,10 @@
 KG.DeleteCheckboxView = KG.Button.extend({
 	
 	isChecked: NO,
-
 	
 	isOwner: function(){
 		var content = this.getPath('itemView.content');
-		if(content && content.get('owner') === KG.core_auth.get('activeUser').id){
+		if(content && KG.core_auth.get('activeUser') && content.get('owner') === KG.core_auth.get('activeUser').id){
 			return YES;
 		}
 		return NO;

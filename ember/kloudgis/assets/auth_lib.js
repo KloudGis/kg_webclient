@@ -219,7 +219,6 @@ KG.core_auth = SC.Object.create({
 });
 
 });spade.register("kloudgis/auth/lib/main", function(require, exports, __module, ARGV, ENV, __filename){
-require("kloudgis/app/lib/main");
 require("./core_auth");
 
 });

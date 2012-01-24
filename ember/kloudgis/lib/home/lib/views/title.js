@@ -3,6 +3,6 @@
 **/
 KG.TitleView = SC.View.extend({
 
-    titleStringBinding: 'KG.pageController.listTitle'
+    titleStringBinding: 'KG.homePanelController.listTitle'
 
 });

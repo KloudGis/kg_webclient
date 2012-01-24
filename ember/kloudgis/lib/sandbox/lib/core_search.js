@@ -86,7 +86,7 @@ $(document).ready(function() {
         KG.core_search._view = Ember.View.create({
             templateName: 'search-panel'
         });
-        KG.core_search._view.append();
+        KG.core_search._view.appendTo('#main-sandbox-view');
     },
     1000);
 });

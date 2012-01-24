@@ -49,6 +49,7 @@
 
 #super-inspector.active #inspector-title{
 	top:0px;
+	left: 0;
 }
 /* Use transform3d if available (its smooter)*/
 @media screen and (-webkit-transform-3d) {
@@ -59,6 +60,7 @@
 	#super-inspector.active #inspector-title{
 		-webkit-transform: translate3d(0,50px,0);
 		top:-50px;
+		left: 0;
 	}
 }
 
@@ -69,6 +71,7 @@
 
 #inspector-title h1{
 	position: absolute;
+	width:auto;
 	top:7px;
 	left:95px;
 	right:95px;
