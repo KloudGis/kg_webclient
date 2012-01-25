@@ -196,9 +196,15 @@
 	position:absolute;
 	padding:3px;
 	left:10px;
-	top:30px;
+	top:32px;
 	box-shadow: none;
 	-webkit-box-shadow: none;
+}
+
+#create-sandbox-button > div{
+	width:30px;
+	height:30px;
+	background: url('../resources/images/add_30.png') no-repeat;
 }
 
 #delete-mode-button{
@@ -208,8 +214,6 @@
 	top:32px;
 	box-shadow: none;
 	-webkit-box-shadow: none;
-	width:38px;
-	height:38px;
 }
 
 #delete-mode-button.delete-mode{
@@ -217,9 +221,9 @@
 }
 
 #delete-mode-button > div{
-	width:100%;
-	height:100%;
-	background: url('../resources/images/delete_30.png');
+	width:30px;
+	height:30px;
+	background: url('../resources/images/delete_30.png') no-repeat;
 }
 
 #delete-mode-button span{

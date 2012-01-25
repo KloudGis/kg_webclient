@@ -1034,6 +1034,7 @@
 	width:100%;
 }
 
+/* Firefox puts a scroll with 100%*/
 .gecko #super-search-popup input{
 	width:97%;
 }
