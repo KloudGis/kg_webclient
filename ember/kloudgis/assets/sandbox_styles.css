@@ -763,6 +763,7 @@
 }
 
 #palette-title{
+	left:0;
 	top:-50px;	
 	z-index: 11;
 	position: fixed;
@@ -858,11 +859,11 @@
 }
 
 #main-sandbox-view.sandbox-pushed-left{
-	left:-150%;
+	left:-120%;
 }
 
 #main-sandbox-view.sandbox-pushed-right{
-	left:150%;
+	left:120%;
 }
 
 #map {

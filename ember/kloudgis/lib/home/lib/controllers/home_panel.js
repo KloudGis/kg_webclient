@@ -8,6 +8,8 @@ KG.homePanelController = Ember.Object.create({
 
     deleteMode: NO,
 
+	createSandboxButtonDisabled: NO,
+
     addTitle: '_createSandboxTitle'.loc(),
 
     errorMessage: '',

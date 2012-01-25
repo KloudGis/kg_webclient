@@ -81,6 +81,7 @@ KG.HomeState = SC.State.extend({
 
         enterState: function() {
             console.log('Enter create sandbox state!');
+			KG.homePanelController.set('createSandboxInProgress', NO);
       		KG.core_home.get('map').addToDocument(null,null,null,'add-sandbox-map')
             KG.homePanelController.set('errorMessage', '');
 			KG.homePanelController.setAddSandboxActive();
@@ -104,6 +105,7 @@ KG.HomeState = SC.State.extend({
                     console.log('sb name already in use');
                     KG.homePanelController.set('errorMessage', '_nameAlreadyTaken'.loc());
                 } else {
+					KG.homePanelController.set('createSandboxInProgress', YES);
                     var center = KG.core_home.get('map').getCenter();
                     var rec = KG.store.createRecord(KG.Sandbox, {
                         name: name,
@@ -115,11 +117,13 @@ KG.HomeState = SC.State.extend({
                     rec.onReady(null,
                     function() {
                         KG.statechart.sendAction('sandboxCreateSuccess');
+						KG.homePanelController.set('createSandboxInProgress', NO);
                     });
                     rec.onError(null,
                     function() {
                         rec.destroy();
                         KG.statechart.sendAction('sandboxCreateError');
+						KG.homePanelController.set('createSandboxInProgress', NO);
                     });
                 }
             } else {

@@ -4,11 +4,11 @@
 }
 
 #main-login-view.login-pushed-left{
-	left:-150%;
+	left:-120%;
 }
 
 #main-login-view.login-pushed-right{
-	left:150%;
+	left:120%;
 }
 
 #main-login-view > div{

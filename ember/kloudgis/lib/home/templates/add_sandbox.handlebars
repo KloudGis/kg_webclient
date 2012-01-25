@@ -7,10 +7,10 @@
 	</div>
 	{{loc _position class="field-label"}}
 	<div id="add-sandbox-map"></div>
-	{{#view KG.Button class="white-button" sc_action="cancelCreateAction" titleBinding="KG.addSandboxController.cancelCreateTooltip"}}
+	{{#view KG.Button class="white-button" sc_action="cancelCreateAction" titleBinding="KG.addSandboxController.cancelCreateTooltip" disabledBinding="KG.homePanelController.createSandboxInProgress"}}
 		<img src="resources/images/cancel_30.png">
 	{{/view}}
-	{{#view KG.Button class="white-button" sc_action="commitCreateAction" titleBinding="KG.addSandboxController.commitCreateTooltip"}}
+	{{#view KG.Button class="white-button" sc_action="commitCreateAction" titleBinding="KG.addSandboxController.commitCreateTooltip" disabledBinding="KG.homePanelController.createSandboxInProgress"}}
 		<img src="resources/images/checkmark_30.png">
 	{{/view}}
 {{/view}}

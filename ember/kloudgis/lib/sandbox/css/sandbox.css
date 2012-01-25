@@ -3,11 +3,11 @@
 }
 
 #main-sandbox-view.sandbox-pushed-left{
-	left:-150%;
+	left:-120%;
 }
 
 #main-sandbox-view.sandbox-pushed-right{
-	left:150%;
+	left:120%;
 }
 
 #map {

@@ -25,6 +25,7 @@
 }
 
 #palette-title{
+	left:0;
 	top:-50px;	
 	z-index: 11;
 	position: fixed;
