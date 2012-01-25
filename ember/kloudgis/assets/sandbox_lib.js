@@ -574,8 +574,9 @@ KG.core_info = SC.Object.create({
             }
             var self = this;
             this._timeout = setTimeout(function() {
-                if (KG.infoController.get('status') & SC.Record.ERROR) {
-                    this._finding = NO;
+				var status = KG.infoController.getPath('content.status');
+                if (!status || SC.Record.ERROR) {
+                    self._finding = NO;
                 }
                 self.findFeaturesAt(lonLat);
             },
@@ -1913,6 +1914,11 @@ KG.core_search = SC.Object.create({
     },
 
     showResults: function() {
+		//clear the record array -  If not cleared, the query will return the cached result
+		var actualContent = KG.searchResultsController.get('content');
+		if(actualContent && actualContent.destroy){
+			actualContent.destroy();
+		}
         KG.searchResultsController.set('listVisible', YES);
         var cat = KG.searchResultsController.get('category');
         if (SC.none(cat)) {
@@ -2803,6 +2809,8 @@ KG.RecordsButtonView = KG.Button.extend({
 	records:function(){
 		if(this.get('recordsVisible')){
 			return KG.searchResultsController.get('content');
+		}else{
+			return null;
 		}
 	}.property('recordsVisible', 'KG.searchResultsController.content')
 	
@@ -2849,8 +2857,18 @@ KG.UserButtonView = KG.Button.extend({
 	
 	activePopupBinding: 'KG.activeUserController.activePopup',
 	
+	activePopupDidChange: function(){
+		this.set('isActive', this.get('activePopup'));
+	}.observes('activePopup'),
+	
+	isActiveDidChange:function(){
+		if(this.get('activePopup')){
+			this.set('isActive', YES);
+		}
+	}.observes('isActive'),
+	
 	triggerAction: function() {
-		this.set('activePopup', !this.get('activePopup'));
+		KG.statechart.sendAction('toggleUserOptionsPopupAction');
 	}
 });
 

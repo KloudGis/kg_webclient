@@ -31,8 +31,6 @@
 }
 
 #super-notification-popup{
-	overflow-y:auto;
-	max-height:400px;
 	z-index:20;
 	position: absolute;
 	left:0;
@@ -86,6 +84,11 @@
 	text-shadow: none;
 	text-align: left;
 	font-weight: normal;
+}
+
+#notification-collection{
+	overflow-y:auto;
+	max-height:400px;
 }
 
 #notification-collection div:first-child .notification-item{

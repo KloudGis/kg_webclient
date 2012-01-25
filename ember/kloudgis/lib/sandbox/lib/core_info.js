@@ -19,8 +19,9 @@ KG.core_info = SC.Object.create({
             }
             var self = this;
             this._timeout = setTimeout(function() {
-                if (KG.infoController.get('status') & SC.Record.ERROR) {
-                    this._finding = NO;
+				var status = KG.infoController.getPath('content.status');
+                if (!status || SC.Record.ERROR) {
+                    self._finding = NO;
                 }
                 self.findFeaturesAt(lonLat);
             },

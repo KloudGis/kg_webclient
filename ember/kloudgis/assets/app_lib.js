@@ -582,15 +582,20 @@ KG.SandboxState = SC.State.extend({
     runningState: SC.State.extend({
 
         substatesAreConcurrent: YES,
-
+		
+		_featuretypes: null,
+		_attrtypes: null,
+		
         enterState: function() {
             KG.core_notification.listen();
             //fetch the featuretypes and attrtypes locally
-            KG.store.find(KG.FEATURETYPE_QUERY);
-            KG.store.find(KG.ATTRTYPE_QUERY);
+            this._featuretypes = KG.store.find(KG.FEATURETYPE_QUERY);
+            this._attrtypes = KG.store.find(KG.ATTRTYPE_QUERY);
         },
 
 		exitState: function(){
+			this._featuretypes.destroy();
+			this._attrtypes.destroy();
 			KG.core_sandbox.cleanUp();
 		},
 
@@ -786,6 +791,10 @@ KG.SandboxState = SC.State.extend({
                 this.gotoState('bookmarkPopupState');
             },
 
+			toggleUserOptionsPopupAction: function(){
+				this.gotoState('userOptionsState');
+			},
+
             //******************************
             // No popup visible
             //******************************
@@ -793,6 +802,28 @@ KG.SandboxState = SC.State.extend({
                 //nothing to do so far
             }),
 
+			//******************************
+            // User Options Popup
+            //******************************
+
+			userOptionsState: SC.State.extend({
+				
+				enterState: function() {
+                    KG.activeUserController.set('activePopup', YES);
+                },
+
+                exitState: function() {
+                    KG.activeUserController.set('activePopup', NO);
+                },
+
+	            backHomeAction: function() {
+	                this.gotoState('homeState');
+	            },
+	
+				toggleUserOptionsPopupAction: function(){
+					this.gotoState('noPopupState');
+				}
+			}),
             //******************************
             // Notification Popup
             //******************************
@@ -1024,10 +1055,6 @@ KG.SandboxState = SC.State.extend({
         mapInteractionState: SC.State.extend({
 
             initialSubstate: 'navigationState',
-
-            backHomeAction: function() {
-                this.gotoState('homeState');
-            },
 
             mapMovedAction: function(center, zoom) {
                 KG.core_note.refreshMarkers();

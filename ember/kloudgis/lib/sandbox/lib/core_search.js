@@ -48,6 +48,11 @@ KG.core_search = SC.Object.create({
     },
 
     showResults: function() {
+		//clear the record array -  If not cleared, the query will return the cached result
+		var actualContent = KG.searchResultsController.get('content');
+		if(actualContent && actualContent.destroy){
+			actualContent.destroy();
+		}
         KG.searchResultsController.set('listVisible', YES);
         var cat = KG.searchResultsController.get('category');
         if (SC.none(cat)) {

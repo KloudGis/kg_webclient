@@ -29,8 +29,6 @@
 }
 
 #super-bookmark-popup{
-	overflow-y:auto;
-	max-height:400px;
 	z-index:20;
 	position:absolute;
 	top:28px;
@@ -71,6 +69,8 @@
 
 #bookmark-list{
 	width:100%;
+	overflow-y:auto;
+	max-height:400px;
 	border-collapse:collapse;
 	text-shadow: none;
 	text-align: left;
@@ -111,8 +111,6 @@
 #bookmark-list .bookmark-item:first-child{
 		border-top:1px solid transparent;
 }
-
-
 
 /*  Add Bookmark panel */
 
@@ -607,8 +605,6 @@
 }
 
 #super-notification-popup{
-	overflow-y:auto;
-	max-height:400px;
 	z-index:20;
 	position: absolute;
 	left:0;
@@ -662,6 +658,11 @@
 	text-shadow: none;
 	text-align: left;
 	font-weight: normal;
+}
+
+#notification-collection{
+	overflow-y:auto;
+	max-height:400px;
 }
 
 #notification-collection div:first-child .notification-item{
@@ -809,6 +810,7 @@
 	color: white;
 	margin: 0px;
 	text-align: center;
+	width:auto;
 }
 
 #palette-panel .palette-list{
@@ -958,7 +960,7 @@
 }
 
 #position-label{
-	z-index:21;
+	z-index:19;
 	padding: 0 5px;
 	position:absolute;
 	bottom:16px;
@@ -999,13 +1001,12 @@
 	z-index:10;
 	position: absolute;
 	width:6cm;
-	margin-left:-3cm;
 	padding:8px;
-	top:-100%;
-	left:50%;
-	transition:top 0.4s ease-in;
-	-webkit-transition:top 0.4s ease-in;
-	-moz-transition:top 0.4s ease-in;
+	top:-500px;
+	left:10px;
+	transition:top 0.5s ease-in;
+	-webkit-transition:top 0.5s ease-in;
+	-moz-transition:top 0.5s ease-in;
 	background:rgba(255,255,255,0.9);
 	border-radius:6px;
 	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
@@ -1018,7 +1019,7 @@
 }
 
 #super-search-popup.active-popup{
-	top:30%;
+	top:55px;
 }
 
 .search-close-button{
@@ -1027,8 +1028,14 @@
 	top:-15px;
 }
 
+
+
 #super-search-popup input{
 	width:100%;
+}
+
+.gecko #super-search-popup input{
+	width:97%;
 }
 
 .search-plugin-item{

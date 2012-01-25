@@ -16,6 +16,8 @@ KG.RecordsButtonView = KG.Button.extend({
 	records:function(){
 		if(this.get('recordsVisible')){
 			return KG.searchResultsController.get('content');
+		}else{
+			return null;
 		}
 	}.property('recordsVisible', 'KG.searchResultsController.content')
 	
