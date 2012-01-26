@@ -1,6 +1,10 @@
 KG.SandboxState = SC.State.extend({
 
     initialSubstate: 'tryAuthenticateState',
+
+	exitState:function(){
+		window.location.hash='';
+	},
 	
     //******************************
     // transient state to check 
@@ -68,6 +72,8 @@ KG.SandboxState = SC.State.extend({
             //fetch the featuretypes and attrtypes locally
             this._featuretypes = KG.store.find(KG.FEATURETYPE_QUERY);
             this._attrtypes = KG.store.find(KG.ATTRTYPE_QUERY);
+			//show the center coord and update the hash in the address bar
+			KG.core_sandbox.setCenter(KG.core_leaflet.getCenter(), KG.core_leaflet.getZoom());
         },
 
 		exitState: function(){

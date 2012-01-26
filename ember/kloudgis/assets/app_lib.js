@@ -365,7 +365,25 @@ KG.HomeState = SC.State.extend({
 
     enterState: function() {
         console.log('home!');
-        KG.core_home.loadSandboxList();		
+		var loadNeeded = YES;
+		var hashLoc = window.location.hash;
+        if (hashLoc && hashLoc.length > 0) {
+            var tokens = hashLoc.split(';');
+            if (tokens.length > 0) {
+                var sb = tokens[0];
+				if(sb && sb.charAt(1) === 's' && sb.charAt(2) === "b"){
+					var sbVal = sb.substring(4);
+					if(sbVal && sbVal.length > 0){
+						KG.set('activeSandboxKey', sbVal);            
+						this.gotoState('sandboxState');
+						loadNeeded = NO;
+					}
+				}
+            }
+        }
+		if(loadNeeded){
+        	KG.core_home.loadSandboxList();
+		}
     },
 
 	exitState: function() {
@@ -524,6 +542,10 @@ KG.HomeState = SC.State.extend({
 KG.SandboxState = SC.State.extend({
 
     initialSubstate: 'tryAuthenticateState',
+
+	exitState:function(){
+		window.location.hash='';
+	},
 	
     //******************************
     // transient state to check 
@@ -591,6 +613,8 @@ KG.SandboxState = SC.State.extend({
             //fetch the featuretypes and attrtypes locally
             this._featuretypes = KG.store.find(KG.FEATURETYPE_QUERY);
             this._attrtypes = KG.store.find(KG.ATTRTYPE_QUERY);
+			//show the center coord and update the hash in the address bar
+			KG.core_sandbox.setCenter(KG.core_leaflet.getCenter(), KG.core_leaflet.getZoom());
         },
 
 		exitState: function(){

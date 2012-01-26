@@ -47,7 +47,7 @@ KG.core_sandbox = SC.Object.create({
 		if(!lonLat){
 			window.location.hash=''
 		}else{
-        	window.location.hash = 'lon:%@;lat:%@;zoom:%@'.fmt(lonLat.get('lon').toFixed(4), lonLat.get('lat').toFixed(4), zoom);
+        	window.location.hash = 'sb:%@;lon:%@;lat:%@;zoom:%@'.fmt(KG.get('activeSandboxKey'), lonLat.get('lon').toFixed(4), lonLat.get('lat').toFixed(4), zoom);
 		}
     },
 
@@ -146,11 +146,11 @@ KG.core_sandbox = SC.Object.create({
         var hashLoc = window.location.hash;
         if (hashLoc && hashLoc.length > 0) {
             var tokens = hashLoc.split(';');
-            if (tokens.length === 3) {
+            if (tokens.length === 4) {
                 return {
-                    lon: parseFloat(tokens[0].substring(5)),
-                    lat: parseFloat(tokens[1].substring(4)),
-                    zoom: parseInt(tokens[2].substring(5))
+                    lon: parseFloat(tokens[1].substring(4)),
+                    lat: parseFloat(tokens[2].substring(4)),
+                    zoom: parseInt(tokens[3].substring(5))
                 }
             }
         }

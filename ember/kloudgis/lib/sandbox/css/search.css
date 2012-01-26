@@ -30,8 +30,6 @@
 }
 
 #search-popup{
-	max-height:500px;
-	overflow-y:auto;
 }
 
 #super-search-popup.active-popup{
@@ -131,7 +129,9 @@
 }
 
 .search-result-list.records-visible{
-	max-height:1000px;
+	max-height:300px;
+	overflow-y:auto;
+	overflow-x:hidden;
 }
 
 .search-record-item{
@@ -151,15 +151,28 @@
 
 .search-select{
 	position:absolute;
-	top:-2px;
-	right:-1px;
+	top: 0;
+	bottom:0;
+	right:0;
+	overflow:hidden;
 }
 
+.search-select img{
+	margin-top: 2px;
+	margin-right:0px;
+}
 
 .search-create-note{
 	position:absolute;
-	top:2px;
-	right:2px;
+	top: 0;
+	bottom:0;
+	right:0;
+	overflow:hidden;
+}
+
+.search-create-note img{
+	margin-top: 2px;
+	margin-right:0px;
 }
 
 

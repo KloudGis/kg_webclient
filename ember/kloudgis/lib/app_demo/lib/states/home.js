@@ -4,7 +4,25 @@ KG.HomeState = SC.State.extend({
 
     enterState: function() {
         console.log('home!');
-        KG.core_home.loadSandboxList();		
+		var loadNeeded = YES;
+		var hashLoc = window.location.hash;
+        if (hashLoc && hashLoc.length > 0) {
+            var tokens = hashLoc.split(';');
+            if (tokens.length > 0) {
+                var sb = tokens[0];
+				if(sb && sb.charAt(1) === 's' && sb.charAt(2) === "b"){
+					var sbVal = sb.substring(4);
+					if(sbVal && sbVal.length > 0){
+						KG.set('activeSandboxKey', sbVal);            
+						this.gotoState('sandboxState');
+						loadNeeded = NO;
+					}
+				}
+            }
+        }
+		if(loadNeeded){
+        	KG.core_home.loadSandboxList();
+		}
     },
 
 	exitState: function() {
