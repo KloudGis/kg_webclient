@@ -1,0 +1,35 @@
+{
+  "name": "ember-utils",
+  "summary": "Ember Utilities",
+  "description": "A collection of utility functions for Ember",
+  "homepage": "http://emberjs.com",
+  "author": "Strobe Inc., Apple, Inc., and contributors",
+  "version": "0.9",
+  "bpm": "1.0.0",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "spade": "~> 1.0",
+    "ember-runtime": ">= 0"
+  },
+  "dependencies:development": {
+    "spade-qunit": "~> 1.0.0"
+  },
+  "bpm:build": {
+    "bpm_libs.js": {
+      "directories": [
+        "lib"
+      ],
+      "modes": "*"
+    },
+    "ember-utils/bpm_tests.js": {
+      "directories": [
+        "tests"
+      ],
+      "modes": [
+        "debug"
+      ]
+    }
+  }
+}

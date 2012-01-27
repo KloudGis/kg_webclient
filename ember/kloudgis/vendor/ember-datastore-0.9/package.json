@@ -1,0 +1,38 @@
+{
+  "name": "ember-datastore",
+  "summary": "A Ember Data Store (port of SproutCore 1.x DataStore)",
+  "description": "This is a port of the SproutCore Data Store library from the SproutCore 1.x framework for use in Ember.js applications.",
+  "author": "Strobe Inc., Apple, Inc., and contributors",
+  "version": "0.9",
+  "bpm": "1.0.0",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "spade": "~> 1.0",
+    "ember-runtime": ">= 0",
+    "ember-datetime": ">= 0",
+    "ember-indexset": ">= 0"
+  },
+  "dependencies:development": {
+    "spade-qunit": "~> 1.0.0",
+    "ember-views": ">= 0",
+    "ember-handlebars": ">= 0"
+  },
+  "bpm:build": {
+    "bpm_libs.js": {
+      "directories": [
+        "lib"
+      ],
+      "modes": "*"
+    },
+    "ember-datastore/bpm_tests.js": {
+      "directories": [
+        "tests"
+      ],
+      "modes": [
+        "debug"
+      ]
+    }
+  }
+}

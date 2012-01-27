@@ -1,0 +1,51 @@
+{
+	"name": "qunit",
+	"version": "1.0.1",
+	"author": "The jQuery Project",
+	"contributors": [
+	{
+		"name": "John Resig",
+		"email": "jeresig@gmail.com",
+		"url": "http://ejohn.org/"
+	},
+	{
+		"name": "Jörn Zaefferer",
+		"email": "joern.zaefferer@googlemail.com",
+		"url": "http://bassistance.de/"
+	}],
+	"url": "http://docs.jquery.com/QUnit",
+	"license": {
+		"name": "MIT",
+		"url": "http://www.opensource.org/licenses/mit-license.php"
+	},
+	"description": "An easy-to-use JavaScript Unit Testing framework.",
+	"summary": "JavaScript Unit Testing framework",
+	"homepage": "http://docs.jquery.com/QUnit",
+	"directories": {
+	  "lib": "qunit"
+	},
+	"keywords": [ "testing", "unit", "jquery" ],
+	"lib": "qunit",
+	
+	"bpm:build": {
+	  "bpm_libs.js": {
+	    "files": []
+	  },
+	  
+	  "bpm_styles.css": {
+	    "files": []
+	  },
+	  
+	  "qunit": {
+	    "assets": ["index.html"]
+	  },
+	  
+	  "qunit/qunit_styles.css": {
+	    "files": ["qunit"]
+	  },
+	  
+	  "qunit/qunit_libs.js": {
+	    "files": ["qunit"]
+	  }
+	}
+}
