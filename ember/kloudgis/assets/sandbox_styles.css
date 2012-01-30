@@ -1004,9 +1004,9 @@
 	padding:8px;
 	top:-500px;
 	left:10px;
-	transition:top 0.5s ease-in;
-	-webkit-transition:top 0.5s ease-in;
-	-moz-transition:top 0.5s ease-in;
+	transition:top 0.7s ease-in;
+	-webkit-transition:top 0.7s ease-in;
+	-moz-transition:top 0.7s ease-in;
 	background:rgba(255,255,255,0.9);
 	border-radius:6px;
 	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
@@ -1097,8 +1097,13 @@
 	background-color: #787878;
 }
 
+.super-result-list{
+	max-height:300px;
+	overflow-y:auto;
+	overflow-x:hidden;
+}
+
 .search-result-list{
-	max-height:0;
 	border-bottom-left-radius:6px;
 	border-bottom-right-radius:6px;
 	color:white;
@@ -1107,16 +1112,19 @@
 	background-color: #787878;
 	background-image: -webkit-linear-gradient(top, rgb(120, 120, 120), rgb(45, 45, 45));
 	background-image: -moz-linear-gradient(top, rgb(120, 120, 120), rgb(45, 45, 45));
-	transition:max-height 1s;
-	-webkit-transition: max-height 1s;
-	-moz-transition:max-height 1s;
 }
 
 .search-result-list.records-visible{
-	max-height:300px;
-	overflow-y:auto;
-	overflow-x:hidden;
 }
+
+.more-panel{
+	margin:3px;
+	text-align:center;
+}
+
+.search-more-result{
+}
+
 
 .search-record-item{
 	padding:6px;

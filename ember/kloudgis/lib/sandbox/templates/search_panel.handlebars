@@ -11,16 +11,23 @@
 									{{itemView.content.count}}
 								{{/view}}
 							{{/view}}
-							{{#collection contentBinding="records" class="search-result-list" recordsVisibleBinding="recordsVisible" classBinding="recordsVisible"}}
-								{{#view KG.Button class="search-record-item common-list-button" tagName="div" sc_action="featureZoomAction"}}
-									{{#view class="label-ellipsis" titleBinding="itemView.content.title"}}
-										{{itemView.content.title}}
+							<div class="super-result-list">
+								{{#collection contentBinding="records" class="search-result-list" recordsVisibleBinding="recordsVisible" classBinding="recordsVisible"}}
+									{{#view KG.Button class="search-record-item common-list-button" tagName="div" sc_action="featureZoomAction"}}
+										{{#view class="label-ellipsis" titleBinding="itemView.content.title"}}
+											{{itemView.content.title}}
+										{{/view}}
+										{{#view KG.Button isVisibleBinding="itemView.content.isSelectable" class="search-select" tagName="div"  sc_action="selectFeatureInspectorAction"}}	
+											<img src="resources/images/right_arrow_24.png"/>		
+											{{/view}}
 									{{/view}}
-									{{#view KG.Button isVisibleBinding="itemView.content.isSelectable" class="search-select" tagName="div"  sc_action="selectFeatureInspectorAction"}}	
-										<img src="resources/images/right_arrow_24.png"/>		
+								{{/collection}}
+								<div class="more-panel">
+									{{#view KG.Button class="white-button search-more-result" isVisibleBinding="hasMoreResult" sc_action="showMoreResultsAction"}}
+										{{loc _showMore}}
 									{{/view}}
-								{{/view}}
-							{{/collection}}
+								</div>
+							</div>
 						{{/collection}}
 						{{#collection contentBinding="KG.core_search.plugins" isVisibleBinding="KG.core_search.searchAsked" class="search-cat-list" itemViewClass="KG.PluginRecordsButtonView"}}
 							{{#view KG.Button class="search-plugin-item common-list-button" tagName="div" sc_action="selectSearchPluginAction" recordsVisibleBinding="recordsVisible" classBinding="recordsVisible"}}

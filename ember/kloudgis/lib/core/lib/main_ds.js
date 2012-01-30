@@ -34,7 +34,7 @@ KG.SEARCH_QUERY = SC.Query.local(KG.SearchCategory, {
 KG.INFO_QUERY = SC.Query.remote(KG.Feature);
 KG.NOTE_MARKER_QUERY = SC.Query.remote(KG.NoteMarker);
 KG.SEARCH_RESULT_NOTE_QUERY = SC.Query.remote(KG.Note, {conditions: 'count > 0'});
-KG.SEARCH_RESULT_FEATURE_QUERY = SC.Query.remote(KG.Feature, {conditions: 'count > 0'});
+KG.SEARCH_RESULT_FEATURE_QUERY = SC.Query.remote(KG.Feature, {conditions: 'count > 0', 	version: 1});
 
 //SC.RECORDARRAY
 //add onReady, onError support to RecordArrays

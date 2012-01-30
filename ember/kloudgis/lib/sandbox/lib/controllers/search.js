@@ -9,6 +9,6 @@ KG.searchController = Ember.ArrayController.create({
 	
 	hasResults: function(){
 		return this.getPath('content.length') > 0;
-	}.property('content.length'),
+	}.property('content.length')
 	
 });

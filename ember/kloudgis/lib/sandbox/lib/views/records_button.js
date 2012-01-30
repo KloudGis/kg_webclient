@@ -13,6 +13,13 @@ KG.RecordsButtonView = KG.Button.extend({
 		}
 	}.observes('KG.searchResultsController.category'),
 	
+	hasMoreResult: function(){
+		if(this.get('recordsVisible')){
+			return KG.searchResultsController.get('hasMoreResults');
+		}
+		return NO;
+	}.property('recordsVisible', 'KG.searchResultsController.hasMoreResults'),
+	
 	records:function(){
 		if(this.get('recordsVisible')){
 			return KG.searchResultsController.get('content');

@@ -56,7 +56,8 @@ var fr = {
 	"_paletteTitle": "Palette",
 	"_showPalette" : "Afficher la Palette",
 	"_moveFeature": "Glisser le nouveau '%@' où vous le voulez.",
-	"_bookmarkDescription": "Par %@ à %@"
+	"_bookmarkDescription": "Par %@ à %@",
+	"_showMore" : "Plus de Résultats"
 };
 
 var en = {
@@ -117,7 +118,8 @@ var en = {
 	"_paletteTitle": "Palette",
 	"_showPalette" : "Show the Palette",
 	"_moveFeature": "Drag the new '%@' where you want.",
-	"_bookmarkDescription": "By %@ at %@"
+	"_bookmarkDescription": "By %@ at %@",
+	"_showMore" : "More Results"
 };
 
 if(KG.lang === 'fr'){

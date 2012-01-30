@@ -147,10 +147,11 @@ KG.Store = SC.DataSource.extend({
             var fatBounds = query.fat_bounds;
             query_url = KG.get('serverHost') + 'api_data/protected/notes/clusters?sw_lon=%@&ne_lat=%@&ne_lon=%@&sw_lat=%@&distance=%@&sandbox=%@'.fmt(fatBounds.getPath('sw.lon'), fatBounds.getPath('sw.lat'), fatBounds.getPath('ne.lon'), fatBounds.getPath('ne.lat'), query.distance, KG.get('activeSandboxKey'));
         } else if (query === KG.SEARCH_RESULT_NOTE_QUERY || query === KG.SEARCH_RESULT_FEATURE_QUERY) {
-            query_url = KG.get('serverHost') + 'api_data/protected/features/search?category=%@&search_string=%@&sandbox=%@'.fmt(query.category, query.search, KG.get('activeSandboxKey'));
+            query_url = KG.get('serverHost') + 'api_data/protected/features/search?category=%@&search_string=%@&sandbox=%@&start=%@'.fmt(query.category, query.search, KG.get('activeSandboxKey'), query.start || 0);
         } else if (query === KG.SANDBOX_QUERY) {
             query_url = KG.get('serverHost') + 'api_sandbox/protected/sandboxes';
         }
+		var version = query.get('version');
         if (!SC.none(query_url)) {
             $.ajax({
                 type: 'GET',
@@ -178,6 +179,9 @@ KG.Store = SC.DataSource.extend({
                         store.dataSourceDidFetchQuery(query);
                     } else {
                         store.loadQueryResults(query, storeKeys);
+                    }
+                    if (!SC.none(data) && query.blockRequestCb && data.blockData) {
+                        query.blockRequestCb.call(query.blockRequestTarget, data.blockData, version);
                     }
                 }
             });
@@ -362,7 +366,7 @@ KG.SEARCH_QUERY = SC.Query.local(KG.SearchCategory, {
 KG.INFO_QUERY = SC.Query.remote(KG.Feature);
 KG.NOTE_MARKER_QUERY = SC.Query.remote(KG.NoteMarker);
 KG.SEARCH_RESULT_NOTE_QUERY = SC.Query.remote(KG.Note, {conditions: 'count > 0'});
-KG.SEARCH_RESULT_FEATURE_QUERY = SC.Query.remote(KG.Feature, {conditions: 'count > 0'});
+KG.SEARCH_RESULT_FEATURE_QUERY = SC.Query.remote(KG.Feature, {conditions: 'count > 0', 	version: 1});
 
 //SC.RECORDARRAY
 //add onReady, onError support to RecordArrays
@@ -1183,28 +1187,48 @@ KG.SearchCategory = KG.Record.extend({
 
     categoryLabel: SC.Record.attr(String),
     count: SC.Record.attr(Number),
-	search: SC.Record.attr(String),
+    search: SC.Record.attr(String),
 
     title: function() {
-    	var cat = this.get('categoryLabel');
-		if(!SC.none(cat)){
-			if(cat.charAt(0) === '_'){
-				return cat.loc();
-			}else{
-				return cat;
-			}
-		}
+        var cat = this.get('categoryLabel');
+        if (!SC.none(cat)) {
+            if (cat.charAt(0) === '_') {
+                return cat.loc();
+            } else {
+                return cat;
+            }
+        }
     }.property('categoryLabel'),
 
     records: function() {
-		var query = KG.SEARCH_RESULT_FEATURE_QUERY;
-		if(this.get('categoryLabel') === '_notes_'){
-			query = KG.SEARCH_RESULT_NOTE_QUERY;
-		}
-		query.category = this.get('id');
-		query.search = this.get('search');
+        return this.findRecords(0);
+    }.property(),
+
+    findRecords: function(start) {
+        var query = KG.SEARCH_RESULT_FEATURE_QUERY;
+        if (this.get('categoryLabel') === '_notes_') {
+            query = KG.SEARCH_RESULT_NOTE_QUERY;
+        }
+        query.start = start || 0;
+        query.category = this.get('id');
+        query.search = this.get('search');
+        query.blockRequestCb = this.blockReceivedCallback;
+        query.blockRequestTarget = this;
+        query.incrementProperty('version');
         return KG.store.find(query);
-    }.property()
+    },
+
+    queryBlock: null,
+
+    blockReceivedCallback: function(block, version) {
+        if (version === KG.SEARCH_RESULT_FEATURE_QUERY.get('version')) {
+            this.set('queryBlock', Ember.Object.create({
+                start: block.start,
+                max: block.max,
+                resultSize: block.resultSize
+            }));
+        }
+    }
 });
 
 });

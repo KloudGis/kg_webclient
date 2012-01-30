@@ -715,7 +715,11 @@ KG.SandboxState = SC.State.extend({
                         });
                         this.gotoState('editNoteState');
                     }
-                }
+                },
+
+				showMoreResultsAction:function(){
+					KG.core_search.showMoreResults();
+				}
             }),
 
             //******************************

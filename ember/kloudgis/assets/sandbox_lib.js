@@ -439,7 +439,7 @@ KG.searchController = Ember.ArrayController.create({
 	
 	hasResults: function(){
 		return this.getPath('content.length') > 0;
-	}.property('content.length'),
+	}.property('content.length')
 	
 });
 
@@ -449,31 +449,54 @@ KG.searchController = Ember.ArrayController.create({
 **/
 
 KG.searchResultsController = Ember.ArrayController.create({
-	content: [],
-	closeLabel: "_closeSearch".loc(),
-	listVisible: NO,
-	category: null,
-	plugin: null,
-	
-	listTitle: function(){
-		if(SC.none(this.get('content'))){
-			return '';
-		}else{
-			var cat = this.get('category');
-			if(SC.none(cat)){
-				var plugin = this.get('plugin');
-				if(!SC.none(plugin)){
-					return "_searchResult".loc(this.getPath('content.length'), plugin.get('searchValue'), plugin.get('pluginName'));
+    content: [],
+    closeLabel: "_closeSearch".loc(),
+    listVisible: NO,
+    category: null,
+    plugin: null,
+
+    listTitle: function() {
+        if (SC.none(this.get('content'))) {
+            return '';
+        } else {
+            var cat = this.get('category');
+            if (SC.none(cat)) {
+                var plugin = this.get('plugin');
+                if (!SC.none(plugin)) {
+                    return "_searchResult".loc(this.getPath('content.length'), plugin.get('searchValue'), plugin.get('pluginName'));
+                }
+            } else {
+                return "_searchResult".loc(this.getPath('content.length'), cat.get('search'), cat.get('title'));
+            }
+        }
+    }.property('content.length'),
+
+    hasResults: function() {
+        return this.getPath('content.length') > 0;
+    }.property('content.length'),
+
+    hasMoreResults: function() {
+        var cat = this.get('category');
+        if (cat) {
+            var block = this.getPath('category.queryBlock');
+            if (block) {
+                var total = block.get('start') + block.get('resultSize');
+                if (total < cat.get('count') && block.get('resultSize') > 0) {
+					return YES;
 				}
-			}else{
-				return "_searchResult".loc(this.getPath('content.length'), cat.get('search'), cat.get('title'));
-			}
+            }
+        }
+		return NO;
+    }.property('category.queryBlock'),
+
+	nextBlockStart: function(){
+		var block = this.getPath('category.queryBlock');
+		if(block){
+			return block.get('start') + block.get('resultSize');
 		}
-	}.property('content.length'),
-	
-	hasResults: function(){
-		return this.getPath('content.length') > 0;
-	}.property('content.length')
+		return 0;
+	}.property('category.queryBlock')
+
 })
 
 });spade.register("kloudgis/sandbox/lib/controllers/send_notification", function(require, exports, __module, ARGV, ENV, __filename){
@@ -1863,6 +1886,7 @@ KG.core_sandbox = SC.Object.create({
 });
 
 });spade.register("kloudgis/sandbox/lib/core_search", function(require, exports, __module, ARGV, ENV, __filename){
+// javascript:/***%20Core%20functions%20to%20perform%20searches**/KG.core_search%20=%20SC.Object.create({plugins:%20[],searchAsked:%20NO,_view:%20null,addPlugin:%20function(plugin)%20{this.plugins.pushObject(plugin);},searchFeatures:%20function()%20{var%20search%20=%20KG.searchController.get(%27searchValue%27);var%20content%20=%20KG.searchController.get(%27content%27);var%20store%20=%20KG.store;if%20(content%20&&%20content.destroy)%20{content.forEach(function(cat)%20{store.unloadRecord(KG.SearchCategory,%20cat.get(%27id%27),%20cat.get(%27storeKey%27))});content.destroy();}console.log(%27search%20for:%27%20+%20search);KG.SEARCH_QUERY.search%20=%20search;var%20records%20=%20store.find(KG.SEARCH_QUERY);KG.searchController.set(%27content%27,%20records);this.plugins.forEach(function(plugin)%20{plugin.set(%27searchValue%27,%20search);});this.set(%27searchAsked%27,%20YES);},clearSearchFeatures:%20function()%20{KG.searchController.set(%27searchValue%27,%20%27%27);var%20content%20=%20KG.searchController.get(%27content%27);var%20store%20=%20KG.store;if%20(content%20&&%20content.destroy)%20{content.forEach(function(cat)%20{store.unloadRecord(KG.SearchCategory,%20cat.get(%27id%27),%20cat.get(%27storeKey%27))});content.destroy();}KG.searchController.set(%27content%27,%20[]);this.set(%27searchAsked%27,%20NO);},showResults:%20function()%20{var%20actualContent%20=%20KG.searchResultsController.get(%27content%27);if(actualContent%20&&%20actualContent.destroy){actualContent.destroy();}KG.searchResultsController.set(%27listVisible%27,%20YES);var%20cat%20=%20KG.searchResultsController.get(%27category%27);if%20(SC.none(cat))%20{var%20plugin%20=%20KG.searchResultsController.get(%27plugin%27);KG.searchResultsController.set(%27content%27,%20null);if%20(!SC.none(plugin))%20{plugin.loadRecords(null,%20function(records)%20{KG.searchResultsController.set(%27content%27,%20records);});}}%20else%20{var%20records%20=%20cat.findRecords(KG.searchResultsController.get(%27nextBlockStart%27));if(records.onReady){records.onReady(null,%20function(){KG.searchResultsController.set(%27content%27,%20array);});}KG.searchResultsController.set(%27content%27,%20records);}},showMoreResults:%20function(){var%20cat%20=%20KG.searchResultsController.get(%27category%27);if(cat){var%20records%20=%20cat.findRecords(KG.searchResultsController.get(%27nextBlockStart%27));}},hideResults:%20function()%20{KG.searchResultsController.set(%27listVisible%27,%20NO);setTimeout(function()%20{var%20content%20=%20KG.searchResultsController.get(%27content%27);if%20(content%20&&%20content.destroy)%20{content.destroy();}KG.searchResultsController.set(%27category%27,%20null);KG.searchResultsController.set(%27content%27,%20[]);KG.core_search.clearSearchFeatures();},800);}});$(document).ready(function()%20{setTimeout(function()%20{KG.core_search._view%20=%20Ember.View.create({templateName:%20%27search-panel%27});KG.core_search._view.appendTo(%27#main-sandbox-view%27);},1000);});
 /**
 * Core functions to perform searches
 **/
@@ -1870,10 +1894,10 @@ KG.core_sandbox = SC.Object.create({
 KG.core_search = SC.Object.create({
 
     plugins: [],
-	searchAsked: NO,
-	
-	//the search panel view
-	_view: null,
+    searchAsked: NO,
+
+    //the search panel view
+    _view: null,
 
     addPlugin: function(plugin) {
         this.plugins.pushObject(plugin);
@@ -1890,13 +1914,13 @@ KG.core_search = SC.Object.create({
             content.destroy();
         }
         console.log('search for:' + search);
-		KG.SEARCH_QUERY.search = search;
+        KG.SEARCH_QUERY.search = search;
         var records = store.find(KG.SEARCH_QUERY);
         KG.searchController.set('content', records);
         this.plugins.forEach(function(plugin) {
             plugin.set('searchValue', search);
         });
-		this.set('searchAsked', YES);
+        this.set('searchAsked', YES);
     },
 
     clearSearchFeatures: function() {
@@ -1910,29 +1934,56 @@ KG.core_search = SC.Object.create({
             content.destroy();
         }
         KG.searchController.set('content', []);
-		this.set('searchAsked', NO);
+        this.set('searchAsked', NO);
     },
 
     showResults: function() {
-		//clear the record array -  If not cleared, the query will return the cached result
-		var actualContent = KG.searchResultsController.get('content');
-		if(actualContent && actualContent.destroy){
-			actualContent.destroy();
+		//reset cursor
+		if(KG.searchResultsController.get('category')){
+        	KG.searchResultsController.setPath('category.queryBlock', null);
 		}
+        //clear the record array -  If not cleared, the query will return the cached result
+        var actualContent = KG.searchResultsController.get('content');
+        if (actualContent && actualContent.destroy) {
+            actualContent.destroy();
+        }
+        KG.searchResultsController.set('content', []);
         KG.searchResultsController.set('listVisible', YES);
         var cat = KG.searchResultsController.get('category');
         if (SC.none(cat)) {
             var plugin = KG.searchResultsController.get('plugin');
-			KG.searchResultsController.set('content', null);
+            KG.searchResultsController.set('content', null);
             if (!SC.none(plugin)) {
-                plugin.loadRecords(null, function(records) {
+                plugin.loadRecords(null,
+                function(records) {
                     KG.searchResultsController.set('content', records);
                 });
             }
         } else {
-            var records = cat.get('records');
-            KG.searchResultsController.set('content', records);
+            var records = cat.findRecords(KG.searchResultsController.get('nextBlockStart'));
+            if (records.onReady) {
+                records.onReady(this, this._addResults);
+            }
         }
+    },
+
+    showMoreResults: function() {
+        var cat = KG.searchResultsController.get('category');
+        if (cat) {
+            var records = cat.findRecords(KG.searchResultsController.get('nextBlockStart'));
+            if (records.onReady) {
+                records.onReady(this, this._addResults);
+            }
+        }
+    },
+
+    _addResults: function(records) {
+        var array = KG.searchResultsController.get('content');
+        records.forEach(function(rec) {
+            array.pushObject(rec);
+        });
+        KG.searchResultsController.set('content', array);
+        records.destroy();
     },
 
     hideResults: function() {
@@ -2382,7 +2433,8 @@ var fr = {
 	"_paletteTitle": "Palette",
 	"_showPalette" : "Afficher la Palette",
 	"_moveFeature": "Glisser le nouveau '%@' où vous le voulez.",
-	"_bookmarkDescription": "Par %@ à %@"
+	"_bookmarkDescription": "Par %@ à %@",
+	"_showMore" : "Plus de Résultats"
 };
 
 var en = {
@@ -2443,7 +2495,8 @@ var en = {
 	"_paletteTitle": "Palette",
 	"_showPalette" : "Show the Palette",
 	"_moveFeature": "Drag the new '%@' where you want.",
-	"_bookmarkDescription": "By %@ at %@"
+	"_bookmarkDescription": "By %@ at %@",
+	"_showMore" : "More Results"
 };
 
 if(KG.lang === 'fr'){
@@ -2806,6 +2859,13 @@ KG.RecordsButtonView = KG.Button.extend({
 		}
 	}.observes('KG.searchResultsController.category'),
 	
+	hasMoreResult: function(){
+		if(this.get('recordsVisible')){
+			return KG.searchResultsController.get('hasMoreResults');
+		}
+		return NO;
+	}.property('recordsVisible', 'KG.searchResultsController.hasMoreResults'),
+	
 	records:function(){
 		if(this.get('recordsVisible')){
 			return KG.searchResultsController.get('content');
@@ -2913,7 +2973,7 @@ return Ember.Handlebars.compile("{{#view tagName=\"header\" id=\"sandbox-header\
 });spade.register("kloudgis/sandbox/templates/palette", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("{{#view id=\"super-palette\" classBinding=\"KG.paletteController.active\"}}\t\n\t{{#view id=\"palette-title\" tagName=\"header\"}}\n\t\t{{#view KG.Button tagName=\"div\" class=\"ios-button ios-tb-left\" isVisibleBinding=\"KG.paletteController.isDirty\"  sc_action=\"cancelPaletteAction\" titleBinding=\"KG.paletteController.cancelTitle\"}}\n\t\t\t{{loc _cancel}}\n\t\t{{/view}}\n\t\t<h1 class=\"label-ellipsis\" {{bindAttr title=\"KG.paletteController.title\"}}>{{loc _paletteTitle}}</h1>\n\t\t{{#view KG.Button tagName=\"div\" class=\"ios-button ios-tb-right\"  sc_action=\"closePaletteAction\" titleBinding=\"KG.paletteController.closeTitle\"}}\n\t\t\t{{loc _close}}\n\t\t{{/view}}\n\t{{/view}}\t\n\t<div id=\"palette-panel\">\n\t\t\t{{#collection contentBinding=\"KG.paletteController.content\" class=\"palette-list\"}}\n\t\t\t\t{{#view KG.Button tagName=\"div\" class=\"white-button\" sc_action=\"selectPaletteItemAction\"}}\n\t\t\t\t\t{{itemView.content.label}}\n\t\t\t\t{{/view}}\n\t\t\t{{/collection}}\n\t</div>\n{{/view}}\n");
 });spade.register("kloudgis/sandbox/templates/search_panel", function(require, exports, __module, ARGV, ENV, __filename){
-return Ember.Handlebars.compile("{{#view id=\"super-search-popup\" classBinding=\"KG.searchController.activePopup\"}}\n\t\t\t\t{{view KG.Button class=\"x-button search-close-button\"  sc_action=\"toogleSearchPopopAction\"}}\n\t\t\t\t{{#view id=\"search-popup\" }}\n\t\t\t\t\t{{view KG.SearchField resultsBinding=\"KG.searchController.searchHistorySize\" placeholder_not_loc=\"_search\" valueBinding=\"KG.searchController.searchValue\"}}\n\t\t\t\t\t\t{{#collection contentBinding=\"KG.searchController\" isVisibleBinding=\"KG.searchController.hasResults\" class=\"search-cat-list\" itemViewClass=\"KG.RecordsButtonView\"}}\t\t\n\t\t\t\t\t\t\t{{#view KG.Button class=\"search-cat-item common-list-button\" tagName=\"div\" sc_action=\"selectSearchCategoryAction\" recordsVisibleBinding=\"recordsVisible\" classBinding=\"recordsVisible\"}}\n\t\t\t\t\t\t\t\t{{#view class=\"cat-title-label label-ellipsis\" titleBinding=\"itemView.content.title\"}}\n\t\t\t\t\t\t\t\t\t{{itemView.content.title}}\n\t\t\t\t\t\t\t\t{{/view}}\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t{{#view class=\"cat-size-label label-ellipsis capsule-label\" tagName=\"span\"}}\n\t\t\t\t\t\t\t\t\t{{itemView.content.count}}\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{#collection contentBinding=\"records\" class=\"search-result-list\" recordsVisibleBinding=\"recordsVisible\" classBinding=\"recordsVisible\"}}\n\t\t\t\t\t\t\t\t{{#view KG.Button class=\"search-record-item common-list-button\" tagName=\"div\" sc_action=\"featureZoomAction\"}}\n\t\t\t\t\t\t\t\t\t{{#view class=\"label-ellipsis\" titleBinding=\"itemView.content.title\"}}\n\t\t\t\t\t\t\t\t\t\t{{itemView.content.title}}\n\t\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t\t{{#view KG.Button isVisibleBinding=\"itemView.content.isSelectable\" class=\"search-select\" tagName=\"div\"  sc_action=\"selectFeatureInspectorAction\"}}\t\n\t\t\t\t\t\t\t\t\t\t<img src=\"resources/images/right_arrow_24.png\"/>\t\t\n\t\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{/collection}}\n\t\t\t\t\t\t{{/collection}}\n\t\t\t\t\t\t{{#collection contentBinding=\"KG.core_search.plugins\" isVisibleBinding=\"KG.core_search.searchAsked\" class=\"search-cat-list\" itemViewClass=\"KG.PluginRecordsButtonView\"}}\n\t\t\t\t\t\t\t{{#view KG.Button class=\"search-plugin-item common-list-button\" tagName=\"div\" sc_action=\"selectSearchPluginAction\" recordsVisibleBinding=\"recordsVisible\" classBinding=\"recordsVisible\"}}\n\t\t\t\t\t\t\t\t{{#view class=\"plugin-title-label label-ellipsis\" titleBinding=\"itemView.content.title\"}}\n\t\t\t\t\t\t\t\t\t{{itemView.content.title}}\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{#collection contentBinding=\"records\" class=\"search-result-list\" recordsVisibleBinding=\"recordsVisible\" classBinding=\"recordsVisible\"}}\n\t\t\t\t\t\t\t\t{{#view KG.Button class=\"search-record-item common-list-button\" tagName=\"div\" sc_action=\"featureZoomAction\"}}\n\t\t\t\t\t\t\t\t\t{{#view class=\"label-ellipsis\" titleBinding=\"itemView.content.title\"}}\n\t\t\t\t\t\t\t\t\t\t{{itemView.content.title}}\n\t\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t\t{{#view KG.Button isVisibleBinding=\"itemView.content.hasCreateNote\" class=\"search-create-note\" tagName=\"div\"  sc_action=\"createNoteFromFeatureAction\"}}\t\n\t\t\t\t\t\t\t\t\t\t<img src=\"resources/images/note_black.png\"/>\t\t\n\t\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{/collection}}\n\t\t\t\t\t\t{{/collection}}\n\t\t\t\t{{/view}}\n{{/view}}\n");
+return Ember.Handlebars.compile("{{#view id=\"super-search-popup\" classBinding=\"KG.searchController.activePopup\"}}\n\t\t\t\t{{view KG.Button class=\"x-button search-close-button\"  sc_action=\"toogleSearchPopopAction\"}}\n\t\t\t\t{{#view id=\"search-popup\" }}\n\t\t\t\t\t{{view KG.SearchField resultsBinding=\"KG.searchController.searchHistorySize\" placeholder_not_loc=\"_search\" valueBinding=\"KG.searchController.searchValue\"}}\n\t\t\t\t\t\t{{#collection contentBinding=\"KG.searchController\" isVisibleBinding=\"KG.searchController.hasResults\" class=\"search-cat-list\" itemViewClass=\"KG.RecordsButtonView\"}}\t\t\n\t\t\t\t\t\t\t{{#view KG.Button class=\"search-cat-item common-list-button\" tagName=\"div\" sc_action=\"selectSearchCategoryAction\" recordsVisibleBinding=\"recordsVisible\" classBinding=\"recordsVisible\"}}\n\t\t\t\t\t\t\t\t{{#view class=\"cat-title-label label-ellipsis\" titleBinding=\"itemView.content.title\"}}\n\t\t\t\t\t\t\t\t\t{{itemView.content.title}}\n\t\t\t\t\t\t\t\t{{/view}}\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t{{#view class=\"cat-size-label label-ellipsis capsule-label\" tagName=\"span\"}}\n\t\t\t\t\t\t\t\t\t{{itemView.content.count}}\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t<div class=\"super-result-list\">\n\t\t\t\t\t\t\t\t{{#collection contentBinding=\"records\" class=\"search-result-list\" recordsVisibleBinding=\"recordsVisible\" classBinding=\"recordsVisible\"}}\n\t\t\t\t\t\t\t\t\t{{#view KG.Button class=\"search-record-item common-list-button\" tagName=\"div\" sc_action=\"featureZoomAction\"}}\n\t\t\t\t\t\t\t\t\t\t{{#view class=\"label-ellipsis\" titleBinding=\"itemView.content.title\"}}\n\t\t\t\t\t\t\t\t\t\t\t{{itemView.content.title}}\n\t\t\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t\t\t{{#view KG.Button isVisibleBinding=\"itemView.content.isSelectable\" class=\"search-select\" tagName=\"div\"  sc_action=\"selectFeatureInspectorAction\"}}\t\n\t\t\t\t\t\t\t\t\t\t\t<img src=\"resources/images/right_arrow_24.png\"/>\t\t\n\t\t\t\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t{{/collection}}\n\t\t\t\t\t\t\t\t<div class=\"more-panel\">\n\t\t\t\t\t\t\t\t\t{{#view KG.Button class=\"white-button search-more-result\" isVisibleBinding=\"hasMoreResult\" sc_action=\"showMoreResultsAction\"}}\n\t\t\t\t\t\t\t\t\t\t{{loc _showMore}}\n\t\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t{{/collection}}\n\t\t\t\t\t\t{{#collection contentBinding=\"KG.core_search.plugins\" isVisibleBinding=\"KG.core_search.searchAsked\" class=\"search-cat-list\" itemViewClass=\"KG.PluginRecordsButtonView\"}}\n\t\t\t\t\t\t\t{{#view KG.Button class=\"search-plugin-item common-list-button\" tagName=\"div\" sc_action=\"selectSearchPluginAction\" recordsVisibleBinding=\"recordsVisible\" classBinding=\"recordsVisible\"}}\n\t\t\t\t\t\t\t\t{{#view class=\"plugin-title-label label-ellipsis\" titleBinding=\"itemView.content.title\"}}\n\t\t\t\t\t\t\t\t\t{{itemView.content.title}}\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{#collection contentBinding=\"records\" class=\"search-result-list\" recordsVisibleBinding=\"recordsVisible\" classBinding=\"recordsVisible\"}}\n\t\t\t\t\t\t\t\t{{#view KG.Button class=\"search-record-item common-list-button\" tagName=\"div\" sc_action=\"featureZoomAction\"}}\n\t\t\t\t\t\t\t\t\t{{#view class=\"label-ellipsis\" titleBinding=\"itemView.content.title\"}}\n\t\t\t\t\t\t\t\t\t\t{{itemView.content.title}}\n\t\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t\t{{#view KG.Button isVisibleBinding=\"itemView.content.hasCreateNote\" class=\"search-create-note\" tagName=\"div\"  sc_action=\"createNoteFromFeatureAction\"}}\t\n\t\t\t\t\t\t\t\t\t\t<img src=\"resources/images/note_black.png\"/>\t\t\n\t\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{/collection}}\n\t\t\t\t\t\t{{/collection}}\n\t\t\t\t{{/view}}\n{{/view}}\n");
 });spade.register("kloudgis/sandbox/templates/send_text_notification", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("<div id=\"send-notification-panel\">\n\t{{KG.sendNotificationController.notificationLabel}}\n\t{{view KG.Button class=\"x-button notification-close-button\"  sc_action=\"closeSendNotificationAction\" titleBinding=\"KG.sendNotificationController.closeLabel\"}}\n\t{{view KG.TextNotificationAreaView valueBinding=\"KG.sendNotificationController.content\"}}\n\t{{KG.sendNotificationController.feedbackMessage}}\n\t{{#view KG.Button class=\"white-button send-notification-button\"  sc_action=\"sendNotificationButtonAction\"}}\n\t\t{{KG.sendNotificationController.sendLabel}}\n\t{{/view}}\n\t{{view SC.Checkbox valueBinding=\"KG.sendNotificationController.sendOnEnterValue\"}}\n\t<img src=\"resources/images/return.png\" {{bindAttr title=\"KG.sendNotificationController.sendOnEnterTooltip\"}}/>\n\t{{#view KG.LoadingImageView isVisibleBinding=\"KG.sendNotificationController.hasNotificationPending\"}}\n\t\t<img {{bindAttr src=\"loadingImage\"}} alt=\"Loading\"/>\n  \t{{/view}}\t\t\n</div>\n");
 });spade.register("kloudgis/sandbox/templates/text_renderer", function(require, exports, __module, ARGV, ENV, __filename){
