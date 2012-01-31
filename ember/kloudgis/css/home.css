@@ -96,72 +96,37 @@
 	font-size: 18px;
 }
 
-.delete-button{
-	overflow:hidden;
-	display:inline-block;
-	float: right;
-	border-radius:14px;
-	margin:0;
-	padding: 2px 5px 13px 1px;
-	height: 24px;
-	min-width:24px;
+.sandbox-list-item .sb-item-check{
+	float:right;
 	width:auto;
-	border: solid 2px #DDD;
-	background:none;
-    color: #fff;
-	opacity:0;
-	-webkit-transition: opacity 0.7s, max-width 0.7s;
-	-moz-transition: opacity 0.7s, max-width 0.7s;
 }
 
-.delete-button.is-owner{
+.sb-item-check.is-owner{
 	height: 24px;
 	width: 24px;
 }
 
-.delete-button.is-owner span:last-child{
+.sb-item-check.is-owner span:last-child{
 	display: none;
 }
 
-.delete-button span{
+.sb-item-check span{
 	display: inline-block;
 	max-width:0px;
 	opacity:0;
-	-webkit-transition: opacity 0.7s, max-width 0.7s;
-	-moz-transition: opacity 0.7s, max-width 0.7s;
+	-webkit-transition: opacity 0.2s, max-width 0.2s;
+	-moz-transition: opacity 0.2s, max-width 0.2s;
 }
 
-.delete-button.is-checked span{
+.sb-item-check.is-checked span{
 	opacity:1;
 	max-width:200px;
 }
 
-.delete-button.is-checked{
-		font: bold 26px/14px Verdana;
-	    background-color: #c66572;
-	    background-image:
-	    -webkit-gradient(linear, left top, left bottom, 
-	            from(#c66572), 
-	            color-stop(0.25, #b63849), 
-	            color-stop(0.5, #ac1a2e), 
-	            color-stop(0.5, #a40018), 
-	            color-stop(0.75, #a40018), 
-	            to(#7d1022));
-	    font-size: 14px;
-	    font-weight: bold;
-	    text-align: center;
-	    border: solid 3px #fff;
-		box-shadow: 0 1px 3px #666;
-	    -webkit-box-shadow: 0 1px 3px #666;
-}
-
-.delete-button.is-checked span:last-child{
+.sb-item-check.is-checked span:last-child{
 	font-size: 12px;
 }
 
-.delete-button.delete-mode{
-	opacity:1;
-}
 
 .info-line{
 	width:100%;
@@ -252,10 +217,12 @@
 	-webkit-transition: opacity 0.7s;
 	-moz-transition: opacity 0.7s;
 	padding: 10px 10px 10px 10px;
+	cursor: default;
 }
 
 #delete-sandbox-button.delete-mode{
 	opacity:1;
+	cursor: pointer;
 }
 
 #add-sandbox-panel .page-title{

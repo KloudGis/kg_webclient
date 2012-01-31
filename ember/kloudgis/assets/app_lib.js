@@ -1019,10 +1019,21 @@ KG.SandboxState = SC.State.extend({
 
                     exitState: function() {
                         KG.bookmarksController.set('editMode', NO);
+						KG.bookmarksController.set('deleteList', []);
                     },
 
-                    deleteBookmarkAction: function(bookmark) {
-                        KG.core_bookmark.deleteBookmark(bookmark);
+					checkBookmarkAction: function(bookmark){
+						var list = KG.bookmarksController.get('deleteList');
+						if(list.indexOf(bookmark) > -1){
+							list.removeObject(bookmark);
+						}else{
+							list.pushObject(bookmark);
+						}
+					},
+
+                    deleteBookmarkAction: function() {
+                        KG.core_bookmark.deleteSelectedBookmarks();
+						this.gotoState('normalModeState');
                     },
 
                     editBookmarkAction: function() {

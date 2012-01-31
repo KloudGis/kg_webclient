@@ -1,5 +1,7 @@
 KG.DeleteCheckboxView = KG.Button.extend({
 	
+	classNameBindings:['KG.homePanelController.deleteMode:is-visible'],
+	
 	isChecked: NO,
 	
 	isOwner: function(){

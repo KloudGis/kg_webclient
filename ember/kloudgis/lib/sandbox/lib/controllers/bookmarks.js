@@ -4,6 +4,6 @@
 KG.bookmarksController = Ember.ArrayController.create({
 	content: [],
 	activePopup: NO,
-	editMode: NO	
-	
+	editMode: NO,
+	deleteList: []		
 });

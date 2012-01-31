@@ -49,25 +49,66 @@
 #bookmark-top-bar{
 	width:100%;
 	padding-bottom:15px;
+	position:relative;
 }
 
 #bookmark-label{
 	color:#666;
 	text-align:center;
 	text-shadow: none;
-	font-size:13px;
+	font-size:16px;
 	padding-bottom:0.2cm;
 }
 
 #bookmark-add-button{
-	margin-left: 0.5cm;
+	position:absolute;
+	left:3px;
+	top:20px;	
+	padding:0;
+}
+
+#bookmark-add-button > div{
+	width:30px;
+	height:30px;
+	background: url('../resources/images/add_30.png') no-repeat;
 }
 
 #bookmark-edit-button{
-	margin-left: 1cm;
+	position:absolute;
+	right:3px;
+	top:20px;
+	padding:0;
+}
+
+#bookmark-edit-button > div{
+	width:30px;
+	height:30px;
+	background: url('../resources/images/delete_30.png') no-repeat;
+}
+
+
+#bookmark-delete-button{
+	position:absolute;
+	width:84px;
+	left:50%;
+	margin-left:-42px;
+	top:20px;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+	opacity:0;
+	-webkit-transition: opacity 0.7s;
+	-moz-transition: opacity 0.7s;
+	padding: 7px;
+	cursor: default;
+}
+
+#bookmark-delete-button.edit-mode{
+	opacity:1;
+	cursor: pointer;
 }
 
 #bookmark-list{
+	margin-top:20px;
 	width:100%;
 	overflow-y:auto;
 	max-height:400px;
@@ -89,7 +130,7 @@
 #bookmark-list .bookmark-delete{
 	position:absolute;
 	right:3px;
-	top:2px;
+	top:9px;
 }
 
 .bookmark-item{
@@ -627,7 +668,7 @@
 	width:100%;
 	text-shadow: none;
 	text-align:center;
-	font-size:13px;
+	font-size:16px;
 	padding-bottom:30px;
 }
 

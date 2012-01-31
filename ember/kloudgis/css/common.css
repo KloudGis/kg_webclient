@@ -185,3 +185,56 @@ red-button:hover, .white-button:hover, .black-button:hover{
 						to(#194fdb));
     color: #fff;
 }
+
+
+/* delete circle to check in delete mode*/
+.check-delete-button{
+	overflow:hidden;
+	display:inline-block;
+	border-radius:14px;
+	margin:0;
+	padding: 2px 5px 13px 1px;
+	height: 24px;
+	min-width:24px;
+	width:24px;
+	border: solid 2px #DDD;
+	background:none;
+    color: #fff;
+	opacity:0;
+	-webkit-transition: opacity 0.2s, max-width 0.2s;
+	-moz-transition: opacity 0.2s, max-width 0.2s;
+}
+
+.check-delete-button > span{
+	left: 0;
+	opacity: 0;
+	position: relative;
+	top: 0;
+}
+
+/* firefox misplacement*/
+.gecko .check-delete-button > span{
+	left: 2px;
+	top: -3px;
+}
+
+.check-delete-button.is-visible{
+	opacity:1;
+}
+
+.check-delete-button.is-checked{
+		font: bold 26px/14px Verdana;
+	    background-color: #c66572;
+		background-image: -moz-linear-gradient(top, #c66572, #b63849 25%, #ac1a2e 50%,#a40018 50%, #a40018 75%, #7d1022);
+		background-image: -webkit-gradient(linear, from(#c66572), color-stop(0.25, #b63849), color-stop(0.5, #ac1a2e), color-stop(0.5, #a40018), color-stop(0.75, #a40018), to(#7d1022));
+	    font-size: 14px;
+	    font-weight: bold;
+	    text-align: center;
+	    border: solid 3px #fff;
+		box-shadow: 0 1px 3px #666;
+	    -webkit-box-shadow: 0 1px 3px #666;
+}
+
+.check-delete-button.is-checked > span{
+	opacity:1;
+}

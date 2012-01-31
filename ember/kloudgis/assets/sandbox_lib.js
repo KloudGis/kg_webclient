@@ -133,8 +133,8 @@ KG.addBookmarkController = SC.Object.create({
 KG.bookmarksController = Ember.ArrayController.create({
 	content: [],
 	activePopup: NO,
-	editMode: NO	
-	
+	editMode: NO,
+	deleteList: []		
 });
 
 });spade.register("kloudgis/sandbox/lib/controllers/comments", function(require, exports, __module, ARGV, ENV, __filename){
@@ -536,9 +536,9 @@ KG.core_bookmark = SC.Object.create({
         bm.onReady(this, this._bmReady);
     },
 
-	refreshBookmarks: function(){
-		 KG.bookmarksController.get('content').refresh();
-	},
+    refreshBookmarks: function() {
+        KG.bookmarksController.get('content').refresh();
+    },
 
     _bmReady: function(bookmarks) {
         //?
@@ -558,20 +558,32 @@ KG.core_bookmark = SC.Object.create({
         }
     },
 
-    deleteBookmark: function(bookmark) {
-        if (bookmark) {
-            var storeKey = bookmark.get('storeKey');
-            bookmark.destroy();
-            KG.store.commitRecords(null, null, [storeKey]);
+    deleteSelectedBookmarks: function() {
+        var list = KG.bookmarksController.get('deleteList');
+        if (list && list.get('length') > 0) {
+            var keys = [];
+            list.forEach(function(bookmark) {
+                var storeKey = bookmark.get('storeKey');
+                keys.push(storeKey);
+                bookmark.destroy();
+            });
+            KG.store.commitRecords(null, null, keys);
         }
     },
 
-	addBookmark: function(label, centerLonLat, zoom){
-		var c = {x: centerLonLat.get('lon'), y: centerLonLat.get('lat')};
-		var newBm = KG.store.createRecord(KG.Bookmark, {label: label, center: c, zoom: zoom});
-		//commit only this record
+    addBookmark: function(label, centerLonLat, zoom) {
+        var c = {
+            x: centerLonLat.get('lon'),
+            y: centerLonLat.get('lat')
+        };
+        var newBm = KG.store.createRecord(KG.Bookmark, {
+            label: label,
+            center: c,
+            zoom: zoom
+        });
+        //commit only this record
         KG.store.commitRecords(null, null, [newBm.get('storeKey')]);
-	}
+    }
 });
 
 });spade.register("kloudgis/sandbox/lib/core_info", function(require, exports, __module, ARGV, ENV, __filename){
@@ -2583,7 +2595,9 @@ KG.BookmarkButtonView = KG.Button.extend({
 });spade.register("kloudgis/sandbox/lib/views/bookmark_delete_button", function(require, exports, __module, ARGV, ENV, __filename){
 KG.BookmarkDeleteButtonView = KG.Button.extend({
 	
-	isVisible: function(){
+	classNameBindings:['isAvailable:is-visible'],
+	
+	isAvailable: function(){
 		var content = this.getPath('itemView.content');
 		if(content && KG.bookmarksController.get('editMode')){
 			var auth = content.get('user_create');
@@ -2593,6 +2607,19 @@ KG.BookmarkDeleteButtonView = KG.Button.extend({
 		}
 		return NO;
 	}.property('itemView.content', 'KG.bookmarksController.editMode'),
+	
+	
+	isChecked: NO,
+	
+	
+	deleteListDidChange: function(){
+		var content = this.getPath('itemView.content');
+		if(KG.bookmarksController.get('deleteList').indexOf(content) > -1){
+			this.set('isChecked', YES);
+		}else{
+			this.set('isChecked', NO);
+		}		
+	}.observes('itemView.content', 'KG.bookmarksController.deleteList.length')
 });
 
 });spade.register("kloudgis/sandbox/lib/views/bookmark_item", function(require, exports, __module, ARGV, ENV, __filename){
@@ -2939,7 +2966,7 @@ return Ember.Handlebars.compile("{{#view KG.UserButtonView id=\"active-user-butt
 });spade.register("kloudgis/sandbox/templates/add_bookmark", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("<div id=\"add-bookmark-panel\">\n\t{{KG.addBookmarkController.addBookmarkLabel}}\n\t{{view KG.Button class=\"x-button bookmark-close-button\"  sc_action=\"closeAddBookmarkAction\" titleBinding=\"KG.addBookmarkController.closeTitle\"}}\n\t{{view KG.TextField valueBinding=\"KG.addBookmarkController.content\" nl_sc_action=\"addBookmarkAction\"}}\n\t{{#view KG.Button class=\"white-button add-bookmark-button\"  sc_action=\"addBookmarkAction\"}}\n\t\t{{KG.addBookmarkController.addLabel}}\n\t{{/view}}\t\t\n</div>\n");
 });spade.register("kloudgis/sandbox/templates/bookmark_panel", function(require, exports, __module, ARGV, ENV, __filename){
-return Ember.Handlebars.compile("{{#view KG.Button id=\"bookmark-button\" tagName=\"div\" sc_action=\"toggleBookmarkPopupAction\" class=\"header-button header-button-icon\" classBinding=\"KG.bookmarksController.activePopup\"}}\n\t\t<span class=\"button-image\"><span>\t\n\t\t{{#view id=\"super-bookmark-popup\" isVisibleBinding=\"KG.bookmarksController.activePopup\"}}\n\t\t\t\t\t{{#view id=\"bookmark-popup\" isVisibleBinding=\"KG.bookmarksController.activePopup\"}}\t\t\t\t\t\t\n\t\t\t\t\t\t<div id=\"bookmark-top-bar\">\n\t\t\t\t\t\t\t{{loc _bookmarkTitle id=\"bookmark-label\" tagName=\"div\"}}\n\t\t\t\t\t\t\t{{#view KG.Button id=\"bookmark-add-button\" tagName=\"span\" class=\"white-button unselectable\" sc_action=\"addBookmarkAction\"}}\n\t\t\t\t\t\t\t\t{{loc _bookmarkAdd}}\n\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{#view KG.EditBookmarkButtonView id=\"bookmark-edit-button\" tagName=\"span\" class=\"white-button unselectable\" sc_action=\"editBookmarkAction\"}}\n\t\t\t\t\t\t\t\t{{loc _bookmarkEdit}}\n\t\t\t\t\t\t\t{{/view}}\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div id=\"bookmark-collection\">\n\t\t\t\t\t\t{{#collection id=\"bookmark-list\" contentBinding=\"KG.bookmarksController.content\" itemViewClass=\"KG.BookmarkItemView\" classBinding=\"KG.bookmarksController.editMode\"}}\t\n\t\t\t\t\t\t\t\t{{#view KG.Button class=\"bookmark-item-label\" tagName=\"div\" sc_action=\"selectBookmarkAction\"}}\n\t\t\t\t\t\t\t\t\t{{itemView.content.label}}\n\t\t\t\t\t\t\t\t{{/view}}\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t{{#view KG.Button class=\"bookmark-item-author\" tagName=\"span\" sc_action=\"selectBookmarkAction\"}}\n\t\t\t\t\t\t\t\t\t{{itemView.content.formattedDescription}}\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t{{#view KG.BookmarkDeleteButtonView isVisibleBinding=\"KG.bookmarksController.editMode\" class=\"bookmark-delete red-button unselectable\" sc_action=\"deleteBookmarkAction\"}}\n\t\t\t\t\t\t\t\t\t-\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t{{/collection}}\n\t\t\t\t\t\t</div>\n\t\t\t\t\t{{/view}}\n\t\t{{/view}}\n{{/view}}\n");
+return Ember.Handlebars.compile("{{#view KG.Button id=\"bookmark-button\" tagName=\"div\" sc_action=\"toggleBookmarkPopupAction\" class=\"header-button header-button-icon\" classBinding=\"KG.bookmarksController.activePopup\"}}\n\t\t<span class=\"button-image\"><span>\t\n\t\t{{#view id=\"super-bookmark-popup\" isVisibleBinding=\"KG.bookmarksController.activePopup\"}}\n\t\t\t\t\t{{#view id=\"bookmark-popup\" isVisibleBinding=\"KG.bookmarksController.activePopup\"}}\t\t\t\t\t\t\n\t\t\t\t\t\t<div id=\"bookmark-top-bar\">\n\t\t\t\t\t\t\t{{loc _bookmarkTitle id=\"bookmark-label\" tagName=\"div\"}}\n\t\t\t\t\t\t\t{{#view KG.Button id=\"bookmark-add-button\" tagName=\"div\" class=\"white-button unselectable\" sc_action=\"addBookmarkAction\"}}\n\t\t\t\t\t\t\t\t<div></div>\n\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{#view KG.Button id=\"bookmark-delete-button\" tagName=\"div\" class=\"red-button unselectable\" sc_action=\"deleteBookmarkAction\" classBinding=\"KG.bookmarksController.editMode\"}}\n\t\t\t\t\t\t\t\t{{loc _delete}}\n\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t{{#view KG.EditBookmarkButtonView id=\"bookmark-edit-button\" tagName=\"div\" class=\"white-button unselectable\" sc_action=\"editBookmarkAction\"}}\n\t\t\t\t\t\t\t\t<div></div>\n\t\t\t\t\t\t\t{{/view}}\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div id=\"bookmark-collection\">\n\t\t\t\t\t\t{{#collection id=\"bookmark-list\" contentBinding=\"KG.bookmarksController.content\" itemViewClass=\"KG.BookmarkItemView\" classBinding=\"KG.bookmarksController.editMode\"}}\t\n\t\t\t\t\t\t\t\t{{#view KG.Button class=\"bookmark-item-label\" tagName=\"div\" sc_action=\"selectBookmarkAction\"}}\n\t\t\t\t\t\t\t\t\t{{itemView.content.label}}\n\t\t\t\t\t\t\t\t{{/view}}\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t{{#view KG.Button class=\"bookmark-item-author\" tagName=\"span\" sc_action=\"selectBookmarkAction\"}}\n\t\t\t\t\t\t\t\t\t{{itemView.content.formattedDescription}}\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t\t\t{{#view KG.BookmarkDeleteButtonView class=\"bookmark-delete check-delete-button unselectable\" classBinding=\"isChecked\" sc_action=\"checkBookmarkAction\"}}\n\t\t\t\t\t\t\t\t\t<span>✓</span>\n\t\t\t\t\t\t\t\t{{/view}}\n\t\t\t\t\t\t{{/collection}}\n\t\t\t\t\t\t</div>\n\t\t\t\t\t{{/view}}\n\t\t{{/view}}\n{{/view}}\n");
 });spade.register("kloudgis/sandbox/templates/bool_renderer", function(require, exports, __module, ARGV, ENV, __filename){
 return Ember.Handlebars.compile("<span class=\"inspector-attr-name\">\n\t{{itemView.content.label}}\n</span>\t\n{{view templateName=\"switch\" class=\"inspector-attr-value\" contentBinding=\"itemView.content.value\" disabledBinding=\"KG.inspectorController.isReadOnly\"}}\n");
 });spade.register("kloudgis/sandbox/templates/catalog_renderer", function(require, exports, __module, ARGV, ENV, __filename){

@@ -4,7 +4,7 @@
 {{#view}}
 {{#collection contentBinding="KG.sandboxesController" class="sandbox-list"}}
 		{{#view KG.SandboxView tagName="div" class="sandbox-list-item common-list-button"}}
-			{{#view KG.DeleteCheckboxView  class="delete-button" sc_action="checkSandboxAction" classBinding="KG.homePanelController.deleteMode isChecked isOwner"}}
+			{{#view KG.DeleteCheckboxView  class="sb-item-check check-delete-button" sc_action="checkSandboxAction" classBinding="isChecked isOwner"}}
 				<span>✓</span> {{loc _leave tagName="span"}}
 			{{/view}}
 			{{#view tagName="span" class="sandbox-name"}}
