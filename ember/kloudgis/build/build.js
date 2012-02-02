@@ -1,12 +1,11 @@
 var fs = require('fs'),
 	uglifyjs = require('uglify-js'),
-	deps = require('./deps.js').deps;
+	deps = require('./deps.js').deps,
+    css_deps = require('./css_deps.js').css_deps;
 
 exports.getFiles = function (compsBase32) {
 	var memo = {},
 		comps;
-    
-    console.log(compsBase32 + ': Componnents');
 	if (compsBase32) {
 		comps = parseInt(compsBase32, 32).toString(2).split('');
 		console.log('Managing dependencies...')
@@ -39,6 +38,29 @@ exports.getFiles = function (compsBase32) {
 
 	return files;
 };
+
+exports.getCssFiles = function () {
+	var memo = {};
+
+	function addFiles(srcs) {
+		for (var j = 0, len = srcs.length; j < len; j++) {
+			memo[srcs[j]] = true;
+		}
+	}
+
+	for (var i in css_deps) {
+		addFiles(css_deps[i].src);
+	}
+
+	var files = [];
+
+	for (var src in memo) {
+		files.push('src_css/' + src);
+	}
+
+	return files;
+};
+
 
 exports.uglify = function (code) {
 	var pro = uglifyjs.uglify;

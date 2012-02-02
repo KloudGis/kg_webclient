@@ -1,13 +1,12 @@
-var build = require('./build/build.js');
-var vm = require('vm');
-
 var crlf = '\r\n',
 	COPYRIGHT = '/*' + crlf + ' Copyright (c) 2010-2011, XYZ Civitas' + crlf +
                 ' Kloudgis.' + crlf +
                 ' http://kloudgis.com' + crlf + '*/' + crlf;
-                
+var build = require('./build/build.js');
+var vm = require('vm');                
 var fs = require('fs');
 var vm = require('vm');
+var less = require('less');
 
 var emberjs = fs.readFileSync('./js/ember-0.9.4.js', 'utf8');
 var templatesDir = './src/templates';
@@ -81,8 +80,25 @@ function compileHandlebarsTemplate(file) {
   fs.writeFileSync(compiledDir + '/' + fileNameWithExt.replace(/\.handlebars$/, '.js'), 'Ember.TEMPLATES["'+ templateN+ '"] =Handlebars.template(' + context.templatejs + ')', 'utf8');
 }
 
+desc('Compile all .less css file.');
+task({ 'less': [] }, function () {
+    var srcPath = 'css/app-src.css';
+    var path = 'css/app.css';
+    var parser = new(less.Parser)();
+    var files = build.getCssFiles();
+    console.log('Concatenating ' + files.length + ' CSS files...');
+    var content = build.combineFiles(files);
+    parser.parse(content, function (e, tree) {
+        build.save(srcPath, tree.toCSS({ compress: false }));
+    });
+    console.log('Compressing CSS...');
+    parser.parse(content, function (e, tree) {
+        build.save(path, tree.toCSS({ compress: true })); // Minify CSS output
+    });
+});
+
 desc('Combine and compress Kloudgis source files');
-task('build', ['handlebars'], function (compsBase32, buildName) {
+task('build', ['handlebars', 'less'], function (compsBase32, buildName) {
 	var pathPart = 'js/kloudgis' + (buildName ? '-' + buildName : ''),
 		srcPath = pathPart + '-src.js',
 		path = pathPart + '.js';
