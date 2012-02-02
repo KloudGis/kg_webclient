@@ -1,0 +1,75 @@
+<a  id="kloud-logo" href="/kloudgis">
+			<img src="css/images/kloudgis_black_128.png" alt="Kloudgis"/>
+		</a>
+		<span id="kloud-welcome">{{loc _signupTitle}}	</span>
+		<div class="signup-pane">
+			<table>
+			<tr class="section">
+					<td>
+						{{#view KG.SignupField id="user-field" classBinding="focus hasError" hasErrorBinding="KG.userFieldController.hasError"}}
+							<label id="email-label" for="user-textfield">{{loc _email}}</label>
+							{{#view KG.ForwardTextField id="user-textfield" valueBinding="KG.userFieldController.value" type="email" placeholder_not_loc="_UserHint" spellcheck="false" autocorrect="off" autocapitalize="off" autofocus="true"}}
+							{{/view}}
+							<span>{{KG.userFieldController.errorMessage}}</span>						
+							{{#view KG.LoadingImageView isVisibleBinding="KG.userFieldController.isBusy"}}
+								<img {{bindAttr src="loadingImage"}} alt="Loading"/>
+							{{/view}}
+						{{/view}}	
+					</td>
+			</tr>
+			<tr class="section">
+					<td>
+						{{#view KG.SignupField id="pwd-field" classBinding="focus hasError" hasErrorBinding="KG.pwdFieldController.hasError"}}
+							<label id="pwd-label" for="pwd-textfield">{{loc _pwd}}</label>
+							{{#view KG.ForwardTextField id="pwd-textfield" valueBinding="KG.pwdFieldController.value" type="password" placeholder_not_loc="_PwdHint" spellcheck="false" autocorrect="off" autocapitalize="off" }}
+							{{/view}}
+							<span>{{KG.pwdFieldController.errorMessage}}</span>						
+						{{/view}}	
+					</td>
+			</tr>
+			<tr class="section">
+					<td>
+						{{#view KG.SignupField id="name-field" classBinding="focus hasError" hasErrorBinding="KG.nameFieldController.hasError"}}
+							<label id="name-label" for="name-textfield">{{loc _name}}</label>
+							{{#view KG.ForwardTextField id="name-textfield" valueBinding="KG.nameFieldController.value" type="text" placeholder_not_loc="_NameHint" spellcheck="false" autocorrect="off" autocapitalize="off" }}
+							{{/view}}
+							<span>{{KG.nameFieldController.errorMessage}}</span>					
+						{{/view}}	
+					</td>
+			</tr>
+			<tr class="section">
+					<td>
+						{{#view KG.SignupField id="company-field" classBinding="focus hasError" hasErrorBinding="KG.companyFieldController.hasError"}}
+							<label id="company-label" for="company-textfield">{{loc _company}}</label>
+							{{#view KG.ForwardTextField id="company-textfield" valueBinding="KG.companyFieldController.value" type="text" placeholder_not_loc="_CompanyHint" spellcheck="false" autocorrect="off" autocapitalize="off" }}
+							{{/view}}
+							<span>{{KG.companyFieldController.errorMessage}}</span>				
+						{{/view}}	
+					</td>
+			</tr>
+			<tr class="section">
+					<td>
+						{{#view KG.SignupField id="location-field" classBinding="focus hasError" hasErrorBinding="KG.locationFieldController.hasError"}}
+							<label id="location-label" for="location-textfield">{{loc _location}}</label>
+							{{#view KG.ForwardTextField id="location-textfield" valueBinding="KG.locationFieldController.value" type="text" placeholder_not_loc="_LocationHint" spellcheck="false" autocorrect="off" autocapitalize="off"}}
+							{{/view}}
+							<span>{{KG.locationFieldController.errorMessage}}</span>						
+						{{/view}}	
+					</td>
+			</tr>	
+			<tr class="section">
+					<td>
+						{{#view KG.Button  sc_action="createAccountAction" id="create-button"}}
+                            {{loc _createAccount}}						
+						{{/view}}
+					</td>
+			</tr>
+			<tr class="section">
+					<td>
+						{{#view messageBinding="KG.core_signup.globalError" id="global-error"}}
+							<span>{{message}}</span>
+						{{/view}}
+					</td>
+			</tr>
+			</table>
+		</div>

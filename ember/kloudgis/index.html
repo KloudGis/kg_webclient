@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <!--<html manifest="kloudgis.manifest">-->
-  <head>
+   <head>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 	 	<meta charset="UTF-8">
 	  	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -9,17 +9,22 @@
 	  	<meta name="author" content="Kloudgis.org">
 	  	<link rel="shortcut icon" href="favicon.ico">
 	  	<link rel="apple-touch-icon" href="apple-touch-icon.png">	
-		<link rel="stylesheet" href="css/spinner.css" type="text/css" media="screen">
-		<link rel="stylesheet" href="css/style.css" type="text/css" media="screen"/>
-		<link rel="stylesheet" href="css/login.css" type="text/css" media="screen"/>
-		<link rel="stylesheet" href="css/common.css" type="text/css" media="screen"/>
-		<link rel="stylesheet" href="css/home.css" type="text/css" media="screen"/>
-		<link rel="stylesheet" href="css/switch.css" type="text/css" media="screen"/>
-		<link rel="stylesheet" href="assets/sandbox_styles.css" type="text/css" media="screen"/>
-		<link rel="stylesheet" href="ext/leaflet/leaflet.css" type="text/css" media="screen" />
-    	<title>Kloudgis</title>
-</head>
-  <body>
+	    <link rel="stylesheet" href="css/spinner.css" type="text/css" media="screen">
+		<link rel="stylesheet" href="css/app.css" type="text/css" media="screen">
+		<link rel="stylesheet" href="js/leaflet/leaflet.css" type="text/css" media="screen" />
+		<script type="text/javascript" src="js/jquery-1.7.1.js" ></script>
+	    <script type="text/javascript" src="js/plugins/autoresize.jquery.js" ></script> 
+	    <script type="text/javascript" src="js/plugins/jquery.atmosphere.js" ></script>
+	    <script type="text/javascript" src="js/css_browser_selector.js" ></script>
+	    <script type="text/javascript" src="js/ember-0.9.4.js" ></script>
+	    <script type="text/javascript" src="js/ember-statechart-src.js" ></script>
+	    <script type="text/javascript" src="js/sproutcore-datastore.js" ></script>
+	    <script type="text/javascript" src="js/sha256.js" ></script>
+	    <script type="text/javascript" src="js/leaflet/leaflet-src.js" ></script>
+	    <script type="text/javascript" src="js/kloudgis-src.js" ></script>
+        <title>Kloudgis</title>
+   </head>
+   <body>
 	<div id="loading">
 		<div class="spinner">
 		  <div class="bar1"></div>
@@ -37,28 +42,5 @@
 		</div>
 	</div>
 	<div id="super-pages"></div>
-  </body>
-<!-- load all of the dependencies --> 
-   <script type="text/javascript" src="assets/bpm_libs.js" ></script>
-   <script type="text/javascript" src="assets/app_lib.js" ></script> 
-   <script type="text/javascript" src="assets/addon_lib.js" ></script> 
-   <script type="text/javascript" src="assets/view_lib.js" ></script> 
-   <script type="text/javascript" src="assets/auth_lib.js" ></script> 
-   <script type="text/javascript" src="assets/login_lib.js" ></script> 
-   <script type="text/javascript" src="assets/core_lib.js" ></script> 
-   <script type="text/javascript" src="assets/home_lib.js" ></script>
-   <script type="text/javascript" src="assets/map_lib.js" ></script>
-   <script type="text/javascript" src="assets/templates_lib.js" ></script>
-   <script type="text/javascript" src="assets/sandbox_lib.js" ></script>
-   
-   <script type="text/javascript" src="ext/css_browser_selector.js" ></script>
-   <script type="text/javascript" src="ext/leaflet/leaflet.js" ></script>
-   <script type="text/javascript" src="ext/sha256.js" ></script> 
-   <script type="text/javascript" src="ext/plugins/autoresize.jquery.js" ></script> 
-   <script type="text/javascript" src="ext/plugins/jquery.atmosphere.js" ></script>
-   <script type="text/javascript"> 
-	      spade.ready(function() { 
-	        spade.require('kloudgis/app_demo/lib/main');			
-	      }); 
-	</script>
+   </body>	  
 </html>

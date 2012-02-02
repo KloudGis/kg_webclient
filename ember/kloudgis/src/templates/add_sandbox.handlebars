@@ -1,0 +1,16 @@
+{{#view id="add-sandbox-title" class="page-title"}}
+	{{KG.homePanelController.addTitle}}
+{{/view}}
+{{#view id="inner-add-sandbox-panel"}}
+	<div>
+		{{view KG.TextField placeholder_not_loc="_sandboxName" valueBinding="KG.addSandboxController.name"}}	
+	</div>
+	{{loc _position class="field-label"}}
+	<div id="add-sandbox-map"></div>
+	{{#view KG.Button class="white-button" sc_action="cancelCreateAction" titleBinding="KG.addSandboxController.cancelCreateTooltip" disabledBinding="KG.homePanelController.createSandboxInProgress"}}
+		<img src="css/images/cancel_30.png">
+	{{/view}}
+	{{#view KG.Button class="white-button" sc_action="commitCreateAction" titleBinding="KG.addSandboxController.commitCreateTooltip" disabledBinding="KG.homePanelController.createSandboxInProgress"}}
+		<img src="css/images/checkmark_30.png">
+	{{/view}}
+{{/view}}

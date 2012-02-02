@@ -1,0 +1,78 @@
+{
+  "ember": {
+    "version": "0.9.3",
+    "path": "/gitroot/kg_webclient/ember/kloudgis/vendor/ember"
+  },
+  "spade": {
+    "version": "1.0.2",
+    "path": "/gitroot/kg_webclient/ember/kloudgis/vendor/spade-1.0.2"
+  },
+  "ember-datastore": {
+    "version": "0.9",
+    "path": "/gitroot/kg_webclient/ember/kloudgis/vendor/ember-datastore-0.9"
+  },
+  "ember-statechart": {
+    "version": "0.9",
+    "path": "/gitroot/kg_webclient/ember/kloudgis/vendor/ember-statechart-0.9"
+  },
+  "uglify-js": {
+    "version": "1.0.7",
+    "path": "/gitroot/kg_webclient/ember/kloudgis/vendor/uglify-js-1.0.7"
+  },
+  "ember-runtime": {
+    "version": "0.9.3",
+    "path": "/gitroot/kg_webclient/ember/kloudgis/vendor/ember-runtime"
+  },
+  "ember-views": {
+    "version": "0.9.3",
+    "path": "/gitroot/kg_webclient/ember/kloudgis/vendor/ember-views"
+  },
+  "ember-states": {
+    "version": "0.9.3",
+    "path": "/gitroot/kg_webclient/ember/kloudgis/vendor/ember-states"
+  },
+  "ember-handlebars": {
+    "version": "0.9.3",
+    "path": "/gitroot/kg_webclient/ember/kloudgis/vendor/ember-handlebars"
+  },
+  "ember-handlebars-format": {
+    "version": "0.9.3",
+    "path": "/gitroot/kg_webclient/ember/kloudgis/vendor/ember-handlebars-format"
+  },
+  "qunit": {
+    "version": "1.0.1",
+    "path": "/gitroot/kg_webclient/ember/kloudgis/vendor/qunit-1.0.1"
+  },
+  "ember-datetime": {
+    "version": "0.9.3",
+    "path": "/gitroot/kg_webclient/ember/kloudgis/vendor/ember-datetime-0.9.3"
+  },
+  "ember-indexset": {
+    "version": "0.9",
+    "path": "/gitroot/kg_webclient/ember/kloudgis/vendor/ember-indexset-0.9"
+  },
+  "spade-qunit": {
+    "version": "1.0.1",
+    "path": "/gitroot/kg_webclient/ember/kloudgis/vendor/spade-qunit-1.0.1"
+  },
+  "ember-utils": {
+    "version": "0.9",
+    "path": "/gitroot/kg_webclient/ember/kloudgis/vendor/ember-utils-0.9"
+  },
+  "ember-metal": {
+    "version": "0.9.3",
+    "path": "/gitroot/kg_webclient/ember/kloudgis/vendor/ember-metal"
+  },
+  "jquery": {
+    "version": "1.7.1",
+    "path": "/gitroot/kg_webclient/ember/kloudgis/vendor/jquery-1.7.1"
+  },
+  "handlebars": {
+    "version": "1.0.0.beta.3",
+    "path": "/gitroot/kg_webclient/ember/kloudgis/vendor/handlebars"
+  },
+  "metamorph": {
+    "version": "1.0.0",
+    "path": "/gitroot/kg_webclient/ember/kloudgis/vendor/metamorph"
+  }
+}

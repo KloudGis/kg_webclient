@@ -1,5 +1,5 @@
 body{
-	background: url('../resources/images/back-bg.jpg') repeat;
+	background: url('images/back-bg.jpg') repeat;
 	width:100%;
 }
 
@@ -149,7 +149,7 @@ red-button:hover, .white-button:hover, .black-button:hover{
 	width: 30px;
 	height:30px;
 	border:none;
-	background: url(../resources/images/closebox.png);
+	background: url(images/closebox.png);
 	cursor: pointer;
 }
 
@@ -226,7 +226,13 @@ red-button:hover, .white-button:hover, .black-button:hover{
 		font: bold 26px/14px Verdana;
 	    background-color: #c66572;
 		background-image: -moz-linear-gradient(top, #c66572, #b63849 25%, #ac1a2e 50%,#a40018 50%, #a40018 75%, #7d1022);
-		background-image: -webkit-gradient(linear, from(#c66572), color-stop(0.25, #b63849), color-stop(0.5, #ac1a2e), color-stop(0.5, #a40018), color-stop(0.75, #a40018), to(#7d1022));
+		background-image: -webkit-gradient(linear, left top, left bottom, 
+			            from(#c66572), 
+			            color-stop(0.25, #b63849), 
+			            color-stop(0.5, #ac1a2e), 
+			            color-stop(0.5, #a40018), 
+			            color-stop(0.75, #a40018), 
+			            to(#7d1022));
 	    font-size: 14px;
 	    font-weight: bold;
 	    text-align: center;
